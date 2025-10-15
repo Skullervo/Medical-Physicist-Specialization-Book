@@ -42,12 +42,14 @@
         // Set EPA ID for use by base.html functions
         window.pageEpaId = {% if epa %}{{ epa.id }}{% else %}null{% endif %};
 
-        // Initialize main section editor
+        // Wait for ckeditor.js to initialize the editor, then add math button
         document.addEventListener('DOMContentLoaded', function() {
-            ClassicEditor.create(document.getElementById('section-editor'), getEditorConfig())
-                .then(editor => {
-                    addMathButtonToEditor(editor);
-                });
+            // Wait for ckeditor.js to initialize the editor
+            setTimeout(() => {
+                if (window['section-editorEditor']) {
+                    addMathButtonToEditor(window['section-editorEditor']);
+                }
+            }, 1000);
         });
 
         function saveSection() {

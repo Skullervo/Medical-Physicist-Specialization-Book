@@ -47,11 +47,13 @@
 
         // Initialize main section editor
         document.addEventListener('DOMContentLoaded', function() {
-            ClassicEditor.create(document.getElementById('section-editor'), getEditorConfig())
-                .then(editor => {
-                    window.mainEditorInstance = editor;
+            // Editor initialization handled by ckeditor.js
+            setTimeout(() => {
+                const editor = window['section-editorEditor'];
+                if (editor) {
                     addMathButtonToEditor(editor);
-                });
+                }
+            }, 1000);
         });
     </script>
 {% endblock %}
