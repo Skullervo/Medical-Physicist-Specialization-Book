@@ -1,0 +1,212 @@
+{% extends "sisalto/base.html" %}
+{% load static %}
+{% block title %}Kuvantaminen ja suunnittelu sädehoidossa{% endblock %}
+{% block extra_head %}
+    <style>
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        
+        .section-title-input, .section-proficiency-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .section-title-input:focus, .section-proficiency-input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        
+        /* Skill Level Widget - same as natiivikuvantaminen */
+        .skill-widget {
+            margin: 0.5em 0 1.5em 0;
+            padding: 0.5em 0.8em;
+            background: #2a2e4d;
+            border-radius: 6px;
+            border: 1px solid #444;
+            display: flex;
+            align-items: center;
+            gap: 0.8em;
+            font-size: 0.9em;
+        }
+        .skill-widget label {
+            margin: 0;
+            font-weight: 500;
+            color: #e0e0e0;
+            white-space: nowrap;
+        }
+        .skill-widget select {
+            background: #23232b;
+            color: #fff;
+            border: 1px solid #666;
+            border-radius: 4px;
+            padding: 0.4em 0.6em;
+            font-size: 0.85em;
+            flex: 1;
+            max-width: 400px;
+        }
+        
+        #section-editor {
+            border-radius: 4px;
+        }
+        
+        .editor-save-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        .editor-save-btn:hover:not(:disabled) {
+            background: #0056b3;
+        }
+        
+        .editor-save-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        
+        .section-header h3 {
+            margin: 0;
+            flex-grow: 1;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <h1>Kuvantaminen ja suunnittelu sädehoidossa</h1>
+    {% if not epa %}
+        <div style="color: red; font-weight: bold;">EPA-objektia ei löytynyt! Tallennus ei onnistu.</div>
+    {% endif %}
+    
+    <div id="sections-list">
+        {% for section in sections %}
+            <div class="section" data-section-id="{{ section.id }}">
+                <div class="section-header">
+                    <h3 onclick="openEditSection({{ section.id }})">{{ section.title }}</h3>
+                    <div class="section-actions">
+                        <button class="editor-save-btn" onclick="openEditSection({{ section.id }})" title="Muokkaa"><i class="fas fa-edit"></i></button>
+                        <button class="editor-save-btn" style="background:rgba(201, 75, 75, 0.7);" onclick="deleteSection({{ section.id }})" title="Poista"><i class="fas fa-trash"></i></button>
+                        <button class="editor-save-btn" style="background:rgba(39, 174, 96, 0.7);" onclick="openAddSectionAfter({{ section.order }})" title="Lisää osio tähän"><i class="fas fa-plus"></i></button>
+                    </div>
+                </div>
+                <div class="skill-widget">
+                    <label>Osaamiseni tasolla:</label>
+                    <select data-section-id="{{ section.id }}" onchange="updateProficiencyLevel(this)">
+                        <option value="1" {% if section.proficiency_level == '1' %}selected{% endif %}>1 — Aihe on uusi/tuntematon/vieras</option>
+                        <option value="2" {% if section.proficiency_level == '2' %}selected{% endif %}>2 — Yleistason/teoreettinen ymmärrys</option>
+                        <option value="3" {% if section.proficiency_level == '3' %}selected{% endif %}>3 — Ymmärtää ja osaa soveltaa käytännössä</option>
+                    </select>
+                </div>
+                <div class="section-content">{{ section.content|safe }}</div>
+            </div>
+        {% empty %}
+            <p>Ei vielä sisältöä.</p>
+        {% endfor %}
+    </div>
+
+    <hr>
+    <h2>Lisää uusi osio</h2>
+    <form id="add-section-form">
+        <div class="form-group">
+            <label for="section-title">Otsikko:</label>
+            <input type="text" id="section-title" placeholder="Kirjoita osion otsikko..." class="section-title-input" required>
+        </div>
+        <div class="form-group">
+            <div class="skill-widget">
+                <label for="section-proficiency">Osaamiseni tasolla:</label>
+                <select id="section-proficiency" class="section-proficiency-input">
+                    <option value="1">1 — Aihe on uusi/tuntematon/vieras</option>
+                    <option value="2">2 — Yleistason/teoreettinen ymmärrys</option>
+                    <option value="3">3 — Ymmärtää ja osaa soveltaa käytännössä</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="section-editor">Sisältö:</label>
+            <div id="section-editor" style="min-height: 200px; border: 1px solid #ccc; padding: 10px;">
+                <p>Kirjoita osion sisältö tähän...</p>
+            </div>
+        </div>
+        <button type="button" class="editor-save-btn" onclick="saveNewSection()" {% if not epa %}disabled{% endif %}>Tallenna osio</button>
+    </form>
+    <div id="section-save-status"></div>
+
+    <script>
+        // Set EPA ID and URL paths for use by base.html functions
+        window.pageEpaId = {% if epa %}{{ epa.id }}{% else %}null{% endif %};
+        window.addSectionUrl = "{% url 'add_sadehoito_kuvantaminen_suunnittelu_section_view' %}";
+        window.editSectionUrl = "{% url 'edit_sadehoito_kuvantaminen_suunnittelu_section_view' %}";
+        window.deleteSectionUrl = "{% url 'delete_sadehoito_kuvantaminen_suunnittelu_section_view' %}";
+
+        // Function to update proficiency level
+        function updateProficiencyLevel(selectElement) {
+            const sectionId = selectElement.getAttribute('data-section-id');
+            const proficiencyLevel = selectElement.value;
+            
+            // Send to backend
+            fetch(window.editSectionUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": window.csrfToken
+                },
+                body: JSON.stringify({ 
+                    section_id: sectionId,
+                    proficiency_level: proficiencyLevel,
+                    action: 'update_proficiency'
+                })
+            }).catch(error => {
+                console.error('Error updating proficiency level:', error);
+            });
+        }
+
+        // Initialize main section editor
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOMContentLoaded fired, initializing editor...');
+            const editorElement = document.getElementById('section-editor');
+            
+            if (!editorElement) {
+                console.error('Editor element not found!');
+                return;
+            }
+            
+            console.log('Editor element found, creating ClassicEditor...');
+            ClassicEditor.create(editorElement, getEditorConfig())
+                .then(editor => {
+                    console.log('Editor created successfully');
+                    window.mainEditorInstance = editor; // Store globally for saveNewSection
+                    addMathButtonToEditor(editor);
+                })
+                .catch(error => {
+                    console.error('Editor creation failed:', error);
+                    // Fallback: show a simple textarea
+                    editorElement.innerHTML = '<textarea style="width:100%; height:200px; padding:10px;" placeholder="Kirjoita sisältö tähän..." id="fallback-editor"></textarea>';
+                });
+        });
+    </script>
+    </script>
+{% endblock %}

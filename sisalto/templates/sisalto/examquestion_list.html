@@ -1,0 +1,736 @@
+{% extends "sisalto/base.html" %}
+
+{% block title %}Tenttikysymykset{% endblock %}
+
+{% block extra_css %}
+<style>
+body {
+    background-color: #f8f9fa;
+}
+
+.container-fluid {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.main-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 3rem 2rem;
+    margin-bottom: 3rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    text-align: center;
+}
+
+.main-header h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.main-header p {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.stats-section {
+    margin-bottom: 3rem;
+}
+
+.stats-container {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-card.primary-action {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.filters-section {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    margin-bottom: 3rem;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.filters-title {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.filter-group {
+    margin-bottom: 1rem;
+}
+
+.filter-label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.form-control {
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+    padding: 0.75rem 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15);
+}
+
+.btn-clear {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 10px;
+    padding: 0.75rem 1.5rem;
+    color: white;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-clear:hover {
+    background: linear-gradient(135deg, #5a67d8 0%, #667eea 100%);
+    color: white;
+}
+
+.clean-table {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.clean-table thead th {
+    background: #2c3e50;
+    color: #f1c40f;
+    font-weight: 600;
+    padding: 1rem;
+    border: none;
+    text-align: left;
+}
+
+.clean-table tbody td {
+    padding: 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.clean-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.question-title {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.3rem;
+}
+
+.subject-badge {
+    background: #e3f2fd;
+    color: #1565c0;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.year-badge {
+    background: #fff3e0;
+    color: #ef6c00;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.85em;
+    display: inline-block;
+}
+
+.question-number {
+    background: #f3e5f5;
+    color: #7b1fa2;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.85em;
+    display: inline-block;
+}
+
+.expand-btn {
+    background: none;
+    border: none;
+    color: #007bff;
+    font-size: 0.85em;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+    margin-top: 0.5rem;
+}
+
+.expand-btn:hover {
+    color: #0056b3;
+}
+
+.full-question {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 0.5rem;
+    font-size: 0.9em;
+    line-height: 1.5;
+    border-left: 4px solid #007bff;
+}
+</style>
+{% endblock %}
+}
+
+.main-header h1, .main-header p {
+    position: relative;
+    z-index: 2;
+}
+
+.stats-section {
+    margin-bottom: 4rem;
+}
+
+.stats-container {
+    background: white;
+    border-radius: 25px;
+    padding: 3rem 2rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    border: none;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2.5rem;
+    margin-bottom: 0;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    border: none;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.stat-card:hover::before {
+    opacity: 1;
+}
+
+.stat-card.primary-action {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+}
+
+.stat-card.primary-action::before {
+    background: linear-gradient(90deg, #ffffff40, #ffffff60);
+    opacity: 1;
+}
+
+.stat-card.primary-action:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 25px 50px rgba(102, 126, 234, 0.4);
+}
+
+.filters-section {
+    background: white;
+    padding: 3rem 2.5rem;
+    border-radius: 25px;
+    margin-bottom: 4rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    border: none;
+}
+
+.filters-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    text-align: center;
+    justify-content: center;
+}
+
+.filter-group {
+    margin-bottom: 1.5rem;
+}
+
+.filter-label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.form-control {
+    border-radius: 15px;
+    border: 2px solid #e9ecef;
+    padding: 1rem 1.5rem;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    background: #fafbfc;
+}
+
+.form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15);
+    background: white;
+}
+
+.btn-clear {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 15px;
+    padding: 1rem 1.5rem;
+    color: white;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-clear:hover {
+    background: linear-gradient(135deg, #5a67d8 0%, #667eea 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    color: white;
+}
+
+.clean-table {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    border: 1px solid #e9ecef;
+}
+
+.clean-table table {
+    margin-bottom: 0;
+    border: none;
+}
+
+.clean-table thead th {
+    background: #2c3e50;
+    color: #f1c40f;
+    font-weight: 600;
+    font-size: 1.1em;
+    padding: 1.2rem 1rem;
+    border: none;
+    text-align: left;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.clean-table tbody td {
+    padding: 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #e9ecef;
+    font-size: 0.95em;
+}
+
+.clean-table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.clean-table tbody tr:hover {
+    background-color: #e3f2fd;
+    transition: background-color 0.2s ease;
+}
+
+.question-title {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.3rem;
+    line-height: 1.4;
+}
+
+.subject-badge {
+    background: #e3f2fd;
+    color: #1565c0;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: 600;
+    display: inline-block;
+    max-width: 180px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.question-number {
+    background: #f3e5f5;
+    color: #7b1fa2;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.85em;
+    display: inline-block;
+}
+
+.year-badge {
+    background: #fff3e0;
+    color: #ef6c00;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.85em;
+    display: inline-block;
+}
+
+.expand-btn {
+    background: none;
+    border: none;
+    color: #007bff;
+    font-size: 0.85em;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+    margin-top: 0.5rem;
+    transition: color 0.2s ease;
+}
+
+.expand-btn:hover {
+    color: #0056b3;
+}
+
+.full-question {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 0.5rem;
+    font-size: 0.9em;
+    line-height: 1.5;
+    border-left: 4px solid #007bff;
+}
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4" style="background: #f8f9fa; min-height: 100vh;">
+    <!-- Header -->
+    <div class="main-header">
+        <div class="mb-4">
+            <h1 class="display-3 font-weight-bold mb-3">📚 Tenttikysymykset</h1>
+            <p class="lead mb-3 opacity-90">Sairaalafyysikon erikoistumiskoe - Kysymyspankki</p>
+            <p class="mb-0 opacity-75">Harjoittele ja hallitse erikoistumiskokeen kysymykset</p>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="stats-section">
+        <div class="stats-container">
+            <div class="stats-grid">
+                <div class="stat-card primary-action">
+                    <div class="mb-4">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🎯</div>
+                        <h4 class="font-weight-bold mb-3">Aloita harjoittelu</h4>
+                    </div>
+                    <a href="{% url 'exam_practice' %}" class="btn btn-light btn-lg w-100 text-primary font-weight-bold">
+                        Harjoittele satunnaisilla kysymyksillä
+                    </a>
+                </div>
+                <div class="stat-card">
+                    <div class="mb-3">
+                        <div style="font-size: 2.5rem; color: #667eea; margin-bottom: 1rem;">📊</div>
+                        <h2 class="font-weight-bold text-primary mb-2">{{ questions.count }}</h2>
+                        <h5 class="font-weight-bold text-muted mb-1">Kysymystä yhteensä</h5>
+                        <small class="text-muted">Kaikki saatavilla olevat kysymykset</small>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="mb-3">
+                        <div style="font-size: 2.5rem; color: #667eea; margin-bottom: 1rem;">📅</div>
+                        <h2 class="font-weight-bold text-info mb-2">{{ years_range }}</h2>
+                        <h5 class="font-weight-bold text-muted mb-1">Vuosijakauma</h5>
+                        <small class="text-muted">Kysymysten aikavälillä</small>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="mb-3">
+                        <div style="font-size: 2.5rem; color: #667eea; margin-bottom: 1rem;">📚</div>
+                        <h2 class="font-weight-bold text-success mb-2">{{ subject_areas_count }}</h2>
+                        <h5 class="font-weight-bold text-muted mb-1">Eri aihe-aluetta</h5>
+                        <small class="text-muted">Erikoisalojen mukaan</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters-section">
+        <div class="filters-title">
+            <span style="font-size: 1.8rem;">🔍</span>
+            <span>Suodata ja hae kysymyksiä</span>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-3 col-md-4">
+                <div class="filter-group">
+                    <label class="filter-label">
+                        <span>�</span>
+                        <span>Hae tekstistä</span>
+                    </label>
+                    <input type="text" class="form-control" id="searchInput" 
+                           placeholder="Kirjoita hakusana...">
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-3">
+                <div class="filter-group">
+                    <label class="filter-label">
+                        <span style="font-size: 1.2rem;">📅</span>
+                        <span>Vuosi</span>
+                    </label>
+                    <select class="form-control" id="yearFilter">
+                        <option value="">Kaikki vuodet</option>
+                        <!-- JavaScript täyttää -->
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3">
+                <div class="filter-group">
+                    <label class="filter-label">
+                        <span style="font-size: 1.2rem;">📚</span>
+                        <span>Aihe-alue</span>
+                    </label>
+                    <select class="form-control" id="subjectFilter">
+                        <option value="">Kaikki aiheet</option>
+                        <!-- JavaScript täyttää -->
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2">
+                <div class="filter-group">
+                    <label class="filter-label">&nbsp;</label>
+                    <button class="btn btn-clear w-100" onclick="clearAllFilters()">
+                        <span style="font-size: 1.1rem;">🔄</span>
+                        <span>Tyhjennä</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Questions Table -->
+    <div class="clean-table">
+        <table class="table mb-0">
+            <thead>
+                <tr>
+                    <th style="width: 35%;">Kysymys</th>
+                    <th style="width: 20%;">Aihe</th>
+                    <th style="width: 15%;">Tenttipäivä</th>
+                    <th style="width: 10%;">Vuosi</th>
+                    <th style="width: 10%;">Q#</th>
+                    <th style="width: 10%;">Toiminnot</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for question in questions %}
+                <tr>
+                    <td>
+                        <div class="question-title">
+                            {{ question.question_text|truncatechars:80 }}
+                        </div>
+                        {% if question.question_text|length > 80 %}
+                        <button class="expand-btn" onclick="toggleQuestion({{ question.id }})">
+                            Näytä koko kysymys
+                        </button>
+                        <div class="full-question" id="full-{{ question.id }}" style="display: none;">
+                            {{ question.question_text }}
+                            <br><br>
+                            <button class="expand-btn" onclick="toggleQuestion({{ question.id }})">
+                                Piilota
+                            </button>
+                        </div>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="subject-badge">
+                            {{ question.subject_area|default:"Ei määritelty" }}
+                        </span>
+                    </td>
+                    <td>
+                        {{ question.exam_date|default:"Ei tiedossa" }}
+                    </td>
+                    <td>
+                        <span class="year-badge">
+                            {{ question.year|default:"?" }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="question-number">
+                            {{ question.question_number }}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="{% url 'exam_practice' %}?question={{ question.id }}" 
+                           class="btn btn-sm btn-outline-primary" title="Harjoittele tätä kysymystä">
+                            📝 Harjoittele
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-5">
+                        <h5>Ei kysymyksiä löytynyt</h5>
+                        <p>Kokeile muuttaa hakukriteerejä.</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Results Counter -->
+    <div class="mt-3 text-center">
+        <small class="text-muted">
+            Näytetään <span id="visibleCount">{{ questions.count }}</span> kysymystä
+        </small>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Search and filter functionality
+document.getElementById('searchInput').addEventListener('keyup', filterTable);
+document.getElementById('yearFilter').addEventListener('change', filterTable);
+document.getElementById('subjectFilter').addEventListener('change', filterTable);
+
+function filterTable() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const yearFilter = document.getElementById('yearFilter').value;
+    const subjectFilter = document.getElementById('subjectFilter').value;
+    const rows = document.querySelectorAll('tbody tr');
+    
+    let visibleCount = 0;
+    
+    rows.forEach(row => {
+        if (row.children.length === 1) return; // Skip empty row
+        
+        const questionText = row.children[5].textContent.toLowerCase();
+        const subject = row.children[4].textContent.toLowerCase();
+        const year = row.children[3].textContent.trim();
+        
+        const matchesSearch = questionText.includes(searchTerm);
+        const matchesYear = !yearFilter || year.includes(yearFilter);
+        const matchesSubject = !subjectFilter || subject.includes(subjectFilter.toLowerCase());
+        
+        if (matchesSearch && matchesYear && matchesSubject) {
+            row.style.display = '';
+            visibleCount++;
+        } else {
+            row.style.display = 'none';
+        }
+    });
+    
+    document.getElementById('visibleCount').textContent = visibleCount;
+}
+
+function clearAllFilters() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('yearFilter').value = '';
+    document.getElementById('subjectFilter').value = '';
+    filterTable();
+}
+
+function toggleQuestion(questionId) {
+    const fullDiv = document.getElementById('full-' + questionId);
+    const isVisible = fullDiv.style.display !== 'none';
+    fullDiv.style.display = isVisible ? 'none' : 'block';
+}
+
+// Initialize filters on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const subjectFilter = document.getElementById('subjectFilter');
+    const yearFilter = document.getElementById('yearFilter');
+    const subjects = new Set();
+    const years = new Set();
+    
+    // Collect unique subjects and years
+    document.querySelectorAll('tbody tr').forEach(row => {
+        if (row.children.length > 1) {
+            const subject = row.children[4].textContent.trim();
+            const year = row.children[3].textContent.trim();
+            subjects.add(subject);
+            if (year !== '?') years.add(year);
+        }
+    });
+    
+    // Populate filters
+    Array.from(subjects).sort().forEach(subject => {
+        const option = document.createElement('option');
+        option.value = subject.toLowerCase();
+        option.textContent = subject;
+        subjectFilter.appendChild(option);
+    });
+    
+    Array.from(years).sort((a, b) => b - a).forEach(year => {
+        const option = document.createElement('option');
+        option.value = year;
+        option.textContent = year;
+        yearFilter.appendChild(option);
+    });
+});
+</script>
+{% endblock %}

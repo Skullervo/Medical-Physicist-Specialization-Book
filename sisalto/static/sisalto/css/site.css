@@ -1,0 +1,296 @@
+body {
+    background: #222;
+    color: #fff;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    scroll-behavior: smooth;
+}
+.container {
+    display: flex;
+    min-height: calc(100vh - 56px); /* Vähennetään header:n korkeus */
+}
+.sidebar {
+    position: sticky;
+    top: 56px; /* Header:n korkeus */
+    height: calc(100vh - 56px);
+    overflow-y: auto;
+    width: 260px;
+    background: #2d2d2d;
+    padding: 20px 0 20px 20px;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.2);
+    /* Sujuva scrollaus */
+    scrollbar-width: thin;
+    scrollbar-color: #555 transparent;
+}
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+.sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+.sidebar::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 3px;
+}
+.sidebar h2 {
+    font-size: 1.1em;
+    margin-bottom: 1em;
+    color: #fff;
+}
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+.sidebar li {
+    margin-bottom: 0.7em;
+}
+.sidebar details ul {
+    margin-left: 18px;
+    font-size: 0.97em;
+    color: #b0b8c1;
+    padding-bottom: 0.5em;
+}
+.sidebar details ul li a {
+    color: #b0b8c1;
+    font-weight: 400;
+}
+.sidebar details ul li a:hover {
+    color: #90caf9;
+}
+.sidebar details[open] > summary {
+    color: #90caf9;
+}
+
+.sidebar a {
+    color: #b0b8c1;
+    text-decoration: none;
+    font-weight: 500;
+}
+.sidebar a:hover {
+    color: #90caf9;
+}
+.main {
+    flex: 1;
+    padding: 40px 40px 40px 40px;
+    max-width: 900px;
+}
+.toc {
+    position: sticky;
+    top: 56px; /* Header:n korkeus */
+    height: calc(100vh - 56px);
+    overflow-y: auto;
+    width: 260px;
+    background: #2d2d2d;
+    padding: 20px;
+    box-shadow: -2px 0 8px rgba(0,0,0,0.2);
+    /* Sujuva scrollaus */
+    scrollbar-width: thin;
+    scrollbar-color: #555 transparent;
+    /* Transition for smooth toggling */
+    transition: transform 0.3s ease;
+}
+
+/* Hide TOC when it doesn't have toc-open class and screen is mobile */
+@media (max-width: 1200px) {
+    .toc:not(.toc-open) {
+        transform: translateX(100%);
+    }
+}
+
+/* Also hide TOC on desktop when no toc-open class - for toggle functionality */
+@media (min-width: 1201px) {
+    .toc:not(.toc-open) {
+        display: none;
+    }
+}
+
+/* Show TOC when toc-open class is added (works on all screen sizes) */
+.toc.toc-open {
+    position: fixed;
+    top: 56px;
+    right: 0;
+    z-index: 1000;
+    transform: translateX(0);
+    box-shadow: -2px 0 12px rgba(0,0,0,0.5);
+}
+.toc::-webkit-scrollbar {
+    width: 6px;
+}
+.toc::-webkit-scrollbar-track {
+    background: transparent;
+}
+.toc::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 3px;
+}
+.toc h3 {
+    color: #fff;
+    font-size: 1em;
+    margin-bottom: 1em;
+}
+.toc ul {
+    list-style: none;
+    padding: 0;
+}
+.toc li {
+    margin-bottom: 0.5em;
+}
+.toc a {
+    color: #90caf9;
+    text-decoration: none;
+}
+.toc a:hover {
+    text-decoration: underline;
+}
+img {
+    max-width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+/* Toggle buttons */
+.toc-toggle {
+    display: flex !important;
+    position: fixed;
+    z-index: 9999;
+    background: rgba(45, 45, 45, 0.8);
+    color: #e0e0e0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 8px;
+    cursor: pointer;
+    font-size: 0.9em;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    backdrop-filter: blur(10px);
+    transition: all 0.2s ease;
+    opacity: 0.7;
+}
+
+.toc-toggle {
+    top: 70px;
+    right: 20px;
+}
+
+.toc-toggle:hover {
+    background: rgba(60, 60, 60, 0.9);
+    opacity: 1;
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+.toc-toggle span {
+    display: none;
+}
+
+.toc-toggle i {
+    margin: 0;
+    font-size: 16px;
+}
+
+/* Force show for debugging */
+@media (max-width: 1200px) {
+    .sidebar-toggle, .toc-toggle {
+        display: flex !important;
+        align-items: center;
+    }
+}
+
+.sidebar-toggle {
+    bottom: 20px;
+    left: 20px;
+}
+
+.toc-toggle {
+    display: flex !important; /* Force show on all screen sizes */
+    align-items: center;
+    bottom: 20px;
+    right: 20px;
+    position: fixed;
+    background: rgba(45, 45, 45, 0.95);
+    border: 1px solid #555;
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(10px);
+    z-index: 1001;
+    font-size: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.toc-toggle:hover {
+    background: rgba(55, 55, 55, 0.95);
+    border-color: #666;
+    transform: translateY(-1px);
+}
+
+.sidebar-toggle:hover {
+    background: #3a3a3a;
+    transform: translateY(-2px);
+}
+
+.sidebar-toggle i, .toc-toggle i {
+    margin-right: 6px;
+}
+
+@media (max-width: 1200px) {
+    .container {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        position: sticky !important;
+        top: 56px !important;
+        height: calc(100vh - 56px) !important;
+        width: 260px !important;
+        transform: none !important;
+        transition: none !important;
+    }
+    
+    .toc {
+        position: fixed;
+        top: 56px;
+        right: 0;
+        height: calc(100vh - 56px);
+        width: 280px;
+        z-index: 1000;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        box-shadow: -2px 0 12px rgba(0,0,0,0.5);
+    }
+    
+    .toc-toggle {
+        display: flex !important;
+        align-items: center;
+    }
+    
+    .main {
+        max-width: 100%;
+        padding: 20px;
+        width: 100%;
+    }
+    
+    /* Overlay when TOC is open */
+    .toc.toc-open::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0,0,0,0.5);
+        z-index: -1;
+    }
+}
+
+@media (min-width: 1201px) {
+    .sidebar, .toc {
+        position: sticky !important;
+        transform: none !important;
+        transition: none !important;
+    }
+}

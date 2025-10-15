@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <title>{% block title %}Sivusto{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'sisalto/css/site.css' %}">
+    <link rel="stylesheet" href="{% static 'sisalto/css/header.css' %}">
+    <link rel="stylesheet" href="{% static 'sisalto/css/chatbot.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <!-- CKEditor for rich text editing -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+    <script src="{% static 'sisalto/js/ckeditor.js' %}"></script>
+    
+    <!-- MathJax for mathematical formulas -->
+    <script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            processEscapes: true,
+            processEnvironments: true
+        },
+        options: {
+            ignoreHtmlClass: 'ck-editor.*',
+            processHtmlClass: 'math-content'
+        },
+        startup: {
+            ready() {
+                console.log('MathJax is loaded and ready');
+                MathJax.startup.defaultReady();
+            }
+        }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- Define toggleToc function early -->
+    
+    <!-- DEBUG: Force show toggle buttons -->
+    <style>
+        .toc-toggle {
+            display: flex !important;
+            position: fixed !important;
+            z-index: 9999 !important;
+            background: #cbcbcbff !important; /* Red for debugging */
+            color: white !important;
+            border: 2px solid #7c7c7cff !important; /* Yellow border for visibility */
+            border-radius: 8px !important;
+            padding: 8px !important;
+            cursor: pointer !important;
+            font-size: 1em !important;
+            box-shadow: 0 4px 16px rgba(176, 176, 176, 0.8) !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 50px !important;
+            height: 50px !important;
+            transition: all 0.2s ease !important;
+            opacity: 1 !important;
+        }
+        
+        .toc-toggle {
+            top: 70px !important;
+            right: 20px !important;
+        }
+        
+        .toc-toggle:hover {
+            background: #545454ff !important;
+            transform: scale(1.1) !important;
+        }
+        
+        .toc-toggle span {
+            display: none !important;
+        }
+        
+        .toc-toggle i {
+            margin: 0 !important;
+            font-size: 18px !important;
+        }
+        
+        /* Sidebar and TOC mobile behavior */
+        @media (max-width: 1200px) {
+            .sidebar {
+                position: sticky !important;
+                top: 56px !important;
+                height: calc(100vh - 56px) !important;
+                width: 260px !important;
+                transform: none !important;
+                transition: none !important;
+            }
+            
+            .toc {
+                position: fixed !important;
+                top: 56px !important;
+                right: 0 !important;
+                height: calc(100vh - 56px) !important;
+                width: 280px !important;
+                z-index: 1000 !important;
+                transform: translateX(100%) !important;
+                transition: transform 0.3s ease !important;
+                box-shadow: -2px 0 12px rgba(0,0,0,0.5) !important;
+            }
+            
+            .toc.toc-open {
+                transform: translateX(0) !important;
+            }
+        }
+        
+        @media (min-width: 1201px) {
+            .sidebar, .toc {
+                position: sticky !important;
+                transform: none !important;
+                transition: none !important;
+            }
+        }
+        
+        @media (max-width: 1200px) {
+            .sidebar, .toc {
+                position: fixed !important;
+                top: 56px !important;
+                height: calc(100vh - 56px) !important;
+                width: 280px !important;
+                z-index: 1000 !important;
+                box-shadow: 2px 0 12px rgba(0,0,0,0.5) !important;
+            }
+            
+            .toc {
+                right: 0 !important;
+                box-shadow: -2px 0 12px rgba(0,0,0,0.5) !important;
+            }
+        }
+    </style>
+    
+    <!-- Common editor styles -->
+    <style>
+        .editor-toolbar { margin-bottom: 1em; }
+        .editor-save-btn { 
+            background: rgba(42, 46, 77, 0.7); 
+            color: rgba(255, 255, 255, 0.8); 
+            border: none; 
+            border-radius: 4px; 
+            padding: 4px 8px; 
+            font-size: 0.75em; 
+            cursor: pointer; 
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1); 
+            transition: all 0.2s; 
+            opacity: 0.6;
+        }
+        .editor-save-btn:hover { 
+            background: rgba(59, 65, 128, 0.9); 
+            opacity: 1;
+            transform: translateY(-1px);
+        }
+        .section-title-input {
+            background: #23232b !important;
+            color: #fff !important;
+            border: 1px solid #444 !important;
+            border-radius: 8px !important;
+            font-size: 1.1em !important;
+            padding: 10px 16px !important;
+            margin-bottom: 1em !important;
+        }
+        
+        /* CKEditor dark theme */
+        .ck-editor__editable {
+            background: #23232b !important;
+            color: #ffffffff !important;
+            border-radius: 8px;
+            border: 1px solid #444;
+            min-height: 200px;
+        }
+        .ck.ck-toolbar {
+            background: #23232b !important;
+            color: #fff !important;
+            border-radius: 8px 8px 0 0;
+            border: 1px solid #444;
+        }
+        .ck.ck-toolbar .ck-button {
+            color: #fff !important;
+        }
+        .ck.ck-dropdown,
+        .ck.ck-dropdown__panel,
+        .ck.ck-list__item,
+        .ck.ck-list__item .ck.ck-button,
+        .ck.ck-list__item .ck.ck-button.ck-on,
+        .ck.ck-list__item .ck.ck-button:hover,
+        .ck.ck-color-grid,
+        .ck.ck-color-grid__tile,
+        .ck.ck-color-picker,
+        .ck.ck-color-picker__row,
+        .ck.ck-input,
+        .ck.ck-labeled-field-view__input-wrapper {
+            background: #23232b !important;
+            color: #fff !important;
+            border: 1px solid #444 !important;
+        }
+        .ck.ck-list__item:hover,
+        .ck.ck-list__item .ck.ck-button:hover,
+        .ck.ck-color-grid__tile:hover {
+            background: #444 !important;
+        }
+        .ck.ck-button.ck-on {
+            background: #444 !important;
+            color: #fff !important;
+        }
+        
+        /* Section styling */
+        .section-block {
+            background: linear-gradient(135deg, #2d2d35 0%, #23232b 100%);
+            border-radius: 12px;
+            padding: 2em;
+            margin-bottom: 2em;
+            border: 1px solid #444;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .section-block h2 {
+            color: #90caf9;
+            margin-top: 0;
+            margin-bottom: 1em;
+        }
+        .section-content {
+            margin-bottom: 1.5em;
+            line-height: 1.6;
+        }
+        
+        /* Section actions styling */
+        .section-actions {
+            margin-top: 1.5em;
+            display: flex;
+            gap: 0.3em;
+            flex-wrap: wrap;
+        }
+        .section-actions .editor-save-btn {
+            margin: 0;
+            width: 28px;
+            height: 28px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .section-actions .editor-save-btn i {
+            font-size: 12px;
+        }
+        
+        /* Sidebar active page highlighting */
+        .sidebar a.active {
+            background: rgba(144, 202, 249, 0.2);
+            color: #90caf9 !important;
+            font-weight: bold;
+            border-radius: 4px;
+            padding: 2px 6px;
+        }
+        
+        /* Modal napit - säilyttävät alkuperäisen koon */
+        .modal .editor-save-btn {
+            width: auto;
+            height: auto;
+            padding: 8px 16px;
+            font-size: 0.9em;
+        }
+        
+        /* Modal styling */
+        .modal {
+            position: fixed;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #23232b;
+            color: #fff;
+            border-radius: 8px;
+            padding: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 16px #000;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            padding: 1.5em 2em 1em;
+            border-bottom: 1px solid #444;
+        }
+        .modal-header h2 {
+            margin: 0;
+            color: #90caf9;
+        }
+        .modal-content {
+            padding: 2em;
+        }
+        .modal-footer {
+            padding: 1em 2em 1.5em;
+            border-top: 1px solid #444;
+            display: flex;
+            gap: 1em;
+            justify-content: flex-end;
+        }
+
+        /* Section management styles */
+        .section {
+            background: #2a2e4d;
+            border-radius: 8px;
+            padding: 1.5em;
+            margin-bottom: 1.5em;
+            border: 1px solid #444;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1em;
+        }
+        .section-header h3 {
+            margin: 0;
+            color: #90caf9;
+        }
+        .section-actions {
+            display: flex;
+            gap: 0.5em;
+        }
+        .section-content {
+            margin: 1em 0;
+            line-height: 1.6;
+        }
+        .section-title-input {
+            width: 100%;
+            padding: 0.5em;
+            margin-bottom: 1em;
+            background: #333;
+            color: #fff;
+            border: 1px solid #666;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+    </style>
+    
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    {% csrf_token %}
+    
+    <script>
+        // Make CSRF token available globally
+        window.csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    </script>
+    
+    <div class="header">
+        <span class="header-logo">
+            <i class="fa-solid fa-radiation fa-lg" style="color:#90caf9;"></i>
+        </span>
+        <span class="header-title">{% block header_title %}{{ page_title|default:"Erikoistuminen sairaalafyysikoksi" }}{% endblock %}</span>
+        <span class="header-search">
+            <input type="text" placeholder="Search">
+            <button><i class="fa fa-search"></i></button>
+        </span>
+    </div>
+    
+    <!-- TOC toggle button for mobile -->
+    <button id="toc-toggle" class="toc-toggle" onclick="
+        const toc = document.getElementById('toc');
+        if (toc) {
+            toc.classList.toggle('toc-open');
+            const icon = this.querySelector('i');
+            if (icon) {
+                if (toc.classList.contains('toc-open')) {
+                    icon.className = 'fas fa-times';
+                } else {
+                    icon.className = 'fas fa-list';
+                }
+            }
+        }
+    ">
+        <i class="fas fa-list"></i>
+        <span>Sisältö</span>
+    </button>
+    
+    <div class="container">
+        <nav class="sidebar" id="sidebar">
+            <!-- Otsikko poistettu, vain navigointilista jäljellä -->
+            <ul>
+                <li><a href="/">Etusivu</a></li>
+                <li>
+                    <details>
+                        <summary><a href="/epas/">EPA:t</a></summary>
+                        <ul>
+                            <li>
+                                <details>
+                                    <summary><a href="/radiologia_epas/">Radiologia</a></summary>
+                                    <ul>
+                                        <li><a href="/radiologia/lapivalaisu-angiografia/">Läpivalaisu ja angiografia (ml kardiologia)</a></li>
+                                        <li><a href="/radiologia/magneettikuvaus/">Magneettikuvaus</a></li>
+                                        <li><a href="/radiologia/mammografia/">Mammografia</a></li>
+                                        <li><a href="/radiologia/natiivikuvantaminen/">Natiivikuvantaminen</a></li>
+                                        <li><a href="/radiologia/tietokonetomografia/">Tietokonetomografia</a></li>
+                                        <li><a href="/radiologia/ultraaani/">Ultraääni</a></li>
+                                        <li><a href="/radiologia/kuvankatselunaytot/">Kuvankatselunäytöt</a></li>
+                                        <li><a href="/radiologia/hammaskuvantaminen/">Hammas­kuvantaminen</a></li>
+                                        <li><a href="/radiologia/sateilybiologia-suojelu/">Säteilybiologia ja säteily­suojelu radiologiassa</a></li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details>
+                                    <summary><a href="/sadehoito_epas/">Sädehoito</a></summary>
+                                    <ul>
+                                        <li><a href="/sadehoito/peruskasitteet/">Sädehoidon peruskäsitteet</a></li>
+                                        <li><a href="/sadehoito/kuvantaminen_suunnittelu/">Kuvantaminen sädehoidon suunnittelua varten</a></li>
+                                        <li><a href="/sadehoito/ulkoinen/">Ulkoinen sädehoito</a></li>
+                                        <li><a href="/sadehoito/sisainen/">Sisäinen sädehoito</a></li>
+                                        <li><a href="/sadehoito/dosimetria/">Sädehoidon dosimetria</a></li>
+                                        <li><a href="/sadehoito/laitteet/">Säteilyä tuottavat laitteet sädehoidossa</a></li>
+                                        <li><a href="/sadehoito/sateilybiologia/">Säteilybiologia ja säteily­suojelu sädehoidossa</a></li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details>
+                                    <summary><a href="/isotooppi_epas/">Isotooppilääketiede</a></summary>
+                                    <ul>
+                                        <li><a href="/isotooppi/gammakamera/">Gammakamerateknologia</a></li>
+                                        <li><a href="/isotooppi/petkamera/">PET-kamerateknologia</a></li>
+                                        <li><a href="/isotooppi/annostelu_radiofarmasia/">Annostelu ja radiofarmasiatoiminta</a></li>
+                                        <li><a href="/isotooppi/gammakuvaus_spet/">Gammakuvaus ja SPET-tutkimukset</a></li>
+                                        <li><a href="/isotooppi/pet_tutkimukset/">PET-tutkimukset</a></li>
+                                        <li><a href="/isotooppi/radionuklidihoidot/">Radionuklidihoidot</a></li>
+                                        <li><a href="/isotooppi/sateilybiologia_suojelu/">Säteilybiologia ja säteily­suojelu isotooppitoiminnassa</a></li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details>
+                                    <summary><a href="/knf_epas/">KNF</a></summary>
+                                    <ul>
+                                        <li><a href="/knf/eeg/">EEG</a></li>
+                                        <li><a href="/knf/heratepotentiaali_enmg/">Herätepotentiaali ja ENMG-tutkimukset</a></li>
+                                        <li><a href="/knf/iom/">IOM</a></li>
+                                        <li><a href="/knf/laite_sahkoturvallisuus/">Laite- ja sähköturvallisuus</a></li>
+                                        <li><a href="/knf/sarja_tms_hoidot/">Sarja-TMS-hoidot ja navigoidut TMS-tutkimukset</a></li>
+                                        <li><a href="/knf/uni/">Uni</a></li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details>
+                                    <summary><a href="/fysiologia_epas/">Fysiologia</a></summary>
+                                    <ul>
+                                        <li><a href="/fysiologia/ekg/">EKG-tutkimukset</a></li>
+                                        <li><a href="/fysiologia/gi_kanava/">GI-kanavan tutkimukset</a></li>
+                                        <li><a href="/fysiologia/keuhkofunktio/">Keuhkofunktiotutkimukset</a></li>
+                                        <li><a href="/fysiologia/luuston_mineraali/">Luuston mineraalitiheyden mittaus</a></li>
+                                        <li><a href="/fysiologia/verenkierto/">Verenkiertotutkimukset</a></li>
+                                    </ul>
+                                </details>
+                            </li>
+                        </ul>
+                    </details>
+                </li>
+                <li><a href="/examquestions/">Tenttikysymykset</a></li>
+                <li><a href="/links/">Hyödyllisiä linkkejä</a></li>
+                <li><a href="/report/">Raportoi ongelmasta</a></li>
+                <li><a href="/sairaalafyysikot/">Sairaalafyysikot ry</a></li>
+            </ul>
+        </nav>
+        <main class="main">
+            {% block content %}{% endblock %}
+        </main>
+        <aside class="toc" id="toc">
+            <h3>Sisältö</h3>
+            <ul>
+                {% block toc %}{% endblock %}
+            </ul>
+        </aside>
+    </div>
+    
+    <!-- AI Chatbot Widget -->
+    <div id="ai-chatbot" class="chatbot-widget chatbot-minimized">
+        <div class="chatbot-header" onclick="toggleChatbot()">
+            <div class="chatbot-title">
+                <i class="fas fa-robot"></i>
+                <span>AI Assistentti</span>
+            </div>
+            <div class="chatbot-controls">
+                <button id="chatbot-toggle" class="chatbot-btn-icon">
+                    <i class="fas fa-chevron-up"></i>
+                </button>
+            </div>
+        </div>
+        <div class="chatbot-body">
+            <div class="chatbot-messages" id="chatbot-messages">
+                <div class="chatbot-message bot-message">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        Hei! Olen AI-assistenttisi. Voin auttaa sinua sairaalafysiikan opiskelussa. Kysy minulta mitä tahansa radiologiasta, sädehoidosta, isotooppilääketieteestä tai KNF:stä!<br><br>
+                        <small><strong>💡 Testaa:</strong> Kirjoita "test: kysymyksesi"</small>
+                    </div>
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chatbot-input-field" placeholder="Kirjoita kysymyksesi..." onkeypress="handleChatbotKeypress(event)">
+                <button onclick="sendChatbotMessage()" class="chatbot-send-btn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+            <div class="chatbot-status" id="chatbot-status"></div>
+        </div>
+    </div>
+    
+    
+    <!-- Common editor JavaScript functions -->
+    <script>
+        // Global variables for editing
+        let currentMathEditor = null;
+        let editModalEditorInstance = null;
+        let editingSectionId = null;
+        let sectionEditorInstance = null;
+        let newModalEditorInstance = null;
+
+        // Math modal functions
+        function openMathModal(editor) {
+            currentMathEditor = editor;
+            document.getElementById('math-modal').style.display = 'block';
+            document.getElementById('math-input').value = '';
+            document.getElementById('math-preview').innerHTML = '';
+            document.getElementById('math-input').focus();
+        }
+
+        function closeMathModal() {
+            document.getElementById('math-modal').style.display = 'none';
+            currentMathEditor = null;
+        }
+
+        function insertMath() {
+            const mathText = document.getElementById('math-input').value;
+            if (mathText && currentMathEditor) {
+                const viewFragment = currentMathEditor.data.processor.toView(
+                    '<span class="math-content">' + mathText + '</span>'
+                );
+                const modelFragment = currentMathEditor.data.toModel(viewFragment);
+                currentMathEditor.model.insertContent(modelFragment);
+                closeMathModal();
+            }
+        }
+
+        // Add Math button to CKEditor instances
+        function addMathButtonToEditor(editor) {
+            editor.ui.componentFactory.add('mathButton', locale => {
+                const button = new editor.ui.ButtonView(locale);
+                button.set({
+                    label: 'Lisää kaava',
+                    icon: '<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 3h16v2H2V3zm0 4h16v2H2V7zm0 4h16v2H2v-2zm0 4h10v2H2v-2z"/><path d="M15 11l2 2-2 2"/></svg>',
+                    tooltip: true
+                });
+                button.on('execute', () => {
+                    openMathModal(editor);
+                });
+                return button;
+            });
+        }
+
+        // Common editor configuration
+        function getEditorConfig() {
+            return {
+                toolbar: [ 
+                    'heading', '|', 
+                    'bold', 'italic', 'underline', 'strikethrough', '|',
+                    'fontColor', 'fontBackgroundColor', 'fontSize', 'fontFamily', '|',
+                    'alignment', 'outdent', 'indent', '|',
+                    'bulletedList', 'numberedList', 'blockQuote', '|',
+                    'insertTable', 'link', 'mediaEmbed', 'mathButton', '|',
+                    'undo', 'redo'
+                ],
+                heading: { 
+                    options: [ 
+                        { model: 'paragraph', title: 'Normaali', class: 'ck-heading_paragraph' }, 
+                        { model: 'heading1', view: 'h1', title: 'Otsikko 1', class: 'ck-heading_heading1' }, 
+                        { model: 'heading2', view: 'h2', title: 'Otsikko 2', class: 'ck-heading_heading2' }, 
+                        { model: 'heading3', view: 'h3', title: 'Otsikko 3', class: 'ck-heading_heading3' } 
+                    ] 
+                },
+                alignment: {
+                    options: [ 'left', 'center', 'right', 'justify' ]
+                },
+                fontColor: {
+                    colors: [
+                        { color: '#000000', label: 'Musta' },
+                        { color: '#ffffff', label: 'Valkoinen' },
+                        { color: '#ff0000', label: 'Punainen' },
+                        { color: '#00ff00', label: 'Vihreä' },
+                        { color: '#0000ff', label: 'Sininen' },
+                        { color: '#ffff00', label: 'Keltainen' },
+                        { color: '#ff00ff', label: 'Magenta' },
+                        { color: '#00ffff', label: 'Cyan' },
+                        { color: '#808080', label: 'Harmaa' },
+                        { color: '#ffa500', label: 'Oranssi' }
+                    ]
+                },
+                fontBackgroundColor: {
+                    colors: [
+                        { color: '#000000', label: 'Musta' },
+                        { color: '#ffffff', label: 'Valkoinen' },
+                        { color: '#ff0000', label: 'Punainen' },
+                        { color: '#00ff00', label: 'Vihreä' },
+                        { color: '#0000ff', label: 'Sininen' },
+                        { color: '#ffff00', label: 'Keltainen' },
+                        { color: '#ff00ff', label: 'Magenta' },
+                        { color: '#00ffff', label: 'Cyan' },
+                        { color: '#808080', label: 'Harmaa' },
+                        { color: '#ffa500', label: 'Oranssi' }
+                    ]
+                },
+                fontSize: {
+                    options: [ 9, 11, 13, 'default', 17, 19, 21 ]
+                },
+                fontFamily: {
+                    options: [
+                        'default',
+                        'Arial, Helvetica, sans-serif',
+                        'Courier New, Courier, monospace',
+                        'Georgia, serif',
+                        'Lucida Sans Unicode, Lucida Grande, sans-serif',
+                        'Tahoma, Geneva, sans-serif',
+                        'Times New Roman, Times, serif',
+                        'Trebuchet MS, Helvetica, sans-serif',
+                        'Verdana, Geneva, sans-serif'
+                    ]
+                },
+                mediaEmbed: { previewsInData: true }
+            };
+        }
+
+        // Math input preview function
+        function setupMathPreview() {
+            if (document.getElementById('math-input')) {
+                document.getElementById('math-input').addEventListener('input', function() {
+                    const mathText = this.value;
+                    const preview = document.getElementById('math-preview');
+                    preview.innerHTML = mathText;
+                    
+                    if (window.MathJax && MathJax.typesetPromise) {
+                        MathJax.typesetPromise([preview]).catch(function (err) {
+                            preview.innerHTML = '<span style="color: #ff6b6b;">Kaavavirhe: Tarkista syntaksi</span>';
+                        });
+                    } else if (window.MathJax) {
+                        MathJax.Hub.Queue(["Typeset", MathJax.Hub, preview]);
+                    }
+                });
+            }
+        }
+
+        // Global variables for section management
+        let insertAfterOrder = null;
+        let currentEditSectionId = null;
+
+        // Section management functions (common for all pages)
+        function openEditSection(sectionId) {
+            currentEditSectionId = sectionId;
+            // Get section data from the page
+            const sectionElement = document.querySelector(`[data-section-id="${sectionId}"]`);
+            if (!sectionElement) return;
+            
+            const title = sectionElement.querySelector('.section-header h3').textContent;
+            const contentElement = sectionElement.querySelector('.section-content');
+            
+            // Get clean HTML content, removing any extra whitespace
+            let content = contentElement.innerHTML.trim();
+            
+            document.getElementById('edit-section-title').value = title;
+            document.getElementById('edit-section-modal').style.display = 'block';
+            
+            if(editModalEditorInstance) {
+                editModalEditorInstance.destroy();
+            }
+            
+            ClassicEditor.create(document.getElementById('edit-section-editor'), getEditorConfig())
+                .then(editor => {
+                    editModalEditorInstance = editor;
+                    // Set the content after a small delay to ensure editor is ready
+                    setTimeout(() => {
+                        editor.setData(content);
+                    }, 100);
+                    addMathButtonToEditor(editor);
+                })
+                .catch(error => {
+                    console.error('Error creating editor:', error);
+                });
+        }
+
+        function closeEditSection() {
+            document.getElementById('edit-section-modal').style.display = 'none';
+            if(editModalEditorInstance) {
+                editModalEditorInstance.destroy();
+                editModalEditorInstance = null;
+            }
+            currentEditSectionId = null;
+        }
+
+        function openAddSectionAfter(order) {
+            insertAfterOrder = order;
+            document.getElementById('add-section-modal').style.display = 'block';
+            document.getElementById('new-section-title').value = '';
+            
+            if(newModalEditorInstance) {
+                newModalEditorInstance.destroy();
+            }
+            
+            ClassicEditor.create(document.getElementById('new-section-editor'), getEditorConfig())
+                .then(editor => {
+                    newModalEditorInstance = editor;
+                    addMathButtonToEditor(editor);
+                });
+        }
+
+        function closeAddSectionModal() {
+            document.getElementById('add-section-modal').style.display = 'none';
+            if(newModalEditorInstance) {
+                newModalEditorInstance.destroy();
+                newModalEditorInstance = null;
+            }
+            insertAfterOrder = null;
+        }
+
+        function saveEditSection() {
+            if (!currentEditSectionId || !editModalEditorInstance) {
+                console.error('Missing section ID or editor instance');
+                return;
+            }
+            
+            const title = document.getElementById('edit-section-title').value;
+            const content = editModalEditorInstance.getData();
+            const currentPath = window.location.pathname;
+            
+            // Debug logging
+            console.log('Saving section:', {
+                id: currentEditSectionId,
+                title: title,
+                contentLength: content.length,
+                content: content.substring(0, 100) + '...'
+            });
+            
+            fetch(`${currentPath}edit_section/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": window.csrfToken
+                },
+                body: JSON.stringify({ 
+                    section_id: currentEditSectionId,
+                    title: title,
+                    content: content
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Server response:', data);
+                document.getElementById("edit-section-status").innerText = data.success ? "Muutokset tallennettu!" : "Tallennus epäonnistui.";
+                if(data.success) {
+                    setTimeout(() => { location.reload(); }, 800);
+                }
+            })
+            .catch(error => {
+                console.error('Error saving section:', error);
+                document.getElementById("edit-section-status").innerText = "Verkkovirhe: Tallennus epäonnistui.";
+            });
+        }
+
+        function saveNewSectionAtPosition() {
+            if (!newModalEditorInstance) return;
+            
+            const title = document.getElementById('new-section-title').value;
+            const content = newModalEditorInstance.getData();
+            const currentPath = window.location.pathname;
+            
+            // Get EPA ID from the page
+            const epaId = window.pageEpaId; // This needs to be set by each page
+            
+            fetch(`${currentPath}add_section/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": window.csrfToken
+                },
+                body: JSON.stringify({ 
+                    title: title, 
+                    content: content, 
+                    epa_id: epaId,
+                    after_order: insertAfterOrder
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("new-section-status").innerText = data.success ? "Osio tallennettu!" : "Tallennus epäonnistui.";
+                if(data.success) {
+                    setTimeout(() => { location.reload(); }, 800);
+                }
+            });
+        }
+
+        // Function for saving from main page editor
+        function saveNewSection() {
+            if (!window.mainEditorInstance) {
+                document.getElementById("section-save-status").innerText = "Virhe: Editor ei ole valmis.";
+                return;
+            }
+            
+            const title = document.getElementById('section-title').value;
+            const content = window.mainEditorInstance.getData();
+            const proficiencyLevel = document.getElementById('section-proficiency') ? 
+                document.getElementById('section-proficiency').value : '1';
+            const currentPath = window.location.pathname;
+            
+            // Get EPA ID from the page
+            const epaId = window.pageEpaId;
+            
+            if (!title || !epaId) {
+                document.getElementById("section-save-status").innerText = "Virhe: Puuttuva otsikko tai EPA ID.";
+                return;
+            }
+            
+            fetch(`${currentPath}add_section/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": window.csrfToken
+                },
+                body: JSON.stringify({ 
+                    title: title, 
+                    content: content, 
+                    proficiency_level: proficiencyLevel,
+                    epa_id: epaId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("section-save-status").innerText = data.success ? "Osio tallennettu!" : "Tallennus epäonnistui.";
+                if(data.success) {
+                    // Clear the form
+                    document.getElementById('section-title').value = '';
+                    window.mainEditorInstance.setData('');
+                    setTimeout(() => { location.reload(); }, 800);
+                }
+            })
+            .catch(error => {
+                console.error('Error saving section:', error);
+                document.getElementById("section-save-status").innerText = "Tallennus epäonnistui: " + error.message;
+            });
+        }
+
+        function deleteSection(sectionId) {
+            if (confirm('Haluatko varmasti poistaa tämän osion?')) {
+                const currentPath = window.location.pathname;
+                
+                fetch(`${currentPath}delete_section/`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": window.csrfToken
+                    },
+                    body: JSON.stringify({ section_id: sectionId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.success) {
+                        location.reload();
+                    } else {
+                        alert('Poistaminen epäonnistui.');
+                    }
+                });
+            }
+        }
+
+        // Initialize common functionality when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setupMathPreview();
+            initializeSidebarState();
+            highlightActivePage();
+        });
+
+        // Highlight the current page in sidebar
+        function highlightActivePage() {
+            const currentPath = window.location.pathname;
+            const sidebarLinks = document.querySelectorAll('.sidebar a');
+            
+            sidebarLinks.forEach(link => {
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('active');
+                    
+                    // Also open parent details elements
+                    let parent = link.parentElement;
+                    while (parent) {
+                        if (parent.tagName === 'DETAILS') {
+                            parent.setAttribute('open', '');
+                        }
+                        parent = parent.parentElement;
+                    }
+                }
+            });
+        }
+
+        // Sidebar state management
+        function initializeSidebarState() {
+            // First highlight active page and open its parents
+            highlightActivePage();
+            
+            // Then restore any additional saved state from localStorage
+            const savedState = localStorage.getItem('sidebarState');
+            if (savedState) {
+                const openItems = JSON.parse(savedState);
+                openItems.forEach(index => {
+                    const details = document.querySelectorAll('.sidebar details')[index];
+                    if (details) {
+                        details.setAttribute('open', '');
+                    }
+                });
+            }
+
+            // Add event listeners to save state when details are toggled
+            const detailsElements = document.querySelectorAll('.sidebar details');
+            detailsElements.forEach((details, index) => {
+                details.addEventListener('toggle', () => {
+                    // Small delay to ensure the state has changed
+                    setTimeout(saveSidebarState, 10);
+                });
+            });
+        }
+
+        function saveSidebarState() {
+            const detailsElements = document.querySelectorAll('.sidebar details');
+            const openItems = [];
+            
+            detailsElements.forEach((details, index) => {
+                if (details.hasAttribute('open')) {
+                    openItems.push(index);
+                }
+            });
+            
+            localStorage.setItem('sidebarState', JSON.stringify(openItems));
+        }
+    </script>
+    
+    <!-- Math Modal (common for all pages) -->
+    <div id="math-modal" class="modal" style="display:none;">
+        <div class="modal-header">
+            <h2>Lisää matemaattinen kaava</h2>
+        </div>
+        <div class="modal-content">
+            <p>Kirjoita kaava LaTeX-muodossa:</p>
+            <input type="text" id="math-input" placeholder="Esim: E = mc^2 tai \\frac{a}{b}" style="width: 100%; padding: 8px; margin-bottom: 1em;">
+            <div style="background: #333; padding: 1em; border-radius: 4px; margin-bottom: 1em;">
+                <strong>Esikatselu:</strong>
+                <div id="math-preview" style="margin-top: 0.5em; min-height: 2em;"></div>
+            </div>
+            <div style="font-size: 0.9em; color: #aaa;">
+                <strong>Ohjeita:</strong><br>
+                • Murtoluvut: \\frac{osoittaja}{nimittäjä}<br>
+                • Potenssi: x^2 tai x^{2n}<br>
+                • Juuri: \\sqrt{x} tai \\sqrt[n]{x}<br>
+                • Kreikkalaiset kirjaimet: \\alpha, \\beta, \\gamma<br>
+                • Yhtälöt: \\int, \\sum, \\lim
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="editor-save-btn" onclick="insertMath()">Lisää kaava</button>
+            <button type="button" class="editor-save-btn" style="background:#444;" onclick="closeMathModal()">Peruuta</button>
+        </div>
+    </div>
+
+    <!-- Common Section Modals -->
+    <!-- Edit section modal -->
+    <div id="edit-section-modal" class="modal" style="display:none;">
+        <div class="modal-header">
+            <h2>Muokkaa osio</h2>
+        </div>
+        <div class="modal-content">
+            <input type="text" id="edit-section-title" class="section-title-input">
+            <div id="edit-section-editor"></div>
+            <div id="edit-section-status"></div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="editor-save-btn" onclick="saveEditSection()">Tallenna muutokset</button>
+            <button type="button" class="editor-save-btn" style="background:#444;" onclick="closeEditSection()">Peruuta</button>
+        </div>
+    </div>
+
+    <!-- Add section modal -->
+    <div id="add-section-modal" class="modal" style="display:none;">
+        <div class="modal-header">
+            <h2>Lisää uusi osio</h2>
+        </div>
+        <div class="modal-content">
+            <input type="text" id="new-section-title" class="section-title-input" placeholder="Otsikko">
+            <div id="new-section-editor"></div>
+            <div id="new-section-status"></div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="editor-save-btn" onclick="saveNewSectionAtPosition()">Tallenna osio</button>
+            <button type="button" class="editor-save-btn" style="background:#444;" onclick="closeAddSectionModal()">Peruuta</button>
+        </div>
+    </div>
+    
+    <!-- Responsive sidebar functionality -->
+    <script>
+        // Define function globally
+        window.toggleToc = function() {
+            alert('toggleToc function called!'); // Debug alert
+            console.log('toggleToc called');
+            const toc = document.getElementById('toc');
+            const toggle = document.getElementById('toc-toggle');
+            
+            console.log('toc element:', toc);
+            console.log('toggle element:', toggle);
+            
+            if (!toc) {
+                console.error('TOC element not found!');
+                alert('TOC element not found!');
+                return;
+            }
+            if (!toggle) {
+                console.error('TOC toggle button not found!');
+                alert('TOC toggle button not found!');
+                return;
+            }
+            
+            console.log('Before toggle - TOC classes:', toc.className);
+            toc.classList.toggle('toc-open');
+            console.log('After toggle - TOC classes:', toc.className);
+            
+            // Update toggle button icon
+            const icon = toggle.querySelector('i');
+    
+    <script src="{% static 'sisalto/js/site.js' %}"></script>
+    <script src="{% static 'sisalto/js/chatbot.js' %}"></script>
+</body>
+</html>

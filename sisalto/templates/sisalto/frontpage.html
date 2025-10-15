@@ -1,0 +1,14 @@
+{% extends "sisalto/base.html" %}
+
+{% block content %}
+    <h1>Etusivu</h1>
+    <ul>
+    {% for specialty in specialties %}
+        <li><a href="/specialty/{{ specialty.id }}/">{{ specialty.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block toc %}
+    <li>Etusivun sisältö</li>
+{% endblock %}

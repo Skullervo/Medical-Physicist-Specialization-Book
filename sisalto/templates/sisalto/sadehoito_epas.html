@@ -1,0 +1,13 @@
+{% extends "sisalto/base.html" %}
+{% block title %}Sädehoidon EPA:t{% endblock %}
+{% block content %}
+    <h1>Sädehoidon EPA:t</h1>
+    <ul>
+    {% for epa in epas %}
+        <li><a href="/epa/{{ epa.id }}/">{{ epa.title }}</a></li>
+    {% endfor %}
+    </ul>
+{% endblock %}
+{% block toc %}
+    <li>Sädehoidon EPA:t</li>
+{% endblock %}

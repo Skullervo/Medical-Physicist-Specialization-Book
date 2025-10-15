@@ -1,0 +1,72 @@
+# Django
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+db.sqlite3
+*.sqlite3
+
+# Django migrations (keep structure but not specific migrations)
+# Uncomment if you want to ignore migration files
+# */migrations/0*.py
+
+# Media files (uploaded content)
+media/
+uploads/
+
+# Static files (collected)
+staticfiles/
+static_root/
+
+# Secret key and sensitive settings
+.env
+local_settings.py
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Node modules (if using npm for frontend)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python virtual environment
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+
+# Pytest
+.pytest_cache/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json

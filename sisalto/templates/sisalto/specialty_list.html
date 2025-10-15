@@ -1,0 +1,16 @@
+{% extends "sisalto/base.html" %}
+
+{% block title %}Erikoisalat{% endblock %}
+
+{% block content %}
+    <h1>Erikoisalat</h1>
+    <ul>
+    {% for specialty in specialties %}
+        <li><a href="/specialty/{{ specialty.id }}/">{{ specialty.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block toc %}
+    <li>Erikoisalojen lista</li>
+{% endblock %}

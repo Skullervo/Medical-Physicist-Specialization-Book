@@ -1,0 +1,152 @@
+{% extends "sisalto/base.html" %}
+{% load static %}
+{% block title %}Natiivikuvantaminen{% endblock %}
+{% block extra_head %}
+    <!-- Page-specific styles -->
+    <style>
+        /* Skill Level Widget - specific to this page */
+        .skill-widget {
+            margin: 0.5em 0 1.5em 0;
+            padding: 0.5em 0.8em;
+            background: #2a2e4d;
+            border-radius: 6px;
+            border: 1px solid #444;
+            display: flex;
+            align-items: center;
+            gap: 0.8em;
+            font-size: 0.9em;
+        }
+        .skill-widget label {
+            margin: 0;
+            font-weight: 500;
+            color: #e0e0e0;
+            white-space: nowrap;
+        }
+        .skill-widget select {
+            background: #23232b;
+            color: #fff;
+            border: 1px solid #666;
+            border-radius: 4px;
+            padding: 0.4em 0.6em;
+            font-size: 0.85em;
+            flex: 1;
+            max-width: 400px;
+        }
+        .skill-chip {
+            display: inline-block;
+            padding: 0.25em 0.6em;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        .skill-chip.level-1 { background: #e74c3c; color: #fff; }
+        .skill-chip.level-2 { background: #f39c12; color: #fff; }
+        .skill-chip.level-3 { background: #27ae60; color: #fff; }
+        
+        /* Table of Contents styling */
+        .toc-skill-chip {
+            display: inline-block;
+            padding: 0.15em 0.4em;
+            border-radius: 8px;
+            font-size: 0.7em;
+            font-weight: bold;
+            margin-left: 0.5em;
+            min-width: 1.2em;
+            text-align: center;
+        }
+        .toc-skill-chip.level-1 { background: #e74c3c; color: #fff; }
+        .toc-skill-chip.level-2 { background: #f39c12; color: #fff; }
+        .toc-skill-chip.level-3 { background: #27ae60; color: #fff; }
+    </style>
+{% endblock %}
+
+{% block toc %}
+    {% for section in sections %}
+        <li>
+            <a href="#section-{{ section.id }}" onclick="scrollToSection({{ section.id }})">
+                {{ section.title }}
+                {% if section.proficiency_level %}
+                    <span class="toc-skill-chip level-{{ section.proficiency_level }}">{{ section.proficiency_level }}</span>
+                {% endif %}
+            </a>
+        </li>
+    {% empty %}
+        <li><em>Ei sisältöä</em></li>
+    {% endfor %}
+{% endblock %}
+
+{% block content %}
+    <h1>Natiivikuvantaminen</h1>
+    {% if not epa %}
+        <div style="color: red; font-weight: bold;">EPA-objektia ei löytynyt! Tallennus ei onnistu.</div>
+    {% endif %}
+    
+    <div id="sections-list">
+        {% for section in sections %}
+            <div class="section" data-section-id="{{ section.id }}" id="section-{{ section.id }}">
+                <div class="section-header">
+                    <h3>{{ section.title }}</h3>
+                    <div class="section-actions">
+                        <button class="editor-save-btn" onclick="openEditSection({{ section.id }})" title="Muokkaa"><i class="fas fa-edit"></i></button>
+                        <button class="editor-save-btn" style="background:rgba(201, 75, 75, 0.7);" onclick="deleteSection({{ section.id }})" title="Poista"><i class="fas fa-trash"></i></button>
+                        <button class="editor-save-btn" style="background:rgba(39, 174, 96, 0.7);" onclick="openAddSectionAfter({{ section.order }})" title="Lisää osio tähän"><i class="fas fa-plus"></i></button>
+                    </div>
+                </div>
+                <div class="skill-widget">
+                    <label>Osaamiseni tasolla:</label>
+                    <select>
+                        <option value="1">1 — Aihe on uusi/tuntematon/vieras</option>
+                        <option value="2">2 — Yleistason/teoreettinen ymmärrys</option>
+                        <option value="3">3 — Ymmärtää ja osaa soveltaa käytännössä</option>
+                    </select>
+                    <span class="skill-chip"></span>
+                </div>
+                <div class="section-content">{{ section.content|safe }}</div>
+            </div>
+        {% empty %}
+            <p>Ei vielä sisältöä.</p>
+        {% endfor %}
+    </div>
+
+    <hr>
+    <h2>Lisää uusi osio</h2>
+    <form id="add-section-form">
+        <input type="text" id="section-title" placeholder="Otsikko" class="section-title-input" required>
+        <div id="section-editor"></div>
+        <button type="button" class="editor-save-btn" onclick="saveNewSection()" {% if not epa %}disabled{% endif %}>Tallenna osio</button>
+    </form>
+    <div id="section-save-status"></div>
+
+    <!-- Page-specific JavaScript -->
+    <script>
+        // Set EPA ID and URL paths for use by base.html functions
+        window.pageEpaId = {% if epa %}{{ epa.id }}{% else %}null{% endif %};
+        window.addSectionUrl = "{% url 'add_natiivikuvantaminen_section_view' %}";
+        window.editSectionUrl = "{% url 'edit_natiivikuvantaminen_section_view' %}";
+        window.deleteSectionUrl = "{% url 'delete_natiivikuvantaminen_section_view' %}";
+
+        // Function to scroll to section from table of contents
+        function scrollToSection(sectionId) {
+            const element = document.getElementById('section-' + sectionId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                // Add highlight effect
+                element.style.backgroundColor = 'rgba(74, 144, 226, 0.1)';
+                setTimeout(() => {
+                    element.style.backgroundColor = '';
+                }, 2000);
+            }
+        }
+
+        // Initialize main section editor
+        document.addEventListener('DOMContentLoaded', function() {
+            ClassicEditor.create(document.getElementById('section-editor'), getEditorConfig())
+                .then(editor => {
+                    window.mainEditorInstance = editor;
+                    addMathButtonToEditor(editor);
+                });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "sisalto/base.html" %}
+{% block title %}Kaikki EPA:t{% endblock %}
+{% block content %}
+    <h1>Kaikki EPA:t</h1>
+    {% for specialty in specialties %}
+        <h2>{{ specialty.name }}</h2>
+        <ul>
+        {% for epa in specialty.epas.all %}
+            <li><a href="/epa/{{ epa.id }}/">{{ epa.title }}</a></li>
+        {% empty %}
+            <li>Ei EPA:ja</li>
+        {% endfor %}
+        </ul>
+    {% endfor %}
+{% endblock %}
+{% block toc %}
+    <li>Kaikki EPA:t</li>
+    {% for specialty in specialties %}
+        <li>{{ specialty.name }}</li>
+    {% endfor %}
+{% endblock %}

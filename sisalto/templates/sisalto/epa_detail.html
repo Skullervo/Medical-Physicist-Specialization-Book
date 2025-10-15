@@ -1,0 +1,14 @@
+{% extends "sisalto/base.html" %}
+
+{% block title %}{{ epa.title }}{% endblock %}
+
+{% block content %}
+    <h1>{{ epa.title }}</h1>
+    <p>{{ epa.description }}</p>
+    <a href="/specialty/{{ epa.specialty.id }}/">Takaisin erikoisalaan</a> | <a href="/specialties/">Erikoisalat</a> | <a href="/">Etusivu</a>
+{% endblock %}
+
+{% block toc %}
+    <li>{{ epa.title }}</li>
+    <li>Kuvaus</li>
+{% endblock %}
