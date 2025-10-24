@@ -99,6 +99,8 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             font-size: 14px;
             line-height: 1.6;
+            overflow-wrap: anywhere;   /* moderni tapa: sallii rivinvaihdot missä tahansa */
+            word-break: break-word;    /* varmistaa tuen vanhemmille selaimille */
         }
         
         /* Dark theme for modals */
@@ -204,29 +206,39 @@
             background: transparent !important;
         }
         
-        /* Floating images support */
-        .note-editable img[style*="float: left"] {
+        /* ÄLÄ katkaise kelluntaa kappaleissa */
+        .note-editable p { 
+            overflow: visible; 
+        }
+
+        /* Tekstin kierto kuvan ympäri – toimii editorissa ja tallennetussa sisällössä */
+        .note-editable img[style*="float:left"],
+        .note-editable img.note-float-left,
+        .note-editable img.float-left {
             float: left;
             margin: 0 15px 10px 0;
             max-width: 50%;
         }
         
-        .note-editable img[style*="float: right"] {
+        .note-editable img[style*="float:right"],
+        .note-editable img.note-float-right,
+        .note-editable img.float-right {
             float: right;
             margin: 0 0 10px 15px;
             max-width: 50%;
         }
         
-        /* Clear floats after content */
-        .note-editable::after {
-            content: "";
-            display: table;
-            clear: both;
+        /* Clearfix vain containeriin */
+        .note-editable::after { 
+            content:""; 
+            display:block; 
+            clear:both; 
         }
-        
-        /* Ensure text flows around floating images */
-        .note-editable p {
-            overflow: hidden;
+
+        /* Estä ccccc… -tyylinen ylivuoto editorissa */
+        .note-editable { 
+            overflow-wrap:anywhere; 
+            word-break:break-word; 
         }
         
         /* Responsive images */
@@ -692,6 +704,14 @@
                     ['insert', ['link', 'picture', 'video', 'hr']],
                     ['view', ['fullscreen', 'codeview', 'undo', 'redo']]
                 ],
+                
+                popover: {
+                    image: [
+                        ['image', ['resizeFull','resizeHalf','resizeQuarter','resizeNone']],
+                        ['float', ['floatLeft','floatRight','floatNone']],
+                        ['remove', ['removeMedia']]
+                    ]
+                },
                 
                 fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Helvetica', 'Impact', 'Tahoma', 'Times New Roman', 'Verdana'],
                 fontSizes: ['8', '9', '10', '11', '12', '14', '16', '18', '20', '24', '28', '32', '36', '48', '72'],
