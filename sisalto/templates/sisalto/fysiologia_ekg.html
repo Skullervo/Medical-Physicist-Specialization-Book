@@ -54,7 +54,28 @@
 
         function saveSection() {
             const title = document.getElementById('section-title').value;
-            const content = document.querySelector('#section-editor').innerHTML;
+            
+            // Debug: Tarkista onko editor olemassa
+            console.log('Looking for editor:', 'section-editorEditor');
+            console.log('Available editors:', Object.keys(window).filter(key => key.includes('Editor')));
+            
+            const editor = window['section-editorEditor'];
+            console.log('Found editor:', editor);
+            
+            let content = '';
+            if (editor) {
+                try {
+                    content = editor.getData();
+                    console.log('Got content from editor:', content.substring(0, 100) + '...');
+                } catch (e) {
+                    console.error('Error getting data from editor:', e);
+                    content = document.querySelector('#section-editor').innerHTML;
+                    console.log('Fallback to innerHTML:', content.substring(0, 100) + '...');
+                }
+            } else {
+                console.warn('Editor not found, using innerHTML fallback');
+                content = document.querySelector('#section-editor').innerHTML;
+            }
             
             fetch("/fysiologia/ekg/add_section/", {
                 method: "POST",

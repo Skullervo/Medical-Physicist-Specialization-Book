@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        // YKSINKERTAINEN SKAALAUSFUNKTIO
+        function scaleImageSimply(img) {
+            if (!img.naturalWidth) return;
+            
+            const originalWidth = img.naturalWidth;
+            let targetWidth;
+            
+            if (originalWidth > 800) {
+                targetWidth = Math.round(originalWidth / 5);
+            } else if (originalWidth > 600) {
+                targetWidth = Math.round(originalWidth / 4);
+            } else if (originalWidth > 400) {
+                targetWidth = Math.round(originalWidth / 3);
+            } else {
+                targetWidth = originalWidth;
+            }
+            
+            targetWidth = Math.min(targetWidth, 250);
+            const targetHeight = targetWidth / (img.naturalWidth / img.naturalHeight);
+            
+            img.style.width = targetWidth + 'px';
+            img.style.height = targetHeight + 'px';
+            
+            console.log(`Scaled: ${originalWidth} → ${targetWidth}`);
+        }
+    </script>
+</head>
+<body>
+    <h1>Testaa skaalaus</h1>
+    <img src="http://127.0.0.1:8000/media/editor/ecdde7afb2874faa95f5448db3797e20.png" 
+         onload="scaleImageSimply(this)" 
+         style="border: 1px solid red;">
+</body>
+</html>

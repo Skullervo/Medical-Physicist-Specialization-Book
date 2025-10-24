@@ -180,6 +180,9 @@ urlpatterns = [
     path('fysiologia/gi_kanava/edit_section/', views.edit_fysiologia_gi_kanava_section_view, name='edit_fysiologia_gi_kanava_section_view'),
     path('fysiologia/gi_kanava/delete_section/', views.delete_fysiologia_gi_kanava_section_view, name='delete_fysiologia_gi_kanava_section_view'),
     
+    # Raportoi ongelmasta sivu
+    path('raportoi-ongelma/', views.raportoi_ongelma_view, name='raportoi_ongelma'),
+    
     # Image upload for CKEditor
     path('upload-image/', views.upload_image_view, name='upload_image'),
 ]

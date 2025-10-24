@@ -13,7 +13,8 @@ This file contains all view functions organized by functionality:
 # =============================================================================
 # IMPORTS
 # =============================================================================
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from django.views.decorators.http import require_POST
 from django.http import JsonResponse, HttpResponse
 from django.db.models import F, Max
 from django.shortcuts import render, get_object_or_404
@@ -25,13 +26,16 @@ import json
 # =============================================================================
 
 def frontpage_view(request):
-	"""Main landing page view"""
+	"""Main landing page view - TESTING NEW CKEDITOR"""
 	try:
-		from .models import FrontPage
+		from .models import FrontPage, Specialty
 		page = FrontPage.objects.first()
+		specialties = Specialty.objects.all()
 	except:
 		page = None
-	return render(request, 'sisalto/frontpage.html', {'page': page})
+		specialties = []
+	# Use new template for testing
+	return render(request, 'sisalto/frontpage_new.html', {'page': page, 'specialties': specialties})
 
 def specialty_list_view(request):
 	"""List all medical specialties"""
@@ -2325,64 +2329,68 @@ def delete_fysiologia_gi_kanava_section_view(request):
 	return JsonResponse({"success": False})
 
 # =============================================================================
+# RAPORTOI ONGELMASTA SIVU
+# =============================================================================
+
+def raportoi_ongelma_view(request):
+    """
+    Näyttää "Raportoi ongelmasta" -sivun joka käyttää base_new2.html pohjaa
+    ja CKEditor 5 Super Buildia kaikilla ominaisuuksilla.
+    """
+    context = {
+        'page_title': 'Raportoi ongelmasta - Sairaalafyysikon erikoistumiskirja',
+        'page_description': 'Ilmoita sivuston toiminnassa havaitsemistasi ongelmista tai ehdota parannuksia. Käytämme CKEditor 5 Super Buildia kaikkien muokkausominaisuuksien kanssa.',
+    }
+    return render(request, 'sisalto/raportoi_ongelma.html', context)
+
+# =============================================================================
 # IMAGE UPLOAD FOR CKEDITOR
 # =============================================================================
 
-@csrf_exempt
+@require_POST
+@csrf_protect
 def upload_image_view(request):
-	"""Handle image uploads from CKEditor"""
-	if request.method == 'POST' and request.FILES.get('upload'):
-		import os
-		from django.conf import settings
-		from django.core.files.storage import default_storage
-		from django.core.files.base import ContentFile
-		
-		upload = request.FILES['upload']
-		
-		# Validate file type
-		allowed_types = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
-		if upload.content_type not in allowed_types:
-			return JsonResponse({
-				'error': {
-					'message': 'Tiedostotyyppi ei ole tuettu. Sallitut tyypit: JPEG, PNG, GIF, WebP'
-				}
-			})
-		
-		# Validate file size (max 5MB)
-		if upload.size > 5 * 1024 * 1024:
-			return JsonResponse({
-				'error': {
-					'message': 'Tiedosto on liian suuri. Maksimikoko on 5MB.'
-				}
-			})
-		
-		try:
-			# Create uploads directory if it doesn't exist
-			upload_dir = 'uploads/images/'
-			
-			# Generate unique filename
-			import uuid
-			extension = os.path.splitext(upload.name)[1]
-			filename = f"{uuid.uuid4()}{extension}"
-			file_path = os.path.join(upload_dir, filename)
-			
-			# Save file
-			path = default_storage.save(file_path, ContentFile(upload.read()))
-			file_url = default_storage.url(path)
-			
-			return JsonResponse({
-				'url': file_url
-			})
-			
-		except Exception as e:
-			return JsonResponse({
-				'error': {
-					'message': f'Virhe tallentaessa tiedostoa: {str(e)}'
-				}
-			})
-	
-	return JsonResponse({
-		'error': {
-			'message': 'Virheellinen pyyntö'
-		}
-	})
+    """
+    Universal image upload for both CKEditor 5 and Summernote
+    - CKEditor 5 odottaa kenttää 'upload' ja vastausta { "url": "..." }
+    - Summernote odottaa kenttää 'file' ja vastausta { "location": "..." }
+    """
+    # Try both field names
+    f = request.FILES.get('upload') or request.FILES.get('file')
+    
+    if not f:
+        return JsonResponse({ 'error': { 'message': 'No file sent.' } }, status=400)
+
+    # Check file type
+    allowed_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg']
+    import os
+    ext = os.path.splitext(f.name)[1].lower()
+    
+    if ext not in allowed_extensions:
+        return JsonResponse({ 'error': { 'message': 'Invalid file type. Only images allowed.' } }, status=400)
+
+    # Create unique name
+    import uuid
+    name = f"editor/{uuid.uuid4().hex}{ext}"
+
+    from django.core.files.storage import default_storage
+    from django.core.files.base import ContentFile
+    
+    try:
+        saved_path = default_storage.save(name, ContentFile(f.read()))
+        file_url = default_storage.url(saved_path)
+
+        # Build absolute URL
+        if file_url.startswith('/'):
+            absolute_url = request.build_absolute_uri(file_url)
+        else:
+            absolute_url = file_url
+
+        # Return response for both editors
+        return JsonResponse({ 
+            'url': absolute_url,      # For CKEditor 5
+            'location': absolute_url  # For Summernote
+        })
+        
+    except Exception as e:
+        return JsonResponse({ 'error': { 'message': str(e) } }, status=500)

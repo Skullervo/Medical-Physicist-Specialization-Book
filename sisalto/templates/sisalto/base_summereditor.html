@@ -1,0 +1,836 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sairaalafyysikon erikoistumiskirja{% endblock %}</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'sisalto/css/site.css' %}?v=3">
+    <link rel="stylesheet" href="{% static 'sisalto/css/header.css' %}?v=3">
+    <link rel="stylesheet" href="{% static 'sisalto/css/chatbot.css' %}?v=3">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <!-- MathJax for math formulas -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            svg: {
+                fontCache: 'global',
+                mtextInheritFont: true,
+                merrorInheritFont: true,
+                scale: 1,
+                minScale: 0.5,
+                matchFontHeight: false,
+                displayAlign: 'center',
+                displayIndent: '0',
+                internalSpeechTitles: true,
+                backgroundColor: 'transparent'
+            },
+            chtml: {
+                scale: 1,
+                minScale: 0.5,
+                matchFontHeight: false,
+                displayAlign: 'center',
+                displayIndent: '0'
+            },
+            options: {
+                ignoreHtmlClass: 'no-mathjax',
+                processHtmlClass: 'mathjax'
+            },
+            startup: {
+                ready() {
+                    console.log('MathJax loaded successfully!');
+                    MathJax.startup.defaultReady();
+                    
+                    // Pakota läpinäkyvä tausta kaikille MathJax-elementeille
+                    const style = document.createElement('style');
+                    style.textContent = `
+                        mjx-container, mjx-container svg, mjx-math, mjx-math svg {
+                            background: transparent !important;
+                            color: inherit !important;
+                        }
+                    `;
+                    document.head.appendChild(style);
+                    
+                    // Lisää globaali funktio dynaamiseen renderöintiin
+                    window.MathJaxReady = true;
+                }
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Summernote Editor (täysin ilmainen) -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/lang/summernote-fi-FI.min.js"></script>
+    
+    <style>
+        /* Summernote styling to match site theme */
+        .note-editor {
+            margin: 20px 0;
+            border: 1px solid #c4c4c4;
+            border-radius: 4px;
+            background: #fff;
+        }
+        
+        .note-toolbar {
+            border-bottom: 1px solid #c4c4c4;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px 4px 0 0;
+        }
+        
+        .note-editing-area {
+            border-radius: 0 0 4px 4px;
+        }
+        
+        .note-editable {
+            min-height: 200px;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        /* Dark theme for modals */
+        .modal-content .note-editor {
+            background: #2c3e50;
+            border-color: #34495e;
+        }
+        
+        .modal-content .note-toolbar {
+            background: #34495e;
+            border-color: #2c3e50;
+        }
+        
+        .modal-content .note-editable {
+            background: #2c3e50;
+            color: #ecf0f1;
+        }
+        
+        /* Summernote buttons styling */
+        .note-btn-group .note-btn {
+            background: transparent;
+            border: none;
+            color: #333;
+            padding: 5px 8px;
+            margin: 1px;
+            border-radius: 3px;
+            transition: all 0.2s;
+        }
+        
+        .note-btn:hover {
+            background: #007cff;
+            color: white;
+        }
+        
+        .modal-content .note-btn {
+            color: #ecf0f1;
+        }
+        
+        .modal-content .note-btn:hover {
+            background: #3498db;
+        }
+        
+        /* Image styling in editor */
+        .note-editable img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin: 10px 0;
+        }
+        
+        /* MathJax styling for dark theme */
+        .note-editable .MathJax {
+            color: inherit !important;
+        }
+        
+        .note-editable .MathJax svg {
+            background: transparent !important;
+            color: inherit !important;
+        }
+        
+        .note-editable .MathJax_Display {
+            background: transparent !important;
+            color: inherit !important;
+        }
+        
+        /* MathJax in dark/modal contexts */
+        .modal-content .note-editable .MathJax,
+        .modal-content .note-editable .MathJax svg {
+            color: #ecf0f1 !important;
+            background: transparent !important;
+        }
+        
+        /* Ensure MathJax elements inherit text color */
+        mjx-container {
+            color: inherit !important;
+        }
+        
+        mjx-container svg {
+            background: transparent !important;
+        }
+        
+        /* Global MathJax dark theme support */
+        mjx-math {
+            color: inherit !important;
+            background: transparent !important;
+        }
+        
+        mjx-math svg {
+            background: transparent !important;
+        }
+        
+        /* Dark theme specific MathJax styling */
+        body.dark-theme mjx-container,
+        .dark mjx-container,
+        .note-editable mjx-container {
+            color: currentColor !important;
+            background: transparent !important;
+        }
+        
+        /* Force transparent background on all MathJax SVG elements */
+        svg[data-mml-node="math"] {
+            background: transparent !important;
+        }
+        
+        /* Floating images support */
+        .note-editable img[style*="float: left"] {
+            float: left;
+            margin: 0 15px 10px 0;
+            max-width: 50%;
+        }
+        
+        .note-editable img[style*="float: right"] {
+            float: right;
+            margin: 0 0 10px 15px;
+            max-width: 50%;
+        }
+        
+        /* Clear floats after content */
+        .note-editable::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        
+        /* Ensure text flows around floating images */
+        .note-editable p {
+            overflow: hidden;
+        }
+        
+        /* Responsive images */
+        .note-editable figure {
+            margin: 1em auto;
+            text-align: center;
+        }
+        
+        .note-editable figcaption {
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 12px;
+            font-size: 12px;
+            text-align: center;
+            border-radius: 0 0 4px 4px;
+            margin-top: -5px;
+        }
+        
+        /* Modal sticky toolbar */
+        .modal-content .note-toolbar {
+            position: sticky;
+            top: 0;
+            z-index: 9999;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        /* Modal scrolling */
+        .modal-content {
+            position: relative;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        
+        /* TOC Toggle button styling */
+        .toc-toggle {
+            display: flex !important;
+            position: fixed !important;
+            z-index: 9999 !important;
+            background: #cbcbcbff !important;
+            color: #333 !important;
+            border: none !important;
+            padding: 10px 15px !important;
+            border-radius: 25px !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+            font-size: 14px !important;
+            font-weight: 500 !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+            align-items: center !important;
+            gap: 8px !important;
+            top: 20px !important;
+            right: 20px !important;
+        }
+
+        .toc-toggle:hover {
+            background: #b8b8b8 !important;
+            transform: scale(1.05) !important;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2) !important;
+        }
+
+        .toc-toggle i {
+            font-size: 16px !important;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .toc-toggle {
+                top: 10px !important;
+                right: 10px !important;
+                padding: 8px 12px !important;
+                font-size: 12px !important;
+            }
+        }
+
+        /* Global editor improvements */
+        .summernote-global {
+            min-height: 300px;
+        }
+        
+        /* Table styling in editor */
+        .note-editable table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+        
+        .note-editable table, .note-editable th, .note-editable td {
+            border: 1px solid #ddd;
+        }
+        
+        .note-editable th, .note-editable td {
+            padding: 8px 12px;
+            text-align: left;
+        }
+        
+        .note-editable th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        
+        /* Code block styling */
+        .note-editable pre {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 4px;
+            border-left: 4px solid #007cff;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .note-editable code {
+            background: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 90%;
+        }
+        
+        /* TOC positioning fixes */
+        .toc {
+            position: fixed !important;
+            top: 56px !important;
+            right: 0 !important;
+            z-index: 1000 !important;
+            transform: translateX(100%) !important;
+            transition: transform 0.3s ease !important;
+        }
+        
+        .toc.toc-open {
+            transform: translateX(0) !important;
+        }
+        
+        /* Ensure main content doesn't overlap with TOC */
+        .main-content {
+            margin-right: 0;
+            transition: margin-right 0.3s ease;
+        }
+        
+        /* Add margin when TOC is open on larger screens */
+        @media (min-width: 1200px) {
+            .container:has(.toc.toc-open) .main-content {
+                margin-right: 280px;
+            }
+        }
+        
+        /* Mobile TOC positioning */
+        @media (max-width: 768px) {
+            .toc {
+                width: 90vw !important;
+                max-width: 350px !important;
+            }
+        }
+        
+        /* Header thicker/taller */
+        .header {
+            height: 72px !important;
+            padding: 0 40px !important;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.2) !important;
+        }
+        
+        .header-title {
+            font-size: 1.4em !important;
+            font-weight: 700 !important;
+            line-height: 1.2 !important;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+        
+        .header-nav {
+            margin-left: auto;
+            display: flex;
+            gap: 24px;
+        }
+        
+        .header-nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        
+        .header-nav a:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-1px);
+        }
+        
+        /* Adjust other elements for new header height */
+        .sidebar, .toc {
+            top: 72px !important;
+            height: calc(100vh - 72px) !important;
+        }
+        
+        .container {
+            min-height: calc(100vh - 72px) !important;
+        }
+        
+        /* Mobile header adjustments */
+        @media (max-width: 768px) {
+            .header {
+                height: 64px !important;
+                padding: 0 20px !important;
+            }
+            
+            .header-title {
+                font-size: 1.2em !important;
+            }
+            
+            .sidebar, .toc {
+                top: 64px !important;
+                height: calc(100vh - 64px) !important;
+            }
+        }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1 class="header-title">
+                <i class="fas fa-radiation-alt" style="color: #4a90e2; margin-right: 12px;"></i>
+                <span class="highlight">Sairaalafyysikon</span> erikoistumiskirja
+            </h1>
+        </div>
+    </header>
+
+    <!-- Progress indicator -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
+    <!-- Save status indicator -->
+    <div id="save-status" class="save-status" style="display: none;"></div>
+
+    <!-- Chat overlay toggle -->
+    <div id="chat-overlay-toggle" class="chat-overlay-toggle" onclick="toggleChatOverlay()">
+        {% comment %} <i class="fas fa-comments"></i> {% endcomment %}
+        {% comment %} <span class="chat-tooltip">Avaa AI-chat</span> {% endcomment %}
+    </div>
+    
+    <!-- TOC toggle button for mobile -->
+    <button id="toc-toggle" class="toc-toggle" onclick="
+        const toc = document.getElementById('toc');
+        if (toc) {
+            toc.classList.toggle('toc-open');
+            const icon = this.querySelector('i');
+            if (icon) {
+                if (toc.classList.contains('toc-open')) {
+                    icon.className = 'fas fa-times';
+                } else {
+                    icon.className = 'fas fa-list';
+                }
+            }
+        }
+    ">
+        <i class="fas fa-list"></i>
+        <span>Sisältö</span>
+    </button>
+    
+    <div class="container">
+        <nav class="sidebar" id="sidebar">
+            <ul>
+                <li><a href="/">Etusivu</a></li>
+                <li>
+                    <details>
+                        <summary><a href="/epas/">EPA:t</a></summary>
+                        <ul>
+                            <li>
+                                <details>
+                                    <summary><a href="/radiologia_epas/">Radiologia</a></summary>
+                                    <ul>
+                                        <li><a href="/radiologia/lapivalaisu-angiografia/">Läpivalaisu ja angiografia (ml kardiologia)</a></li>
+                                        <li><a href="/radiologia/magneettikuvaus/">Magneettikuvaus</a></li>
+                                        <li><a href="/radiologia/mammografia/">Mammografia</a></li>
+                                        <li><a href="/radiologia/natiivikuvantaminen/">Natiivikuvantaminen</a></li>
+                                        <li><a href="/radiologia/tietokonetomografia/">Tietokonetomografia</a></li>
+                                        <li><a href="/radiologia/ultraaani/">Ultraääni</a></li>
+                                        <li><a href="/radiologia/kuvankatselunaytot/">Kuvankatselunäytöt</a></li>
+                                        <li><a href="/radiologia/hammaskuvantaminen/">Hammas­kuvantaminen</a></li>
+                                        <li><a href="/radiologia/sateilybiologia-suojelu/">Säteilybiologia ja säteily­suojelu radiologiassa</a></li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details>
+                                    <summary><a href="/sadehoito_epas/">Sädehoito</a></summary>
+                                    <ul>
+                                        <li><a href="/sadehoito/peruskasitteet/">Sädehoidon peruskäsitteet</a></li>
+                                        <li><a href="/sadehoito/dosimetria/">Sädehoidon dosimetria</a></li>
+                                        <li><a href="/sadehoito/annossuunnittelu/">Annossuunnittelu</a></li>
+                                        <li><a href="/sadehoito/sahkolaitteisto/">Sähkölaitteisto</a></li>
+                                        <li><a href="/sadehoito/laadunvarmistus/">Laadunvarmistus</a></li>
+                                        <li><a href="/sadehoito/sateilybiologia-suojelu/">Säteilybiologia ja säteilysuojelu sädehoidossa</a></li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details>
+                                    <summary><a href="/isotooppi_epas/">Isotooppidiagnostiikka ja -terapia</a></summary>
+                                    <ul>
+                                        <li><a href="/isotooppi/annostelu-radiofarmasia/">Annostelu ja radiofarmasia</a></li>
+                                        <li><a href="/isotooppi/gammakamera/">Gammakamera</a></li>
+                                        <li><a href="/isotooppi/gammakuvaus-spet/">Gammakuvaus ja SPET</a></li>
+                                        <li><a href="/isotooppi/pet-tutkimukset/">PET-tutkimukset</a></li>
+                                        <li><a href="/isotooppi/petkamera/">PET-kamera</a></li>
+                                        <li><a href="/isotooppi/radionuklidihoidot/">Radionuklidihoidot</a></li>
+                                        <li><a href="/isotooppi/sateilybiologia-suojelu/">Säteilybiologia ja säteilysuojelu isotoopeissa</a></li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details>
+                                    <summary><a href="/knf_epas/">Kliininen neurofysiologia</a></summary>
+                                    <ul>
+                                        <li><a href="/knf/eeg/">EEG</a></li>
+                                        <li><a href="/knf/heratepotentiaali-enmg/">Herätepotentiaali ja ENMG</a></li>
+                                        <li><a href="/knf/iom/">Intraoperatiivinen monitorointi</a></li>
+                                        <li><a href="/knf/laite-sahkoturvallisuus/">Laite- ja sähköturvallisuus</a></li>
+                                        <li><a href="/knf/sarja-tms-hoidot/">Sarja- ja TMS-hoidot</a></li>
+                                        <li><a href="/knf/uni/">Uni</a></li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details>
+                                    <summary><a href="/fysiologia_epas/">Kliininen fysiologia</a></summary>
+                                    <ul>
+                                        <li><a href="/fysiologia/ekg/">EKG</a></li>
+                                        <li><a href="/fysiologia/gi-kanava/">GI-kanava</a></li>
+                                        <li><a href="/fysiologia/keuhkofunktio/">Keuhkofunktio</a></li>
+                                        <li><a href="/fysiologia/luuston-mineraali/">Luuston mineraali</a></li>
+                                        <li><a href="/fysiologia/verenkierto/">Verenkierto</a></li>
+                                    </ul>
+                                </details>
+                            </li>
+                        </ul>
+                    </details>
+                </li>
+                <li><a href="/examquestions/">Tenttikysymykset</a></li>
+                <li><a href="/exam/practice/">Harjoittele tenttiä</a></li>
+                <li><a href="/raportoi-ongelma/">Raportoi ongelmasta</a></li>
+            </ul>
+        </nav>
+
+        <!-- TOC Panel -->
+        <aside class="toc" id="toc">
+            <div class="toc-content">
+                <h3>Sisältö</h3>
+                {% block toc %}
+                <div id="toc-container">
+                    <!-- Sisällysluettelo generoidaan automaattisesti -->
+                </div>
+                {% endblock %}
+            </div>
+        </aside>
+
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <!-- AI Chatbot Widget -->
+    <div id="ai-chatbot" class="chatbot-widget chatbot-minimized">
+        <div class="chatbot-header" onclick="toggleChatbot()">
+            <div class="chatbot-title">
+                <i class="fas fa-robot"></i>
+                AI Assistant
+            </div>
+            <div id="chatbot-toggle" class="chatbot-toggle">
+                <i class="fas fa-chevron-up"></i>
+            </div>
+        </div>
+        
+        <div class="chatbot-body">
+            <div id="chatbot-messages" class="chatbot-messages">
+                <div class="chatbot-message bot-message">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-text">
+                            Hei! Olen AI-assistentti. Voin auttaa sinua sairaalafyysikon erikoistumiseen liittyvissä kysymyksissä. 
+                            <br><br>
+                            <strong>Ominaisuudet:</strong>
+                            <br>• Vastaan kysymyksiin EPA-alueista
+                            <br>• Selitän fysiikan käsitteitä
+                            <br>• Autan tenttiin valmistautumisessa
+                            <br><br>
+                            <em>Huom: Tarvitset OpenAI API-avaimen keskustellaksesi.</em>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chatbot-input-container">
+                <input 
+                    type="text" 
+                    id="chatbot-input-field" 
+                    class="chatbot-input" 
+                    placeholder="Kirjoita viestisi..."
+                    onkeypress="handleChatbotEnter(event)"
+                >
+                <button id="chatbot-send-btn" class="chatbot-send-btn" onclick="sendChatbotMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+            
+            <div class="chatbot-settings">
+                <button class="chatbot-settings-btn" onclick="toggleChatbotSettings()">
+                    <i class="fas fa-cog"></i> Asetukset
+                </button>
+            </div>
+            
+            <div id="chatbot-settings-panel" class="chatbot-settings-panel" style="display: none;">
+                <div class="setting-group">
+                    <label>OpenAI API Key:</label>
+                    <input 
+                        type="password" 
+                        id="api-key-input" 
+                        class="api-key-input"
+                        placeholder="sk-..." 
+                        onchange="saveChatbotApiKey()"
+                    >
+                    <small>Avain tallennetaan vain paikallisesti selaimeesi.</small>
+                </div>
+                <div class="setting-actions">
+                    <button onclick="clearChatHistory()" class="clear-btn">
+                        <i class="fas fa-trash"></i> Tyhjennä keskustelu
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="{% static 'sisalto/js/site.js' %}?v=3"></script>
+    <script src="{% static 'sisalto/js/chatbot.js' %}?v=3"></script>
+
+    <!-- Summernote global functions -->
+    <script>
+        // Global Summernote initialization function
+        function initSummernoteEditor(selector, options = {}) {
+            const defaultOptions = {
+                height: 400,
+                lang: 'fi-FI',
+                placeholder: 'Kirjoita tähän...',
+                
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'strikethrough', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'video', 'hr']],
+                    ['view', ['fullscreen', 'codeview', 'undo', 'redo']]
+                ],
+                
+                fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Helvetica', 'Impact', 'Tahoma', 'Times New Roman', 'Verdana'],
+                fontSizes: ['8', '9', '10', '11', '12', '14', '16', '18', '20', '24', '28', '32', '36', '48', '72'],
+                
+                callbacks: {
+                    onImageUpload: function(files) {
+                        uploadSummernoteImage(files, this);
+                    },
+                    onChange: function(contents, $editable) {
+                        // Renderöi MathJax-kaavat kun sisältö muuttuu
+                        if (window.MathJax && window.MathJax.typesetPromise) {
+                            window.MathJax.typesetPromise([$editable[0]]).catch(function (err) {
+                                console.log('MathJax typeset error:', err.message);
+                            });
+                        }
+                    },
+                    onInit: function() {
+                        // Renderöi MathJax-kaavat kun editori on valmis
+                        const $editable = $(this).next('.note-editor').find('.note-editable');
+                        if (window.MathJax && window.MathJax.typesetPromise) {
+                            setTimeout(() => {
+                                window.MathJax.typesetPromise([$editable[0]]).catch(function (err) {
+                                    console.log('MathJax initial typeset error:', err.message);
+                                });
+                            }, 100);
+                        }
+                    }
+                }
+            };
+            
+            // Merge custom options with defaults
+            const config = Object.assign({}, defaultOptions, options);
+            
+            return $(selector).summernote(config);
+        }
+        
+        // Global image upload function for Summernote
+        function uploadSummernoteImage(files, editor) {
+            for(let i = 0; i < files.length; i++) {
+                const formData = new FormData();
+                formData.append('file', files[i]);
+                
+                fetch('/upload-image/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.location) {
+                        $(editor).summernote('insertImage', data.location);
+                    }
+                })
+                .catch(error => {
+                    console.error('Image upload failed:', error);
+                });
+            }
+        }
+        
+        // MathJax renderöinti funktio
+        function renderMathJax(element) {
+            if (window.MathJax && window.MathJax.typesetPromise && window.MathJaxReady) {
+                console.log('Rendering MathJax for element:', element);
+                window.MathJax.typesetPromise([element || document.body]).then(() => {
+                    console.log('MathJax rendering completed');
+                }).catch(function (err) {
+                    console.log('MathJax render error:', err.message);
+                });
+            } else if (!window.MathJaxReady) {
+                console.log('MathJax not ready yet, waiting...');
+                setTimeout(() => renderMathJax(element), 500);
+            } else {
+                console.log('MathJax not available');
+            }
+        }
+        
+        // Globaali funktio MathJax-renderöintiin
+        window.renderMathJax = renderMathJax;
+
+        // CSRF token helper for Django
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        
+        // Auto-generate TOC from headings
+        document.addEventListener('DOMContentLoaded', function() {
+            const tocContainer = document.getElementById('toc-container');
+            if (tocContainer) {
+                const headings = document.querySelectorAll('main h1, main h2, main h3, main h4, main h5, main h6');
+                if (headings.length > 0) {
+                    const tocList = document.createElement('ul');
+                    tocList.className = 'toc-list';
+                    
+                    headings.forEach((heading, index) => {
+                        const id = heading.id || `heading-${index}`;
+                        heading.id = id;
+                        
+                        const tocItem = document.createElement('li');
+                        tocItem.className = `toc-item toc-${heading.tagName.toLowerCase()}`;
+                        
+                        const tocLink = document.createElement('a');
+                        tocLink.href = `#${id}`;
+                        tocLink.textContent = heading.textContent;
+                        tocLink.className = 'toc-link';
+                        
+                        tocItem.appendChild(tocLink);
+                        tocList.appendChild(tocItem);
+                    });
+                    
+                    tocContainer.appendChild(tocList);
+                } else {
+                    tocContainer.innerHTML = '<p class="toc-empty">Ei otsikoita sivulla</p>';
+                }
+            }
+        });
+        
+        // Chat overlay toggle function (maps to chatbot toggle)
+        function toggleChatOverlay() {
+            // This function is called by the chat-overlay-toggle button
+            // It simply calls the main chatbot toggle function
+            toggleChatbot();
+        }
+        
+        console.log('Base Summernote template loaded successfully!');
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

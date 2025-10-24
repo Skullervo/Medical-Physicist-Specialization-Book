@@ -5,11 +5,12 @@
 {% block extra_css %}
 <style>
 body {
-    background-color: #f8f9fa;
+    background-color: #1b1b1b;
+    color: #fff;
 }
 
 .container-fluid {
-    max-width: 1200px;
+    max-width: 1200px;I
     margin: 0 auto;
     padding: 20px;
 }
@@ -125,29 +126,79 @@ body {
 }
 
 .clean-table {
-    background: white;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    background: rgba(45, 45, 45, 0.95) !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3) !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
-.clean-table thead th {
-    background: #2c3e50;
-    color: #f1c40f;
-    font-weight: 600;
-    padding: 1rem;
-    border: none;
-    text-align: left;
+.clean-table .modern-table, .clean-table table {
+    width: 100% !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    margin-bottom: 0 !important;
+    background: transparent !important;
 }
 
-.clean-table tbody td {
-    padding: 1rem;
-    vertical-align: middle;
-    border-bottom: 1px solid #e9ecef;
+.clean-table .modern-table thead th, .clean-table table thead th {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: white !important;
+    font-weight: 600 !important;
+    padding: 1.25rem 1rem !important;
+    border: none !important;
+    text-align: left !important;
+    font-size: 0.95rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    position: relative !important;
 }
 
-.clean-table tbody tr:hover {
-    background-color: #f8f9fa;
+.clean-table .modern-table thead th:first-child, .clean-table table thead th:first-child {
+    border-top-left-radius: 15px !important;
+}
+
+.clean-table .modern-table thead th:last-child, .clean-table table thead th:last-child {
+    border-top-right-radius: 15px !important;
+}
+
+.clean-table .modern-table tbody td, .clean-table table tbody td {
+    padding: 1.25rem 1rem !important;
+    vertical-align: middle !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
+    font-size: 0.95rem !important;
+    color: #fff !important;
+    background: rgba(45, 45, 45, 0.8) !important;
+    border-top: none !important;
+    border-left: none !important;
+}
+
+.clean-table .modern-table tbody td:last-child, .clean-table table tbody td:last-child {
+    border-right: none !important;
+}
+
+.clean-table .modern-table tbody tr:nth-child(even) td, .clean-table table tbody tr:nth-child(even) td {
+    background: rgba(55, 55, 55, 0.8) !important;
+}
+
+.clean-table .modern-table tbody tr:hover td, .clean-table table tbody tr:hover td {
+    background: rgba(102, 126, 234, 0.2) !important;
+    transform: scale(1.002) !important;
+    transition: all 0.2s ease !important;
+}
+
+.clean-table .modern-table tbody tr:last-child td, .clean-table table tbody tr:last-child td {
+    border-bottom: none !important;
+}
+
+.clean-table .modern-table tbody tr:last-child td:first-child, .clean-table table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 15px !important;
+}
+
+.clean-table .modern-table tbody tr:last-child td:last-child, .clean-table table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 15px !important;
 }
 
 .question-title {
@@ -210,13 +261,148 @@ body {
     line-height: 1.5;
     border-left: 4px solid #007bff;
 }
-</style>
-{% endblock %}
+
+/* Modern Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 24px;
+    padding: 4rem 3rem;
+    margin-bottom: 4rem;
+    color: white;
+    position: relative;
+    overflow: hidden;
 }
 
-.main-header h1, .main-header p {
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    z-index: 1;
+}
+
+.hero-content {
     position: relative;
     z-index: 2;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+}
+
+.hero-description {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+    opacity: 0.95;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+.btn-primary-modern {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(255, 255, 255, 0.95);
+    color: #4C51BF;
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary-modern:hover {
+    background: white;
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    color: #4C51BF;
+    text-decoration: none;
+}
+
+.hero-stats {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    opacity: 0.9;
+    font-size: 1rem;
+}
+
+.stat-item {
+    white-space: nowrap;
+}
+
+.stat-divider {
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 300;
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 3rem 2rem;
+        margin-bottom: 3rem;
+    }
+    
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-description {
+        font-size: 1.1rem;
+    }
+    
+    .hero-stats {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .stat-divider {
+        display: none;
+    }
+}
+
+/* Modern Filters Section */
+.filters-title-modern {
+    text-align: center;
+    margin-bottom: 3rem;
+    color: #fff;
+}
+
+.filters-title-modern h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: #fff;
+}
+
+.filters-title-modern p {
+    font-size: 1.1rem;
+    opacity: 0.8;
+    margin-bottom: 0;
+    color: #fff;
 }
 
 .stats-section {
@@ -314,7 +500,7 @@ body {
 
 .filter-label {
     font-weight: 600;
-    color: #495057;
+    color: #fff;
     margin-bottom: 0.5rem;
     display: flex;
     align-items: center;
@@ -323,18 +509,26 @@ body {
 }
 
 .form-control {
-    border-radius: 15px;
-    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     padding: 1rem 1.5rem;
     transition: all 0.3s ease;
     font-size: 0.95rem;
-    background: #fafbfc;
+    background: rgba(45, 45, 45, 0.8);
+    color: #fff;
+    backdrop-filter: blur(10px);
 }
 
 .form-control:focus {
     border-color: #667eea;
-    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15);
-    background: white;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    background: rgba(45, 45, 45, 0.95);
+    color: #fff;
+}
+
+.form-control option {
+    background: #2d2d2d;
+    color: #fff;
 }
 
 .btn-clear {
@@ -354,47 +548,7 @@ body {
     color: white;
 }
 
-.clean-table {
-    background: white;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-    border: 1px solid #e9ecef;
-}
 
-.clean-table table {
-    margin-bottom: 0;
-    border: none;
-}
-
-.clean-table thead th {
-    background: #2c3e50;
-    color: #f1c40f;
-    font-weight: 600;
-    font-size: 1.1em;
-    padding: 1.2rem 1rem;
-    border: none;
-    text-align: left;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
-
-.clean-table tbody td {
-    padding: 1rem;
-    vertical-align: middle;
-    border-bottom: 1px solid #e9ecef;
-    font-size: 0.95em;
-}
-
-.clean-table tbody tr:nth-child(even) {
-    background-color: #f8f9fa;
-}
-
-.clean-table tbody tr:hover {
-    background-color: #e3f2fd;
-    transition: background-color 0.2s ease;
-}
 
 .question-title {
     font-weight: 600;
@@ -462,57 +616,112 @@ body {
     line-height: 1.5;
     border-left: 4px solid #007bff;
 }
+
+/* DataTables overrides - Force modern styling */
+#questionsTable {
+    background: transparent !important;
+    border: none !important;
+}
+
+#questionsTable_wrapper .dataTables_info,
+#questionsTable_wrapper .dataTables_paginate {
+    color: #fff !important;
+}
+
+#questionsTable_wrapper .dataTables_paginate .paginate_button {
+    background: rgba(102, 126, 234, 0.3) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #fff !important;
+    margin: 0 2px !important;
+    padding: 8px 12px !important;
+    border-radius: 8px !important;
+}
+
+#questionsTable_wrapper .dataTables_paginate .paginate_button:hover {
+    background: rgba(102, 126, 234, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+#questionsTable_wrapper .dataTables_paginate .paginate_button.current {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Force table styling with highest specificity */
+table.dataTable {
+    background: transparent !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+}
+
+table.dataTable thead th {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: white !important;
+    font-weight: 600 !important;
+    padding: 1.25rem 1rem !important;
+    border: none !important;
+    text-align: left !important;
+    font-size: 0.95rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-bottom: none !important;
+}
+
+table.dataTable tbody td {
+    padding: 1.25rem 1rem !important;
+    vertical-align: middle !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
+    font-size: 0.95rem !important;
+    color: #fff !important;
+    background: rgba(45, 45, 45, 0.8) !important;
+    border-top: none !important;
+    border-left: none !important;
+}
+
+table.dataTable tbody tr:nth-child(even) td {
+    background: rgba(55, 55, 55, 0.8) !important;
+}
+
+table.dataTable tbody tr:hover td {
+    background: rgba(102, 126, 234, 0.2) !important;
+    transform: scale(1.002) !important;
+    transition: all 0.2s ease !important;
 }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid px-4" style="background: #f8f9fa; min-height: 100vh;">
-    <!-- Header -->
-    <div class="main-header">
-        <div class="mb-4">
-            <h1 class="display-3 font-weight-bold mb-3">📚 Tenttikysymykset</h1>
-            <p class="lead mb-3 opacity-90">Sairaalafyysikon erikoistumiskoe - Kysymyspankki</p>
-            <p class="mb-0 opacity-75">Harjoittele ja hallitse erikoistumiskokeen kysymykset</p>
-        </div>
-    </div>
-
-    <!-- Stats Section -->
-    <div class="stats-section">
-        <div class="stats-container">
-            <div class="stats-grid">
-                <div class="stat-card primary-action">
-                    <div class="mb-4">
-                        <div style="font-size: 3rem; margin-bottom: 1rem;">🎯</div>
-                        <h4 class="font-weight-bold mb-3">Aloita harjoittelu</h4>
-                    </div>
-                    <a href="{% url 'exam_practice' %}" class="btn btn-light btn-lg w-100 text-primary font-weight-bold">
-                        Harjoittele satunnaisilla kysymyksillä
-                    </a>
-                </div>
-                <div class="stat-card">
-                    <div class="mb-3">
-                        <div style="font-size: 2.5rem; color: #667eea; margin-bottom: 1rem;">📊</div>
-                        <h2 class="font-weight-bold text-primary mb-2">{{ questions.count }}</h2>
-                        <h5 class="font-weight-bold text-muted mb-1">Kysymystä yhteensä</h5>
-                        <small class="text-muted">Kaikki saatavilla olevat kysymykset</small>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="mb-3">
-                        <div style="font-size: 2.5rem; color: #667eea; margin-bottom: 1rem;">📅</div>
-                        <h2 class="font-weight-bold text-info mb-2">{{ years_range }}</h2>
-                        <h5 class="font-weight-bold text-muted mb-1">Vuosijakauma</h5>
-                        <small class="text-muted">Kysymysten aikavälillä</small>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="mb-3">
-                        <div style="font-size: 2.5rem; color: #667eea; margin-bottom: 1rem;">📚</div>
-                        <h2 class="font-weight-bold text-success mb-2">{{ subject_areas_count }}</h2>
-                        <h5 class="font-weight-bold text-muted mb-1">Eri aihe-aluetta</h5>
-                        <small class="text-muted">Erikoisalojen mukaan</small>
-                    </div>
+<div class="container-fluid px-4" style="background: #1b1b1b; min-height: 100vh; color: #fff;">
+    <!-- Modern Hero Section -->
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">Tenttikysymykset</h1>
+            <p class="hero-description">
+                Sairaalafyysikon erikoistumiskokeen kattava kysymyspankki tarjoaa systemaattisen tavan 
+                valmistautua kokeeseen. Harjoittele {{ questions.count }} kysymyksellä, jotka kattavat 
+                {{ subject_areas_count }} eri erikoisalaa vuosien {{ years_range }} ajalta.
+            </p>
+            <div class="hero-actions">
+                <a href="{% url 'exam_practice' %}" class="btn-primary-modern">
+                    <i class="fas fa-play-circle"></i>
+                    Aloita harjoittelu
+                </a>
+                <div class="hero-stats">
+                    <span class="stat-item">
+                        <strong>{{ questions.count }}</strong> kysymystä
+                    </span>
+                    <span class="stat-divider">•</span>
+                    <span class="stat-item">
+                        <strong>{{ subject_areas_count }}</strong> aihe-aluetta
+                    </span>
+                    <span class="stat-divider">•</span>
+                    <span class="stat-item">
+                        <strong>{{ years_range }}</strong>
+                    </span>
                 </div>
             </div>
         </div>
@@ -520,15 +729,17 @@ body {
 
     <!-- Filters -->
     <div class="filters-section">
-        <div class="filters-title">
-            <span style="font-size: 1.8rem;">🔍</span>
-            <span>Suodata ja hae kysymyksiä</span>
+        <div class="filters-title-modern">
+            <h2>Hae ja suodata kysymyksiä</h2>
+            <p>Löydä haluamasi kysymykset aihepiirin, vuoden tai sisällön perusteella</p>
         </div>
         <div class="row justify-content-center">
             <div class="col-lg-3 col-md-4">
                 <div class="filter-group">
                     <label class="filter-label">
-                        <span>�</span>
+                        <span style="font-size: 1.2rem; color: #667eea;">
+                            <i class="fas fa-search"></i>
+                        </span>
                         <span>Hae tekstistä</span>
                     </label>
                     <input type="text" class="form-control" id="searchInput" 
@@ -538,7 +749,9 @@ body {
             <div class="col-lg-2 col-md-3">
                 <div class="filter-group">
                     <label class="filter-label">
-                        <span style="font-size: 1.2rem;">📅</span>
+                        <span style="font-size: 1.2rem; color: #667eea;">
+                            <i class="fas fa-calendar"></i>
+                        </span>
                         <span>Vuosi</span>
                     </label>
                     <select class="form-control" id="yearFilter">
@@ -550,7 +763,9 @@ body {
             <div class="col-lg-3 col-md-3">
                 <div class="filter-group">
                     <label class="filter-label">
-                        <span style="font-size: 1.2rem;">📚</span>
+                        <span style="font-size: 1.2rem; color: #667eea;">
+                            <i class="fas fa-book"></i>
+                        </span>
                         <span>Aihe-alue</span>
                     </label>
                     <select class="form-control" id="subjectFilter">
@@ -573,7 +788,7 @@ body {
 
     <!-- Questions Table -->
     <div class="clean-table">
-        <table class="table mb-0">
+        <table class="modern-table">
             <thead>
                 <tr>
                     <th style="width: 35%;">Kysymys</th>

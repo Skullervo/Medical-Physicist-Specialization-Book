@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raportoi ongelmasta - Sairaalafyysikon erikoistumiskirja</title>
+    
+    {% load static %}
+    
+    <!-- Summernote Editor (täysin ilmainen) -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/lang/summernote-fi-FI.min.js"></script>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+    <h1>🐛 Raportoi ongelmasta</h1>
+    <p>Ilmoita sivuston toiminnassa havaitsemistasi ongelmista tai ehdota parannuksia</p>
+    
+    <div id="save-status" style="display: none; position: fixed; top: 20px; right: 20px; padding: 10px 20px; border-radius: 4px; color: white; z-index: 1000;"></div>
+    
+    <!-- Section 1: Yhteystiedot -->
+    <div data-section-id="1" style="margin-bottom: 2em; background: #f9f9f9; border-radius: 8px; padding: 1.5em; border: 1px solid #e0e0e0;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1em;">
+            <h2 style="margin: 0; color: #2196f3;">📧 Yhteystiedot</h2>
+            <button type="button" onclick="editSection(1)" title="Muokkaa osiota" style="width: 28px; height: 28px; background: #2196f3; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                <i class="fas fa-edit"></i>
+            </button>
+        </div>
+        <div id="section-content-1">
+            <p>Jos kohtaat teknisiä ongelmia sivustolla tai haluat ehdottaa parannuksia, voit ottaa yhteyttä seuraavilla tavoilla:</p>
+            <ul>
+                <li><strong>Sähköposti:</strong> <a href="mailto:admin@erikoistumiskirja.fi">admin@erikoistumiskirja.fi</a></li>
+                <li><strong>Telegram:</strong> @erikoistumiskirja_admin</li>
+                <li><strong>GitHub Issues:</strong> <a href="https://github.com/erikoistumiskirja/issues" target="_blank">GitHub Repository</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Section 2: Yleisimmät ongelmat -->
+    <div data-section-id="2" style="margin-bottom: 2em; background: #f9f9f9; border-radius: 8px; padding: 1.5em; border: 1px solid #e0e0e0;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1em;">
+            <h2 style="margin: 0; color: #2196f3;">🔧 Yleisimmät ongelmat ja ratkaisut</h2>
+            <button type="button" onclick="editSection(2)" title="Muokkaa osiota" style="width: 28px; height: 28px; background: #2196f3; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                <i class="fas fa-edit"></i>
+            </button>
+        </div>
+        <div id="section-content-2">
+            <h3>Sisällön editointi ei toimi</h3>
+            <p>Jos editorin muokkausnappi ei toimi tai editori ei avaudu:</p>
+            <ol>
+                <li>Päivitä sivu (F5 tai Ctrl+R)</li>
+                <li>Tyhjennä selaimen välimuisti (Ctrl+Shift+Delete)</li>
+                <li>Kokeile toista selainta (Chrome, Firefox, Edge)</li>
+                <li>Tarkista että JavaScript on käytössä</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="edit-section-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; overflow-y: auto;">
+        <div style="position: relative; background: #fff; margin: 2% auto; padding: 20px; border-radius: 8px; width: 90%; max-width: 1200px; max-height: 90vh; overflow-y: auto;">
+            <h3 style="color: #2196f3; margin-top: 0;">Muokkaa osiota</h3>
+            <input type="text" id="edit-section-title" placeholder="Osion otsikko" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+            <div id="edit-section-editor"></div>
+            <div style="margin-top: 20px;">
+                <button type="button" onclick="saveEditSection()" style="padding: 10px 20px; background: #4caf50; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 10px;">Tallenna muutokset</button>
+                <button type="button" onclick="closeEditSection()" style="padding: 10px 20px; background: #666; color: white; border: none; border-radius: 4px; cursor: pointer;">Peruuta</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentEditSectionId = null;
+        let editModalEditorInstance = null;
+
+        // Section management functions
+        function editSection(sectionId) {
+            console.log('Editing section:', sectionId);
+            currentEditSectionId = sectionId;
+            
+            // Get current title and content
+            const titleEl = document.querySelector(`[data-section-id="${sectionId}"] h2`);
+            const actualTitle = titleEl ? titleEl.textContent : 'Osio';
+            const contentEl = document.getElementById('section-content-' + sectionId);
+            const currentContent = contentEl ? contentEl.innerHTML : '';
+            
+            // Set title and show modal
+            document.getElementById('edit-section-title').value = actualTitle;
+            document.getElementById('edit-section-modal').style.display = 'block';
+            
+            // Initialize TinyMCE
+            initEditSectionEditor(currentContent);
+        }
+        
+        async function initEditSectionEditor(content) {
+            const editorElement = document.getElementById('edit-section-editor');
+            
+            try {
+                // Clean up any existing editor
+                if (editModalEditorInstance) {
+                    $('#summernote-editor').summernote('destroy');
+                    editModalEditorInstance = null;
+                }
+                
+                // Clear the editor element and add textarea
+                editorElement.innerHTML = '<textarea id="summernote-editor"></textarea>';
+                
+                console.log('Creating Summernote instance...');
+                
+                // Initialize Summernote
+                $('#summernote-editor').summernote({
+                    height: 400,
+                    lang: 'fi-FI',
+                    placeholder: 'Kirjoita tähän...',
+                    
+                    toolbar: [
+                        ['style', ['style']],
+                        ['font', ['bold', 'italic', 'underline', 'strikethrough', 'clear']],
+                        ['fontname', ['fontname']],
+                        ['fontsize', ['fontsize']],
+                        ['color', ['color']],
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        ['table', ['table']],
+                        ['insert', ['link', 'picture', 'video', 'hr']],
+                        ['view', ['fullscreen', 'codeview', 'undo', 'redo']]
+                    ],
+                    
+                    fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Helvetica', 'Impact', 'Tahoma', 'Times New Roman', 'Verdana'],
+                    fontSizes: ['8', '9', '10', '11', '12', '14', '16', '18', '20', '24', '28', '32', '36', '48', '72'],
+                    
+                    // Kuvan upload
+                    callbacks: {
+                        onImageUpload: function(files) {
+                            for(let i = 0; i < files.length; i++) {
+                                uploadImage(files[i]);
+                            }
+                        }
+                    }
+                });
+                
+                // Set content
+                $('#summernote-editor').summernote('code', content);
+                
+                editModalEditorInstance = {
+                    getContent: function() {
+                        return $('#summernote-editor').summernote('code');
+                    },
+                    destroy: function() {
+                        return $('#summernote-editor').summernote('destroy');
+                    }
+                };
+                
+                console.log('Summernote initialized successfully!');
+                
+            } catch (error) {
+                console.error('Failed to create Summernote:', error);
+                editorElement.innerHTML = `
+                    <div style="color: #f44336; margin: 10px 0;">
+                        ⚠️ Summernote lataus epäonnistui. Käytä yksinkertaista tekstialuetta:
+                    </div>
+                    <textarea id="fallback-editor" style="width: 100%; height: 400px; border: 1px solid #ddd; padding: 10px; font-family: monospace; box-sizing: border-box;">${content}</textarea>
+                `;
+                
+                // Create fallback editor instance
+                editModalEditorInstance = {
+                    getContent: function() {
+                        const textarea = document.getElementById('fallback-editor');
+                        return textarea ? textarea.value : '';
+                    },
+                    destroy: function() {
+                        return Promise.resolve();
+                    }
+                };
+            }
+        }
+        
+        // Image upload function for Summernote
+        function uploadImage(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            fetch('/upload-image/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.location) {
+                    $('#summernote-editor').summernote('insertImage', data.location);
+                }
+            })
+            .catch(error => {
+                console.error('Image upload failed:', error);
+            });
+        }
+        
+        // CSRF token helper for Django
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        
+        async function saveEditSection() {
+            if (!currentEditSectionId || !editModalEditorInstance) {
+                return;
+            }
+            
+            const title = document.getElementById('edit-section-title').value;
+            const content = editModalEditorInstance.getContent ? editModalEditorInstance.getContent() : editModalEditorInstance.getData();
+            
+            // Update the DOM
+            const sectionEl = document.querySelector(`[data-section-id="${currentEditSectionId}"]`);
+            if (sectionEl) {
+                const titleEl = sectionEl.querySelector('h2');
+                if (titleEl) titleEl.textContent = title;
+                
+                const contentEl = sectionEl.querySelector(`#section-content-${currentEditSectionId}`);
+                if (contentEl) {
+                    contentEl.innerHTML = content;
+                }
+            }
+            
+            showSaveStatus('Osio tallennettu onnistuneesti!', 'success');
+            
+            setTimeout(() => {
+                closeEditSectionModal();
+            }, 1000);
+        }
+        
+        async function closeEditSectionModal() {
+            document.getElementById('edit-section-modal').style.display = 'none';
+            currentEditSectionId = null;
+            
+            if (editModalEditorInstance) {
+                if (editModalEditorInstance.destroy) {
+                    editModalEditorInstance.destroy();
+                }
+                editModalEditorInstance = null;
+            }
+            
+            document.getElementById('edit-section-editor').innerHTML = '';
+        }
+        
+        function showSaveStatus(message, type) {
+            const statusEl = document.getElementById('save-status');
+            statusEl.textContent = message;
+            statusEl.style.backgroundColor = type === 'success' ? '#4caf50' : '#f44336';
+            statusEl.style.display = 'block';
+            
+            setTimeout(() => {
+                statusEl.style.display = 'none';
+            }, 3000);
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Page loaded, Summernote ready to use!');
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sairaalafyysikon erikoistumiskirja{% endblock %}</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% load static %}sisalto/img/favicon.ico">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CKEditor 5 Super Build - All features included! -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/latest/super-build/ckeditor.js"></script>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'sisalto/css/base.css' %}">
+    
+    <style>
+        /* Dark theme for main layout */
+        body {
+            background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%);
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* CKEditor image styling - CRITICAL for proper image handling */
+        .ck-content figure.image_resized {
+            max-width: none !important;
+        }
+        
+        .ck-content figure.image_resized img {
+            width: 100% !important;
+            height: auto !important;
+            max-width: none !important;
+            object-fit: contain !important;
+        }
+        
+        .ck-content figure.image {
+            max-width: 100% !important;
+            margin: 1em auto;
+            display: table;
+        }
+        
+        /* Default for images without resize */
+        .ck-content img:not(figure.image_resized img) {
+            max-width: 400px !important;
+            height: auto !important;
+            object-fit: contain !important;
+        }
+
+        /* Image captions styling */
+        .ck-content .image > figcaption {
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 12px;
+            font-size: 14px;
+            text-align: center;
+            border-radius: 0 0 4px 4px;
+        }
+
+        /* Enable drag and drop for images */
+        .ck-content figure.image {
+            cursor: move;
+        }
+
+        .ck-content figure.image:hover {
+            outline: 2px dashed #007cff;
+        }
+
+        /* Image alignment styles */
+        .ck-content .image-align-left {
+            float: left;
+            margin: 0 15px 15px 0;
+        }
+
+        .ck-content .image-align-center {
+            display: block;
+            margin: 15px auto;
+            text-align: center;
+        }
+
+        .ck-content .image-align-right {
+            float: right;
+            margin: 0 0 15px 15px;
+        }
+
+        /* Sticky toolbar for modal editors */
+        .modal-content .ck-toolbar {
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 9999 !important;
+            background: #1e2139 !important;
+            border-bottom: 1px solid #555 !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3) !important;
+        }
+
+        /* Ensure modal has proper scrolling */
+        .modal-content {
+            position: relative;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        /* Dark theme for CKEditor in modals */
+        .modal-content .ck-editor__editable {
+            background-color: #2a2e4d !important;
+            color: #ffffff !important;
+            min-height: 400px;
+        }
+
+        .modal-content .ck-content {
+            background-color: #2a2e4d !important;
+            color: #ffffff !important;
+        }
+
+        .modal-content .ck-content p {
+            color: #ffffff !important;
+        }
+        
+        /* TOC Toggle button styling */
+        .toc-toggle {
+            display: flex !important;
+            position: fixed !important;
+            z-index: 9999 !important;
+            background: #cbcbcbff !important;
+            color: white !important;
+            border: none !important;
+            padding: 10px 15px !important;
+            top: 20px !important;
+            right: 20px !important;
+            border-radius: 5px !important;
+            cursor: pointer !important;
+            font-size: 16px !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .toc-toggle:hover {
+            background: #999999ff !important;
+            transform: translateY(-2px) !important;
+        }
+
+        /* Hide scrollbars */
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: transparent;
+        }
+
+        /* Container for main content */
+        .main-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: rgba(30, 30, 46, 0.95);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            height: 100vh;
+            overflow-y: auto;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+        }
+
+        /* Main content area */
+        .content-area {
+            flex: 1;
+            margin-left: 250px;
+            padding: 2rem;
+            max-width: calc(100vw - 250px);
+        }
+
+        /* Make responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            
+            .content-area {
+                margin-left: 0;
+                max-width: 100vw;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Toggle button for mobile -->
+    <button class="toc-toggle d-md-none" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="main-container">
+        <!-- Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header mb-4">
+                <h4 class="text-light">📚 Erikoistumiskirja</h4>
+            </div>
+            
+            <div class="nav-section">
+                <h6 class="text-muted text-uppercase mb-2">Navigaatio</h6>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a href="/" class="nav-link text-light">
+                            <i class="fas fa-home me-2"></i>Etusivu
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/epas/" class="nav-link text-light">
+                            <i class="fas fa-clipboard-check me-2"></i>EPA:t
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/examquestions/" class="nav-link text-light">
+                            <i class="fas fa-question-circle me-2"></i>Tenttikysymykset
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="nav-section mt-4">
+                <h6 class="text-muted text-uppercase mb-2">Hyödyllisiä linkkejä</h6>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a href="/raportoi-ongelma/" class="nav-link text-light">
+                            <i class="fas fa-bug me-2"></i>Raportoi ongelmasta
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/sairaalafyysikot-ry/" class="nav-link text-light">
+                            <i class="fas fa-users me-2"></i>Sairaalafyysikot ry
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main content -->
+        <main class="content-area">
+            {% block content %}
+            <!-- Page content goes here -->
+            {% endblock %}
+        </main>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Mobile sidebar toggle
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('show');
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.querySelector('.toc-toggle');
+            
+            if (window.innerWidth <= 768) {
+                if (!sidebar.contains(event.target) && !toggleBtn.contains(event.target)) {
+                    sidebar.classList.remove('show');
+                }
+            }
+        });
+
+        // Initialize CKEditor when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Initializing CKEditor 5 Super Build...');
+            
+            // Create global config function for modals using Super Build
+            window.getEditorConfig = function() {
+                return {
+                    language: 'fi',
+                    placeholder: 'Kirjoita tähän…',
+                    
+                    toolbar: {
+                        items: [
+                            'undo','redo','|',
+                            'findAndReplace','selectAll','|',
+                            'heading','|',
+                            'bold','italic','underline','strikethrough','subscript','superscript','code','removeFormat','|',
+                            'fontFamily','fontSize','fontColor','fontBackgroundColor','highlight','|',
+                            'alignment','outdent','indent','|',
+                            'bulletedList','numberedList','todoList','|',
+                            'blockQuote','codeBlock','horizontalLine','pageBreak','specialCharacters','|',
+                            'link','insertTable','mediaEmbed','|',
+                            'sourceEditing'
+                        ],
+                        shouldNotGroupWhenFull: true // Multi-row toolbar
+                    },
+
+                    heading: {
+                        options: [
+                            { model: 'paragraph', title: 'Normaali kappale', class: 'ck-heading_paragraph' },
+                            { model: 'heading1', view: 'h1', title: 'Otsikko 1', class: 'ck-heading_heading1' },
+                            { model: 'heading2', view: 'h2', title: 'Otsikko 2', class: 'ck-heading_heading2' },
+                            { model: 'heading3', view: 'h3', title: 'Otsikko 3', class: 'ck-heading_heading3' }
+                        ]
+                    },
+
+                    list: {
+                        properties: { styles: true, startIndex: true, reversed: true }
+                    },
+
+                    image: {
+                        toolbar: [
+                            'imageTextAlternative','|',
+                            'imageStyle:inline','imageStyle:block','imageStyle:side','|',
+                            'linkImage'
+                        ],
+                        resizeOptions: [
+                            {
+                                name: 'resizeImage:original',
+                                label: 'Alkuperäinen',
+                                value: null
+                            },
+                            {
+                                name: 'resizeImage:400',
+                                label: '400px',
+                                value: '400'
+                            },
+                            {
+                                name: 'resizeImage:300',
+                                label: '300px',
+                                value: '300'
+                            },
+                            {
+                                name: 'resizeImage:200',
+                                label: '200px',
+                                value: '200'
+                            },
+                            {
+                                name: 'resizeImage:100',
+                                label: '100px',
+                                value: '100'
+                            }
+                        ]
+                    },
+
+                    table: {
+                        contentToolbar: [
+                            'tableColumn','tableRow','mergeTableCells','|',
+                            'tableProperties','tableCellProperties'
+                        ]
+                    },
+
+                    mediaEmbed: {
+                        previewsInData: true
+                    },
+
+                    // Remove premium/cloud plugins to avoid warnings
+                    removePlugins: [
+                        'CKBox','CKFinder','EasyImage',
+                        'RealTimeCollaborativeComments','RealTimeCollaborativeTrackChanges','RealTimeCollaborativeRevisionHistory','PresenceList',
+                        'Comments','TrackChanges','RevisionHistory',
+                        'Pagination',
+                        'WProofreader','MathType',
+                        'ExportPdf','ExportWord','ImportWord'
+                    ]
+                };
+            };
+            
+            console.log('✅ CKEditor Super Build configuration ready');
+        });
+
+        // Custom image upload function
+        function addCustomImageButton(editor) {
+            console.log('🖼️ Adding custom gradient image upload button...');
+            
+            setTimeout(() => {
+                const toolbar = editor.ui.view.toolbar.element;
+                
+                // Create upload button with gradient styling
+                const uploadBtn = document.createElement('button');
+                uploadBtn.className = 'ck ck-button custom-image-btn';
+                uploadBtn.type = 'button';
+                uploadBtn.title = 'Lataa kuva';
+                uploadBtn.style.cssText = `
+                    background: linear-gradient(135deg, #007cff, #0056cc) !important;
+                    color: white !important;
+                    border: 2px solid #004499 !important;
+                    border-radius: 6px !important;
+                    padding: 6px 10px !important;
+                    margin: 0 4px !important;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
+                    transition: all 0.2s ease !important;
+                `;
+                uploadBtn.innerHTML = `
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white" style="margin-right: 4px;">
+                        <path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/>
+                    </svg>
+                    📸
+                `;
+                
+                // Add hover effect
+                uploadBtn.addEventListener('mouseenter', () => {
+                    uploadBtn.style.transform = 'translateY(-1px)';
+                    uploadBtn.style.boxShadow = '0 4px 8px rgba(0,0,0,0.3)';
+                });
+                
+                uploadBtn.addEventListener('mouseleave', () => {
+                    uploadBtn.style.transform = 'translateY(0)';
+                    uploadBtn.style.boxShadow = '0 2px 4px rgba(0,0,0,0.2)';
+                });
+                
+                uploadBtn.addEventListener('click', () => {
+                    console.log('📤 Gradient image upload button clicked');
+                    
+                    const input = document.createElement('input');
+                    input.type = 'file';
+                    input.accept = 'image/*';
+                    
+                    input.onchange = function(e) {
+                        const file = e.target.files[0];
+                        if (!file) return;
+                        
+                        console.log('📁 File selected:', file.name);
+                        uploadImageFile(file, editor);
+                    };
+                    
+                    input.click();
+                });
+                
+                toolbar.appendChild(uploadBtn);
+                console.log('✅ Custom gradient image upload button added');
+            }, 100);
+        }
+
+        function uploadImageFile(file, editor) {
+            console.log('🔄 Uploading file:', file.name);
+            
+            const formData = new FormData();
+            formData.append('upload', file);
+            
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || 
+                             document.querySelector('meta[name="csrf-token"]')?.content ||
+                             window.csrfToken;
+            
+            fetch('/upload-image/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                }
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log('📤 Upload result:', result);
+                
+                if (result.url) {
+                    editor.model.change(writer => {
+                        const imageElement = writer.createElement('imageBlock', { src: result.url });
+                        editor.model.insertContent(imageElement, editor.model.document.selection);
+                    });
+                    
+                    console.log('✅ Image inserted successfully');
+                    
+                    setTimeout(() => {
+                        const images = editor.ui.getEditableElement().querySelectorAll('img:not(.size-checked)');
+                        images.forEach(img => {
+                            img.onload = function() {
+                                if (img.naturalWidth > 800) {
+                                    console.log('🔧 Auto-scaling very large image:', img.naturalWidth + 'px');
+                                    editor.model.change(writer => {
+                                        const imageElement = editor.model.document.getRoot().getChild(0);
+                                        if (imageElement && imageElement.name === 'imageBlock') {
+                                            writer.setAttribute('width', '400px', imageElement);
+                                        }
+                                    });
+                                }
+                                img.classList.add('size-checked');
+                            };
+                            
+                            if (img.complete) {
+                                img.onload();
+                            }
+                        });
+                    }, 500);
+                } else {
+                    alert('Kuvan lataus epäonnistui: ' + (result.error || 'Tuntematon virhe'));
+                }
+            })
+            .catch(error => {
+                console.error('❌ Upload error:', error);
+                alert('Kuvan lataus epäonnistui: ' + error);
+            });
+        }
+
+        function setupStickyToolbar(editor) {
+            console.log('📌 Setting up sticky toolbar for Super Build');
+            
+            const toolbar = editor.ui.view.toolbar.element;
+            const modalContent = toolbar.closest('.modal-content');
+            
+            if (!modalContent) {
+                console.log('Not in modal, skipping sticky setup');
+                return;
+            }
+            
+            // Observe scroll in modal to update toolbar shadow
+            modalContent.addEventListener('scroll', function() {
+                const scrollTop = modalContent.scrollTop;
+                if (scrollTop > 10) {
+                    toolbar.style.boxShadow = '0 4px 8px rgba(0,0,0,0.4)';
+                } else {
+                    toolbar.style.boxShadow = '0 2px 4px rgba(0,0,0,0.3)';
+                }
+            });
+            
+            console.log('✅ Sticky toolbar setup complete for Super Build');
+        }
+    </script>
+</body>
+</html>

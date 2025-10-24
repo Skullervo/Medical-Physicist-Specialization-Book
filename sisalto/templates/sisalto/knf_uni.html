@@ -55,7 +55,8 @@
 
         function saveSection() {
             const title = document.getElementById('section-title').value;
-            const content = document.querySelector('#section-editor').innerHTML;
+            const editor = window['section-editorEditor'];
+            const content = editor ? editor.getData() : '';
             
             fetch("/knf/uni/add_section/", {
                 method: "POST",

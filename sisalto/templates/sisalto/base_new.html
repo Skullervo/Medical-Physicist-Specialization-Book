@@ -1,0 +1,636 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sairaalafyysikon erikoistumiskirja{% endblock %}</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'sisalto/css/site.css' %}?v=3">
+    <link rel="stylesheet" href="{% static 'sisalto/css/header.css' %}?v=3">
+    <link rel="stylesheet" href="{% static 'sisalto/css/chatbot.css' %}?v=3">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <!-- MathJax for math formulas -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+
+    <!-- CKEditor 5 -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/decoupled-document/ckeditor.js"></script>
+    
+    <style>
+        /* CKEditor styling */
+        .ck-editor {
+            margin: 20px 0;
+        }
+        
+        .ck-toolbar-container {
+            border: 1px solid #c4c4c4;
+            border-bottom: none;
+            border-radius: 4px 4px 0 0;
+            background: #f8f9fa;
+            padding: 5px;
+        }
+        
+        .ck-content {
+            border: 1px solid #c4c4c4;
+            border-top: none;
+            border-radius: 0 0 4px 4px;
+            min-height: 200px;
+            padding: 20px;
+        }
+        
+        /* Respect CKEditor image resizing */
+        .ck-content figure.image_resized {
+            max-width: none !important;
+        }
+        
+        .ck-content figure.image_resized img {
+            width: 100% !important;
+            height: auto !important;
+            max-width: none !important;
+        }
+        
+        .ck-content figure.image {
+            max-width: 100% !important;
+        }
+        
+        /* Default for images without resize */
+        .ck-content img:not(figure.image_resized img) {
+            max-width: 400px !important;
+            height: auto !important;
+        }
+
+        /* Image captions styling */
+        .ck-content .image > figcaption {
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 12px;
+            font-size: 14px;
+            text-align: center;
+            border-radius: 0 0 4px 4px;
+        }
+
+        .ck-content figure.image {
+            margin: 1em auto;
+            display: table;
+        }
+
+        /* Enable drag and drop for images */
+        .ck-content figure.image {
+            cursor: move;
+        }
+
+        .ck-content figure.image:hover {
+            outline: 2px dashed #007cff;
+        }
+
+        /* Image alignment styles */
+        .ck-content .image-align-left {
+            float: left;
+            margin: 0 15px 15px 0;
+        }
+
+        .ck-content .image-align-center {
+            display: block;
+            margin: 15px auto;
+            text-align: center;
+        }
+
+        .ck-content .image-align-right {
+            float: right;
+            margin: 0 0 15px 15px;
+        }
+
+        /* Sticky toolbar for modal editors */
+        .modal-content .ck-toolbar-container {
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 9999 !important;
+            background: #1e2139 !important;
+            border-bottom: 1px solid #555 !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3) !important;
+        }
+
+        .modal-content .ck-toolbar {
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 9999 !important;
+            background: #1e2139 !important;
+            border-bottom: 1px solid #555 !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3) !important;
+        }
+
+        /* Ensure modal has proper scrolling */
+        .modal-content {
+            position: relative;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        /* Give editor content proper padding when toolbar is sticky */
+        .modal-content #edit-section-editor {
+            min-height: 400px;
+        }
+        
+        /* TOC Toggle button styling (copied from old base.html) */
+        .toc-toggle {
+            display: flex !important;
+            position: fixed !important;
+            z-index: 9999 !important;
+            background: #cbcbcbff !important;
+            color: white !important;
+            border: 2px solid #7c7c7cff !important;
+            border-radius: 8px !important;
+            padding: 8px !important;
+            cursor: pointer !important;
+            font-size: 1em !important;
+            box-shadow: 0 4px 16px rgba(176, 176, 176, 0.8) !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 50px !important;
+            height: 50px !important;
+            transition: all 0.2s ease !important;
+            opacity: 1 !important;
+            top: 70px !important;
+            right: 20px !important;
+        }
+        
+        .toc-toggle:hover {
+            background: #545454ff !important;
+            transform: scale(1.1) !important;
+        }
+        
+        .toc-toggle span {
+            display: none !important;
+        }
+        
+        .toc-toggle i {
+            margin: 0 !important;
+            font-size: 18px !important;
+        }
+    </style>
+</head>
+
+<body>
+    {% csrf_token %}
+    
+    <script>
+        // Make CSRF token available globally
+        window.csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    </script>
+    
+    <div class="header">
+        <span class="header-logo">
+            <i class="fa-solid fa-radiation fa-lg" style="color:#90caf9;"></i>
+        </span>
+        <span class="header-title">{% block header_title %}{{ page_title|default:"Erikoistuvan sairaalafyysikon teoriaopas - UUSI CKEDITOR TESTI" }}{% endblock %}</span>
+        <span class="header-search">
+            <input type="text" placeholder="Search">
+            <button><i class="fa fa-search"></i></button>
+        </span>
+    </div>
+    
+    <!-- TOC toggle button for mobile -->
+    <button id="toc-toggle" class="toc-toggle" onclick="
+        const toc = document.getElementById('toc');
+        if (toc) {
+            toc.classList.toggle('toc-open');
+            const icon = this.querySelector('i');
+            if (icon) {
+                if (toc.classList.contains('toc-open')) {
+                    icon.className = 'fas fa-times';
+                } else {
+                    icon.className = 'fas fa-list';
+                }
+            }
+        }
+    ">
+        <i class="fas fa-list"></i>
+        <span>Sisältö</span>
+    </button>
+    
+    <div class="container">
+        <nav class="sidebar" id="sidebar">
+            <ul>
+                <li><a href="/">Etusivu</a></li>
+                <li>
+                    <details>
+                        <summary><a href="/epas/">EPA:t</a></summary>
+                        <ul>
+                            <li>
+                                <details>
+                                    <summary><a href="/radiologia_epas/">Radiologia</a></summary>
+                                    <ul>
+                                        <li><a href="/radiologia/lapivalaisu-angiografia/">Läpivalaisu ja angiografia (ml kardiologia)</a></li>
+                                        <li><a href="/radiologia/magneettikuvaus/">Magneettikuvaus</a></li>
+                                        <li><a href="/radiologia/mammografia/">Mammografia</a></li>
+                                        <li><a href="/radiologia/natiivikuvantaminen/">Natiivikuvantaminen</a></li>
+                                        <li><a href="/radiologia/tietokonetomografia/">Tietokonetomografia</a></li>
+                                        <li><a href="/radiologia/ultraaani/">Ultraääni</a></li>
+                                        <li><a href="/radiologia/kuvankatselunaytot/">Kuvankatselunäytöt</a></li>
+                                        <li><a href="/radiologia/hammaskuvantaminen/">Hammas­kuvantaminen</a></li>
+                                        <li><a href="/radiologia/sateilybiologia-suojelu/">Säteilybiologia ja säteily­suojelu radiologiassa</a></li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details>
+                                    <summary><a href="/sadehoito_epas/">Sädehoito</a></summary>
+                                    <ul>
+                                        <li><a href="/sadehoito/peruskasitteet/">Sädehoidon peruskäsitteet</a></li>
+                                        <li><a href="/sadehoito/kuvantaminen_suunnittelu/">Kuvantaminen sädehoidon suunnittelua varten</a></li>
+                                        <li><a href="/sadehoito/ulkoinen/">Ulkoinen sädehoito</a></li>
+                                        <li><a href="/sadehoito/sisainen/">Sisäinen sädehoito</a></li>
+                                        <li><a href="/sadehoito/dosimetria/">Sädehoidon dosimetria</a></li>
+                                        <li><a href="/sadehoito/laitteet/">Säteilyä tuottavat laitteet sädehoidossa</a></li>
+                                        <li><a href="/sadehoito/sateilybiologia/">Säteilybiologia ja säteily­suojelu sädehoidossa</a></li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details>
+                                    <summary><a href="/isotooppi_epas/">Isotooppilääketiede</a></summary>
+                                    <ul>
+                                        <li><a href="/isotooppi/gammakamera/">Gammakamerateknologia</a></li>
+                                        <li><a href="/isotooppi/petkamera/">PET-kamerateknologia</a></li>
+                                        <li><a href="/isotooppi/annostelu_radiofarmasia/">Annostelu ja radiofarmasiatoiminta</a></li>
+                                        <li><a href="/isotooppi/gammakuvaus_spet/">Gammakuvaus ja SPET-tutkimukset</a></li>
+                                        <li><a href="/isotooppi/pet_tutkimukset/">PET-tutkimukset</a></li>
+                                        <li><a href="/isotooppi/radionuklidihoidot/">Radionuklidihoidot</a></li>
+                                        <li><a href="/isotooppi/sateilybiologia_suojelu/">Säteilybiologia ja säteily­suojelu isotooppitoiminnassa</a></li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details>
+                                    <summary><a href="/knf_epas/">KNF</a></summary>
+                                    <ul>
+                                        <li><a href="/knf/eeg/">EEG</a></li>
+                                        <li><a href="/knf/heratepotentiaali_enmg/">Herätepotentiaali ja ENMG-tutkimukset</a></li>
+                                        <li><a href="/knf/iom/">IOM</a></li>
+                                        <li><a href="/knf/laite_sahkoturvallisuus/">Laite- ja sähköturvallisuus</a></li>
+                                        <li><a href="/knf/sarja_tms_hoidot/">Sarja-TMS-hoidot ja navigoidut TMS-tutkimukset</a></li>
+                                        <li><a href="/knf/uni/">Uni</a></li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details>
+                                    <summary><a href="/fysiologia_epas/">Fysiologia</a></summary>
+                                    <ul>
+                                        <li><a href="/fysiologia/ekg/">EKG-tutkimukset</a></li>
+                                        <li><a href="/fysiologia/gi_kanava/">GI-kanavan tutkimukset</a></li>
+                                        <li><a href="/fysiologia/keuhkofunktio/">Keuhkofunktiotutkimukset</a></li>
+                                        <li><a href="/fysiologia/luuston_mineraali/">Luuston mineraalitiheyden mittaus</a></li>
+                                        <li><a href="/fysiologia/verenkierto/">Verenkiertotutkimukset</a></li>
+                                    </ul>
+                                </details>
+                            </li>
+                        </ul>
+                    </details>
+                </li>
+                <li><a href="/examquestions/">Tenttikysymykset</a></li>
+                <li><a href="/links/">Hyödyllisiä linkkejä</a></li>
+                <li><a href="/raportoi-ongelma/">Raportoi ongelmasta</a></li>
+                <li><a href="/sairaalafyysikot/">Sairaalafyysikot ry</a></li>
+            </ul>
+        </nav>
+        
+        <main class="main">
+            {% block content %}{% endblock %}
+        </main>
+        
+        <aside class="toc" id="toc">
+            <h3>Sisältö</h3>
+            <ul>
+                {% block toc %}{% endblock %}
+            </ul>
+        </aside>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{% static 'sisalto/js/new-image-scaling.js' %}"></script>
+    <script src="{% static 'sisalto/js/chatbot.js' %}"></script>
+
+    <script>
+        // Initialize CKEditor
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Initializing NEW CKEditor...');
+            
+            // Look for editor element (page-editor or test-editor)
+            const editorElement = document.querySelector('#page-editor, #test-editor');
+            if (!editorElement) {
+                console.log('❌ No editor element found');
+                return;
+            }
+            
+            console.log('📝 Found editor element:', editorElement.id);
+
+            DecoupledEditor
+                .create(editorElement, {
+                    toolbar: [
+                        'heading', '|',
+                        'bold', 'italic', 'underline', '|',
+                        'bulletedList', 'numberedList', '|',
+                        'link', 'blockQuote', '|',
+                        'insertTable', '|',
+                        'undo', 'redo'
+                    ],
+                    heading: {
+                        options: [
+                            { model: 'paragraph', title: 'Normaali', class: 'ck-heading_paragraph' },
+                            { model: 'heading1', view: 'h1', title: 'Otsikko 1', class: 'ck-heading_heading1' },
+                            { model: 'heading2', view: 'h2', title: 'Otsikko 2', class: 'ck-heading_heading2' },
+                            { model: 'heading3', view: 'h3', title: 'Otsikko 3', class: 'ck-heading_heading3' }
+                        ]
+                    },
+                    image: {
+                        toolbar: ['imageTextAlternative', 'imageStyle:inline', 'imageStyle:block', 'imageStyle:side', '|', 'imageStyle:alignLeft', 'imageStyle:alignCenter', 'imageStyle:alignRight'],
+                        styles: [
+                            'inline',
+                            'alignLeft',
+                            'alignCenter', 
+                            'alignRight',
+                            'block',
+                            'side'
+                        ],
+                        resizeOptions: [
+                            {
+                                name: 'resizeImage:original',
+                                label: 'Alkuperäinen',
+                                value: null
+                            },
+                            {
+                                name: 'resizeImage:400',
+                                label: '400px',
+                                value: '400'
+                            },
+                            {
+                                name: 'resizeImage:300',
+                                label: '300px',
+                                value: '300'
+                            },
+                            {
+                                name: 'resizeImage:200',
+                                label: '200px',
+                                value: '200'
+                            },
+                            {
+                                name: 'resizeImage:100',
+                                label: '100px',
+                                value: '100'
+                            }
+                        ]
+                    }
+                })
+                .then(editor => {
+                    console.log('✅ NEW CKEditor initialized successfully');
+                    
+                    // Create toolbar container
+                    const toolbarContainer = document.createElement('div');
+                    toolbarContainer.className = 'ck-toolbar-container';
+                    editorElement.parentNode.insertBefore(toolbarContainer, editorElement);
+                    toolbarContainer.appendChild(editor.ui.view.toolbar.element);
+                    
+                    // Make toolbar sticky in modals
+                    setupStickyToolbar(toolbarContainer, editorElement);
+                    
+                    // Add custom image upload button
+                    addCustomImageButton(editor);
+                    
+                    // Store editor globally for testing
+                    window.testEditor = editor;
+                    
+                    // Create global config function for modals
+                    window.getEditorConfig = function() {
+                        return {
+                            toolbar: [
+                                'heading', '|',
+                                'bold', 'italic', 'underline', '|',
+                                'bulletedList', 'numberedList', '|',
+                                'link', 'blockQuote', '|',
+                                'insertTable', '|',
+                                'undo', 'redo'
+                            ],
+                            heading: {
+                                options: [
+                                    { model: 'paragraph', title: 'Normaali', class: 'ck-heading_paragraph' },
+                                    { model: 'heading1', view: 'h1', title: 'Otsikko 1', class: 'ck-heading_heading1' },
+                                    { model: 'heading2', view: 'h2', title: 'Otsikko 2', class: 'ck-heading_heading2' },
+                                    { model: 'heading3', view: 'h3', title: 'Otsikko 3', class: 'ck-heading_heading3' }
+                                ]
+                            },
+                            image: {
+                                toolbar: ['imageTextAlternative', 'imageStyle:inline', 'imageStyle:block', 'imageStyle:side', '|', 'imageStyle:alignLeft', 'imageStyle:alignCenter', 'imageStyle:alignRight'],
+                                styles: [
+                                    'inline',
+                                    'alignLeft',
+                                    'alignCenter', 
+                                    'alignRight',
+                                    'block',
+                                    'side'
+                                ],
+                                resizeOptions: [
+                                    {
+                                        name: 'resizeImage:original',
+                                        label: 'Alkuperäinen',
+                                        value: null
+                                    },
+                                    {
+                                        name: 'resizeImage:400',
+                                        label: '400px',
+                                        value: '400'
+                                    },
+                                    {
+                                        name: 'resizeImage:300',
+                                        label: '300px',
+                                        value: '300'
+                                    },
+                                    {
+                                        name: 'resizeImage:200',
+                                        label: '200px',
+                                        value: '200'
+                                    },
+                                    {
+                                        name: 'resizeImage:100',
+                                        label: '100px',
+                                        value: '100'
+                                    }
+                                ]
+                            }
+                        };
+                    };
+                })
+                .catch(error => {
+                    console.error('❌ CKEditor initialization failed:', error);
+                });
+        });
+        
+        // Custom image upload button
+        function addCustomImageButton(editor) {
+            console.log('🖼️ Adding custom image upload button...');
+            
+            setTimeout(() => {
+                const toolbar = editor.ui.view.toolbar.element;
+                
+                // Create upload button
+                const uploadBtn = document.createElement('button');
+                uploadBtn.className = 'ck ck-button custom-image-btn';
+                uploadBtn.type = 'button';
+                uploadBtn.title = 'Lataa kuva';
+                uploadBtn.style.cssText = `
+                    background: linear-gradient(135deg, #007cff, #0056cc) !important;
+                    color: white !important;
+                    border: 2px solid #004499 !important;
+                    border-radius: 6px !important;
+                    padding: 6px 10px !important;
+                    margin: 0 4px !important;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
+                    transition: all 0.2s ease !important;
+                `;
+                uploadBtn.innerHTML = `
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white" style="margin-right: 4px;">
+                        <path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/>
+                    </svg>
+                    📸
+                `;
+                
+                // Add hover effect
+                uploadBtn.addEventListener('mouseenter', () => {
+                    uploadBtn.style.transform = 'translateY(-1px)';
+                    uploadBtn.style.boxShadow = '0 4px 8px rgba(0,0,0,0.3)';
+                });
+                
+                uploadBtn.addEventListener('mouseleave', () => {
+                    uploadBtn.style.transform = 'translateY(0)';
+                    uploadBtn.style.boxShadow = '0 2px 4px rgba(0,0,0,0.2)';
+                });
+                
+                uploadBtn.addEventListener('click', () => {
+                    console.log('📤 Image upload button clicked');
+                    
+                    const input = document.createElement('input');
+                    input.type = 'file';
+                    input.accept = 'image/*';
+                    
+                    input.onchange = function(e) {
+                        const file = e.target.files[0];
+                        if (!file) return;
+                        
+                        console.log('📁 File selected:', file.name);
+                        uploadImageFile(file, editor);
+                    };
+                    
+                    input.click();
+                });
+                
+                toolbar.appendChild(uploadBtn);
+                console.log('✅ Custom image upload button added');
+            }, 100);
+        }
+        
+
+
+        // Upload image file
+        function uploadImageFile(file, editor) {
+            console.log('🔄 Uploading file:', file.name);
+            
+            const formData = new FormData();
+            formData.append('upload', file);
+            
+            // Get CSRF token
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || 
+                             document.querySelector('meta[name="csrf-token"]')?.content ||
+                             '{{ csrf_token }}';
+            
+            fetch('/upload-image/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                }
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log('📤 Upload result:', result);
+                
+                if (result.url) {
+                    // Insert image into editor
+                    editor.model.change(writer => {
+                        const imageElement = writer.createElement('imageBlock', { src: result.url });
+                        editor.model.insertContent(imageElement, editor.model.document.selection);
+                    });
+                    
+                    console.log('✅ Image inserted successfully');
+                    
+                    // Let user control image size - only scale extremely large images
+                    setTimeout(() => {
+                        const images = editor.ui.getEditableElement().querySelectorAll('img:not(.size-checked)');
+                        images.forEach(img => {
+                            img.onload = function() {
+                                // Only auto-scale if image is ridiculously large (over 800px)
+                                if (img.naturalWidth > 800) {
+                                    console.log('🔧 Auto-scaling very large image:', img.naturalWidth + 'px');
+                                    editor.model.change(writer => {
+                                        const imageElement = editor.model.document.getRoot().getChild(0);
+                                        if (imageElement && imageElement.name === 'imageBlock') {
+                                            writer.setAttribute('width', '400px', imageElement);
+                                        }
+                                    });
+                                }
+                                img.classList.add('size-checked');
+                            };
+                            
+                            if (img.complete) {
+                                img.onload();
+                            }
+                        });
+                    }, 500);
+                } else {
+                    alert('Kuvan lataus epäonnistui: ' + (result.error || 'Tuntematon virhe'));
+                }
+            })
+            .catch(error => {
+                console.error('❌ Upload error:', error);
+                alert('Kuvan lataus epäonnistui: ' + error);
+            });
+        }
+        
+        function setupStickyToolbar(toolbarContainer, editorElement) {
+            console.log('📌 Setting up sticky toolbar');
+            
+            // Check if we're in a modal
+            const modalContent = toolbarContainer.closest('.modal-content');
+            if (!modalContent) {
+                console.log('Not in modal, skipping sticky setup');
+                return;
+            }
+            
+            // Add sticky classes
+            toolbarContainer.classList.add('sticky-toolbar');
+            
+            // Observe scroll in modal to update toolbar shadow
+            modalContent.addEventListener('scroll', function() {
+                const scrollTop = modalContent.scrollTop;
+                if (scrollTop > 10) {
+                    toolbarContainer.style.boxShadow = '0 4px 8px rgba(0,0,0,0.4)';
+                } else {
+                    toolbarContainer.style.boxShadow = '0 2px 4px rgba(0,0,0,0.3)';
+                }
+            });
+            
+            console.log('✅ Sticky toolbar setup complete');
+        }
+    </script>
+</body>
+</html>

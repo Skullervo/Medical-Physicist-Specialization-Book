@@ -1,0 +1,603 @@
+{% extends "sisalto/base_new.html" %}
+
+{% block title %}Etusivu - Sairaalafyysikon erikoistumiskirja{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>Etusivu</h1>
+    </div>
+    
+    <div id="save-status" class="save-status" style="display: none;"></div>
+    
+    <!-- Section 1: Introduction -->
+    <div class="content-section" data-section-id="1">
+        <div class="section-header">
+            <h2>Tervetuloa</h2>
+            <div class="section-actions">
+                <button type="button" class="editor-save-btn" onclick="editSection(1, 'Tervetuloa')" title="Muokkaa osiota">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button type="button" class="editor-save-btn" onclick="deleteSection(1)" title="Poista osio" style="background: rgba(244, 67, 54, 0.7);">
+                    <i class="fas fa-trash"></i>
+                </button>
+                <button type="button" class="editor-save-btn" onclick="addSectionAfter(1)" title="Lisää osio tämän jälkeen" style="background: rgba(76, 175, 80, 0.7);">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="section-content" id="section-content-1">
+            <p>Tervetuloa sairaalafyysikon erikoistumiskirjaan. Tämä on uusi CKEditor-toteutus.</p>
+            <p>Voit muokata sisältöä klikkaamalla muokkaa-nappia (✏️) osion oikeassa yläkulmassa.</p>
+        </div>
+    </div>
+    
+    <!-- Section 2: Instructions -->
+    <div class="content-section" data-section-id="2">
+        <div class="section-header">
+            <h2>Käyttöohjeet</h2>
+            <div class="section-actions">
+                <button type="button" class="editor-save-btn" onclick="editSection(2, 'Käyttöohjeet')" title="Muokkaa osiota">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button type="button" class="editor-save-btn" onclick="deleteSection(2)" title="Poista osio" style="background: rgba(244, 67, 54, 0.7);">
+                    <i class="fas fa-trash"></i>
+                </button>
+                <button type="button" class="editor-save-btn" onclick="addSectionAfter(2)" title="Lisää osio tämän jälkeen" style="background: rgba(76, 175, 80, 0.7);">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="section-content" id="section-content-2">
+            <ul>
+                <li><strong>Muokkaa:</strong> Klikkaa ✏️-nappia muokataksesi osion sisältöä</li>
+                <li><strong>Poista:</strong> Klikkaa 🗑️-nappia poistaaksesi koko osion</li>
+                <li><strong>Lisää:</strong> Klikkaa ➕-nappia lisätäksesi uuden osion</li>
+                <li><strong>Kuvat:</strong> Muokkaustilassa klikkaa kuvakuvaketta lisätäksesi kuvia (skaalautuvat automaattisesti)</li>
+            </ul>
+        </div>
+    </div>
+
+    <style>
+        .page-header {
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #333;
+        }
+        
+        .page-header h1 {
+            margin: 0;
+            color: #fff;
+        }
+        
+        /* Content sections styling */
+        .content-section {
+            margin-bottom: 2em;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            padding: 1.5em;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1em;
+        }
+        
+        .section-header h2 {
+            margin: 0;
+            color: #90caf9;
+            font-size: 1.3em;
+        }
+        
+        /* Section actions styling (copied from base.html) */
+        .section-actions {
+            display: flex;
+            gap: 0.3em;
+            flex-wrap: wrap;
+        }
+        
+        .section-actions .editor-save-btn {
+            margin: 0;
+            width: 28px;
+            height: 28px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(42, 46, 77, 0.7);
+            color: rgba(255, 255, 255, 0.8);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+            opacity: 0.7;
+        }
+        
+        .section-actions .editor-save-btn i {
+            font-size: 12px;
+        }
+        
+        .section-actions .editor-save-btn:hover {
+            opacity: 1;
+            transform: translateY(-1px);
+        }
+
+        /* Modal styling */
+        .modal {
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #2a2e4d;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 900px;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+
+        .modal-content h3 {
+            margin-top: 0;
+            color: #ffffff;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .section-title-input {
+            width: 100%;
+            padding: 8px 12px;
+            margin-bottom: 15px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #2a2e4d;
+            color: #ffffff;
+        }
+
+        .modal-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        #edit-section-editor {
+            min-height: 300px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            background-color: #2a2e4d;
+            color: #ffffff;
+        }
+
+        .ck-toolbar-container {
+            border: 1px solid #555;
+            border-bottom: none;
+            border-radius: 4px 4px 0 0;
+            background: #1e2139;
+        }
+
+        /* Dark theme matching background */
+        #edit-section-editor .ck-content {
+            background-color: #2a2e4d !important;
+            color: #ffffff !important;
+            border: none !important;
+        }
+
+        #edit-section-editor .ck-editor__editable {
+            background-color: #2a2e4d !important;
+            color: #ffffff !important;
+        }
+
+        #edit-section-editor .ck-placeholder::before {
+            color: #888 !important;
+        }
+
+        /* Additional dark theme rules */
+        .modal-content .ck-editor__main > .ck-editor__editable {
+            background-color: #2a2e4d !important;
+            color: #ffffff !important;
+        }
+
+        .modal-content .ck-content p {
+            color: #ffffff !important;
+        }
+
+        .modal-content .ck-content {
+            background: #2a2e4d !important;
+            color: #ffffff !important;
+        }
+
+        /* Toolbar dark theme */
+        .modal-content .ck-toolbar {
+            background: #1e2139 !important;
+            border-color: #555 !important;
+        }
+
+        .modal-content .ck-button {
+            color: #ffffff !important;
+        }
+
+        .modal-content .ck-button:hover {
+            background: #333 !important;
+        }
+        
+        /* Allow CKEditor to control image sizes in modal editor */
+        .modal-content .ck-content img {
+            /* Remove size restrictions to allow CKEditor resize handles to work */
+            object-fit: contain !important;
+        }
+        
+        .save-status {
+            padding: 10px 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .save-status.success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        
+        .save-status.error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        
+        .section-content {
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+        }
+        
+        .section-content p {
+            margin-bottom: 1em;
+        }
+        
+        /* Respect CKEditor figure sizes */
+        .section-content figure.image_resized {
+            max-width: none !important;
+        }
+        
+        .section-content figure.image_resized img {
+            width: 100% !important;
+            height: auto !important;
+            max-width: none !important;
+            object-fit: contain !important;
+        }
+        
+        /* Default fallback for images without figure wrapper */
+        .section-content img:not(figure img) {
+            height: auto !important;
+            object-fit: contain !important;
+            display: inline-block !important;
+            max-width: 400px !important;
+        }
+
+        /* Image captions styling */
+        .section-content figure.image > figcaption,
+        .modal-content figure.image > figcaption {
+            background: rgba(42, 46, 77, 0.8);
+            color: white;
+            padding: 8px 12px;
+            font-size: 14px;
+            text-align: center;
+            border-radius: 0 0 4px 4px;
+            margin-top: 5px;
+        }
+
+        .section-content figure.image,
+        .modal-content figure.image {
+            margin: 1em auto;
+            display: table;
+        }
+
+        /* Enable drag and drop hints for images */
+        .modal-content figure.image {
+            cursor: move;
+        }
+
+        .modal-content figure.image:hover {
+            outline: 2px dashed #007cff;
+        }
+
+        /* Image alignment styles */
+        .section-content .image-align-left,
+        .modal-content .image-align-left {
+            float: left;
+            margin: 0 15px 15px 0;
+        }
+
+        .section-content .image-align-center,
+        .modal-content .image-align-center {
+            display: block;
+            margin: 15px auto;
+            text-align: center;
+        }
+
+        .section-content .image-align-right,
+        .modal-content .image-align-right {
+            float: right;
+            margin: 0 0 15px 15px;
+        }
+        
+        .section-content ul, .section-content ol {
+            margin-left: 1.5em;
+        }
+        
+        .section-content li {
+            margin-bottom: 0.5em;
+        }
+        
+        .save-status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            display: none;
+        }
+        
+        .save-status.success {
+            background: rgba(76, 175, 80, 0.1);
+            color: #4caf50;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+        
+        .save-status.error {
+            background: rgba(244, 67, 54, 0.1);
+            color: #f44336;
+            border: 1px solid rgba(244, 67, 54, 0.3);
+        }
+    </style>
+
+    <div id="save-status" class="save-status"></div>
+
+    <!-- Edit Section Modal -->
+    <div id="edit-section-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Muokkaa osiota</h3>
+            <input type="text" id="edit-section-title" placeholder="Osion otsikko" class="section-title-input">
+            <div id="edit-section-editor"></div>
+            <div class="modal-actions">
+                <button type="button" class="editor-save-btn" onclick="saveEditSection()">Tallenna muutokset</button>
+                <button type="button" class="editor-save-btn" style="background:#444;" onclick="closeEditSection()">Peruuta</button>
+            </div>
+            <div id="edit-section-status" class="save-status"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentEditSectionId = null;
+        let editModalEditorInstance = null;
+
+        // Section management functions (copied from base.html style)
+        function editSection(sectionId, currentTitle) {
+            console.log('🖊️ Editing section:', sectionId, currentTitle);
+            currentEditSectionId = sectionId;
+            
+            // Get current content
+            const contentEl = document.getElementById('section-content-' + sectionId);
+            const currentContent = contentEl ? contentEl.innerHTML : '';
+            
+            // Debug what content we're loading
+            console.log('📖 Loading content into editor:', currentContent);
+            if (currentContent.includes('<img')) {
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = currentContent;
+                const images = tempDiv.querySelectorAll('img');
+                images.forEach((img, index) => {
+                    console.log(`🖼️ Loading image ${index}:`, {
+                        src: img.src,
+                        width: img.width,
+                        height: img.height,
+                        styleWidth: img.style.width,
+                        styleHeight: img.style.height,
+                        outerHTML: img.outerHTML
+                    });
+                });
+            }
+            
+            // Set title and show modal
+            document.getElementById('edit-section-title').value = currentTitle;
+            document.getElementById('edit-section-modal').style.display = 'block';
+            
+            // Initialize editor
+            initEditSectionEditor(currentContent);
+        }
+        
+        function initEditSectionEditor(content) {
+            const editorElement = document.getElementById('edit-section-editor');
+            
+            // Clean up any existing editor
+            if (editModalEditorInstance) {
+                editModalEditorInstance.destroy();
+                editModalEditorInstance = null;
+            }
+            
+            // Remove any existing toolbar containers
+            const existingToolbars = editorElement.parentNode.querySelectorAll('.ck-toolbar-container');
+            existingToolbars.forEach(toolbar => toolbar.remove());
+            
+            // Clear the editor element completely
+            editorElement.innerHTML = '';
+            
+            // Wait a bit for cleanup to complete
+            setTimeout(() => {
+                DecoupledEditor.create(editorElement, window.getEditorConfig ? window.getEditorConfig() : {
+                    toolbar: ['heading', '|', 'bold', 'italic', 'underline', '|', 'bulletedList', 'numberedList', '|', 'link', 'blockQuote', '|', 'undo', 'redo']
+                })
+                .then(editor => {
+                    console.log('✅ Edit modal editor created');
+                    
+                    // Create toolbar container only if it doesn't exist
+                    let toolbarContainer = editorElement.parentNode.querySelector('.ck-toolbar-container');
+                    if (!toolbarContainer) {
+                        toolbarContainer = document.createElement('div');
+                        toolbarContainer.className = 'ck-toolbar-container';
+                        editorElement.parentNode.insertBefore(toolbarContainer, editorElement);
+                    }
+                    toolbarContainer.appendChild(editor.ui.view.toolbar.element);
+                    
+                    editModalEditorInstance = editor;
+                    editor.setData(content);
+                    
+                    // Add custom image button
+                    if (typeof addCustomImageButton === 'function') {
+                        addCustomImageButton(editor);
+                    }
+                    
+                    // Don't auto-scale images in modal editor - user controls image sizes
+                    console.log('📝 Modal editor ready - user controls image sizes');
+                })
+                .catch(error => {
+                    console.error('❌ Failed to create edit modal editor:', error);
+                });
+            }, 100);
+        }
+        
+        function saveEditSection() {
+            if (!currentEditSectionId || !editModalEditorInstance) {
+                console.error('❌ Missing section ID or editor instance');
+                return;
+            }
+            
+            const title = document.getElementById('edit-section-title').value;
+            
+            // Get content and debug what CKEditor actually outputs
+            const content = editModalEditorInstance.getData();
+            
+            console.log('💾 DEBUGGING: Full content from CKEditor:', content);
+            
+            // Check specifically for images and their attributes
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = content;
+            const images = tempDiv.querySelectorAll('img');
+            images.forEach((img, index) => {
+                console.log(`🖼️ Image ${index}:`, {
+                    src: img.src,
+                    width: img.width,
+                    height: img.height,
+                    styleWidth: img.style.width,
+                    styleHeight: img.style.height,
+                    outerHTML: img.outerHTML
+                });
+            });
+            
+            console.log('💾 Saving section with preserved image sizes:', {
+                id: currentEditSectionId,
+                title: title,
+                imageCount: images.length
+            });
+            
+            // For now, just update the DOM (later we can add backend saving)
+            const sectionEl = document.querySelector(`[data-section-id="${currentEditSectionId}"]`);
+            if (sectionEl) {
+                // Update title
+                const titleEl = sectionEl.querySelector('h2');
+                if (titleEl) titleEl.textContent = title;
+                
+                // Update content preserving all user-defined attributes including sizes
+                const contentEl = sectionEl.querySelector('.section-content');
+                if (contentEl) {
+                    contentEl.innerHTML = content;
+                    console.log('✅ Content saved with preserved image attributes');
+                }
+            }
+            
+            showSaveStatus('Osio tallennettu onnistuneesti!', 'success');
+            
+            setTimeout(() => {
+                closeEditSection();
+            }, 1000);
+        }
+        
+        function closeEditSection() {
+            document.getElementById('edit-section-modal').style.display = 'none';
+            currentEditSectionId = null;
+            
+            if (editModalEditorInstance) {
+                editModalEditorInstance.destroy();
+                editModalEditorInstance = null;
+            }
+            
+            // Clean up any remaining toolbar containers
+            const editorElement = document.getElementById('edit-section-editor');
+            const existingToolbars = editorElement.parentNode.querySelectorAll('.ck-toolbar-container');
+            existingToolbars.forEach(toolbar => toolbar.remove());
+            
+            // Clear editor content
+            editorElement.innerHTML = '';
+        }
+        
+        function deleteSection(sectionId) {
+            const confirmed = confirm('Haluatko varmasti poistaa tämän osion?');
+            if (confirmed) {
+                const sectionEl = document.querySelector(`[data-section-id="${sectionId}"]`);
+                if (sectionEl) {
+                    sectionEl.remove();
+                    showSaveStatus('Osio poistettu.', 'success');
+                }
+            }
+        }
+        
+        function addSectionAfter(sectionId) {
+            const title = prompt('Anna uuden osion otsikko:');
+            if (title) {
+                const newSectionId = Date.now(); // Simple unique ID
+                const sectionEl = document.querySelector(`[data-section-id="${sectionId}"]`);
+                
+                const newSectionHtml = `
+                    <div class="content-section" data-section-id="${newSectionId}">
+                        <div class="section-header">
+                            <h2>${title}</h2>
+                            <div class="section-actions">
+                                <button type="button" class="editor-save-btn" onclick="editSection(${newSectionId}, '${title}')" title="Muokkaa osiota">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button type="button" class="editor-save-btn" onclick="deleteSection(${newSectionId})" title="Poista osio" style="background: rgba(244, 67, 54, 0.7);">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                <button type="button" class="editor-save-btn" onclick="addSectionAfter(${newSectionId})" title="Lisää osio tämän jälkeen" style="background: rgba(76, 175, 80, 0.7);">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="section-content" id="section-content-${newSectionId}">
+                            <p>Uusi osio. Klikkaa muokkaa-nappia lisätäksesi sisältöä.</p>
+                        </div>
+                    </div>
+                `;
+                
+                sectionEl.insertAdjacentHTML('afterend', newSectionHtml);
+                showSaveStatus('Uusi osio lisätty!', 'success');
+            }
+        }
+        
+        function showSaveStatus(message, type) {
+            const statusEl = document.getElementById('save-status');
+            if (statusEl) {
+                statusEl.textContent = message;
+                statusEl.className = `save-status ${type}`;
+                statusEl.style.display = 'block';
+                
+                setTimeout(() => {
+                    statusEl.style.display = 'none';
+                }, 3000);
+            }
+        }
+    </script>
+{% endblock %}

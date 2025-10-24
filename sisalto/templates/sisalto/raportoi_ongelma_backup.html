@@ -1,0 +1,723 @@
+{% extends "sisalto/base.html" %}
+{% load static %}
+
+{% block title %}Raportoi ongelmasta - Sairaalafyysikon erikoistumiskirja{% endblock %}
+
+{% block extra_head %}
+    <!-- CKEditor 5 Super Build - Local Version -->
+    <link rel="stylesheet" href="{% static 'sisalto/ckeditor5-47.1.0/ckeditor5/ckeditor5.css' %}">
+    <script src="{% static 'sisalto/ckeditor5-47.1.0/ckeditor5/ckeditor5.umd.js' %}"></script>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>🐛 Raportoi ongelmasta</h1>
+        <p class="lead">Ilmoita sivuston toiminnassa havaitsemistasi ongelmista tai ehdota parannuksia</p>
+    </div>
+    
+    <div id="save-status" class="save-status" style="display: none;"></div>
+    
+    <!-- Section 1: Yhteystiedot -->
+    <div class="content-section" data-section-id="1">
+        <div class="section-header">
+            <h2>📧 Yhteystiedot</h2>
+            <div class="section-actions">
+                <button type="button" class="editor-save-btn" onclick="editSection(1)" title="Muokkaa osiota">
+                    <i class="fas fa-edit"></i>
+                </button>
+            </div>
+        </div>
+        <div class="section-content" id="section-content-1">
+            <p>Jos kohtaat teknisiä ongelmia sivustolla tai haluat ehdottaa parannuksia, voit ottaa yhteyttä seuraavilla tavoilla:</p>
+            <ul>
+                <li><strong>Sähköposti:</strong> <a href="mailto:admin@erikoistumiskirja.fi">admin@erikoistumiskirja.fi</a></li>
+                <li><strong>Telegram:</strong> @erikoistumiskirja_admin</li>
+                <li><strong>GitHub Issues:</strong> <a href="https://github.com/erikoistumiskirja/issues" target="_blank">GitHub Repository</a></li>
+            </ul>
+        </div>
+    </div>
+
+{% block content %}
+    <div class="page-header">
+        <h1>🐛 Raportoi ongelmasta</h1>
+        <p class="lead">Ilmoita sivuston toiminnassa havaitsemistasi ongelmista tai ehdota parannuksia</p>
+    </div>
+    
+    <div id="save-status" class="save-status" style="display: none;"></div>
+    
+    <!-- Section 1: Yhteystiedot -->
+    <div class="content-section" data-section-id="1">
+        <div class="section-header">
+            <h2>📧 Yhteystiedot</h2>
+            <div class="section-actions">
+                <button type="button" class="editor-save-btn" onclick="editSection(1)" title="Muokkaa osiota">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button type="button" class="editor-save-btn" onclick="deleteSection(1)" title="Poista osio" style="background: rgba(244, 67, 54, 0.7);">
+                    <i class="fas fa-trash"></i>
+                </button>
+                <button type="button" class="editor-save-btn" onclick="addSectionAfter(1)" title="Lisää osio tämän jälkeen" style="background: rgba(76, 175, 80, 0.7);">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="section-content" id="section-content-1">
+            <p>Jos kohtaat teknisiä ongelmia sivustolla tai haluat ehdottaa parannuksia, voit ottaa yhteyttä seuraavilla tavoilla:</p>
+            <ul>
+                <li><strong>Sähköposti:</strong> <a href="mailto:admin@erikoistumiskirja.fi">admin@erikoistumiskirja.fi</a></li>
+                <li><strong>Telegram:</strong> @erikoistumiskirja_admin</li>
+                <li><strong>GitHub Issues:</strong> <a href="https://github.com/erikoistumiskirja/issues" target="_blank">GitHub Repository</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Section 2: Yleisimmät ongelmat -->
+    <div class="content-section" data-section-id="2">
+        <div class="section-header">
+            <h2>🔧 Yleisimmät ongelmat ja ratkaisut</h2>
+            <div class="section-actions">
+                <button type="button" class="editor-save-btn" onclick="editSection(2)" title="Muokkaa osiota">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button type="button" class="editor-save-btn" onclick="deleteSection(2)" title="Poista osio" style="background: rgba(244, 67, 54, 0.7);">
+                    <i class="fas fa-trash"></i>
+                </button>
+                <button type="button" class="editor-save-btn" onclick="addSectionAfter(2)" title="Lisää osio tämän jälkeen" style="background: rgba(76, 175, 80, 0.7);">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="section-content" id="section-content-2">
+            <h3>Sisällön editointi ei toimi</h3>
+            <p>Jos editorin muokkausnappi ei toimi tai editori ei avaudu:</p>
+            <ol>
+                <li>Päivitä sivu (F5 tai Ctrl+R)</li>
+                <li>Tyhjennä selaimen välimuisti (Ctrl+Shift+Delete)</li>
+                <li>Kokeile toista selainta (Chrome, Firefox, Edge)</li>
+                <li>Tarkista että JavaScript on käytössä</li>
+            </ol>
+            
+            <h3>Kuvien lataus epäonnistuu</h3>
+            <p>Jos kuvia ei voi ladata editorissa:</p>
+            <ul>
+                <li>Tarkista tiedostokoko (max 10MB)</li>
+                <li>Käytä tuettuja formaatteja: JPG, PNG, GIF, WebP</li>
+                <li>Varmista verkkoyhteytesi toimivuus</li>
+            </ul>
+            
+            <h3>Sivu latautuu hitaasti</h3>
+            <p>Sivuston suorituskykyongelmissa:</p>
+            <ul>
+                <li>Tarkista verkkoyhteytesi nopeus</li>
+                <li>Sulje muut selainvälilehdet</li>
+                <li>Käytä modernia selainta</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Section 3: Ongelman raportointi -->
+    <div class="content-section" data-section-id="3">
+        <div class="section-header">
+            <h2>📝 Miten raportoida ongelma</h2>
+            <div class="section-actions">
+                <button type="button" class="editor-save-btn" onclick="editSection(3)" title="Muokkaa osiota">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button type="button" class="editor-save-btn" onclick="deleteSection(3)" title="Poista osio" style="background: rgba(244, 67, 54, 0.7);">
+                    <i class="fas fa-trash"></i>
+                </button>
+                <button type="button" class="editor-save-btn" onclick="addSectionAfter(3)" title="Lisää osio tämän jälkeen" style="background: rgba(76, 175, 80, 0.7);">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="section-content" id="section-content-3">
+            <p>Auta meitä korjaamaan ongelma nopeasti antamalla seuraavat tiedot:</p>
+            
+            <h3>🔍 Ongelman kuvaus</h3>
+            <ul>
+                <li><strong>Mitä tapahtui?</strong> Kuvaile ongelma yksityiskohtaisesti</li>
+                <li><strong>Milloin?</strong> Tapahtuiko ongelma tiettyyn aikaan tai tilanteessa?</li>
+                <li><strong>Toistettavuus:</strong> Toistuuko ongelma joka kerta?</li>
+            </ul>
+            
+            <h3>🖥️ Teknisiä tietoja</h3>
+            <ul>
+                <li><strong>Selain:</strong> Chrome, Firefox, Safari, Edge (ja versio)</li>
+                <li><strong>Käyttöjärjestelmä:</strong> Windows, macOS, Linux, iOS, Android</li>
+                <li><strong>Laite:</strong> Tietokone, tabletti, puhelin</li>
+                <li><strong>Ruudun koko:</strong> Desktop, mobile</li>
+            </ul>
+            
+            <h3>📸 Liitteet</h3>
+            <ul>
+                <li>Ota kuvakaappaus ongelmasta</li>
+                <li>Kopioi virheilmoitukset (jos näkyy)</li>
+                <li>Kerro tarkat vaiheet ongelman toistamiseksi</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Section 4: Kehitysehdotukset -->
+    <div class="content-section" data-section-id="4">
+        <div class="section-header">
+            <h2>💡 Kehitysehdotukset</h2>
+            <div class="section-actions">
+                <button type="button" class="editor-save-btn" onclick="editSection(4)" title="Muokkaa osiota">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button type="button" class="editor-save-btn" onclick="deleteSection(4)" title="Poista osio" style="background: rgba(244, 67, 54, 0.7);">
+                    <i class="fas fa-trash"></i>
+                </button>
+                <button type="button" class="editor-save-btn" onclick="addSectionAfter(4)" title="Lisää osio tämän jälkeen" style="background: rgba(76, 175, 80, 0.7);">
+                    <i class="fas plus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="section-content" id="section-content-4">
+            <p>Olemme kiinnostuneita kehittämään sivustoa käyttäjien tarpeiden mukaan. Kerro mielipiteesi:</p>
+            
+            <h3>🎯 Toivotut ominaisuudet</h3>
+            <ul>
+                <li>Uudet sisältöalueet tai aiheet</li>
+                <li>Käyttöliittymän parannukset</li>
+                <li>Hakutoiminnot</li>
+                <li>Mobiiliversion kehitys</li>
+                <li>Yhteistyötyökalut</li>
+            </ul>
+            
+            <h3>📊 Käyttökokemuksen palaute</h3>
+            <ul>
+                <li>Mikä toimii hyvin?</li>
+                <li>Mikä on hankalaa tai epäselvää?</li>
+                <li>Mitä käytät eniten?</li>
+                <li>Mitä kaipaat lisää?</li>
+            </ul>
+        </div>
+    </div>
+
+    <style>
+        .page-header {
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #333;
+        }
+        
+        .page-header h1 {
+            margin: 0;
+            color: #fff;
+            font-size: 2.2em;
+        }
+        
+        .page-header .lead {
+            color: #ccc;
+            margin-top: 0.5em;
+            font-size: 1.1em;
+        }
+        
+        /* Content sections styling */
+        .content-section {
+            margin-bottom: 2em;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            padding: 1.5em;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1em;
+        }
+        
+        .section-header h2 {
+            margin: 0;
+            color: #90caf9;
+            font-size: 1.3em;
+        }
+        
+        /* Section actions styling */
+        .section-actions {
+            display: flex;
+            gap: 0.3em;
+            flex-wrap: wrap;
+        }
+        
+        .section-actions .editor-save-btn {
+            margin: 0;
+            width: 28px;
+            height: 28px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(42, 46, 77, 0.7);
+            color: rgba(255, 255, 255, 0.8);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+            opacity: 0.7;
+        }
+        
+        .section-actions .editor-save-btn i {
+            font-size: 12px;
+        }
+        
+        .section-actions .editor-save-btn:hover {
+            opacity: 1;
+            transform: translateY(-1px);
+        }
+
+        /* Section content styling */
+        .section-content {
+            color: #ffffff;
+            line-height: 1.6;
+        }
+        
+        .section-content h3 {
+            color: #81c784;
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+        }
+
+        .section-content ul, .section-content ol {
+            margin: 0.5em 0;
+            padding-left: 1.5em;
+        }
+
+        .section-content li {
+            margin-bottom: 0.3em;
+        }
+
+        .section-content p {
+            margin: 0.5em 0;
+        }
+
+        .section-content strong {
+            color: #90caf9;
+        }
+        
+        .section-content a {
+            color: #64b5f6;
+            text-decoration: none;
+        }
+        
+        .section-content a:hover {
+            color: #90caf9;
+            text-decoration: underline;
+        }
+
+        /* Save status styling */
+        .save-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            border-radius: 4px;
+            color: white;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .save-status.success {
+            background-color: #4caf50;
+        }
+
+        .save-status.error {
+            background-color: #f44336;
+        }
+
+        /* Modal styling */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            position: relative;
+            background-color: #2a2e4d;
+            margin: 2% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 1200px;
+            max-height: 90vh;
+            overflow-y: auto;
+            color: #ffffff;
+        }
+
+        .modal-content h3 {
+            color: #90caf9;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .section-title-input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            background-color: #1e2139;
+            border: 1px solid #555;
+            border-radius: 4px;
+            color: #ffffff;
+            font-size: 16px;
+        }
+
+        .modal-actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .modal-actions .editor-save-btn {
+            width: auto;
+            height: auto;
+            padding: 10px 20px;
+            font-size: 14px;
+        }
+
+        /* Ensure CKEditor works in modal */
+        .modal-content .ck-editor {
+            margin: 15px 0;
+        }
+
+        .modal-content .ck-editor__editable {
+            min-height: 400px;
+            background-color: #2a2e4d !important;
+            color: #ffffff !important;
+        }
+    </style>
+
+    <!-- Edit Section Modal - Simple Version -->
+    <div id="edit-section-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000;">
+        <div style="position: relative; background: #2a2e4d; margin: 2% auto; padding: 20px; border-radius: 8px; width: 90%; max-width: 1200px; max-height: 90vh; overflow-y: auto; color: #fff;">
+            <h3 style="color: #90caf9; margin-top: 0;">Muokkaa osiota</h3>
+            
+            <label style="display: block; margin-bottom: 5px; color: #90caf9;">Otsikko:</label>
+            <input type="text" id="edit-section-title" placeholder="Osion otsikko" style="width: 100%; padding: 10px; margin-bottom: 15px; background: #1e2139; border: 1px solid #555; border-radius: 4px; color: #fff; box-sizing: border-box;">
+            
+            <label style="display: block; margin-bottom: 5px; color: #90caf9;">Sisältö (HTML):</label>
+            <textarea id="edit-section-content" style="width: 100%; height: 400px; padding: 15px; background: #1e2139; border: 1px solid #555; border-radius: 4px; color: #fff; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.5; box-sizing: border-box; resize: vertical;"></textarea>
+            
+            <div style="margin-top: 10px; color: #81c784; font-size: 12px;">
+                <strong>HTML-esimerkkejä:</strong><br>
+                • &lt;h3&gt;Otsikko&lt;/h3&gt; • &lt;strong&gt;Lihavoitu&lt;/strong&gt; • &lt;em&gt;Kursivoitu&lt;/em&gt;<br>
+                • &lt;ul&gt;&lt;li&gt;Lista&lt;/li&gt;&lt;/ul&gt; • &lt;a href="linkki"&gt;Linkki&lt;/a&gt;
+            </div>
+            
+            <div style="margin-top: 20px; display: flex; gap: 10px;">
+                <button type="button" onclick="saveSimpleEditSection()" style="padding: 10px 20px; background: #4caf50; color: white; border: none; border-radius: 4px; cursor: pointer;">Tallenna muutokset</button>
+                <button type="button" onclick="closeSimpleEditSection()" style="padding: 10px 20px; background: #666; color: white; border: none; border-radius: 4px; cursor: pointer;">Peruuta</button>
+            </div>
+            
+            <div id="edit-section-status" style="margin-top: 10px; padding: 10px; border-radius: 4px; display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentEditSectionId = null;
+
+        // Simple section editing - no complex dependencies
+        function editSection(sectionId) {
+            console.log('Editing section:', sectionId);
+            currentEditSectionId = sectionId;
+            
+            // Get current title from the page
+            const titleEl = document.querySelector(`[data-section-id="${sectionId}"] h2`);
+            const actualTitle = titleEl ? titleEl.textContent : 'Osio';
+            
+            // Get current content
+            const contentEl = document.getElementById('section-content-' + sectionId);
+            const currentContent = contentEl ? contentEl.innerHTML : '';
+            
+            // Set values and show modal
+            document.getElementById('edit-section-title').value = actualTitle;
+            document.getElementById('edit-section-content').value = currentContent;
+            document.getElementById('edit-section-modal').style.display = 'block';
+            
+            // Focus on title input
+            setTimeout(() => {
+                document.getElementById('edit-section-title').focus();
+            }, 100);
+        }
+        
+        function saveSimpleEditSection() {
+            if (!currentEditSectionId) {
+                console.error('Missing section ID');
+                return;
+            }
+            
+            const title = document.getElementById('edit-section-title').value;
+            const content = document.getElementById('edit-section-content').value;
+            
+            console.log('Saving section:', {
+                id: currentEditSectionId,
+                title: title,
+                contentLength: content.length
+            });
+            
+            // Update the DOM
+            const sectionEl = document.querySelector(`[data-section-id="${currentEditSectionId}"]`);
+            if (sectionEl) {
+                // Update title
+                const titleEl = sectionEl.querySelector('h2');
+                if (titleEl) titleEl.textContent = title;
+                
+                // Update content
+                const contentEl = sectionEl.querySelector('.section-content');
+                if (contentEl) {
+                    contentEl.innerHTML = content;
+                    console.log('Content saved successfully');
+                }
+            }
+            
+            showSaveStatus('Osio tallennettu onnistuneesti!', 'success');
+            
+            setTimeout(() => {
+                closeSimpleEditSection();
+            }, 1000);
+        }
+        
+        function closeSimpleEditSection() {
+            document.getElementById('edit-section-modal').style.display = 'none';
+            currentEditSectionId = null;
+        }
+        
+        function deleteSection(sectionId) {
+            const confirmed = confirm('Haluatko varmasti poistaa tämän osion?');
+            if (confirmed) {
+                const sectionEl = document.querySelector(`[data-section-id="${sectionId}"]`);
+                if (sectionEl) {
+                    sectionEl.remove();
+                    showSaveStatus('Osio poistettu.', 'success');
+                }
+            }
+        }
+        
+        function addSectionAfter(sectionId) {
+            const title = prompt('Anna uuden osion otsikko:');
+            if (title) {
+                const newSectionId = Date.now();
+                const sectionEl = document.querySelector(`[data-section-id="${sectionId}"]`);
+                
+                const newSectionHtml = `
+                    <div class="content-section" data-section-id="${newSectionId}">
+                        <div class="section-header">
+                            <h2>${title}</h2>
+                            <div class="section-actions">
+                                <button type="button" class="editor-save-btn" onclick="editSection(${newSectionId})" title="Muokkaa osiota">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button type="button" class="editor-save-btn" onclick="deleteSection(${newSectionId})" title="Poista osio" style="background: rgba(244, 67, 54, 0.7);">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                <button type="button" class="editor-save-btn" onclick="addSectionAfter(${newSectionId})" title="Lisää osio tämän jälkeen" style="background: rgba(76, 175, 80, 0.7);">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="section-content" id="section-content-${newSectionId}">
+                            <p>Uusi osio. Klikkaa muokkaa-nappia lisätäksesi sisältöä.</p>
+                        </div>
+                    </div>
+                `;
+                
+                sectionEl.insertAdjacentHTML('afterend', newSectionHtml);
+                showSaveStatus('Uusi osio lisätty!', 'success');
+            }
+        }
+        
+        function showSaveStatus(message, type) {
+            const statusEl = document.getElementById('save-status');
+            if (statusEl) {
+                statusEl.textContent = message;
+                statusEl.className = `save-status ${type}`;
+                statusEl.style.display = 'block';
+                
+                setTimeout(() => {
+                    statusEl.style.display = 'none';
+                }, 3000);
+            }
+        }
+    </script>
+{% endblock %} {% endcomment %}
+
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CKEditor 5 – kaikki herkut</title>
+
+  <style>
+    body {
+      margin: 2rem;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      background: #fafafa;
+    }
+    #editor {
+      max-width: 900px;
+      margin: 2rem auto;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 1rem;
+      background: #fff;
+      min-height: 200px;
+    }
+    #status {
+      max-width: 900px;
+      margin: 0 auto;
+      color: #666;
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>CKEditor 5 – “kaikki herkut”</h1>
+
+  <div id="status">Ladataan editoria…</div>
+  <div id="editor">
+    <p>Tähän voit kirjoittaa ja testata ominaisuuksia.</p>
+  </div>
+
+  <script>
+    // --- Yleinen latausapu: dynaaminen <script> ja timeout ---
+    function loadScript(src, { timeout = 15000 } = {}) {
+      return new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = src;
+        s.async = true;
+        s.defer = true;
+        s.onload = () => resolve(src);
+        s.onerror = () => reject(new Error('Latausvirhe: ' + src));
+        document.head.appendChild(s);
+
+        if (timeout) {
+          setTimeout(() => reject(new Error('Aikakatkaisu: ' + src)), timeout);
+        }
+      });
+    }
+
+    // Super-buildin pää-URL + varaversio
+    const superBuildUrls = [
+      // Käytä jotain tuoretta versionumeroa; voit vaihtaa myöhemmin
+      'https://cdn.ckeditor.com/ckeditor5/43.0.0/super-build/ckeditor.js',
+      // Jos ylläoleva ei toimi, kokeile toista staattista versiota:
+      'https://cdn.ckeditor.com/ckeditor5/42.0.0/super-build/ckeditor.js'
+    ];
+
+    // Classic-fallback jsDelivristä (ei “kaikkia herkkuja”, mutta editori näkyy)
+    const classicFallbackUrl =
+      'https://cdn.jsdelivr.net/npm/@ckeditor/ckeditor5-build-classic@39.0.1/build/ckeditor.js';
+
+    const statusEl = document.getElementById('status');
+
+    async function init() {
+      // 1) Koeta super-build useilla URL:eilla
+      for (const url of superBuildUrls) {
+        try {
+          statusEl.textContent = 'Ladataan CKEditor super-buildia…';
+          await loadScript(url);
+
+          if (window.CKEDITOR && window.CKEDITOR.ClassicEditor) {
+            statusEl.textContent = 'Super-build ladattu. Alustetaan…';
+            await window.CKEDITOR.ClassicEditor.create(document.querySelector('#editor'), {
+              language: 'fi',
+              placeholder: 'Kirjoita tähän…',
+              toolbar: {
+                items: [
+                  'undo','redo','|',
+                  'findAndReplace','selectAll','|',
+                  'heading','|',
+                  'bold','italic','underline','strikethrough','subscript','superscript','code','removeFormat','|',
+                  'fontFamily','fontSize','fontColor','fontBackgroundColor','highlight','|',
+                  'alignment','outdent','indent','|',
+                  'bulletedList','numberedList','todoList','|',
+                  'blockQuote','codeBlock','horizontalLine','pageBreak','specialCharacters','|',
+                  'link','insertTable','imageUpload','mediaEmbed','|',
+                  'sourceEditing'
+                ],
+                shouldNotGroupWhenFull: true
+              },
+              list: { properties: { styles: true, startIndex: true, reversed: true } },
+              image: {
+                toolbar: [
+                  'imageTextAlternative','|',
+                  'imageStyle:inline','imageStyle:block','imageStyle:side','|',
+                  'linkImage'
+                ]
+              },
+              table: {
+                contentToolbar: [
+                  'tableColumn','tableRow','mergeTableCells','|',
+                  'tableProperties','tableCellProperties'
+                ]
+              },
+              removePlugins: [
+                'CKBox','CKFinder','EasyImage',
+                'RealTimeCollaborativeComments','RealTimeCollaborativeTrackChanges','RealTimeCollaborativeRevisionHistory','PresenceList',
+                'Comments','TrackChanges','RevisionHistory',
+                'Pagination',
+                'WProofreader','MathType',
+                'ExportPdf','ExportWord','ImportWord'
+              ]
+            });
+            statusEl.textContent = 'Valmis (super-build).';
+            return; // onnistui
+          } else {
+            throw new Error('CKEDITOR-globaali puuttuu tämän URL:n jälkeen: ' + url);
+          }
+        } catch (err) {
+          console.warn(err.message);
+        }
+      }
+
+      // 2) Fallback: Classic-build (näkyy varmasti, muttei ihan kaikkia plugareita)
+      try {
+        statusEl.textContent = 'Super-build ei latautunut. Ladataan classic-fallback…';
+        await loadScript(classicFallbackUrl);
+
+        if (window.ClassicEditor) {
+          statusEl.textContent = 'Classic-build ladattu. Alustetaan…';
+          await window.ClassicEditor.create(document.querySelector('#editor'), {
+            language: 'fi',
+            toolbar: [
+              'undo','redo','|',
+              'heading','|',
+              'bold','italic','underline','strikethrough','|',
+              'bulletedList','numberedList','|',
+              'blockQuote','link','insertTable','imageUpload'
+            ]
+          });
+          statusEl.textContent =
+            'Valmis (classic-fallback). Huom: kaikki super-ominaisuudet eivät ole käytössä.';
+          return;
+        } else {
+          throw new Error('ClassicEditor-globaali puuttuu fallbackin jälkeen.');
+        }
+      } catch (err) {
+        console.error(err);
+        statusEl.textContent =
+          'Editorin lataus epäonnistui kokonaan. Tarkista verkko/CSP ja salli cdn.ckeditor.com sekä cdn.jsdelivr.net.';
+      }
+    }
+
+    // Käynnistä kun DOM on valmis
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
