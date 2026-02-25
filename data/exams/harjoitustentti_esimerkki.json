@@ -1,0 +1,56 @@
+{
+  "title": "Harjoitustentti - Esimerkki",
+  "exam_type": "practice",
+  "year": 2024,
+  "semester": "harjoitus",
+  "time_limit_minutes": 240,
+  "passing_score_percent": 50,
+  "description": "Esimerkkitentti joka kattaa kaikki erikoisalat. Käytä tätä pohjana vanhojen tenttien syöttämiseen.",
+  "questions": [
+    {
+      "number": 1,
+      "text": "Selitä lineaarikiihdyttimen toimintaperiaate ja kuvaa sen keskeiset komponentit. Miten monitoriyksikkö (MU) määritellään ja mikä on sen yhteys potilaan annokseen?",
+      "max_points": 10,
+      "epa_card_slug": "sateilya-tuottavat-laitteet",
+      "model_answer": "Lineaarikiihdytin (linac) kiihdyttää elektroneja mikroaaltojen avulla kiihdytysputkessa. Keskeiset komponentit: elektronitykki, kiihdytysputki (travelling wave tai standing wave), taivutusmagneetti, kohdelevy (fotonihoito), tasoitussuodin, primääri- ja sekundäärikollimaattorit, MLC. Monitoriyksikkö (MU) on hoitolaitteen annoskalibraation yksikkö: 1 MU = tietty annos referenssiolosuhteissa (esim. 1 cGy 10x10 cm kentässä, d_max syvyydellä, 100 cm SSD). Potilaan annos riippuu MU:sta, kentän koosta, syvyydestä, SSD:stä ja kudoksen epähomogeenisuuksista.",
+      "scoring_rubric": "Täydet pisteet (10): kiihdytysperiaate oikein, kaikki keskeiset komponentit mainittu, MU-määritelmä oikein referenssiolosuhteissa. 7-9p: pääperiaate ja MU oikein, osa komponenteista puuttuu. 4-6p: perusidea oikein. 1-3p: vain hajanaisia mainintoja.",
+      "key_concepts": ["mikroaaltokiihdytys", "elektronitykki", "kiihdytysputki", "taivutusmagneetti", "MLC", "monitoriyksikkö", "referenssiolosuhteet", "annoskalibraatio"]
+    },
+    {
+      "number": 2,
+      "text": "Tietokonetomografiassa esiintyy erilaisia kuvausartefakteja. Nimeä ja selitä kolme erilaista artefaktityyppiä ja kuvaa miten niitä voidaan vähentää tai korjata.",
+      "max_points": 10,
+      "epa_card_slug": "tietokonetomografia",
+      "model_answer": "1) Beam hardening: polykromaattisen keilan matalampienergisten fotonien voimakkaampi vaimeneminen aiheuttaa cupping-efektin ja tummia raitoja tiheän materiaalin välillä. Korjaus: linearisaatiokorjaus, iteratiivinen rekonstruktio, kaksoisenergiatekniikka. 2) Liikeartefakti: potilaan liike kuvauksen aikana aiheuttaa epätarkkuutta ja haamu-kuvia. Korjaus: nopea kuvaus, hengitystahdistus, EKG-tahdistus. 3) Metalliartefakti: metalliset implantit aiheuttavat voimakasta streak-artefaktaa. Korjaus: MAR-algoritmit, kaksoisenergiatekniikka, kuvausparametrien optimointi (kV nosto).",
+      "scoring_rubric": "Täydet pisteet: 3 eri artefaktia selitetty mekanismeineen ja korjausmenetelmineen. 7-8p: 3 artefaktia mutta selitykset osittain puutteellisia. 4-6p: 2 artefaktia hyvin tai 3 pintapuolisesti. 1-3p: 1 artefakti tai hyvin pintapuolinen.",
+      "key_concepts": ["beam hardening", "cupping", "liikeartefakti", "metalliartefakti", "MAR", "iteratiivinen rekonstruktio", "kaksoisenergiatekniikka"]
+    },
+    {
+      "number": 3,
+      "text": "Selitä sädehoidon LQ-mallin (Linear-Quadratic) perusteet ja sen soveltaminen fraktiokoon muutoksiin. Mitä EQD2-käsite tarkoittaa ja miten sitä käytetään?",
+      "max_points": 10,
+      "epa_card_slug": "sateilybiologia-sadehoito",
+      "model_answer": "LQ-malli kuvaa solujen selviytymistodennäköisyyttä säteilyannoksen funktiona: SF = exp(-αd - βd²), missä d on kerta-annos. α/β-suhde kuvaa kudoksen herkkyyttä fraktiokoon muutoksille: matala α/β (2-4 Gy) myöhäisvaikutukset ja hitaasti jakautuvat kasvaimet, korkea α/β (≈10 Gy) akuuttivaikutukset ja nopeasti jakautuvat kasvaimet. BED (Biologically Effective Dose) = nd(1 + d/(α/β)). EQD2 = BED/(1 + 2/(α/β)) muuntaa minkä tahansa fraktiointiohjelman 2 Gy:n fraktioita vastaavaksi annokseksi, mikä mahdollistaa eri hoito-ohjelmien vertailun. Käyttö: uusintasädetys, hypofraktiointi, fraktioinnin muutokset hoitotauon takia.",
+      "scoring_rubric": "Täydet pisteet: LQ-kaava, α/β-suhteen merkitys, BED, EQD2 kaava ja käyttö. 7-9p: perusperiaatteet oikein, pieniä puutteita. 4-6p: LQ-malli tunnistettu, EQD2 osittain. 1-3p: vain peruskäsite.",
+      "key_concepts": ["LQ-malli", "α/β-suhde", "BED", "EQD2", "fraktiointi", "selviytymiskäyrä", "myöhäisvaikutukset", "akuuttivaikutukset"]
+    },
+    {
+      "number": 4,
+      "text": "Kuvaa magneettikuvauksen signaalinmuodostuksen periaate. Miten T1- ja T2-painotteiset kuvat eroavat toisistaan ja miten painotus valitaan kuvaussekvenssissä?",
+      "max_points": 10,
+      "epa_card_slug": "magneettikuvaus",
+      "model_answer": "MRI perustuu ydinmagneettiseen resonanssiin: vety-ytimien spinit suuntautuvat ulkoiseen magneettikenttään (B0), RF-pulssi kääntää ne ja relaksoituessaan ne tuottavat detektoitavan signaalin. T1-relaksaatio (spin-hila): pitkittäisen magnetisaation palautuminen, riippuu kudoksen rakenteesta. T2-relaksaatio (spin-spin): poikittaisen magnetisaation vaimeneminen. T1-painotteinen kuva: lyhyt TR ja lyhyt TE - rasva kirkas, neste tumma. Hyvä anatomiseen kuvaukseen. T2-painotteinen kuva: pitkä TR ja pitkä TE - neste kirkas, rasva tumma. Hyvä patologian tunnistamiseen (turvotus, kasvaimet).",
+      "scoring_rubric": "Täydet pisteet: NMR-periaate, T1/T2 relaksaatio selitetty, TR/TE valinta oikein, kontrastierot mainittu. 7-9p: perusperiaate oikein, pieniä puutteita. 4-6p: T1/T2 ero ymmärretty mutta mekanismi epäselvä.",
+      "key_concepts": ["NMR", "T1-relaksaatio", "T2-relaksaatio", "TR", "TE", "spin-hila", "spin-spin", "RF-pulssi", "painotus"]
+    },
+    {
+      "number": 5,
+      "text": "Kuvaa gammakameran toimintaperiaate ja keskeiset komponentit. Miten SPET-kuvaus eroaa tasomaiskuvauksesta?",
+      "max_points": 10,
+      "epa_card_slug": "gammakamerateknologia",
+      "model_answer": "Gammakamera ilmaisee kehosta emittoituvia gammakvantteja. Komponentit: kollimaattori (suuntaa fotonit, rinnakkaisreikä yleisin), tuikekide (NaI(Tl)), valomonistimet (PMT) ja paikantamiselektroniikka. Kollimaattori rajoittaa fotonien suuntaa geometrisesti. Kide tuottaa tuikahduksen, jonka PMT:t muuntavat sähköiseksi signaaliksi. Paikka määritetään Angerin logiikalla PMT-signaalien suhteista. Energiaikkunalla valitaan fotopiikki ja hylätään sironneet fotonit. SPET (Single Photon Emission Tomography): kamera kiertää potilaan ympäri keräten projektioita eri kulmista, joista rekonstruoidaan tomografiakuva (FBP tai iteratiivinen). Tasomaiskuvaus: staattinen tai dynaaminen 2D-projektio yhdestä suunnasta.",
+      "scoring_rubric": "Täydet pisteet: kaikki komponentit, toimintaperiaate, SPET vs. tasomais selkeästi. 7-9p: pääosat oikein. 4-6p: perusidea mutta puutteellinen.",
+      "key_concepts": ["kollimaattori", "NaI(Tl)", "PMT", "Angerin logiikka", "energiaikkunointi", "fotopiikki", "SPET", "rekonstruktio", "projektio"]
+    }
+  ]
+}

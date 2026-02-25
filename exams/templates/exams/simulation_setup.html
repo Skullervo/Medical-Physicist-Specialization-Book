@@ -1,0 +1,129 @@
+{% extends "sisalto/base_summereditor.html" %}
+
+{% block title %}Tenttisimulaatio - Sairaalafyysikon erikoistumiskirja{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 0 auto;">
+    <div style="margin-bottom: 30px;">
+        <h1 style="font-family: var(--font-display); font-size: 1.8em; color: var(--text-primary); margin-bottom: 8px;">
+            <i class="fas fa-stopwatch" style="color: var(--color-warning); margin-right: 10px;"></i>
+            Tenttisimulaatio
+        </h1>
+        <p style="color: var(--text-secondary); font-size: 1.05em;">
+            Harjoittele tenttitilannetta aikarajoitteen kanssa. AI arvioi jokaisen vastauksesi.
+        </p>
+    </div>
+
+    <form method="post" action="{% url 'exams:simulation_start' %}">
+        {% csrf_token %}
+        <div style="background: var(--bg-surface); border-radius: 12px; padding: 28px; border: 1px solid var(--border-default);">
+
+            <!-- Specialty selection -->
+            <div style="margin-bottom: 24px;">
+                <label style="display: block; color: var(--text-primary); font-weight: 600; font-size: 0.95em; margin-bottom: 10px;">
+                    <i class="fas fa-stethoscope" style="margin-right: 6px; color: var(--color-primary);"></i>
+                    Erikoisala
+                </label>
+                <select name="specialty_id" style="width: 100%; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-default); background: var(--bg-raised); color: var(--text-primary); font-size: 1em; cursor: pointer;">
+                    <option value="all">Kaikki erikoisalat</option>
+                    {% for spec in specialties %}
+                    <option value="{{ spec.id }}">{{ spec.name }} ({{ spec.question_count }} kysymysta)</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Question count -->
+            <div style="margin-bottom: 24px;">
+                <label style="display: block; color: var(--text-primary); font-weight: 600; font-size: 0.95em; margin-bottom: 10px;">
+                    <i class="fas fa-list-ol" style="margin-right: 6px; color: var(--color-primary);"></i>
+                    Kysymysten maara
+                </label>
+                <div style="display: flex; gap: 10px;">
+                    {% for n in "3,5,7,10"|make_list %}
+                    {% endfor %}
+                    <label style="flex: 1; text-align: center; padding: 10px; border-radius: 8px; border: 1px solid var(--border-default); background: var(--bg-raised); color: var(--text-primary); cursor: pointer; font-weight: 600; transition: border-color 0.2s;">
+                        <input type="radio" name="question_count" value="3" style="display: none;">
+                        3
+                    </label>
+                    <label style="flex: 1; text-align: center; padding: 10px; border-radius: 8px; border: 2px solid var(--color-primary); background: var(--bg-raised); color: var(--color-primary); cursor: pointer; font-weight: 600;">
+                        <input type="radio" name="question_count" value="5" checked style="display: none;">
+                        5
+                    </label>
+                    <label style="flex: 1; text-align: center; padding: 10px; border-radius: 8px; border: 1px solid var(--border-default); background: var(--bg-raised); color: var(--text-primary); cursor: pointer; font-weight: 600; transition: border-color 0.2s;">
+                        <input type="radio" name="question_count" value="7" style="display: none;">
+                        7
+                    </label>
+                    <label style="flex: 1; text-align: center; padding: 10px; border-radius: 8px; border: 1px solid var(--border-default); background: var(--bg-raised); color: var(--text-primary); cursor: pointer; font-weight: 600; transition: border-color 0.2s;">
+                        <input type="radio" name="question_count" value="10" style="display: none;">
+                        10
+                    </label>
+                </div>
+            </div>
+
+            <!-- Time limit -->
+            <div style="margin-bottom: 28px;">
+                <label style="display: block; color: var(--text-primary); font-weight: 600; font-size: 0.95em; margin-bottom: 10px;">
+                    <i class="fas fa-clock" style="margin-right: 6px; color: var(--color-primary);"></i>
+                    Aikaraja (minuuttia)
+                </label>
+                <div style="display: flex; gap: 10px;">
+                    <label style="flex: 1; text-align: center; padding: 10px; border-radius: 8px; border: 1px solid var(--border-default); background: var(--bg-raised); color: var(--text-primary); cursor: pointer; font-weight: 600; transition: border-color 0.2s;">
+                        <input type="radio" name="time_limit" value="30" style="display: none;">
+                        30
+                    </label>
+                    <label style="flex: 1; text-align: center; padding: 10px; border-radius: 8px; border: 2px solid var(--color-primary); background: var(--bg-raised); color: var(--color-primary); cursor: pointer; font-weight: 600;">
+                        <input type="radio" name="time_limit" value="60" checked style="display: none;">
+                        60
+                    </label>
+                    <label style="flex: 1; text-align: center; padding: 10px; border-radius: 8px; border: 1px solid var(--border-default); background: var(--bg-raised); color: var(--text-primary); cursor: pointer; font-weight: 600; transition: border-color 0.2s;">
+                        <input type="radio" name="time_limit" value="120" style="display: none;">
+                        120
+                    </label>
+                    <label style="flex: 1; text-align: center; padding: 10px; border-radius: 8px; border: 1px solid var(--border-default); background: var(--bg-raised); color: var(--text-primary); cursor: pointer; font-weight: 600; transition: border-color 0.2s;">
+                        <input type="radio" name="time_limit" value="180" style="display: none;">
+                        180
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" style="width: 100%; padding: 14px; border-radius: 8px; border: none; background: var(--color-primary); color: white; font-size: 1.05em; font-weight: 600; cursor: pointer; font-family: var(--font-display);">
+                <i class="fas fa-play" style="margin-right: 8px;"></i>
+                Aloita tenttisimulaatio
+            </button>
+        </div>
+    </form>
+
+    <div style="margin-top: 20px; padding: 16px 20px; background: var(--bg-surface); border-radius: 8px; border: 1px solid var(--border-default);">
+        <div style="color: var(--text-secondary); font-size: 0.9em;">
+            <i class="fas fa-info-circle" style="color: var(--color-primary); margin-right: 6px;"></i>
+            Simulaatiossa vastataan esseekysymyksiin annetun ajan puitteissa. Ajan paatyttya vastaukset lahetetaan automaattisesti. AI arvioi jokaisen vastauksen erikseen pisteilla 0-5.
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function() {
+    // Radio button visual toggle
+    document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
+        radio.addEventListener('change', function() {
+            var group = document.querySelectorAll('input[name="' + this.name + '"]');
+            group.forEach(function(r) {
+                var label = r.closest('label');
+                if (r.checked) {
+                    label.style.borderColor = 'var(--color-primary)';
+                    label.style.borderWidth = '2px';
+                    label.style.color = 'var(--color-primary)';
+                } else {
+                    label.style.borderColor = 'var(--border-default)';
+                    label.style.borderWidth = '1px';
+                    label.style.color = 'var(--text-primary)';
+                }
+            });
+        });
+    });
+})();
+</script>
+{% endblock %}

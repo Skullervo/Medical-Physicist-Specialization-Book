@@ -1,0 +1,1930 @@
+[
+  {
+    "id": 865,
+    "subject_area": "Isotooppilääketiede",
+    "year": 1990,
+    "question_text": "PET-laitteisto ja sen toiminta",
+    "answer_length": 1686,
+    "answer_preview": "PET (positroniemissiotomografia) perustuu positronia emittoivien radionuklidien käyttöön ja annihilaatiosäteilyn (511 keV fotonipari) koinsidenssidetektioon.\n\nDetektorirengas: PET-kamera koostuu detektorielementtien renkaista potilaan ympärillä (tyypillisesti 3-5 rengasta aksiaalisuunnassa, halkaisi"
+  },
+  {
+    "id": 866,
+    "subject_area": "Isotooppilääketiede",
+    "year": 1990,
+    "question_text": "EKG tahdistetty kuvatiedon keruu lääketieteellisissä kuvantamisessa",
+    "answer_length": 1303,
+    "answer_preview": "EKG-tahdistus (gating) synkronoi kuvatiedon keräyksen sydämen sähköiseen toimintaan, mahdollistaen sydämen liikkeen aiheuttaman sumentumisen eliminoinnin.\n\nPeriaate: R-R-väli jaetaan tyypillisesti 8-16 aikaikkunaan (bin/frame). Jokaisen sydämenlyönnin vastaava aikaikkuna kerää dataa samaan kuvaan. U"
+  },
+  {
+    "id": 867,
+    "subject_area": "Isotooppilääketiede",
+    "year": 1990,
+    "question_text": "Sydänlihaksen perfuusion määrittäminen radioisotoopein",
+    "answer_length": 1550,
+    "answer_preview": "Sydänlihasperfuusion gammakuvaus (MPI, Myocardial Perfusion Imaging) on isotooppilääketieteen yleisimpiä tutkimuksia.\n\nMerkkiaineet:\n- ⁹⁹ᵐTc-MIBI (sestamibi) / ⁹⁹ᵐTc-tetrofosmiini: Energia 140 keV, T₁/₂ 6h. Kertymä sydänlihakseen verrannollinen verenvirtaukseen. Ei merkittävää redistribuutiota → eri"
+  },
+  {
+    "id": 868,
+    "subject_area": "Isotooppilääketiede",
+    "year": 1991,
+    "question_text": "Absorptiokorjaus SPET- ja PET-kuvauksissa",
+    "answer_length": 1601,
+    "answer_preview": "Gammasäteilyn vaimeneminen kudoksessa aiheuttaa systemaattisen aliarvion syvempien rakenteiden aktiivisuudesta. Vaimennuskorjaus on välttämätön kvantitatiiviselle kuvaukselle.\n\nSPECT-vaimennuskorjaus:\n 1) Chang-menetelmä (ensimmäisen asteen): Olettaa homogeenisen vaimennuksen ja tunnetun kehon ääriv"
+  },
+  {
+    "id": 869,
+    "subject_area": "Isotooppilääketiede",
+    "year": 1991,
+    "question_text": "Gammakuvauksen laadunvalvonta",
+    "answer_length": 1325,
+    "answer_preview": "Gammakameran laadunvalvonta kattaa päivittäiset, viikoittaiset, kuukausittaiset ja vuosittaiset testit.\n\nPäivittäiset testit:\n- Tasaisuus (uniformity): Pintatasaisuus (intrinsic tai extrinsic) mitataan tasalähteellä (⁵⁷Co-levy tai pistelähde etäällä). Integraali-uniformiteetti <±5%, differentiaali-u"
+  },
+  {
+    "id": 870,
+    "subject_area": "Isotooppilääketiede",
+    "year": 1991,
+    "question_text": "Tomografisen kuvantamisen rekonstruktiomenetelmät",
+    "answer_length": 1491,
+    "answer_preview": "Rekonstruktio muuntaa projektioaineiston (sinogrammi) poikkileikekuviksi.\n\nSuodatettu takaisinprojektio (FBP): Analyyttinen menetelmä. Jokainen projektio suodatetaan ramppisuodattimella (noise-amplification → käytännössä Butterworth/Hann-ikkuna) ja projisoidaan takaisin kuva-avaruuteen. Nopea, deter"
+  },
+  {
+    "id": 872,
+    "subject_area": "Isotooppilääketiede",
+    "year": 1992,
+    "question_text": "Luuntiheyden mittaaminen fotonisädekeilan vaimenemisen perusteella",
+    "answer_length": 1127,
+    "answer_preview": "DXA (Dual-energy X-ray Absorptiometry) on standardimenetelmä luuntiheyden mittaamiseen.\n\nPeriaate: Kaksi eri energiasta röntgensädettä läpäisee kohteen. Kahden energian avulla erotetaan luukudos ja pehmytkudos matemaattisesti, koska niiden vaimennuskertoimien energiariippuvuudet eroavat. Luun minera"
+  },
+  {
+    "id": 873,
+    "subject_area": "Isotooppilääketiede",
+    "year": 1993,
+    "question_text": "PET:n kuvausperiaate",
+    "answer_length": 71,
+    "answer_preview": "Ks. vastaus kysymyksessä 0 (PET-laitteisto ja sen toiminta). Sama aihe."
+  },
+  {
+    "id": 874,
+    "subject_area": "Isotooppilääketiede",
+    "year": 1994,
+    "question_text": "Radiolääkeainehoitojen annoslaskennan perusteet",
+    "answer_length": 1101,
+    "answer_preview": "Ks. sädehoidon alan vastaus kysymyksessä 33 (Jodi-131 hoitojen annoksen määritys) ja täydennettynä yleisillä MIRD-periaatteilla.\n\nMIRD-formalismi: D(rₜ ← rₛ) = Ã(rₛ) × S(rₜ ← rₛ), missä rₜ = kohde-elin, rₛ = lähde-elin, Ã = kumulatiivinen aktiivisuus (Bq·s = MBq·h), S = annos per yksikköaktiivisuus "
+  },
+  {
+    "id": 875,
+    "subject_area": "Isotooppilääketiede",
+    "year": 1994,
+    "question_text": "Systeemisti annettujen radioisotooppien annoslaskenta",
+    "answer_length": 38,
+    "answer_preview": "Ks. vastaus kysymyksessä 9. Sama aihe."
+  },
+  {
+    "id": 876,
+    "subject_area": "Isotooppilääketiede",
+    "year": 1995,
+    "question_text": "Emissiotomografian mahdollisuudet",
+    "answer_length": 1050,
+    "answer_preview": "Emissiotomografia (SPECT ja PET) mahdollistaa radioaktiivisten merkkiaineiden kolmiulotteisen jakaumakartoituksen kehossa.\n\nSPECT: Gammakamera pyörii potilaan ympäri 360° (tai 180° sydänkuvauksissa) keräten projektioita. Rekonstruktio tuottaa 3D-kuvan. Resoluutio ~8-12 mm, herkkyys matala (kollimaat"
+  },
+  {
+    "id": 877,
+    "subject_area": "Isotooppilääketiede",
+    "year": 1995,
+    "question_text": "Kvantitatiivinen isotooppidiagnostiikka aivo- ja munuaistutkimuksessa",
+    "answer_length": 959,
+    "answer_preview": "Aivotutkimukset: ⁹⁹ᵐTc-HMPAO tai ⁹⁹ᵐTc-ECD aivoperfuusion SPECT. Kvantitatiivinen analyysi: ROI-mittaukset, vertailu normaatietokantaan (NeuroGam, BRASS), asymmetriaindeksi. Käyttö: epilepsiafokuksen paikannus (iktaalinen vs. interiktaalinen), dementiadiagnostiikka, aivoverenkiertohäiriöt.\n\nMunuaist"
+  },
+  {
+    "id": 878,
+    "subject_area": "Isotooppilääketiede",
+    "year": 1996,
+    "question_text": "Luuston gammakuvaus",
+    "answer_length": 1311,
+    "answer_preview": "Merkkiaineet: ⁹⁹ᵐTc-MDP (metyleenidifosfonaatti) tai ⁹⁹ᵐTc-HDP (hydroksimetyleenidifosfonaatti). Kertymä: adsorboituu hydroksiapatiitin pintaan luussa → kertymä on verrannollinen osteoblastiseen aktiivisuuteen ja paikalliseen verenvirtaukseen.\n\nAktiivisuus: 500-740 MBq aikuiselle (lapsilla painopohj"
+  },
+  {
+    "id": 879,
+    "subject_area": "Isotooppilääketiede",
+    "year": 1996,
+    "question_text": "Munuaisten gammakuvaus",
+    "answer_length": 905,
+    "answer_preview": "Ks. vastaus kysymyksessä 12 (munuaistutkimusten osuus) laajennettuna.\n\nMerkkiaineet: ⁹⁹ᵐTc-MAG3 (tubulaarinen eritys, 300-370 MBq), ⁹⁹ᵐTc-DTPA (glomerulussuodatus, 300-370 MBq), ⁹⁹ᵐTc-DMSA (kortikaalinen kuvantaminen, 80-185 MBq).\n\nDynaaminen renografia (MAG3/DTPA): Posterioriset kuvat, dynaaminen k"
+  },
+  {
+    "id": 880,
+    "subject_area": "Isotooppilääketiede",
+    "year": 1996,
+    "question_text": "Sydänlihasperfuusion gammakuvaus",
+    "answer_length": 79,
+    "answer_preview": "Ks. vastaus kysymyksessä 2 (sydänlihaksen perfuusion määrittäminen). Sama aihe."
+  },
+  {
+    "id": 881,
+    "subject_area": "Isotooppilääketiede",
+    "year": 1997,
+    "question_text": "Luuston gammakuvaus",
+    "answer_length": 28,
+    "answer_preview": "Ks. vastaus kysymyksessä 13."
+  },
+  {
+    "id": 884,
+    "subject_area": "Isotooppilääketiede",
+    "year": 1998,
+    "question_text": "Sydänlihaksen perfuusiotutkimukset",
+    "answer_length": 27,
+    "answer_preview": "Ks. vastaus kysymyksessä 2."
+  },
+  {
+    "id": 885,
+    "subject_area": "Isotooppilääketiede",
+    "year": 1998,
+    "question_text": "Keuhkoemboliatutkimukset",
+    "answer_length": 1237,
+    "answer_preview": "Keuhkoembolian isotooppidiagnostiikka perustuu perfuusion ja ventilaation vertailuun (V/Q-skannaus).\n\nPerfuusiokuvaus: ⁹⁹ᵐTc-MAA (makroaggregoidut albumiini-partikkelit, Ø 10-100 μm). Partikkelit juuttuvat keuhkokapillaareihin verrannollisesti perfuusioon. Aktiivisuus 100-200 MBq. 6-8 projektiota (a"
+  },
+  {
+    "id": 888,
+    "subject_area": "Isotooppilääketiede",
+    "year": 1999,
+    "question_text": "Isotooppihoidot",
+    "answer_length": 1012,
+    "answer_preview": "Yleisimmät isotooppihoidot:\n 1) ¹³¹I kilpirauhashoito: Hypertyreoosi (Gravesin tauti, toksinen nodulaarinen struuma) tai kilpirauhassyövän ablaatio/hoito. Perustuu jodin selektiiviseen kertymiseen kilpirauhaseen. Annos: 200-800 MBq (hypertyreoosi), 1100-7400 MBq (ablaatio).\n 2) ¹⁷⁷Lu-DOTATATE (Lutat"
+  },
+  {
+    "id": 893,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2001,
+    "question_text": "Annoslaskennan perusteet isotooppitutkimuksessa",
+    "answer_length": 363,
+    "answer_preview": "Ks. vastaus kysymyksessä 9 (MIRD-formalismi).\n\nLisäksi: Efektiivinen annos diagnostisissa tutkimuksissa: Lasketaan elinannoksista ja painotuskertoimilla (wT). Tyypillisiä arvoja: ⁹⁹ᵐTc-MDP luukuvaus ~4-5 mSv, ⁹⁹ᵐTc-MIBI sydän ~8-12 mSv, ¹⁸F-FDG PET ~7-10 mSv, ²⁰¹Tl sydän ~15-20 mSv. ICRP 128 tauluko"
+  },
+  {
+    "id": 894,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2001,
+    "question_text": "Munuaisten isotooppitutkimusten tulosteet ja niiden fysikaalinen perusta lausuntoa varten",
+    "answer_length": 522,
+    "answer_preview": "Ks. vastaus kysymyksissä 12 ja 14.\n\nFysikaaliset perustelut tulosteille: Renogrammikäyrä: ROI-pohjainen aika-aktiivisuuskäyrä, taustakorjaus oleellinen (taustaktiivisuus voidaan mitata munuaisten alapuolelta). T_max ja T½ kuvastavat munuaisen toiminnallista tilaa. Suhteellinen funktio (split functio"
+  },
+  {
+    "id": 895,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2002,
+    "question_text": "Munuaisten isotooppitutkimukset",
+    "answer_length": 34,
+    "answer_preview": "Ks. vastaus kysymyksissä 12 ja 14."
+  },
+  {
+    "id": 896,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2002,
+    "question_text": "PET-tutkimukset. Perusteet, laitteet ja käyttö",
+    "answer_length": 702,
+    "answer_preview": "Ks. vastaus kysymyksessä 0 (PET-laitteisto) ja yleinen PET-käyttö:\n\nRadionuklidit: ¹⁸F (T₁/₂ 110 min, syklotronituotettu), ¹¹C (20 min), ¹⁵O (2 min), ⁶⁸Ga (68 min, generaattori), ⁸²Rb (75 s, generaattori).\n\nKliiniset sovellukset: Onkologia (¹⁸F-FDG): diagnostiikka, staging, hoitovaste, seuranta. Kar"
+  },
+  {
+    "id": 897,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2004,
+    "question_text": "Munuaisten isotooppitutkimukset",
+    "answer_length": 34,
+    "answer_preview": "Ks. vastaus kysymyksissä 12 ja 14."
+  },
+  {
+    "id": 898,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2004,
+    "question_text": "PET-tutkimusmenetelmä ja sen kliininen käyttö",
+    "answer_length": 28,
+    "answer_preview": "Ks. vastaus kysymyksessä 31."
+  },
+  {
+    "id": 902,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2005,
+    "question_text": "Transmissiokuvan käyttö SPET tutkimuksissa",
+    "answer_length": 1000,
+    "answer_preview": "Transmissiokuvaus: Ulkoinen säteilylähde (⁶⁰Co, ¹⁵³Gd, ²⁴¹Am viivalähteet tai pistemäiset lähteet) tai CT tuottaa vaimennuskartan.\n\nTarkoitus: Vaimennuskorjaus SPECT-kuville. Gammasäteilyn vaimeneminen kudoksessa aiheuttaa systemaattista aliarvioita syvien rakenteiden aktiivisuudesta. Erityisesti sy"
+  },
+  {
+    "id": 906,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2006,
+    "question_text": "Arvioi sydämen geitatussa SPET-tutkimuksissa vaimennuskorjauksen merkitystä.",
+    "answer_length": 299,
+    "answer_preview": "Ilman vaimennuskorjausta syvät alueet aliarvioituvat: inferiorinen seinämä miehillä (pallean vaimennus), anteriorinen naisilla (rinnat). Johtaa vääriin positiivisiin löydöksiin. CT-pohjainen vaimennuskorjaus parantaa spesifisyyttä ~10-15%. Haasteena mismatch-artefaktat (hengitysliike CT vs. SPECT)."
+  },
+  {
+    "id": 909,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2008,
+    "question_text": "Vaimennus- ja sirontakorjaus SPET:issä. Millaisia periaatteellisia toteutuksia on olemassa?",
+    "answer_length": 330,
+    "answer_preview": "Vaimennuskorjaus: Chang (homogeeninen), CT-pohjainen (heterogeeninen, standardi), transmissiolähteet (historiallinen). Sirontakorjaus: TEW (triple energy window), DEW (dual), mallipohjainen (Monte Carlo/analyyttinen), ESSE. Nykyaikainen rekonstruktio integroi molemmat korjaukset iteratiiviseen algor"
+  },
+  {
+    "id": 925,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2015,
+    "question_text": "Luustometastaasien isotooppihoidot",
+    "answer_length": 28,
+    "answer_preview": "Ks. vastaus kysymyksessä 60."
+  },
+  {
+    "id": 928,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2016,
+    "question_text": "Potilaan isotooppitutkimuksesta sadun säteilyannoksen arvioiminen",
+    "answer_length": 246,
+    "answer_preview": "E = aktiivisuus × konversiokerroin (mSv/MBq, ICRP 128). Tyypilliset annokset: ⁹⁹ᵐTc-MDP ~4-5 mSv, ¹⁸F-FDG ~7 mSv, ⁹⁹ᵐTc-MIBI ~10-12 mSv. CT-osan lisäannos. Annosten vähentäminen: optimoitu aktiivisuus, iteratiivinen rekonstruktio, CZT-detektorit."
+  },
+  {
+    "id": 929,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2016,
+    "question_text": "Gammakameran tekninen laadunvarmistus",
+    "answer_length": 27,
+    "answer_preview": "Ks. vastaus kysymyksessä 4."
+  },
+  {
+    "id": 933,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2018,
+    "question_text": "Teknetium- ja galliumgeneraattori\na) toimintaperiaate\nb) esimerkki leimattavasta radiolääkkeestä",
+    "answer_length": 868,
+    "answer_preview": "⁹⁹Mo/⁹⁹ᵐTc-generaattori: Ks. vastaus kysymyksessä 47.\n\n⁶⁸Ge/⁶⁸Ga-generaattori:\n a) Toimintaperiaate: ⁶⁸Ge (T₁/₂ = 271 d) hajoaa EC:llä ⁶⁸Ga:ksi (T₁/₂ = 68 min, β⁺ 89%, EC 11%). Sekulaarinen tasapaino (emänuklidin T₁/₂ >> tyttären T₁/₂). TiO₂- tai SnO₂-pylväs. Eluutio 0,1 M HCl:lla.\n\nb) Leimattava ra"
+  },
+  {
+    "id": 937,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2019,
+    "question_text": "MR-PET, detektoritekniikka",
+    "answer_length": 1310,
+    "answer_preview": "Haaste: Perinteiset PET-detektorit käyttävät valomonistinputkia (PMT), jotka eivät toimi magneettikentässä. MRI:n magneettikenttä häiritsee PMT:n elektronioptiikkaa, ja PET:n elektroniikka voi häiritä MRI:n signaalia.\n\nRatkaisu – SiPM (Silicon Photomultiplier): Puolijohdepohjainen valodetektori (Gei"
+  },
+  {
+    "id": 938,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2019,
+    "question_text": "Sydänperfuusion gammakuvaus.",
+    "answer_length": 79,
+    "answer_preview": "Ks. vastaus kysymyksessä 2 (sydänlihaksen perfuusion määrittäminen). Sama aihe."
+  },
+  {
+    "id": 941,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2020,
+    "question_text": "EEG ja MEG epilepsiadiagnoosissa",
+    "answer_length": 844,
+    "answer_preview": "Tämä kysymys kuuluu pääosin kliinisen neurofysiologian alaan, mutta isotooppilääketieteen näkökulmasta:\n\nEEG: Mittaa aivokuoren sähköistä toimintaa. Interiktaaliset piikit ja terävät aallot paikallistavat epileptogeenisen alueen. Temporaalinen resoluutio ~1 ms. Spatiaalinen tarkkuus ~10-20 mm pinnal"
+  },
+  {
+    "id": 942,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2021,
+    "question_text": "Aktiivisuusmittarin (annoskalibraattorin) laadunvalvontaprosessit",
+    "answer_length": 878,
+    "answer_preview": "Ks. vastaus kysymyksessä 55 (avolähteiden aktiivisuuden määrittäminen).\n\nLaadunvalvontaohjelma:\n Päivittäin: Pitkäikäisen referenssilähteen (¹³⁷Cs tai ⁵⁷Co) mittaus. Vertailu odotettuun arvoon (hajoamiskorjattu). Toleranssi ±5%. Taustamittaus (nollalukema).\n\nVuosittain: 1) Lineaarisuustesti: Sama lä"
+  },
+  {
+    "id": 943,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2021,
+    "question_text": "Saädehoito: ICRU-määritelmän terminologia ja soveltaminen keuhkojen radikaalihoitoon",
+    "answer_length": 483,
+    "answer_preview": "Tämä kysymys kuuluu pääosin sädehoidon alaan. Ks. sädehoidon vastaus kysymyksessä 6 (ICRU 50 tilavuusmäärittelyt).\n\nKeuhkojen radikaalihoitoon sovellettuna: GTV: CT/PET:ssä näkyvä primaarikasvain ja suurentuneet imusolmukkeet. CTV: GTV + 5-8 mm marginaali mikroskooppiselle leviämiselle. ITV: CTV + l"
+  },
+  {
+    "id": 944,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2022,
+    "question_text": "SUV fysikaalinen perusta ja kuinka kalibrointi tehdään",
+    "answer_length": 1261,
+    "answer_preview": "SUV (Standardized Uptake Value): Semikvantitatiivinen PET-mitta, joka kuvaa radiolääkkeen kertymää suhteessa injektoituun aktiivisuuteen ja potilaan kokoon.\n\nKaava: SUV = C(t) / (A_inj / w), missä C(t) = aktiivisuuspitoisuus kudoksessa (kBq/ml), A_inj = injektoitu aktiivisuus hajoamiskorjattuna (kBq"
+  },
+  {
+    "id": 945,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2022,
+    "question_text": "Sydänlihasperfuusion SPECT, erityisesti datan keräys ja rekonstruktio",
+    "answer_length": 1073,
+    "answer_preview": "Datan keräys: Kaksipäinen gammakamera, 180° kaari (RAO 45° → LPO 45°). 180° riittää sydämelle, koska sydän on anteriorinen → posterioriset projektiot eivät lisää merkittävästi informaatiota (vaimennuksen vuoksi). 32 projektiota per pää (yht. 64), 20-25 s/projektio. Matriisi 64×64. Gated: 8 tai 16 ai"
+  },
+  {
+    "id": 946,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2022,
+    "question_text": "Aivojen hermovälittäjäaineiden gammakuvaus",
+    "answer_length": 1140,
+    "answer_preview": "Dopamiinitransportterikuvaus (DaT-SPECT): ¹²³I-FP-CIT (DaTSCAN) tai ¹²³I-β-CIT. Sitoutuu presynaptisiin dopamiinitransporttereihin striatumissa (caudate + putamen). Kuvaus 3-6 h injektiosta. Aktiivisuus ~150-185 MBq. SPECT-kuvaus 360° kaarella.\n\nTulkinta: Normaali: Symmetrinen pilkullinen kertymä st"
+  },
+  {
+    "id": 947,
+    "subject_area": "Kliininen fysiologia",
+    "year": 1990,
+    "question_text": "Defibrillaation periaate ja laitteistot",
+    "answer_length": 1365,
+    "answer_preview": "Periaate: Defibrillaatio pysäyttää sydämen kaoottisen sähköisen toiminnan (kammiovärinä/kammiotakykardia) johtamalla suuren sähköpulssin sydänlihaksen läpi, depolarisoimalla kriittisen massan sydänlihaskudosta samanaikaisesti → sinus- tai muu hallittu rytmi voi käynnistyä uudelleen.\n\nEnergia ja aalt"
+  },
+  {
+    "id": 948,
+    "subject_area": "Kliininen fysiologia",
+    "year": 1990,
+    "question_text": "Dopplerin ilmioon perustuva verenvirtauksen kuvantaminen ultraäänellä (väri-doppler)",
+    "answer_length": 1174,
+    "answer_preview": "Doppler-ilmiö: Liikkuvasta kohteesta (punasolut) heijastuneen ultraäänen taajuus muuttuu verrattuna lähetettyyn: Δf = 2f₀v cos(θ) / c, missä f₀ = lähetystaajuus, v = veren virtausnopeus, θ = keilan ja virtauksen välinen kulma, c = äänen nopeus kudoksessa (~1540 m/s).\n\nVäri-Doppler: Jokaisen kuvalinj"
+  },
+  {
+    "id": 950,
+    "subject_area": "Kliininen fysiologia",
+    "year": 1990,
+    "question_text": "Tehostetun hoidot tärkeimmät mittaussuureet ja menetelmät",
+    "answer_length": 1015,
+    "answer_preview": "Hemodynamiikka: EKG (jatkuva monitorointi, rytmi, ST-muutokset). Verenpaine: invasiivinen (arteriakanyylin kautta, jatkuva), non-invasiivinen (oskilometrinen, intermittoiva). CVP (keskuslaskimopaine, sentraalinen kanyyli). Keuhkovaltimokatetri (Swan-Ganz): keuhkovaltimopaine, kiilepaine (PCWP), sydä"
+  },
+  {
+    "id": 951,
+    "subject_area": "Kliininen fysiologia",
+    "year": 1991,
+    "question_text": "Hengitykseen liittyvien tilavuuksien ja virtauksien määrittäminen",
+    "answer_length": 1080,
+    "answer_preview": "Spirometria: Mittaa hengitystilavuuksia ja -virtauksia.\n\nTilavuudet: VT (tidal volume, kertahengitystilavuus ~0,5 L), IRV (sisäänhengityksen varatila ~2,5 L), ERV (uloshengityksen varatila ~1,5 L), RV (jäännöstilavuus ~1,5 L, ei mitattavissa spirometrialla).\n\nKapasiteetit: VC (vitaalikapasiteetti = "
+  },
+  {
+    "id": 952,
+    "subject_area": "Kliininen fysiologia",
+    "year": 1992,
+    "question_text": "Tehostetun hoidot tärkeimmät mittaussuureet ja menetelmät",
+    "answer_length": 27,
+    "answer_preview": "Ks. vastaus kysymyksessä 3."
+  },
+  {
+    "id": 954,
+    "subject_area": "Kliininen fysiologia",
+    "year": 1993,
+    "question_text": "EKG ja häiriösignaalien eliminointi",
+    "answer_length": 1204,
+    "answer_preview": "EKG-signaali: Amplitudi ~0,5-5 mV, taajuus 0,05-100 Hz (diagnostinen), 0,5-40 Hz (monitorointi). Mitataan ihon pinnalta elektrodeilla.\n\nHäiriölähteet: 50 Hz verkkojännitehäiriö (sähkömagneettinen kytkentä), lihasartefaktat (EMG-kohina, laajaspektrinen), perusviivan vaellus (hengitys, liike, elektrod"
+  },
+  {
+    "id": 955,
+    "subject_area": "Kliininen fysiologia",
+    "year": 1994,
+    "question_text": "Skalaari EKG:n rintakytkentä",
+    "answer_length": 1004,
+    "answer_preview": "EKG:n rintakytkennät (V1-V6, Wilsonin unipolaareet kytkennät): Mittaavat sydämen sähköistä toimintaa rintakehän pinnalta horisontaalitasossa.\n\nElektrodien sijoitus: V1: 4. kylkiluuväli oikealla rintalastan vieressä. V2: 4. kylkiluuväli vasemmalla rintalastan vieressä. V3: V2:n ja V4:n puolivälissä. "
+  },
+  {
+    "id": 957,
+    "subject_area": "Kliininen fysiologia",
+    "year": 1995,
+    "question_text": "EKG:n raajakutkennät ja niiden teoreettinen pohja",
+    "answer_length": 519,
+    "answer_preview": "Ks. vastaus kysymyksessä 9 (raajakytkentöjen osuus).\n\nTeoreettinen pohja: Einthovenin malli olettaa sydämen sähkökentän olevan yksittäisen diipolin kenttä kolmion keskipisteessä. Raajat toimivat johtimina ja mittauspisteet ovat kolmion kärjissä. Todellisuudessa: sydän ei ole pistemäinen diipoli, keh"
+  },
+  {
+    "id": 958,
+    "subject_area": "Kliininen fysiologia",
+    "year": 1995,
+    "question_text": "Keuhkofunktiotutkimuksen tärkeimmät parametrit",
+    "answer_length": 644,
+    "answer_preview": "Ks. vastaus kysymyksessä 4 (tilavuudet ja virtaukset).\n\nLisäksi: Diffuusiokapasiteetti (DLCO): Hiilimonoksidin siirtyminen keuhkorakkuloista kapillaarivereen. Mittaus single-breath -menetelmällä. Heijastaa keuhkojen kaasujenvaihtokykyä.\n\nObstruktiivinen häiriö: FEV₁/FVC <0,70, konkaaavi virtaus-tila"
+  },
+  {
+    "id": 959,
+    "subject_area": "Kliininen fysiologia",
+    "year": 1995,
+    "question_text": "Mallit ja analogiat biologisen systeemin tutkimisesta",
+    "answer_length": 839,
+    "answer_preview": "Compartment-mallit: Yksi- tai moniosainen malli kuvaa aineen jakautumista kehon osastoihin. Farmakokinetiikka (lääkkeen jakautuminen, metabolia, eritys). Radiolääkkeiden biokinettiikka (MIRD).\n\nSähköiset analogiat: Windkessel-malli (valtimojärjestelmän mallintaminen RC-piirin avulla: resistanssi = p"
+  },
+  {
+    "id": 962,
+    "subject_area": "Kliininen fysiologia",
+    "year": 1996,
+    "question_text": "Tehostetun hoidot tärkeimmät mittaussuureet ja menetelmät",
+    "answer_length": 27,
+    "answer_preview": "Ks. vastaus kysymyksessä 3."
+  },
+  {
+    "id": 963,
+    "subject_area": "Kliininen fysiologia",
+    "year": 1996,
+    "question_text": "Ultraäänianturit: periaate ja käytännön toiminta",
+    "answer_length": 1136,
+    "answer_preview": "Pietsosähköinen ilmiö: Tietyt kiteet (PZT-keramiikka) muuttavat sähköjännitteen mekaaniseksi aaltoliikkeeksi ja päinvastoin. Käänteinen pietsosähköinen ilmiö: jännite → mekaaninen muodonmuutos → ultraäänipulssi. Suora pietsosähköinen ilmiö: heijastunut ultraäänipulssi → mekaaninen muodonmuutos → jän"
+  },
+  {
+    "id": 964,
+    "subject_area": "Kliininen fysiologia",
+    "year": 1997,
+    "question_text": "EKG:n pitkäaikaisnauhoitus ja purku",
+    "answer_length": 1048,
+    "answer_preview": "Holter-monitorointi: Jatkuva EKG-tallennus 24-48h (tai pidempi, 7-14 päivää event recorder tai patch-monitori).\n\nLaitteisto: 3-7 elektrodia rintakehälle, modifioitut V1 ja V5 kytkennät tyypillisimmin. Pienoinen tallennin (flash-muisti). Nykyaikaiset: reaaliaikainen analysointi, langaton siirto (Blue"
+  },
+  {
+    "id": 965,
+    "subject_area": "Kliininen fysiologia",
+    "year": 1997,
+    "question_text": "Tehostetun hoidot tärkeimmät mittaussuureet ja menetelmät",
+    "answer_length": 27,
+    "answer_preview": "Ks. vastaus kysymyksessä 3."
+  },
+  {
+    "id": 966,
+    "subject_area": "Kliininen fysiologia",
+    "year": 1998,
+    "question_text": "EKG-laitteiston testaus",
+    "answer_length": 958,
+    "answer_preview": "Testattavat parametrit:\n 1) Sisääntuloimpedanssi: >10 MΩ (jotta ei kuormita biologista lähdettä).\n 2) CMRR: >100 dB @50 Hz. Mitataan syöttämällä yhteismuotoinen signaal kaikille tuloille.\n 3) Taajuusvaste: 0,05-150 Hz (±3 dB), diagnostisella kaistalla. Tarkistetaan siniaalloilla eri taajuuksilla.\n 4"
+  },
+  {
+    "id": 967,
+    "subject_area": "Kliininen fysiologia",
+    "year": 1999,
+    "question_text": "EKG-kytkennät ja niiden teoreettinen pohja",
+    "answer_length": 27,
+    "answer_preview": "Ks. vastaus kysymyksessä 9."
+  },
+  {
+    "id": 968,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2000,
+    "question_text": "Ambulatorinen EEG-mittaus",
+    "answer_length": 921,
+    "answer_preview": "Ambulatorinen EEG (aEEG): Pitkäkestoinen EEG-mittaus sairaalan ulkopuolella (kotona) 24-72h.\n\nLaitteisto: Pienoinen tallennin, 21-32+ elektrodia (10-20-järjestelmä tai vähennetty montaasi). Kollodiumi- tai pastakiinnitys. Digitaalinen tallennus (256 Hz näytteistys). Nykyaikaiset: video-EEG (kamera t"
+  },
+  {
+    "id": 969,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2000,
+    "question_text": "Autonomisen hermoston tutkimusmenetelmät",
+    "answer_length": 1230,
+    "answer_preview": "Sydämen syketaajuusvaihtelu (HRV): R-R-intervallien vaihtelu analysoidaan aika- ja taajuustasossa. Aikatason parametrit: SDNN (normaali >100 ms), RMSSD (parasympaattinen), pNN50. Taajuustason parametrit: LF (0,04-0,15 Hz, sympaattinen + parasympaattinen), HF (0,15-0,4 Hz, parasympaattinen), LF/HF-su"
+  },
+  {
+    "id": 970,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2001,
+    "question_text": "Autonomisen hermoston tutkimusmenetelmät",
+    "answer_length": 28,
+    "answer_preview": "Ks. vastaus kysymyksessä 22."
+  },
+  {
+    "id": 971,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2001,
+    "question_text": "EKG ja kliininen rasituskoe",
+    "answer_length": 1153,
+    "answer_preview": "Kliininen rasituskoe: Portaittain kasvava fyysinen rasitus (polkupyöräergometri tai juoksumatto) EKG-seurannassa.\n\nEKG-kytkennät: 12-kytkentäinen EKG (Mason-Likar-modifikaatio: raajaelektrodit siirretty torsolle liikeartefaktojen vähentämiseksi). Jatkuva monitorointi ennen, rasituksen aikana ja pala"
+  },
+  {
+    "id": 972,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2002,
+    "question_text": "EKG:n peruskytkennät",
+    "answer_length": 27,
+    "answer_preview": "Ks. vastaus kysymyksessä 9."
+  },
+  {
+    "id": 973,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2003,
+    "question_text": "Autonomisen hermoston tutkimusmenetelmät",
+    "answer_length": 28,
+    "answer_preview": "Ks. vastaus kysymyksessä 22."
+  },
+  {
+    "id": 974,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2003,
+    "question_text": "EKG ja kliininen rasituskoe",
+    "answer_length": 28,
+    "answer_preview": "Ks. vastaus kysymyksessä 24."
+  },
+  {
+    "id": 975,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2003,
+    "question_text": "EKG:n perusteet ja käyttö sairaalassa",
+    "answer_length": 391,
+    "answer_preview": "Ks. vastaukset kysymyksissä 9 (kytkennät) ja 7 (häiriöiden eliminointi).\n\nEKG:n käyttö sairaalassa: Lepo-EKG (12-kytkentäinen, diagnostinen standardi). Monitorointi (teho-osasto, leikkaussali – 3-5 kytkentää, jatkuva). Rasituskoe (ks. vastaus 24). Holter (ks. vastaus 17). Telemetria (langaton siirto"
+  },
+  {
+    "id": 976,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2004,
+    "question_text": "EKG ja sen käyttö sairaalassa",
+    "answer_length": 28,
+    "answer_preview": "Ks. vastaus kysymyksessä 28."
+  },
+  {
+    "id": 977,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2005,
+    "question_text": "Diffuusiokapasiteetti: mittausmentelmät ja virhelähteet",
+    "answer_length": 1044,
+    "answer_preview": "DLCO (Diffusing capacity of the Lung for Carbon Monoxide): Mittaa keuhkojen kaasujenvaihtokapasiteettia.\n\nSingle-breath-menetelmä (standardi): Potilas hengittää testikaasuseoksen (0,3% CO, 10% He, 21% O₂, N₂-tasapaino). Hengityspidätys ~10 s. Uloshengitysnäytteen CO- ja He-pitoisuudet mitataan. He:n"
+  },
+  {
+    "id": 978,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2005,
+    "question_text": "Esitä sydämen toimintakierto ja EKG aaltomuodot.",
+    "answer_length": 413,
+    "answer_preview": "Ks. vastaus kysymyksessä 14 (sähköisen signaalin eteneminen ja paine-virtausmuutokset).\n\nTiivistettynä: P-aalto (eteisten depolarisaatio, ~80 ms) → PR-väli (AV-viive, 120-200 ms) → QRS (kammioiden depolarisaatio, <120 ms) → ST (tasannevaihe) → T-aalto (kammioiden repolarisaatio). Samanaikaisesti mek"
+  },
+  {
+    "id": 979,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2005,
+    "question_text": "Normaalit sydänäänet ja niiden syntymekanismi",
+    "answer_length": 1100,
+    "answer_preview": "S₁ (1. sydänääni): Atrioventrikulaariläppien (mitraali ja trikuspidaali) sulkeutuminen kammioiden systolen alussa. Syntymismekanismi: läppälehtiöiden kiristyminen ja verenpylvään deseleraatio. Matala taajuus, pidempi kesto kuin S₂. Parhaiten kuultavissa apexissa.\n\nS₂ (2. sydänääni): Semilunaaristen "
+  },
+  {
+    "id": 980,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2005,
+    "question_text": "Doppler-ultraääni",
+    "answer_length": 488,
+    "answer_preview": "Ks. vastaus kysymyksessä 1 (väri-Doppler) laajennettuna.\n\nDoppler-menetelmät: CW (jatkuva aalto): Ei syvyysdiskriminointia, mittaa suuria nopeuksia (ei aliasing). PW (pulssi-Doppler): Näytetilavuus valittavissa, mutta Nyquist-raja rajoittaa mitattavaa nopeutta. Väri-Doppler: 2D-virtauskartta B-moodi"
+  },
+  {
+    "id": 981,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2005,
+    "question_text": "Virtaus- ja tilavuusspirometriatutkimukset",
+    "answer_length": 65,
+    "answer_preview": "Ks. vastaus kysymyksessä 4 (tilavuudet ja virtaukset). Sama aihe."
+  },
+  {
+    "id": 982,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2006,
+    "question_text": "Verenvirtausmittaukset doplermenetelmällä",
+    "answer_length": 408,
+    "answer_preview": "Ks. vastaukset kysymyksissä 1 ja 33. Kliiniset sovellukset: Kaulavaltimoiden ahtaumat (duplex-UÄ, PSV/EDV-suhteet). Alaraajojen valtimoverenkierto (ABI, ankle-brachial index). Laskimotromboosi (kompressiivisuus, virtauksen puuttuminen). Transcraniaalinen Doppler (TCD, aivojen verisuonet MCA, ACA, PC"
+  },
+  {
+    "id": 983,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2006,
+    "question_text": "Sydämen syketaajuusvaihtelun kliininen mittaus ja analysointi",
+    "answer_length": 839,
+    "answer_preview": "Ks. vastaus kysymyksessä 22 (autonomisen hermoston tutkimus, HRV-osuus).\n\nMittaus: Holter-EKG 24h tai lyhytaikainen 5 min -mittaus. R-piikkien tarkka detektio ja RR-intervallisarjan muodostus. Artefaktojen ja ektopisten lyöntien poisto/interpolointi.\n\nAikatason analyysi: SDNN (koko tallenteen RR-vai"
+  },
+  {
+    "id": 984,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2006,
+    "question_text": "Kliinisen fysiologian mittausten toistettavuuden arviointi.",
+    "answer_length": 1049,
+    "answer_preview": "Toistettavuus (repeatability/reproducibility): Saman mittauksen tuottamien tulosten yhdenmukaisuus toistettaessa samasta kohteesta.\n\nMenetelmät:\n 1) Variaatiokerroin (CV): CV = SD / keskiarvo × 100%. Intra-individual CV kuvaa saman henkilön mittausten vaihtelua.\n 2) ICC (Intraclass Correlation Coeff"
+  },
+  {
+    "id": 991,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2009,
+    "question_text": "Ultraäänen ja biologisen materiaalin fysikaaliset vuorovaikutukset. Niiden vaikutus ultraäänikuvan laatuun ja mahdollisiin artefaktoihin.",
+    "answer_length": 1005,
+    "answer_preview": "Heijastuminen (reflektio): Akustisen impedanssin (Z = ρ × c) ero rajapinnalla. Suurempi impedanssiero → voimakkaampi heijastus. Luu-pehmytkudos: lähes totaaliheijastus. Pehmytkudos-pehmytkudos: heikko heijastus (~1%).\n\nSironta (scattering): Pieniä rajapintoja (punasolut, pienet rakenteet) → takaisin"
+  },
+  {
+    "id": 992,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2009,
+    "question_text": "Doppler-uä",
+    "answer_length": 33,
+    "answer_preview": "Ks. vastaus kysymyksissä 1 ja 33."
+  },
+  {
+    "id": 993,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2010,
+    "question_text": "Luun tiheyden määritys ja osteoporoosidiagnostiikka röntgentekniikoilla",
+    "answer_length": 45,
+    "answer_preview": "Ks. vastaus kysymyksessä 40 (DXA). Sama aihe."
+  },
+  {
+    "id": 994,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2010,
+    "question_text": "Väridoppler? Menetelmä, virhelähteet ja artefaktat?",
+    "answer_length": 507,
+    "answer_preview": "Ks. vastaus kysymyksessä 1 (väri-Doppler).\n\nVirhelähteet ja artefaktat: Aliasing (PW-pohjainen, Nyquist-raja ylittyy → väri kääntyy): Ratkaisu: PRF:n nosto, baseline-shift, CW-Doppler. Kulmavirhe (θ → 90°, Doppler-siirtymä häviää): Kulma <60° suositeltava. Blooming (väri vuotaa verisuonen ulkopuolel"
+  },
+  {
+    "id": 995,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2010,
+    "question_text": "Ruokatorven peristaltiikan ja happamuuden tutkimusmenetelmät, ja niissä käytettävät anturit/elektrodit?",
+    "answer_length": 844,
+    "answer_preview": "Manometria (painemittaus): Korkearesoluutioinen manometria (HRM): 36 paineantura 1 cm välein katetrissa. Mittaa ruokatorven peristaltiikan paineet ja ajoituksen. Analyysi: Clouse-plot (spatiaalinen-ajakallinen painekartta). Chicago-luokitus: normaali, heikko peristaltiikka, aperistalsis, distaalinen"
+  },
+  {
+    "id": 998,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2015,
+    "question_text": "Ruokatorven pH ja impedanssimittaukset",
+    "answer_length": 61,
+    "answer_preview": "Ks. vastaus kysymyksessä 48 (ruokatorven tutkimusmenetelmät)."
+  },
+  {
+    "id": 999,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2015,
+    "question_text": "Ruokatorven pH:n ja impedanssin pitkäaikaisrekisterointi: laitteisto ja data-analyysin perusteet",
+    "answer_length": 529,
+    "answer_preview": "Ks. vastaus kysymyksessä 48.\n\nLaitteisto: MII-pH-katetri (multichannel intraluminal impedance + pH). 6 impedanssikanavaa + 1-2 pH-anturia. Tallennin 24h. Langaton pH-kapseli (Bravo): pH-mittari kiinnitetään ruokatorven limakalvoon, langaton tiedonsiirto 48-96h.\n\nData-analyysi: pH-parametrit: % ajast"
+  },
+  {
+    "id": 1002,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2017,
+    "question_text": "Keuhkojen tutkimukset (KLF)",
+    "answer_length": 764,
+    "answer_preview": "Spirometria: Ks. vastaus kysymyksessä 4 (tilavuudet ja virtaukset). FVC, FEV₁, FEV₁/FVC, PEF, MEF-arvot. Bronkodilataatiotesti.\n\nDiffuusiokapasiteetti (DLCO): Ks. vastaus kysymyksessä 30.\n\nKehon pletysmografia (Body box): TLC, RV, FRC, Raw (hengitystieresistanssi). Boylesin laki.\n\nValtimoverikaasuan"
+  },
+  {
+    "id": 1003,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2017,
+    "question_text": "Kliininen rasituskoe",
+    "answer_length": 59,
+    "answer_preview": "Ks. vastaus kysymyksessä 24 (EKG ja rasituskoe). Sama aihe."
+  },
+  {
+    "id": 1004,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2018,
+    "question_text": "Sydämen ultraäänitutkimukset",
+    "answer_length": 1141,
+    "answer_preview": "Echokardiografia: Perusmenetelmä sydämen rakenteen ja toiminnan non-invasiiviseen arviointiin.\n\n2D-echokardiografia: Reaaliaikainen leikekuva sydämestä. Parasternaalinen pitkä- ja lyhytakseli, apikaalinen 4- ja 2-kammiokuvat. Arvioitavat: kammioiden koko, seinämän paksuus ja liike, läppien rakenne, "
+  },
+  {
+    "id": 1007,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2020,
+    "question_text": "Hermojen johtonopeusmittaukset",
+    "answer_length": 28,
+    "answer_preview": "Ks. vastaus kysymyksessä 58."
+  },
+  {
+    "id": 1009,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2021,
+    "question_text": "Spirometria mitattavat suureet",
+    "answer_length": 326,
+    "answer_preview": "Ks. vastaus kysymyksessä 4 (tilavuudet ja virtaukset). Mitattavat suureet: FVC, FEV₁, FEV₁/FVC (Tiffeneau), PEF, MEF₇₅/₅₀/₂₅, SVC (hidas VC), MVV (maksimaalinen tahdonalainen ventilaatio), IC, ERV. Bronkodilataatiovaste. Viitearvot: ikä, pituus, sukupuoli, etnisyys (GLI-2012). Obstruktio: FEV₁/FVC <"
+  },
+  {
+    "id": 1010,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2021,
+    "question_text": "Johtumisnopeusmittaukset",
+    "answer_length": 28,
+    "answer_preview": "Ks. vastaus kysymyksessä 58."
+  },
+  {
+    "id": 1011,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2022,
+    "question_text": "Lepo-EKG:ssa, rasituskokeessa ja pitkäaikaisseurannassa käytettävät kytkennät",
+    "answer_length": 837,
+    "answer_preview": "Lepo-EKG: Standardi 12-kytkentäinen (I, II, III, aVR, aVL, aVF, V1-V6). Elektrodien standardisijoitus. Diagnostinen kaista 0,05-150 Hz.\n\nRasituskoe: 12-kytkentäinen Mason-Likar-modifikaatio (raajaelektrodit siirretty torsolle liikeartefaktojen vähentämiseksi). Jatkuva monitorointi. Huomio: Mason-Lik"
+  },
+  {
+    "id": 1012,
+    "subject_area": "KNF",
+    "year": 1990,
+    "question_text": "EEG-mittauksen digitaaliset käsittelymenetelmät",
+    "answer_length": 1276,
+    "answer_preview": "Digitaalinen EEG mahdollistaa monipuolisen signaalinkäsittelyn tallennuksen jälkeen.\n\nSuodatus: Digitaaliset suodattimet (FIR/IIR). Ylipäästö (0,1-0,5 Hz, perusviivan vaellus), alipäästö (35-70 Hz, lihaksista johtuva kohina), notch (50 Hz verkkohäiriö). Etuna: suodatusparametreja voi muuttaa jälkikä"
+  },
+  {
+    "id": 1013,
+    "subject_area": "KNF",
+    "year": 1990,
+    "question_text": "Biomagneettiset mittaukset: signaalin synty ja mittaustekniikka",
+    "answer_length": 1396,
+    "answer_preview": "MEG (magnetoenkefalografia) mittaa aivojen hermovirtojen synnyttämiä magneettikenttiä.\n\nSignaalin synty: Synapttiset virrat aivokuoren pyramidaalisoluissa (erityisesti apikaalisten dendriittien postsynapttiset virrat) tuottavat primäärivirtoja. Nämä synnyttävät magneettikenttiä Biot-Savart'n lain mu"
+  },
+  {
+    "id": 1014,
+    "subject_area": "KNF",
+    "year": 1995,
+    "question_text": "Hermoston johtumisnopeusmittaukset",
+    "answer_length": 657,
+    "answer_preview": "Ks. kliinisen fysiologian vastaus kysymyksessä 58 (hermojen johtumisnopeusmittaukset ENG). Sama aihe.\n\nLisäys KNF-näkökulmasta: Johtumisnopeusmittaukset ovat keskeinen osa ENMG-tutkimusta (elektroneuromyografia). Yhdistettynä neulamyografiaan (EMG) ne antavat kattavan kuvan hermoston ja lihaksen toi"
+  },
+  {
+    "id": 1015,
+    "subject_area": "KNF",
+    "year": 1995,
+    "question_text": "Biosähköisten signaalien mittaamiseen käytettävät elektrodit ja niiden ominaisuudet",
+    "answer_length": 976,
+    "answer_preview": "Elektrodityypit KNF:ssä:\n\nEEG-elektrodit: Kultainen kuppi-elektrodi (cup electrode, Ag/AgCl tai kulta): kiinnitetään kollodiumilla/pastalla. 10-20-järjestelmän sijoitus. Impedanssi <5 kΩ. Subdermaaliset neulaelektrodit (leikkausmonitorointi). Peel-and-stick -elektrodit (ambulatorinen EEG).\n\nEMG-elek"
+  },
+  {
+    "id": 1016,
+    "subject_area": "KNF",
+    "year": 1996,
+    "question_text": "Hermoston johtumisnopeusmittausten suoritusperitaate",
+    "answer_length": 89,
+    "answer_preview": "Ks. kliinisen fysiologian vastaus kysymyksessä 58 ja vastaus kysymyksessä 2 tässä alassa."
+  },
+  {
+    "id": 1017,
+    "subject_area": "KNF",
+    "year": 1996,
+    "question_text": "Herätepotentiaalitutkimusten rekisteröinti ja niiden kliininen käyttö",
+    "answer_length": 1234,
+    "answer_preview": "Herätepotentiaali (EP, Evoked Potential): Aivojen sähköinen vaste ulkoiseen ärsykkeeseen. Pieni amplitudi (0,1-20 μV) → vaatii keskiarvoistamisen (50-2000 toistoa).\n\nTyypit:\n 1) VEP (Visual EP): Ruutukäännösstimulus tai flash. Rekisteröinti Oz (oksipitaalinen). P100 latenssi normaali ~100 ms. Käyttö"
+  },
+  {
+    "id": 1018,
+    "subject_area": "KNF",
+    "year": 1996,
+    "question_text": "Signaalin eteneminen hermokudoksessa",
+    "answer_length": 1064,
+    "answer_preview": "Aktiopotentiaali: Kalvojännitteen nopea muutos (lepopotentiaali ~-70 mV → depolarisaatio +30 mV → repolarisaatio). Na⁺-kanavien avautuminen (depolarisaatio) → K⁺-kanavien avautuminen (repolarisaatio). Kaikki-tai-ei -periaate. Refraktaariperiodi (absoluuttinen ja suhteellinen).\n\nJohtuminen: Myelinoim"
+  },
+  {
+    "id": 1019,
+    "subject_area": "KNF",
+    "year": 1997,
+    "question_text": "Kvantitatiivinen EEG",
+    "answer_length": 859,
+    "answer_preview": "Ks. vastaus kysymyksessä 0 (digitaaliset käsittelymenetelmät, qEEG-osuus).\n\nMenetelmät: FFT → tehospektri (absoluuttinen ja suhteellinen teho taajuuskaistoittain). Topografiset tehokartat (brain mapping). Koherenssi ja synkronia kanavien välillä. Asymmetria-indeksit (oikea vs. vasen). Trendi-analyys"
+  },
+  {
+    "id": 1020,
+    "subject_area": "KNF",
+    "year": 1997,
+    "question_text": "Signaalin eteneminen hermokudoksessa",
+    "answer_length": 27,
+    "answer_preview": "Ks. vastaus kysymyksessä 6."
+  },
+  {
+    "id": 1022,
+    "subject_area": "KNF",
+    "year": 1998,
+    "question_text": "EEG-ilmiöiden paikantaminen",
+    "answer_length": 1106,
+    "answer_preview": "EEG-lähdepaikannus (source localization): Inversio-ongelma – skalpin EEG-jakaumasta päätellään aivojen sähköisten lähteiden sijainti.\n\nEtukäteismallit (forward model): Päämallit: sfäärinen (yksinkertainen), realistinen BEM (Boundary Element Method) tai FEM (Finite Element Method) segmentoidusta MRI:"
+  },
+  {
+    "id": 1023,
+    "subject_area": "KNF",
+    "year": 1998,
+    "question_text": "Unen aikaiset tavallisimmat neurofysiologiset tutkimukset - niissä käytetyt laitteistot ja tärkeimmät käyttöalueet",
+    "answer_length": 924,
+    "answer_preview": "Polysomnografia (PSG): Laaja unenaikainen rekisteröinti useiden signaalien samanaikaisella tallentamisella.\n\nLaitteisto ja parametrit: EEG (vähintään F3, F4, C3, C4, O1, O2 + referenssit), EOG (silmänliikkeet, 2 kanavaa), EMG (leuka-submentaali, jalat tibialis anterior), EKG, hengitysvirtaus (nenä-s"
+  },
+  {
+    "id": 1024,
+    "subject_area": "KNF",
+    "year": 1998,
+    "question_text": "EEG:n rekisteröinti ja tutkimuksen kulku",
+    "answer_length": 954,
+    "answer_preview": "Elektrodit: 10-20-järjestelmä (21 elektrodia). Nasion-inion ja preaurikulaaripisteet referensseinä. Kuppi-elektrodit + pasta/kollodiumikiinnitys. Impedanssi <5 kΩ.\n\nRekisteröinti: Digitaalinen EEG (≥256 Hz näytteistys, 16-24 bit). Tyypillinen kesto 20-30 min (rutiini-EEG). Montaasit: Referenssikytke"
+  },
+  {
+    "id": 1025,
+    "subject_area": "KNF",
+    "year": 1998,
+    "question_text": "Herätevastemittaukset",
+    "answer_length": 55,
+    "answer_preview": "Ks. vastaus kysymyksessä 5 (EP-tutkimukset). Sama aihe."
+  },
+  {
+    "id": 1027,
+    "subject_area": "KNF",
+    "year": 1999,
+    "question_text": "50Hz:n häiriön eristäminen neurofysiologisista signaaleista sairaalaympäristössä",
+    "answer_length": 1181,
+    "answer_preview": "50 Hz verkkojännitehäiriö on yleisin häiriölähde sairaalaympäristössä.\n\nHäiriön syntymekanismit: Kapasitiivinen kytkentä (sähkökentän kautta, sähköjohdot → potilas/kaapelit). Induktiivinen kytkentä (magneettikenttä, muuntajat). Galvaaninen kytkentä (yhteinen maadoitus, maadoitussilmukat).\n\nEliminoin"
+  },
+  {
+    "id": 1028,
+    "subject_area": "KNF",
+    "year": 2000,
+    "question_text": "Vireystilamittaukset",
+    "answer_length": 1004,
+    "answer_preview": "Vireystilan (valveillaolon) arviointi ja mittaus:\n\nMSLT (Multiple Sleep Latency Test): Standardoitu testi päiväaikaisen uneliaisuuden objektiiviseen mittaamiseen. 5 unimahdollisuutta 2h välein. Mitataan: aika nukahtamiseen (normaali >8 min, patologinen <5 min) ja REM-unen esiintyminen (SOREMP, Sleep"
+  },
+  {
+    "id": 1029,
+    "subject_area": "KNF",
+    "year": 2003,
+    "question_text": "Aivojen funktionaaliset tutkimukset",
+    "answer_length": 981,
+    "answer_preview": "KNF-menetelmät: EEG (sähköinen aivojen toiminta, ms-resoluutio), MEG (magneettinen aivojen toiminta, ms + mm-paikannus), herätepotentiaalit (EP: VEP, BAEP, SEP, MEP – hermoratojen eheys), TMS (transkraniaalinen magneettistimulaatio – motorisen ja kognitiivisen aivokuoren tutkimus).\n\nKuvantamismenete"
+  },
+  {
+    "id": 1030,
+    "subject_area": "KNF",
+    "year": 2003,
+    "question_text": "EMG ja sen käyttö",
+    "answer_length": 1308,
+    "answer_preview": "Elektromyografia (EMG) tutkii lihasten ja niitä hermottavien hermojen sähköistä toimintaa.\n\nPinta-EMG: Pintaelektrodit iholla lihaksen päällä. Mittaa usean motorisen yksikön summa-aktiivisuutta. Käyttö: kineesiologia, ergonomia, johtumisnopeusmittauksen CMAP-rekisteröinti, unipolygrafian leukatonuks"
+  },
+  {
+    "id": 1031,
+    "subject_area": "KNF",
+    "year": 2005,
+    "question_text": "Potilasturvallisuus KNF-tutkimuksissa",
+    "answer_length": 1146,
+    "answer_preview": "Sähköturvallisuus: IEC 60601-1 standardi. Potilaan vuotovirta <10 μA (normaali), <50 μA (yksittäinen vika). CF-tyyppi (cardiac floating) sydämen läheisyydessä käytettäville laitteille (maksimivirta 10 μA sydämen läpi). Galvaaninen erotus potilasliitännässä.\n\nStimulaation turvallisuus: Sähköstimulaat"
+  },
+  {
+    "id": 1032,
+    "subject_area": "KNF",
+    "year": 2005,
+    "question_text": "Neurokirurgisen potilaan KNF tutkimukset",
+    "answer_length": 783,
+    "answer_preview": "Preoperatiiviset: EEG (epileptisten purkausten paikannus), video-EEG (kohtausten semiologia ja EEG-korrelaatio), MEG (lähdepaikannus), navigoitu TMS (motorisen ja puhekorteksin kartoitus), SEP/MEP (hermoratojen lähtötason dokumentointi).\n\nIntraoperatiiviset (IOM): SEP-monitorointi (selkärankakirurgi"
+  },
+  {
+    "id": 1035,
+    "subject_area": "KNF",
+    "year": 2006,
+    "question_text": "Kuvafuusio ja sen merkitys KNF-tutkimuksissa",
+    "answer_length": 992,
+    "answer_preview": "Kuvafuusio: Eri kuvantamismenetelmien tulosten yhdistäminen samaan anatomiseen koordinaatistoon.\n\nMenetelmät: EEG/MEG-lähdepaikannus + MRI: Dipoolien tai hajautettujen lähteiden esittäminen rakenteellisen MRI:n päällä. Vaatii elektrodien ja pään koordinaatiston rekisteröinnin (digitalisaattori, fidu"
+  },
+  {
+    "id": 1036,
+    "subject_area": "KNF",
+    "year": 2006,
+    "question_text": "EEG-signaalin lähteet ja EEG-mittauksen kytkennät.",
+    "answer_length": 566,
+    "answer_preview": "Ks. vastaukset kysymyksissä 0 (signaalin synty, lyhyesti) ja 21 (kytkennät).\n\nEEG-signaalin lähteet: Aivokuoren pyramidaalisolujen postsynaptisten potentiaalien summa. Pyramidaalisolut orientoituvat kohtisuorasti aivokuoreen → tangentiaalinen lähde sulcuksissa, radiaalinen gyruksissa. EEG:ssä näkyy "
+  },
+  {
+    "id": 1038,
+    "subject_area": "KNF",
+    "year": 2007,
+    "question_text": "Video-EEG-tutkimusten valmistelu ja toteutus laitteiston osalta",
+    "answer_length": 696,
+    "answer_preview": "Ks. vastaus kysymyksessä 14 (video-EEG-laitteisto).\n\nValmistelu: Potilaan informointi ja suostumus. Elektrodien kiinnitys (10-20 tai 10-10 -järjestelmä, kollodium pitkäaikaiseen kiinnitykseen). Impedanssin mittaus (<5 kΩ). Kameran ja videon testaus. Synkronoinnin tarkistus EEG-video. Hälytysnapin ja"
+  },
+  {
+    "id": 1047,
+    "subject_area": "KNF",
+    "year": 2010,
+    "question_text": "Potilasturvallisuus KNF-tutkimuksissa",
+    "answer_length": 28,
+    "answer_preview": "Ks. vastaus kysymyksessä 19."
+  },
+  {
+    "id": 1050,
+    "subject_area": "KNF",
+    "year": 2014,
+    "question_text": "EEG-signaalin lähteet ja EEG-mittauksen kytkennät.",
+    "answer_length": 28,
+    "answer_preview": "Ks. vastaus kysymyksessä 24."
+  },
+  {
+    "id": 1057,
+    "subject_area": "KNF",
+    "year": 2019,
+    "question_text": "EEG-signaalin lähteet ja EEG-mittauksen kytkennät",
+    "answer_length": 28,
+    "answer_preview": "Ks. vastaus kysymyksessä 24."
+  },
+  {
+    "id": 1058,
+    "subject_area": "KNF",
+    "year": 2019,
+    "question_text": "IOM, perusteet, virhelähteet, käyttöaiheet, jne.",
+    "answer_length": 536,
+    "answer_preview": "Ks. vastaus kysymyksessä 31.\n\nVirhelähteet: Anestesia: Inhalaatioanesteetit (sevofluraani, desfluraani) vaimentavat kortikaalisia vasteita (SEP, MEP). TIVA (propofoli + remifentaaliini) suositeltava. Lihasrelaksantit estävät MEP:n ja EMG:n → ei boluksia monitoroinnin aikana. Fysiologiset: Hypotermia"
+  },
+  {
+    "id": 1059,
+    "subject_area": "KNF",
+    "year": 2020,
+    "question_text": "Video-EEG tutkimuksen valmistelu ja toteutus",
+    "answer_length": 28,
+    "answer_preview": "Ks. vastaus kysymyksessä 26."
+  },
+  {
+    "id": 1061,
+    "subject_area": "KNF",
+    "year": 2022,
+    "question_text": "KNF-laitteiden laadunvarmistus",
+    "answer_length": 871,
+    "answer_preview": "EEG-laitteet: Ks. vastaus kysymyksessä 42.\n\nEMG/EP-laitteet: Kalibraatiopulssi (amplitudi, aika-akseli). Stimulaattorin tuotto (vakiovirtatuoton tarkistus, pulssinkesto). Kohinataso. Taajuusvaste (EP: laaja, 1 Hz - 3 kHz). Turvallisuustestit (vuotovirta, galvaaninen erotus).\n\nPolygrafialaitteisto: A"
+  },
+  {
+    "id": 662,
+    "subject_area": "Radiologia",
+    "year": 1990,
+    "question_text": "CT:n periaate",
+    "answer_length": 1655,
+    "answer_preview": "Tietokonetomografia (TT/CT) perustuu röntgensäteilyn vaimenemisen mittaamiseen useista eri suunnista kohteen ympäri ja kuvan rekonstruoimiseen matemaattisesti näistä projektioista.\n\nLaitteiston pääkomponentit: Röntgenputki ja vastakkaisella puolella detektorikaari pyörivät gantryssä potilaan ympäri."
+  },
+  {
+    "id": 663,
+    "subject_area": "Radiologia",
+    "year": 1990,
+    "question_text": "Digitaalinen kuvankäsittely sädediagnostiikassa",
+    "answer_length": 1451,
+    "answer_preview": "Digitaalinen kuvankäsittely kattaa kaikki vaiheet kuvan muodostamisesta lopulliseen esitykseen ja analysointiin.\n\nDigitalisointi: Analoginen signaali muunnetaan digitaaliseksi näytteistämällä ja kvantisoimalla. Nyquist-teoreema edellyttää näytetaajuuden olevan vähintään kaksinkertainen suurimpaan ta"
+  },
+  {
+    "id": 664,
+    "subject_area": "Radiologia",
+    "year": 1990,
+    "question_text": "Magneetikuvauksen periaate ja erityisesti pulssimenetelmät",
+    "answer_length": 1474,
+    "answer_preview": "Magneettikuvaus (MRI) perustuu atomiydinten (pääasiassa vety-1H) ydinmagneettiseen resonanssiin ulkoisessa magneettikentässä.\n\nPerusperiaate: Voimakkaassa staattisessa magneettikentässä (B₀, 1,5 T tai 3 T) vetyatomien ydinspinit orientoituvat kentän suuntaisesti tai vastaisesti. Nettomagnetisoitumav"
+  },
+  {
+    "id": 665,
+    "subject_area": "Radiologia",
+    "year": 1991,
+    "question_text": "Säteilymittareiden kalibrointi absorboituneen annoksen määrittämistä varten",
+    "answer_length": 1148,
+    "answer_preview": "Kalibroinnin tavoite: Varmistaa mittarin lukeman vastaavuus todelliseen absorboituneeseen annokseen jäljitettävän kalibrointiketjun kautta.\n\nKalibrointiketju: Primaarinormaali (kalorimmetrinen mittaus kansallisessa laboratoriossa) → sekundäärinormaali (kalibrointilaboratorio, esim. STUK) → käyttönor"
+  },
+  {
+    "id": 667,
+    "subject_area": "Radiologia",
+    "year": 1992,
+    "question_text": "T1-painotteisten kuvien käyttö protonitiheydeltään samanlaisten kudoslajien erottelussa MRI:ssä",
+    "answer_length": 886,
+    "answer_preview": "Ongelma: Monet kudokset (harmaa ja valkea aineisto, maksa ja lihakset) ovat protonintiheyksiltään hyvin samankaltaisia (~70–80% veden protonitiheydestä).\n\nT1-painotuksen hyöty: Vaikka protonintiheydet ovat lähellä toisiaan, T1-relaksaatioajat voivat erota merkittävästi. T1 riippuu molekyyliympäristö"
+  },
+  {
+    "id": 668,
+    "subject_area": "Radiologia",
+    "year": 1993,
+    "question_text": "Digitaalinen röntgenkuvaus; erityisesti DSA",
+    "answer_length": 881,
+    "answer_preview": "Digitaaliset detektoritekniikat: Kuvalevyjärjestelmä (CR) käyttää fotostimuloituvaa fosforointia (BaFBr:Eu²⁺). Suoradigitaalinen (DR): epäsuora konversio (CsI:Tl + a-Si fotodiodi) tai suora konversio (a-Se + TFT). DR tarjoaa paremman DQE:n ja työnkulun kuin CR.\n\nDigitaalisen kuvan edut: Laaja dynaam"
+  },
+  {
+    "id": 670,
+    "subject_area": "Radiologia",
+    "year": 1994,
+    "question_text": "Digitaalisen kuvan käsittelytavat",
+    "answer_length": 819,
+    "answer_preview": "Pisteoperaatiot: Ikkunointi, histogrammin ekvalisointi, gamma-korjaus, LUT-taulukot, kynnystäminen.\n\nPaikkasuodatus: Tasoitus (keskiarvo, Gauss, mediaani), reunojen korostus (Laplacian, Sobel, unsharp masking), reunojen tunnistus (Canny).\n\nTaajuustason käsittely: Fourier-muunnos, alipäästö- ja ylipä"
+  },
+  {
+    "id": 671,
+    "subject_area": "Radiologia",
+    "year": 1994,
+    "question_text": "Digitaalinen kuvankäsittely lääketieteessä",
+    "answer_length": 319,
+    "answer_preview": "Ks. vastaus kysymyksessä 8 (Digitaalisen kuvan käsittelytavat), laajennettuna kliinisillä sovelluksilla: modaliteettikohtaiset sovellukset (TT-ikkunointi, MRI bias field correction, isotooppikuvauksen vaimennuskorjaus, UÄ speckle-suodatus), CAD, 3D-visualisointi, kvantitatiivinen analyysi, tekoälypo"
+  },
+  {
+    "id": 672,
+    "subject_area": "Radiologia",
+    "year": 1994,
+    "question_text": "Magneettikuvan kuvasignaalin kirkkauteen vaikuttavat tekijät",
+    "answer_length": 742,
+    "answer_preview": "Kudoskohtaiset tekijät: Protonintiheys ρ(H) (suoraan verrannollinen signaaliin), T1-relaksaatioaika (lyhyt T1 → kirkkaampi T1-painotuksella), T2-relaksaatioaika (pitkä T2 → kirkkaampi T2-painotuksella), T2*, virtaus, diffuusio, suskeptibiliteetti.\n\nSekvenssiparametrit: TR (T1-painotuksen aste), TE ("
+  },
+  {
+    "id": 673,
+    "subject_area": "Radiologia",
+    "year": 1994,
+    "question_text": "Magneettikuvauksen periaate ja laitteisto pääpiirteissään",
+    "answer_length": 874,
+    "answer_preview": "Periaate: Ks. vastaus kysymyksessä 2. Tässä painotetaan laitteistoa.\n\nPäämagneetti: Suprajohtava (NbTi nestemäisessä heliumissa ~4K), 1,5 T tai 3 T. Homogeenisuus <1 ppm 40 cm DSV:ssä.\n\nGradienttijärjestelmä: Kolme kelaa (x, y, z) tuottavat lineaarisesti vaihtelevan lisäkentän paikkakoodaukseen. Tyy"
+  },
+  {
+    "id": 674,
+    "subject_area": "Radiologia",
+    "year": 1994,
+    "question_text": "Ionisoivan säteily vaikutukset solutasolla",
+    "answer_length": 727,
+    "answer_preview": "Ionisaatio ja radiolyysi: Suora ionisaatio kohdistuu DNA:han. Epäsuora ionisaatio tuottaa radikaaleja vesimolekyylien radiolyysin kautta (OH•, e⁻_aq, H₂O₂).\n\nDNA-vauriot: SSB (~1000/Gy/solu, korjautuu), DSB (~40/Gy/solu, kriittisin), emäsvauriot, ristisidokset, klusterivauriot.\n\nKorjausmekanismit: B"
+  },
+  {
+    "id": 675,
+    "subject_area": "Radiologia",
+    "year": 1995,
+    "question_text": "Dosimetrian perussuureet",
+    "answer_length": 567,
+    "answer_preview": "Radiometriset suureet: Fluenssi Φ (1/m²), fluenssinopeus, energiafluenssi Ψ (J/m²).\n\nVuorovaikutussuureet: Kerma K (Gy) = dE_tr/dm, jaetaan törmäyskermaan K_col ja säteilykermaan K_rad. Exposure X (C/kg) ilmassa.\n\nDosimetriset suureet: Absorboitunut annos D (Gy = J/kg). Ekvivalenttiannos H_T (Sv) = "
+  },
+  {
+    "id": 676,
+    "subject_area": "Radiologia",
+    "year": 1995,
+    "question_text": "Dosimetrien kalibrointi",
+    "answer_length": 175,
+    "answer_preview": "Ks. vastaus kysymyksessä 3 (Säteilymittareiden kalibrointi). Sama aihe käsiteltynä laajemmin eri dosimetrityyppien näkökulmasta (ionisaatiokammiot, TLD, puolijohdedetektorit)."
+  },
+  {
+    "id": 677,
+    "subject_area": "Radiologia",
+    "year": 1995,
+    "question_text": "Termoluminenssidosimetria",
+    "answer_length": 907,
+    "answer_preview": "Periaate: Kiinteä aine varastoi ionisoivan säteilyn energiaa loukkutiloihin ja vapauttaa sen valonaan lämmitettäessä.\n\nFysikaaliset perusteet: Säteily nostaa elektroneja valenssivyöltä loukkutiloihin. Lämmitettäessä elektronit vapautuvat ja rekombinoituvat luminesenssikeskusten kanssa emittoiden val"
+  },
+  {
+    "id": 678,
+    "subject_area": "Radiologia",
+    "year": 1995,
+    "question_text": "Röntgenkuvan laatua kuvaavat käsitteet",
+    "answer_length": 733,
+    "answer_preview": "Kontrasti: Signaaliero kohteen ja taustan välillä. Riippuu vaimennuskertoimien erosta, paksuudesta ja energiasta. Sironta heikentää kontrastia.\n\nSpatiaaliresoluutio: MTF (Modulation Transfer Function) taajuuden funktiona. Mitataan lp/mm. Rajoittavat: fokuksen koko, pikselikoko, liike-epäterävyys.\n\nK"
+  },
+  {
+    "id": 679,
+    "subject_area": "Radiologia",
+    "year": 1995,
+    "question_text": "Funktionaalinen MRI",
+    "answer_length": 802,
+    "answer_preview": "BOLD-signaali: Deoksihemoglobiini on paramagneettinen → lyhentää T2*:ta. Aktivoitunut alue: verenvirtaus lisääntyy suhteessa enemmän kuin hapenkulutus → deoksihemoglobiini vähenee → T2* pitenee → signaali kasvaa ~1-5% @1,5T.\n\nHemodynaamisinen vastinfunktio (HRF): Alkudiippi ~1s, huippu ~5-6s, post-s"
+  },
+  {
+    "id": 680,
+    "subject_area": "Radiologia",
+    "year": 1995,
+    "question_text": "Aika- ja paikkaerotuskyky aivojen MEG-, FMRI ja PET-tutkimuksissa",
+    "answer_length": 708,
+    "answer_preview": "MEG: Mittaa hermovirtojen magneettikenttiä SQUID-sensoreilla. Aikaresoluutio ~1 ms, paikkaresoluutio ~5-10 mm. Edut: erinomainen aikaresoluutio. Rajoitukset: kallis, magneettinen suojaus, pinnallisten lähteiden suosiminen.\n\nfMRI: BOLD-signaali. Aikaresoluutio ~1-3 s, paikkaresoluutio ~1-3 mm. Edut: "
+  },
+  {
+    "id": 681,
+    "subject_area": "Radiologia",
+    "year": 1996,
+    "question_text": "Dosimetrian perussuureet",
+    "answer_length": 28,
+    "answer_preview": "Ks. vastaus kysymyksessä 13."
+  },
+  {
+    "id": 682,
+    "subject_area": "Radiologia",
+    "year": 1996,
+    "question_text": "Ionisaatiokammio säteilyn mittalaitteena. Rakenne, materiaali ja tarvittavat korjaukset",
+    "answer_length": 530,
+    "answer_preview": "Rakenne: Kaasulla täytetty tilavuus elektrodeilla. Säteily ionisoi kaasun, ulkoinen jännite kerää varaukset.\n\nKammiotyypit: Sylinterimäinen (Farmer 0,6 cm³), tasolevykammio, vapaailmakammio, ekstrapolaatiokammio.\n\nMateriaalit: Seinämä grafiittia (Z_eff=6) tai PMMA grafiittipäällysteellä. Täytekaasu "
+  },
+  {
+    "id": 683,
+    "subject_area": "Radiologia",
+    "year": 1996,
+    "question_text": "Digitaalikuvan jatkokäsittely DSA:ssa",
+    "answer_length": 286,
+    "answer_preview": "Perussubstraatio: Kontrastikuva − maskikuva. Pikselisiirto liikeartefaktien korjaamiseen. Temporaalinen suodatus ja kehyssummaus SNR:n parantamiseen. Road mapping reaaliaikaiseen katetriohjaukseen. Parametrikuvat (time-to-peak, MTT, CBV). 3D-rotaatioangiografia tilavuusrekonstruktioon."
+  },
+  {
+    "id": 684,
+    "subject_area": "Radiologia",
+    "year": 1996,
+    "question_text": "Aivojen FMRI",
+    "answer_length": 244,
+    "answer_preview": "Ks. vastaus kysymyksessä 17 (fMRI). Aivojen fMRI:n kliiniset sovellukset: preoperatiivinen kartoitus, epilepsiadiagnostiikka, neurodegeneratiiviset sairaudet, resting-state fMRI verkostoanalyysi. 3T:n edut: ~2× SNR, voimakkaampi BOLD-kontrasti."
+  },
+  {
+    "id": 685,
+    "subject_area": "Radiologia",
+    "year": 1996,
+    "question_text": "Magneetikuvauksen periaate ja erityisesti pulssimenetelmät",
+    "answer_length": 27,
+    "answer_preview": "Ks. vastaus kysymyksessä 2."
+  },
+  {
+    "id": 686,
+    "subject_area": "Radiologia",
+    "year": 1996,
+    "question_text": "T1 ja T2 painotteinen magneettikuvaus",
+    "answer_length": 27,
+    "answer_preview": "Ks. vastaus kysymyksessä 4."
+  },
+  {
+    "id": 687,
+    "subject_area": "Radiologia",
+    "year": 1996,
+    "question_text": "T1-painotteisten kuvien käyttö protonitiheydeltään samanlaisten kudoslajien erottelussa MRI:ssä",
+    "answer_length": 27,
+    "answer_preview": "Ks. vastaus kysymyksessä 5."
+  },
+  {
+    "id": 688,
+    "subject_area": "Radiologia",
+    "year": 1997,
+    "question_text": "Artefaktat tietokonetomografiakuvauksessa",
+    "answer_length": 616,
+    "answer_preview": "Metalliartifaktat: Kirkkaat tähtimäiset juovat. Korjaus: MAR-algoritmit, iteratiivinen rekonstruktio, DECT.\n\nKovettumiartifakta: Polykromaattinen keila kovenee → cupping-efekti, tummat juovat. Korjaus: esisuodatus, korjausalgoritmi.\n\nOsittaistilavuusartefakta: Eri tiheydet samassa vokselissa → keski"
+  },
+  {
+    "id": 689,
+    "subject_area": "Radiologia",
+    "year": 1997,
+    "question_text": "Ionisaatiokammio säteilyn mittalaitteena",
+    "answer_length": 28,
+    "answer_preview": "Ks. vastaus kysymyksessä 20."
+  },
+  {
+    "id": 690,
+    "subject_area": "Radiologia",
+    "year": 1997,
+    "question_text": "DSA ja kuvien jälkikäsittely",
+    "answer_length": 36,
+    "answer_preview": "Ks. vastaukset kysymyksissä 6 ja 21."
+  },
+  {
+    "id": 691,
+    "subject_area": "Radiologia",
+    "year": 1997,
+    "question_text": "Vertaile FMRI:tä ja PET:ä aivotoimintojen (lähinnä perfuusion) kuvantamisessa",
+    "answer_length": 367,
+    "answer_preview": "fMRI perfuusio: BOLD (epäsuora), ASL (kvantitatiivinen CBF, endogeeninen), DSC-MRI (gadolinium-bolus, puolikvantitatiivinen).\n\nPET perfuusio: ¹⁵O-H₂O (kultastandardi, absoluuttinen CBF), ¹⁸F-FDG (glukoosimetabolia).\n\nVertailu: fMRI parempi aika- ja paikkaresoluutio, ei säteilyä. PET kvantitatiivisem"
+  },
+  {
+    "id": 692,
+    "subject_area": "Radiologia",
+    "year": 1997,
+    "question_text": "Radiologisten tutkimusten laadunvalvonta",
+    "answer_length": 530,
+    "answer_preview": "Röntgen: säteilyntuoton toistettavuus, HVL, fokuksen koko, AEC, kuvanlaatu fantomilla, annokset (DAP, DRL).\n\nTT: CT-lukujen tarkkuus ja yhdenmukaisuus, kohina, resoluutio, leikepaksuus, CTDI_vol, DLP.\n\nMRI: kenttähomogeenisuus, SNR, geometrinen tarkkuus, ghosting, leikepaksuus, kelojen toiminta.\n\nUl"
+  },
+  {
+    "id": 693,
+    "subject_area": "Radiologia",
+    "year": 1997,
+    "question_text": "Magneettikuvauksen perusteet",
+    "answer_length": 33,
+    "answer_preview": "Ks. vastaus kysymyksissä 2 ja 11."
+  },
+  {
+    "id": 695,
+    "subject_area": "Radiologia",
+    "year": 1997,
+    "question_text": "Teleradiologia",
+    "answer_length": 361,
+    "answer_preview": "Radiologisten kuvien elektroninen siirto tulkintaa ja konsultaatiota varten. DICOM, PACS, HL7/FHIR, VPN-salaus. Häviöttömät ja häviölliset pakkausmenetelmät. Diagnostisten näyttöjen GSDF-kalibrointi. Sovellukset: päivystysaikainen tulkinta, erikoiskonsultaatiot. Lainsäädäntö: terveydenhuoltolaki, GD"
+  },
+  {
+    "id": 696,
+    "subject_area": "Radiologia",
+    "year": 1997,
+    "question_text": "Vertaile aivojen CT-, MR-, ja aivoperfuusion gammakuvauksen löydöksiä akuutissa (<24h) aivoinfarktissa",
+    "answer_length": 1578,
+    "answer_preview": "CT: Ensituntien (<6h) CT on usein normaali tai näyttää vain hienovaraisia muutoksia (harmaa-valkea-aine-rajan häviäminen, sulkusten häämärtyminen, hyperdenssi valtimomerkki). CT:n tärkein rooli akuuttivaiheessa on vuodon poissulku. CTA näyttää valtimo-okluusion. CT-perfuusio (CTP) kartoittaa iskeemi"
+  },
+  {
+    "id": 699,
+    "subject_area": "Radiologia",
+    "year": 1998,
+    "question_text": "Mammografiakuvaus, erityisesti 3-ulotteinen digitaalinen rintakuva",
+    "answer_length": 2059,
+    "answer_preview": "Mammografian perusteet: Rintakudoksen kuvantaminen matalalla röntgenenergalla (25-35 kVp) kontrastin maksimoimiseksi pehmytkudosten välillä. Anode-filtteriyhdistelmät: Mo/Mo, Mo/Rh, W/Rh, W/Ag optimoivat spektrin rintakudoksen paksuuden ja tiheyden mukaan.\n\n2D-mammografia: Kaksi projektiosuuntaa (CC"
+  },
+  {
+    "id": 703,
+    "subject_area": "Radiologia",
+    "year": 2000,
+    "question_text": "Termoloistedosimetrian käyttö sairaalassa",
+    "answer_length": 1664,
+    "answer_preview": "Ks. vastaus kysymyksessä 15 (Termoluminenssidosimetria/TLD). Tässä painotetaan erityisesti sairaalan käyttösovelluksia.\n\nKäyttökohteet sairaalassa:\n\n1) Henkilödosimetria: TLD-sormusdosimetrit käsien annokselle (esim. interventioradiologia, isotooppilaboratorio). TLD-rinnedosimetrit efektiivisen anno"
+  },
+  {
+    "id": 705,
+    "subject_area": "Radiologia",
+    "year": 2000,
+    "question_text": "Magneettikuvauksen nykyinen tilanne",
+    "answer_length": 1686,
+    "answer_preview": "Magneettikuvauksen tekniikka ja kliiniset sovellukset ovat kehittyneet merkittävästi. Yleiskatsaus teknisiin edistysaskeliin:\n\nLaiteteknologia: Suprajohtavat magneetit 1,5 T yleistyneet standardiksi, 3 T kliinisessä käytössä. Voimakkaammat ja nopeammat gradientit (amplitudi >30 mT/m, slew rate >100 "
+  },
+  {
+    "id": 707,
+    "subject_area": "Radiologia",
+    "year": 2001,
+    "question_text": "Fuusiokuvantaminen",
+    "answer_length": 1705,
+    "answer_preview": "Fuusiokuvantaminen (multimodality imaging) yhdistää kahden tai useamman kuvantamismenetelmän informaation yhdeksi kuvaksi, hyödyntäen kunkin menetelmän vahvuuksia.\n\nMenetelmät:\n\n1) Laitteistotason fuusio (hardware fusion):\n- PET-TT: PET-skanneri ja TT integroitu samaan gantryyyn. TT antaa anatomisen"
+  },
+  {
+    "id": 709,
+    "subject_area": "Radiologia",
+    "year": 2002,
+    "question_text": "CT:n ja MRI:n perusteiden vertailu. Kerro viime vuosien edistysaskeleista molemmissa kuvauksissa",
+    "answer_length": 1587,
+    "answer_preview": "CT:n perusteet: Röntgensäteilyn vaimenemisen mittaus useista suunnista → tietokonerekonstruktio. Mittaa lineaarista vaimennuskerrointa (elektronidensiteetti). Nopea, laajasti saatavissa, hyvä spatiaalinen resoluutio (~0,5 mm).\n\nMRI:n perusteet: Ydinmagneettinen resonanssi voimakkaassa magneettikentä"
+  },
+  {
+    "id": 710,
+    "subject_area": "Radiologia",
+    "year": 2002,
+    "question_text": "Sydämen radiologiset tutkimukset",
+    "answer_length": 1907,
+    "answer_preview": "Sydämen kuvantamisen modaliteetit ja niiden roolit:\n\n1) Thorax-röntgen: Sydämen koon arviointi (kardiothorakaalinen suhde <0,5), keuhkoverisuoniston arviointi (staasi, ödeema), perikardiumin kalkkeumat, aortan muutokset.\n\n2) Sydämen TT-angiografia (CCTA): EKG-tahdistettu kuvaus, prospektiivinen tai "
+  },
+  {
+    "id": 711,
+    "subject_area": "Radiologia",
+    "year": 2002,
+    "question_text": "Termoluminenssidosimetria ja sen käyttöalueet",
+    "answer_length": 45,
+    "answer_preview": "Ks. vastaus kysymyksissä 15 ja 41. Sama aihe."
+  },
+  {
+    "id": 712,
+    "subject_area": "Radiologia",
+    "year": 2002,
+    "question_text": "Magneettikuvaksen perusteet",
+    "answer_length": 44,
+    "answer_preview": "Ks. vastaus kysymyksissä 2 ja 11. Sama aihe."
+  },
+  {
+    "id": 713,
+    "subject_area": "Radiologia",
+    "year": 2002,
+    "question_text": "Magneettikuvauksen kuvaussekvenssit",
+    "answer_length": 2050,
+    "answer_preview": "MRI:n kuvaussekvenssit ovat RF-pulssien ja gradienttien sarjoja, jotka määräävät signaalin muodostumisen, painotuksen ja kuvausnopeuden.\n\nSpin Echo (SE): 90°–180° -pulssipari. 180°-pulssi refokusoi T2*-defasoitumisen, joten signaali vaimenee puhtaasti T2:n mukaan. T1-painotus (lyhyt TR/TE), T2-paino"
+  },
+  {
+    "id": 714,
+    "subject_area": "Radiologia",
+    "year": 2002,
+    "question_text": "Munuaisten radiologiset tutkimukset",
+    "answer_length": 1785,
+    "answer_preview": "Munuaisten kuvantaminen eri modaliteeteilla:\n\n1) Ultraääni: Ensisijainen tutkimus. Munuaisten koko, muoto, parenkyymin paksuus, mahdolliset massat, kystat, hydroneforoosi (munuaisaltaan laajeneminen), virtsakivet (akustinen varjo). Doppler: munuaisvaltimoiden virtausvastusindeksi (RI), ahtauman arvi"
+  },
+  {
+    "id": 715,
+    "subject_area": "Radiologia",
+    "year": 2002,
+    "question_text": "Radiologisten tutkimusten säteilyriskit",
+    "answer_length": 1790,
+    "answer_preview": "Säteilyriskit jakautuvat deterministisiin ja stokastisiin vaikutuksiin.\n\nDeterministiset vaikutukset (kudosreaktiot): Kynnysannos, vakavuus kasvaa annoksen myötä. Relevantit diagnostiikassa lähinnä pitkissä interventioradiologisissa toimenpiteissä: ihoeryteema (kynnys ~2 Gy), ihon nekroosi (kynnys ~"
+  },
+  {
+    "id": 717,
+    "subject_area": "Radiologia",
+    "year": 2003,
+    "question_text": "Magneettikuvaus ja isotooppikuvaus toistensa täydentäjinä - periaatteet ja kuvafuusio",
+    "answer_length": 557,
+    "answer_preview": "MRI: Erinomainen pehmytkudoskontrasti, korkea resoluutio, monipuoliset painotukset, ei säteilyä.\n\nIsotooppikuvaus (SPECT/PET): Funktionaalinen/metabolinen tieto, erittäin herkkä, kvantitatiivinen.\n\nKomplementaarisia: Onkologiassa PET näyttää metabolisen aktiivisuuden, MRI rajaa anatomisesti. Neurolo"
+  },
+  {
+    "id": 718,
+    "subject_area": "Radiologia",
+    "year": 2003,
+    "question_text": "Miksi pieniäkin säteilyannoksia vastaan pitää suojautua?",
+    "answer_length": 514,
+    "answer_preview": "LNT-malli: Ei turvallista kynnysannosta stokastisille vaikutuksille. Riskikerroin ~5% per Sv.\n\nEpidemiologinen näyttö: Hiroshima/Nagasaki LSS osoittanut merkitsevän riskin ≥100 mSv. Mekanistisesti ei kynnysarvoa.\n\nKumulatiivinen altistus: Annokset kertyvät eliniän aikana.\n\nALARA: Optimointiperiaate,"
+  },
+  {
+    "id": 720,
+    "subject_area": "Radiologia",
+    "year": 2004,
+    "question_text": "Kuvafuusio radiologiassa",
+    "answer_length": 28,
+    "answer_preview": "Ks. vastaus kysymyksessä 45."
+  },
+  {
+    "id": 721,
+    "subject_area": "Radiologia",
+    "year": 2004,
+    "question_text": "Munuaisten radiologiset tutkimukset",
+    "answer_length": 28,
+    "answer_preview": "Ks. vastaus kysymyksessä 52."
+  },
+  {
+    "id": 724,
+    "subject_area": "Radiologia",
+    "year": 2005,
+    "question_text": "Magneettikuvan keskeiset artefaktat ja niiden mahdollinen korjaus/kompensointi",
+    "answer_length": 656,
+    "answer_preview": "Liikeartefaktat: Ghosting vaihekoodaussuunnassa. Korjaus: gating, hengityspidätys, PROPELLER/BLADE.\n\nKemiallinen siirtymä: Rasva-vesi 3,5 ppm → siirtymä. Korjaus: suurempi BW, rasvan vaimentaminen, Dixon.\n\nSuskeptibiliteetti: Ilma-kudos/metalli-kudos -rajapinnoilla. Korjaus: SE-sekvenssit, lyhyt TE,"
+  },
+  {
+    "id": 727,
+    "subject_area": "Radiologia",
+    "year": 2006,
+    "question_text": "Merkittävimmät turvallisuusriskit henkilökunnalle ja potilaille 1,5 Tja 3,0 T kuvauksissa.",
+    "answer_length": 532,
+    "answer_preview": "Staattinen kenttä: Projektiilit (4× voimakkaampi 3T:ssa), implantit (liike, lämpeneminen, toimintahäiriö).\n\nGradientit: Perifeerinen hermostimulaatio (dB/dt-rajat), akustinen kohina (>100 dB).\n\nRF-kenttä: SAR ∝ B₀² → 3T:ssa ~4× suurempi. IEC-rajat: kokokeho 2 W/kg. Metalliset implantit fokusisoivat "
+  },
+  {
+    "id": 730,
+    "subject_area": "Radiologia",
+    "year": 2007,
+    "question_text": "Rinnakkaiskuvausmenetelmät magneettikuvauksessa edut \"sudenkuopat\"",
+    "answer_length": 626,
+    "answer_preview": "Periaate: Useat vastaanottokelat osittain päällekkäisillä herkkyyksillä → k-avaruudesta jätetään vaiheaskelia keräämättä → kelaherkkyyspohjainen rekonstruktio.\n\nMenetelmät: SENSE (kuva-avaruus, kelaherkkyysprofiilit → unfolding), GRAPPA (k-avaruus, autocalibration lines → puuttuvien rivien laskenta)"
+  },
+  {
+    "id": 733,
+    "subject_area": "Radiologia",
+    "year": 2008,
+    "question_text": "Röntgensäteilyn ja biologisen materiaalin fysikaaliset vuorovaikutukset. Niiden vaikutus röntgenkuvan laatuun ja potilaan kokemaan sädeannokseen?",
+    "answer_length": 573,
+    "answer_preview": "Valosähköinen ilmiö: Todennäköisyys ∝ Z³/E³. Hallitsee matalilla energioilla ja korkeassa Z:ssa. Täysin absorboiva → hyvä kontrasti.\n\nCompton-sironta: Todennäköisyys ∝ elektronitiheys. Hallitseva diagnostisten energioiden yläpäässä. Sironta heikentää kontrastia.\n\nRayleigh-sironta: Suunnan muutos ilm"
+  },
+  {
+    "id": 734,
+    "subject_area": "Radiologia",
+    "year": 2009,
+    "question_text": "Rinnakkaiskuvaustekniikka (Parallel imaging)",
+    "answer_length": 28,
+    "answer_preview": "Ks. vastaus kysymyksessä 68."
+  },
+  {
+    "id": 739,
+    "subject_area": "Radiologia",
+    "year": 2010,
+    "question_text": "Miten perinteisen röntgenkuvauksen ja tietokonetomografian tuottamat säteilyannosjakaumat eroavat toisistaan ja mistä erot johtuvat?",
+    "answer_length": 1652,
+    "answer_preview": "Röntgenkuvaus (projektiiokuvaus):\n- Annosjakauma on voimakkaasti epähomogeeninen: Pinta-annos (ESD, entrance skin dose) on moninkertaisesti suurempi kuin ulostumisannos (exit dose)\n- Annos laskee eksponentiaalisesti kudoksen syvyyden funktiona (vaimennuslaki)\n- Annos on suurin säteilyn tulosuunnassa"
+  },
+  {
+    "id": 740,
+    "subject_area": "Radiologia",
+    "year": 2012,
+    "question_text": "MR-traktografian periaate ja rajoitukset",
+    "answer_length": 2221,
+    "answer_preview": "Periaate: MR-traktografia rekonstruoi aivojen valkean aineen hermoratayhteyksiä diffuusiotensorikuvauksen (DTI) pohjalta.\n\nDTI:n periaate: Diffuusiopainotteisessa kuvauksessa (DWI) mitataan vesimolekyylien diffuusiota. Hermoradoissa vesi diffundoi pääasiassa radan suunnassa (anisotrooppinen diffuusi"
+  },
+  {
+    "id": 741,
+    "subject_area": "Radiologia",
+    "year": 2013,
+    "question_text": "Rauhaskudosannos ja sen määrittäminen.",
+    "answer_length": 1526,
+    "answer_preview": "Rauhaskudosannos (Average Glandular Dose, AGD/MGD): Mammografiassa käytetty annossure, joka kuvaa keskimääräistä rauhaskudokseen absorboitunutta annosta. Se on parempi riskinarvioinnin suure kuin ihon pinta-annos, koska rauhaskudos on säteilyherkkä kudos.\n\nMääritysperiaate: AGD ei voida mitata suora"
+  },
+  {
+    "id": 743,
+    "subject_area": "Radiologia",
+    "year": 2014,
+    "question_text": "Potilaan säteilyaltistuksen määrittäminen tavanomaisessa rtg-tutkimuksessa ja läpivalaisututkimuksessa",
+    "answer_length": 28,
+    "answer_preview": "Ks. vastaus kysymyksessä 81."
+  },
+  {
+    "id": 744,
+    "subject_area": "Radiologia",
+    "year": 2014,
+    "question_text": "Potilaan säteilyaltistuksen määrittäminen tavanomaisessa röntgentutkimuksessa ja läpivalaisututkimuksessa",
+    "answer_length": 1485,
+    "answer_preview": "Röntgentutkimus (projektiokuvaus):\n\nESD (Entrance Surface Dose): Mitataan suoraan TLD/puolijohdedetektorilla iholla tai lasketaan säteilytuotosta: ESD = Y(kV) × mAs × (1m/FSD)² × BSF. Yksikkö mGy.\n\nDAP (Dose-Area Product): Mitataan DAP-mittarilla (läpäisyionisaatiokammio kiilakollimaattorissa). DAP "
+  },
+  {
+    "id": 745,
+    "subject_area": "Radiologia",
+    "year": 2014,
+    "question_text": "Sepelvaltimoiden TT-tutkimus",
+    "answer_length": 1839,
+    "answer_preview": "Sepelvaltimoiden TT-angiografia (CCTA) on ei-invasiivinen menetelmä sepelvaltimoiden anatomian ja patologian arviointiin.\n\nTekniset vaatimukset: Vähintään 64-rivinen TT-laite, mieluiten dual-source tai wide-detector. Temporaalinen resoluutio < 175 ms (optimaalisesti < 100 ms dual-source -tekniikalla"
+  },
+  {
+    "id": 747,
+    "subject_area": "Radiologia",
+    "year": 2015,
+    "question_text": "Magneettikuvauksen riskit",
+    "answer_length": 535,
+    "answer_preview": "Ks. vastaus kysymyksessä 65 (Turvallisuusriskit 1,5 T ja 3,0 T kuvauksissa) ja kysymyksessä 87 (Potilasturvallisuus MRI:ssä).\n\nYhteenvetona MRI:n riskikategoriat: staattisen magneettikentän riskit (projektiillivaara, implantit), gradienttikenttien riskit (perifeerinen hermostimulaatio, akustinen koh"
+  },
+  {
+    "id": 748,
+    "subject_area": "Radiologia",
+    "year": 2015,
+    "question_text": "Kartiokeila tietokonetomografia diagnostiikassa ja sädehoidon kohdentamisessa",
+    "answer_length": 1804,
+    "answer_preview": "Periaate: Kartiomaisella (cone beam) röntgenkeilalla kuvataan kohde yhdellä tai useammalla kierroksella (180°-360°). Tasopaneeldetektori vastaanottaa laajakulmaisen keilan. Rekonstruktio Feldkamp-Davis-Kress (FDK) -algoritmilla tai iteratiivisesti.\n\nDiagnostinen KKTT:\n- Hammasröntgenologia: Hampaide"
+  },
+  {
+    "id": 749,
+    "subject_area": "Radiologia",
+    "year": 2015,
+    "question_text": "Potilasturvallisuus magneettikuvauksissa: riskit ja niiden hallinta",
+    "answer_length": 1649,
+    "answer_preview": "Ks. myös vastaus kysymyksessä 65.\n\nRiskien hallinta käytännössä:\n\n1) Seulontaprosessi: Ennen kuvausta täytettävä turvallisuuslomake (implantit, metalliset vierasesineet, raskaus, klaustrofobia). Röntgenkuvaus metallisilmävierasesineen poissulkemiseksi tarvittaessa. MR-hoitajan haastattelu ja tarkist"
+  },
+  {
+    "id": 751,
+    "subject_area": "Radiologia",
+    "year": 2016,
+    "question_text": "Kuvavääristymät (artefaktat) magneettikuvissa",
+    "answer_length": 108,
+    "answer_preview": "Ks. vastaus kysymyksessä 62 (Magneettikuvan keskeiset artefaktat ja niiden korjaus/kompensointi). Sama aihe."
+  },
+  {
+    "id": 752,
+    "subject_area": "Radiologia",
+    "year": 2016,
+    "question_text": "Rauhaskudosannoksen määritys mammografiassa",
+    "answer_length": 28,
+    "answer_preview": "Ks. vastaus kysymyksessä 79."
+  },
+  {
+    "id": 753,
+    "subject_area": "Radiologia",
+    "year": 2017,
+    "question_text": "Henkilökunnan säteilyaltistus ja sen määrittäminen leikkaussalitoiminnassa",
+    "answer_length": 1800,
+    "answer_preview": "Säteilylähteet leikkaussalissa: C-kaari (fluoroskopia/DSA), intraoperatiivinen KKTT, siirrettävät röntgenlaitteet. Pääasiallinen altistuksen lähde on potilaan kehosta siroava säteily.\n\nAnnoksen suuruusluokka: Tyypilliset efektiiviset annokset leikkaussalihenkilökunnalle 0,01-5 mSv/vuosi riippuen toi"
+  },
+  {
+    "id": 754,
+    "subject_area": "Radiologia",
+    "year": 2017,
+    "question_text": "Radiologia\nKaksoisenergia TT. Toimintaperiaate ja edut.",
+    "answer_length": 2017,
+    "answer_preview": "Toimintaperiaate: Kaksoisenergia-TT kuvaa kohdetta kahdella eri röntgenenergalla (tyypillisesti 80 kV ja 140 kV) samanaikaisesti tai lähes samanaikaisesti. Eri materiaaleilla vaimenemisen energiariippuvuus on erilainen (johtuu valosähköisen ilmiön Z-riippuvuudesta), mikä mahdollistaa materiaalien er"
+  },
+  {
+    "id": 756,
+    "subject_area": "Radiologia",
+    "year": 2018,
+    "question_text": "Diffuusiopainotteinen magneettikuvaus",
+    "answer_length": 1686,
+    "answer_preview": "Periaate: DWI mittaa vesimolekyylien Brownin liikkeen (diffuusion) rajoittuneisuutta kudoksessa. Diffuusiogradientit (Stejskal-Tanner -pari) aiheuttavat signaalin menetyksen liikkuville molekyyleille: mitä vapaammin molekyylit diffundoituvat, sitä enemmän signaali vaimenee.\n\nTekninen toteutus: SE-EP"
+  },
+  {
+    "id": 757,
+    "subject_area": "Radiologia",
+    "year": 2018,
+    "question_text": "Annosmodulointitekniikat tietokonetomografiassa",
+    "answer_length": 1789,
+    "answer_preview": "Annosmodulaatio on automaattisen valotuksen säädön (AEC) kehittynein muoto TT:ssä, jossa putkivirta (mA) säädetään automaattisesti potilaan koon ja muodon mukaan.\n\nModulaatiotyypit:\n 1) Angular modulation (xy-tasossa): mA vaihtelee pyörimiskulman mukaan: enemmän AP-suunnassa (paksumpi vaimennus), vä"
+  },
+  {
+    "id": 759,
+    "subject_area": "Radiologia",
+    "year": 2019,
+    "question_text": "Sepelvaltimoiden tietokonetomografiatutkimukset",
+    "answer_length": 28,
+    "answer_preview": "Ks. vastaus kysymyksessä 83."
+  },
+  {
+    "id": 760,
+    "subject_area": "Radiologia",
+    "year": 2019,
+    "question_text": "Keinot ja menetelmät nopeuttaa MRI-kuvausta VS. perinteinen SE-sekvenssi",
+    "answer_length": 1781,
+    "answer_preview": "Perinteinen SE: Yksi vaihekoodausaskel per TR → kuvausaika = TR × N_y × NEX. Esim. TR=500ms, N_y=256, NEX=1 → 128 s = ~2 min per leike.\n\nNopeuttamismenetelmät:\n\n1) Turbo/Fast Spin Echo (TSE/FSE): Useita kaikuja per TR (ETL = 4-32). Kuvausaika lyhenee ETL-kertaisesti. Turbo-faktori 16: 256/16 = 16 va"
+  },
+  {
+    "id": 763,
+    "subject_area": "Radiologia",
+    "year": 2020,
+    "question_text": "Säteilyannosten määrittäminen läpivalaisun käytössä",
+    "answer_length": 78,
+    "answer_preview": "Ks. vastaus kysymyksessä 81 (läpivalaisututkimuksen osuus) ja kysymyksessä 70."
+  },
+  {
+    "id": 764,
+    "subject_area": "Radiologia",
+    "year": 2020,
+    "question_text": "MRI-diffuusiokuvantaminen, fyysikon rooli ja laadunvalvonta",
+    "answer_length": 1419,
+    "answer_preview": "Ks. myös vastaus kysymyksessä 94 (DWI).\n\nFyysikon rooli:\n 1) Protokollien optimointi: b-arvojen valinta (kliinisen indikaation mukaan), gradienttisuuntien määrä (DTI: ≥30 suuntaa), spatiaaliresoluution ja SNR:n tasapainottaminen, EPI-parametrien optimointi (echo spacing, bandwidth, parallel imaging)"
+  },
+  {
+    "id": 767,
+    "subject_area": "Radiologia",
+    "year": 2022,
+    "question_text": "KKTT:n periaate ja kontrastin syntyminen",
+    "answer_length": 1296,
+    "answer_preview": "Periaate: Ks. vastaus kysymyksessä 86 (Kartiokeila-TT diagnostiikassa ja sädehoidon kohdentamisessa).\n\nKontrastin syntyminen: Kontrastin perusta on sama kuin perinteisessä TT:ssä – röntgensäteilyn vaimenemisen erot eri kudostyppien välillä. Vaimeneminen riippuu kudoksen elektronidensiteetistä, atomi"
+  },
+  {
+    "id": 768,
+    "subject_area": "Radiologia",
+    "year": 2022,
+    "question_text": "fMRI-EEG: Toteutus ja haasteet",
+    "answer_length": 1901,
+    "answer_preview": "Samanaikainen fMRI ja EEG yhdistää fMRI:n hyvän paikkaresoluution EEG:n erinomaiseen aikaresoluutioon.\n\nToteutus:\n 1) EEG-laitteisto MRI-ympäristössä: MR-yhteensopivat elektrodit (ei-ferromagneettiset, AgCl tai hiili), MR-yhteensopivat vahvistimet (suuri dynaaminen alue ja näytteistystaajuus ≥5 kHz "
+  },
+  {
+    "id": 769,
+    "subject_area": "Radiologia",
+    "year": 2022,
+    "question_text": "Kaksoisenergia vs perinteinen TT",
+    "answer_length": 1226,
+    "answer_preview": "Ks. vastaus kysymyksessä 92 (Kaksoisenergia-TT: toimintaperiaate ja edut).\n\nVertailun tiivistelmä:\n\nPerinteinen (yksittäisenerginen) TT:\n- Yksi energiaspektri (esim. 120 kV)\n- CT-luku (HU) kuvaa lineaarista vaimennuskerrointa yhdellä energialla\n- Ei mahdollisuutta materiaalierotteluun\n- Yksinkertais"
+  },
+  {
+    "id": 770,
+    "subject_area": "Sädehoito",
+    "year": 1990,
+    "question_text": "Hypertermita sädehoidon apuna",
+    "answer_length": 1761,
+    "answer_preview": "Hypertermia tarkoittaa kasvainkudoksen lämmittämistä 40-45°C:een sädehoidon yhteydessä terapeuttisen vasteen tehostamiseksi.\n\nBiologinen peruste: Hypertermia tehostaa säteilyn vaikutusta useilla mekanismeilla. Lämpö estää DNA-vaurioiden korjausmekanismeja (erityisesti HR ja NHEJ), jolloin säteilyn a"
+  },
+  {
+    "id": 771,
+    "subject_area": "Sädehoito",
+    "year": 1991,
+    "question_text": "Kudoksen happipitoisuuden merkitys sädehoidossa. Menetelmät vaikutuksen eliminoimiseksi",
+    "answer_length": 1751,
+    "answer_preview": "Happiefekti: Happi on voimakkain tunnettu säteilyherkistäjä. Happi reagoi DNA-radikaalien kanssa \"fiksoimalla\" vaurion pysyväksi (oxygen fixation hypothesis). Ilman happea radikaalit voivat pelkistyä takaisin normaaliksi (tioliprotektorit). OER (Oxygen Enhancement Ratio) = annos hypoksiassa / annos "
+  },
+  {
+    "id": 772,
+    "subject_area": "Sädehoito",
+    "year": 1991,
+    "question_text": "Uusimpien säteilybiologisten tulosten vaikutus sädehoidon fraktiointiin",
+    "answer_length": 1603,
+    "answer_preview": "Fraktioinnin biologiset perusteet (4R:ää + 1R):\n\n1) Repair (korjaus): Subletaalivaurioiden korjaus fraktioiden välillä. Korjauksen puoliintumisaika ~1-2h. Myöhäisreagaatioiden kudokset (pieni α/β ≈ 2-4 Gy) hyötyvät enemmän fraktioinnista kuin kasvaimet (suuri α/β ≈ 8-10 Gy).\n\n2) Reassortment (solusy"
+  },
+  {
+    "id": 773,
+    "subject_area": "Sädehoito",
+    "year": 1991,
+    "question_text": "Jälkilataushoitojen periaate ja käytännön esimerkkejä",
+    "answer_length": 1890,
+    "answer_preview": "Jälkilataus (afterloading) tarkoittaa brakyterapiamenetelmää, jossa säteilylähteet ladataan hoitoaplikaattoreihin vasta kun ne on asetettu potilaaseen. Tämä minimoi henkilökunnan säteilyaltistuksen.\n\nPeriaate: Ensin asetetaan ei-aktiiviset aplikaattorit (metallisylinterit, neulatikkujen ohjaimet) po"
+  },
+  {
+    "id": 774,
+    "subject_area": "Sädehoito",
+    "year": 1992,
+    "question_text": "Simulaattorit ja niiden käyttö sädehoidon kontrollimenetelmänä",
+    "answer_length": 1534,
+    "answer_preview": "Sädehoitosimulaattori on diagnostinen röntgenkuvauslaite, joka jäljittelee hoitolaitteen (lineaarikiihdyttimen) geometriaa.\n\nPerinteinen simulaattori: Röntgenputki ja kuvanvahvistin/tasopaneeldetektori samassa mekaanisessa rakenteessa kuin hoitolaite (gandry pyörii, pöytä liikkuu). Isosentrinen rake"
+  },
+  {
+    "id": 775,
+    "subject_area": "Sädehoito",
+    "year": 1993,
+    "question_text": "Ulkoisessa sädehoidossa käytettävien säteilyjen syväannoskäyrään vaikuttavat tekijät",
+    "answer_length": 1537,
+    "answer_preview": "Syväannoskäyrä (PDD, Percentage Depth Dose) kuvaa absorboituneen annoksen suhteellista muutosta syvyyden funktiona keilan keskiakselilla.\n\nSäteilyn energia: Tärkein tekijä. Korkeampi energia → syvemmälle tunkeutuva keila. Buildup-alueen paksuus kasvaa energian myötä (d_max: ⁶⁰Co ~0,5 cm, 6 MV ~1,5 c"
+  },
+  {
+    "id": 776,
+    "subject_area": "Sädehoito",
+    "year": 1994,
+    "question_text": "Sädehoidon tilavuusmenetelmät ICRU 50:n mukaan",
+    "answer_length": 1597,
+    "answer_preview": "ICRU Report 50 (1993) ja sen täydennys ICRU 62 (1999) määrittelevät sädehoidon kohdealueet ja annosraportoinnin terminologian.\n\nGTV (Gross Tumour Volume): Makroskooppinen kasvainalue, joka voidaan nähdä, palpoida tai kuvata (TT, MRI, PET). Sisältää primäärikasvaimen ja/tai makroskooppiset imusolmuke"
+  },
+  {
+    "id": 777,
+    "subject_area": "Sädehoito",
+    "year": 1994,
+    "question_text": "Sädehoitoannoksen määrittely IRCU 50:n mukaisesti",
+    "answer_length": 831,
+    "answer_preview": "Ks. vastaus kysymyksessä 6 (ICRU 50 tilavuusmääritysten). Tässä painotetaan erityisesti annoksen määrittelyä.\n\nICRU-referenssipiste: Annos raportoidaan ICRU-referenssipisteessä, joka valitaan seuraavien kriteerien mukaan: Pisteen tulee olla kliinisesti merkittävä, helposti määriteltävissä, annos on "
+  },
+  {
+    "id": 778,
+    "subject_area": "Sädehoito",
+    "year": 1995,
+    "question_text": "Tarkastele Bragg-Gray -onteloteorian perusteita",
+    "answer_length": 1567,
+    "answer_preview": "Bragg-Gray -onteloteoria on dosimetrian perustateoria, joka yhdistää absorboituneen annoksen mitta-aineessa (ontelossa) absorboituneeseen annokseen ympäröivässä väliaineessa.\n\nPeriaate: Jos pieni kaasutäytteinen ontelo on sijoitettu homogeeniseen väliaineeseen, absorboitunut annos väliaineessa D_med"
+  },
+  {
+    "id": 779,
+    "subject_area": "Sädehoito",
+    "year": 1995,
+    "question_text": "Vasta-aineperusteisen sädehoidon dosimetria",
+    "answer_length": 1660,
+    "answer_preview": "Vasta-aineperusteinen sädehoito (radioimmunotherapy, RIT) käyttää monoklonaalisia vasta-aineita, jotka on leimattu radioaktiivisella isotoopilla kasvainsolujen pinnalla olevien antigeenien kohdentamiseen.\n\nKäytetyt isotoopit: ⁹⁰Y (puhtaasti β⁻, t₁/₂ = 64h, E_max = 2,28 MeV, R90 ≈ 5 mm), ¹³¹I (β⁻ + γ"
+  },
+  {
+    "id": 780,
+    "subject_area": "Sädehoito",
+    "year": 1995,
+    "question_text": "Stereotaktisen hoidon periaatteet",
+    "answer_length": 1593,
+    "answer_preview": "Stereotaktinen sädehoito (SRS/SRT/SBRT/SABR) on tekniikka, jossa suuria säteilyannoksia annetaan tarkasti rajatulle kohdealueelle yhdessä tai muutamassa fraktiossa.\n\nPeriaate: Suuri määrä eri suunnista tulevia kapeita keiloja kohdistetaan stereotaktisesti paikannettuun kohteeseen. Kohteeseen kertyy "
+  },
+  {
+    "id": 781,
+    "subject_area": "Sädehoito",
+    "year": 1996,
+    "question_text": "Jälkilatauslaitteiden dosimetria",
+    "answer_length": 1592,
+    "answer_preview": "Jälkilatauslaitteiden (brakyterapian) dosimetria perustuu lähdespesifiseen annosjakaumatietoon ja sen soveltamiseen kliinisessä geometriassa.\n\nTG-43 -formalismi (AAPM): Absorboitunut annos pistemäisen lähteen ympärillä: Ḋ(r,θ) = S_K × Λ × [G_L(r,θ)/G_L(r₀,θ₀)] × g_L(r) × F(r,θ), missä: S_K = air-ker"
+  },
+  {
+    "id": 785,
+    "subject_area": "Sädehoito",
+    "year": 1998,
+    "question_text": "Jälkilatauslaitteiden dosimetria",
+    "answer_length": 28,
+    "answer_preview": "Ks. vastaus kysymyksessä 11."
+  },
+  {
+    "id": 787,
+    "subject_area": "Sädehoito",
+    "year": 1998,
+    "question_text": "Sädehoitosimulaattorit ja niiden tärkeimmät ominaisuudet",
+    "answer_length": 60,
+    "answer_preview": "Ks. vastaus kysymyksessä 4 (Simulaattorit ja niiden käyttö)."
+  },
+  {
+    "id": 793,
+    "subject_area": "Sädehoito",
+    "year": 2002,
+    "question_text": "Sädehoidon annossuunnitelman optimointi (kriteerit ja menetelmät)",
+    "answer_length": 1339,
+    "answer_preview": "Kriteerit:\n\nDVH-perusteiset (Dose-Volume Histogram):\n- PTV: D95 ≥ 95% reseptiannoksesta, D2 < 107% (hot spot -rajoitus), V95 > 95%\n- Riskielimet: Elinkohtaiset annosrajoitteet (QUANTEC/EMAMI): selkäydin D_max < 45-50 Gy, parotis Dmean < 26 Gy, sydän V25 < 10%, keuhko V20 < 30%, V5 < 60%\n- Homogenite"
+  },
+  {
+    "id": 794,
+    "subject_area": "Sädehoito",
+    "year": 2002,
+    "question_text": "Sädehoidon potilasdosimetrian menetelmät",
+    "answer_length": 1249,
+    "answer_preview": "In vivo -dosimetria: Annoksen mittaaminen hoitokerralla potilaan ihon pinnalta tai kehon sisältä.\n\nIhon pinta: TLD-dosimetrit (pieni koko, ei johtoja), OSLD (Al₂O₃:C), diodidosimetrit (reaaliaikainen lukema), MOSFET-dosimetrit (pieni koko, reaaliaikainen). Mittaavat sisääntuloannoksen (entrance dose"
+  },
+  {
+    "id": 795,
+    "subject_area": "Sädehoito",
+    "year": 2002,
+    "question_text": "Sädehoidon biologiset perusteet",
+    "answer_length": 775,
+    "answer_preview": "4R + 1R: Ks. vastaus kysymyksessä 2 (fraktiointi).\n\nLQ-malli: SF = e^(−αD − βD²). α/β-suhde: akuutit kudokset ~10 Gy, myöhäisreagoivat ~3 Gy.\n\nSolusyklin vaikutus: M ja G2 herkimmät, S resistentein. Fraktiointi mahdollistaa reassortment.\n\nHappiefekti: OER ~2,5-3,0 fotoneille. Reoxygenation fraktioid"
+  },
+  {
+    "id": 796,
+    "subject_area": "Sädehoito",
+    "year": 2003,
+    "question_text": "Lineaarikiihdytin sädehoitolaitteena",
+    "answer_length": 1497,
+    "answer_preview": "Lineaarikiihdytin (linac) on yleisin ulkoisen sädehoidon laite. Se kiihdyttää elektroneja korkeaenergisiksi ja tuottaa joko fotonisäteilyä (bremsstrahlung) tai elektronisäteilyä.\n\nPääkomponentit:\n 1) Elektronitykkii (electron gun): Kuumennettu katodi emittoi elektroneja (~50 keV).\n 2) Kiihdytysraken"
+  },
+  {
+    "id": 797,
+    "subject_area": "Sädehoito",
+    "year": 2005,
+    "question_text": "Sädehoitokentän verifiointi",
+    "answer_length": 1274,
+    "answer_preview": "Hoitokentän verifioinnilla varmistetaan, että suunnittelun mukainen säteily oikeasti kohdistuu potilaaseen suunnitellusti.\n\nVerifiointimenetelmät:\n\n1) Portaalikuvantaminen: EPID (Electronic Portal Imaging Device) on lineaarikiihdyttimeen integroitu kuvanmuodostusdetektori. MV-portaalikuva vertaillaa"
+  },
+  {
+    "id": 799,
+    "subject_area": "Sädehoito",
+    "year": 2005,
+    "question_text": "Sädehoitolaitteen laadunvalvonta",
+    "answer_length": 1204,
+    "answer_preview": "Laadunvarmistusohjelma perustuu kansainvälisiin suosituksiin (AAPM TG-40, TG-142, ESTRO, IEC) ja kansallisiin ohjeisiin (STUK).\n\nPäivittäiset tarkistukset: Isosentrinen laseroiden tarkkuus, säteilyn tuoton vakioisuus (vakiomitta-alue, esim. päivittäiset QA-laitteet kuten Sun Nuclear Daily QA3), turv"
+  },
+  {
+    "id": 800,
+    "subject_area": "Sädehoito",
+    "year": 2006,
+    "question_text": "Tauon merkitys sädehoidossa",
+    "answer_length": 1672,
+    "answer_preview": "Hoitotauko (treatment gap) voi johtua pyhäpäivistä, laitteen huoltokatkoista, potilaan sairauksista tai komplikaatioista. Tauolla on merkittävä biologinen vaikutus.\n\nKasvaimen repopulaatio: Sädehoidon aikana kasvainsolut proliferoituvat. Pitkittynyt hoitoaika (tauot mukaan lukien) antaa kasvaimelle "
+  },
+  {
+    "id": 801,
+    "subject_area": "Sädehoito",
+    "year": 2006,
+    "question_text": "CT-simulointi",
+    "answer_length": 425,
+    "answer_preview": "CT-simulointi on sädehoidon suunnittelun perusta. Leveäaukkoinen TT (≥80 cm bore), tasainen pöytä, ulkoiset laserit. Työnkulku: Immobilisaatio → CT-kuvaus hoitoasennossa → siirto TPS:ään → kohdealueiden rajaus → annossuunnittelu. CT-lukujen muunnos elektronidensiteetiksi (HU-ED-kalibraatio). 4D-CT h"
+  },
+  {
+    "id": 802,
+    "subject_area": "Sädehoito",
+    "year": 2007,
+    "question_text": "Elektronikeilojen kalibrointi suomalaisen käytännön mukaisesti.",
+    "answer_length": 295,
+    "answer_preview": "Vesifantomi, tasolevykammio (suositeltu). R₅₀ → säteilylaatuindeksi → k_Q. Referenssisyvyys z_ref = 0,6×R₅₀ − 0,1 cm. D_w(z_ref) = M_corr × N_D,w × k_Q. Korjaukset: k_TP, k_s, k_pol. MU-kalibrointi. Output factors kaikille tuubeille ja kenttäko'oille. STUK kalibroi referenssi-ionisaatiokammiot."
+  },
+  {
+    "id": 803,
+    "subject_area": "Sädehoito",
+    "year": 2007,
+    "question_text": "Jodi-131 hoitojen annoksen määritys.",
+    "answer_length": 368,
+    "answer_preview": "MIRD-formalismi: D = Ã × S. Kilpirauhasen kertymämittaus diagnostisella ¹³¹I-aktiivisuudella 24h. Aktiivisuuden laskenta tavoiteannoksen perusteella (300-400 Gy). Empiirinen kiinteä aktiivisuus vaihtoehto. Dosimetrian haasteet: β-säteilyn paikallinen absorptio, γ-säteilyn koko kehon annos, massan va"
+  },
+  {
+    "id": 804,
+    "subject_area": "Sädehoito",
+    "year": 2008,
+    "question_text": "Mittauksen jäljitettävyys mittanormaaleihin.",
+    "answer_length": 353,
+    "answer_preview": "Katkeamaton kalibrointiketju: BIPM → kansallinen laboratorio (STUK) → sairaalan referenssikammio → kenttämittari. TRS-398 protokolla. Epävarmuusbudjetti: primaarinormaali ~0,3%, kansallinen kalibrointi ~0,5%, sairaala ~1-2%. Jäljitettävyys varmistetaan: säännöllinen kalibrointi, ristiintarkistukset,"
+  },
+  {
+    "id": 808,
+    "subject_area": "Sädehoito",
+    "year": 2009,
+    "question_text": "Intensiteettimuokattu sädehoito (IMRT): periaate, hyöty ja haitat.",
+    "answer_length": 320,
+    "answer_preview": "Epätasaiset intensiteettijaumat → konformaalinen annosjakauma. Inversiosuunnittelu. MLC dynaaminen tai step-and-shoot. VMAT yhdistää gantryn pyörimisen ja MLC-modulaation. Hyödyt: parempi konformaalisuus, OAR-säästö, konkaavimuotoiset kohteet. Haitat: suurempi matala-annos-alue, monimutkaisempi QA, "
+  },
+  {
+    "id": 810,
+    "subject_area": "Sädehoito",
+    "year": 2010,
+    "question_text": "Sädehoidossa olevat fotonikentän laskenta-algoritmit",
+    "answer_length": 214,
+    "answer_preview": "Korjauspohjaiset (vanhentuneet), pencil beam, collapsed cone convolution, AAA, Acuros XB (LBTE), Monte Carlo. Tarkkuus paranee monimutkaisemmilla algoritmeilla erityisesti heterogeenisuuksissa ja pienissä kentissä."
+  },
+  {
+    "id": 818,
+    "subject_area": "Sädehoito",
+    "year": 2014,
+    "question_text": "Ionisaatiokammion käyttöperiaate absoluuttiannoksen mittauksessa sekä tarvittavat korjauskertoimet absorboituneen annoksen saamiseksi fotonikeilassa ja elektronikeilassa",
+    "answer_length": 28,
+    "answer_preview": "Ks. vastaus kysymyksessä 48."
+  },
+  {
+    "id": 823,
+    "subject_area": "Sädehoito",
+    "year": 2014,
+    "question_text": "Hengitystahdistettu PET-tutkimus ja sen käyttö sädehoidon annossuunnitelun tukena",
+    "answer_length": 1167,
+    "answer_preview": "Ongelma: Hengitysliike aiheuttaa PET-kuvissa liikkuvien kohteiden sumentumisen, koon yliarvioinnin ja SUV-arvojen aliarvioinnin (partial volume -efekti pahentuu).\n\nHengitystahdistettu PET (respiratory-gated PET / 4D-PET): Hengityssignaali (bellows, RPM, spirometri) tallentaan PET-kuvauksen aikana. D"
+  },
+  {
+    "id": 826,
+    "subject_area": "Sädehoito",
+    "year": 2015,
+    "question_text": "Liikkeen hallinta sädehoidossa",
+    "answer_length": 1116,
+    "answer_preview": "Sydämentahdistimen (PM) tai defibrillaattorin (ICD) kanssa sädehoidossa tulee huomioida:\n\nRiskit: Suora säteilyn aiheuttama vaurio elektroniikassa (erityisesti CMOS-komponentit), EMI (elektromagneettinen interferenssi kiihdyttimestä), neutronisäteily (>10 MV), tahdistimen johtojen lämmittyminen (MRI"
+  },
+  {
+    "id": 828,
+    "subject_area": "Sädehoito",
+    "year": 2015,
+    "question_text": "KKTT diagnostiikassa ja sädehoidon kohdennuksessa: periaate, potilasannos ja kuvan sisältämä informaatio7",
+    "answer_length": 777,
+    "answer_preview": "Ks. radiologian alan vastaus kysymyksessä 86 (KKTT). Sädehoidon erityispiirteet:\n\nKKTT (kV-CBCT) sädehoidossa: Integroitu lineaarikiihdyttimeen, potilaan 3D-kuvaus hoitopöydällä ennen hoitokertaa. Rekisteröinti suunnittelu-CT:hen → asettelunkorjaus. Annos: 10-30 mGy per kuvasarja, kumuloituu 30+ fra"
+  },
+  {
+    "id": 832,
+    "subject_area": "Sädehoito",
+    "year": 2016,
+    "question_text": "Kerro kuvantamismahdollisuuksista sädehoitofraktion aikaisen liikkeen havaitsemiseksi",
+    "answer_length": 1104,
+    "answer_preview": "1) MV-kuvaus (EPID): Hoitokeilan kuva reaaliaikaisesti. Rajallinen kontrasti, mutta näkee luiset maamerkit ja implantoidut markerit.\n\n2) kV-kuvaus: Jatkuva tai toistuva kV-kuvaus hoitokeilaan nähden ortogonaalisti. Parempi kontrasti kuin MV. Fluoroskopia tai stereokuvaparit.\n\n3) CBCT intra-fraction:"
+  },
+  {
+    "id": 835,
+    "subject_area": "Sädehoito",
+    "year": 2017,
+    "question_text": "Pään ja vartalon alueiden stereotaktisen sädehoidon suunnittelyu ja toteutus",
+    "answer_length": 28,
+    "answer_preview": "Ks. vastaus kysymyksessä 65."
+  },
+  {
+    "id": 839,
+    "subject_area": "Sädehoito",
+    "year": 2017,
+    "question_text": "Jälkilatauslaitteen laadunvarmistusohjelma",
+    "answer_length": 915,
+    "answer_preview": "Päivittäin (hoitopäivinä): Lähteen ohjausmekanismin toiminta (dummy run). Hätäjärjestelmien testaus. Säteilymittarin toiminta. Ovien lukitukset ja aluemonitorit.\n\nViikottain: Lähteen position tarkkuus (autoradiografia tai kameramittaus, ±1 mm toleranssi). Timer-tarkkuus.\n\nLähteenvaihdon yhteydessä ("
+  },
+  {
+    "id": 840,
+    "subject_area": "Sädehoito",
+    "year": 2018,
+    "question_text": "Lineaarikiihdyttimen vastaanottomittaukset ja annosjakaumatiedon keräys annossuunnittelujärjestelmään",
+    "answer_length": 832,
+    "answer_preview": "Ks. vastaus kysymyksessä 28 (käyttöönottomittaukset).\n\nTPS:n keilamallin luominen vaatii kattavan mittausaineiston:\n\nFotonikeila: PDD-käyrät (kaikki energiat, kenttäkoot 3×3 → 40×40 cm²). Profiilit useilla syvyyksillä (d_max, 5, 10, 20, 30 cm). Output factors Scp. MLC-transmissio ja DLG (dosimetric "
+  },
+  {
+    "id": 841,
+    "subject_area": "Sädehoito",
+    "year": 2018,
+    "question_text": "Kartiokeilatomografialaitteiden säteilyannoksen ja kuvanlaadun optimointi sädehoidossa",
+    "answer_length": 28,
+    "answer_preview": "Ks. vastaus kysymyksessä 68."
+  },
+  {
+    "id": 846,
+    "subject_area": "Sädehoito",
+    "year": 2019,
+    "question_text": "Miten vaikuttavat sädehoidon kasvainvasteeseen ja terveen kudoksen reaktioihin seuraavat tekijät: kokonaisannos, kerta-annos (fraktioannos), kokonaishoitoaika ja sädefraktioiden väliaika",
+    "answer_length": 1121,
+    "answer_preview": "Kokonaisannos: Suurempi annos → suurempi TCP (kasvainkontrolli) mutta myös suurempi NTCP (komplikaatioriski). Terapeuttinen ikkuna: TCP-käyrän ja NTCP-käyrän välinen ero. Annoksen eskaalaatio mahdollista, kun NTCP pysyy hyväksyttävänä.\n\nFraktioannos: Suuri fraktioannos vaikuttaa enemmän myöhään reag"
+  },
+  {
+    "id": 848,
+    "subject_area": "Sädehoito",
+    "year": 2019,
+    "question_text": "Brakyterapian laadunvarmistustoimenpiteet lähteen vaihdon jälkeen",
+    "answer_length": 716,
+    "answer_preview": "Ks. vastaus kysymyksessä 69 (lähteenvaihdon yhteydessä tehtävät testit).\n\nKriittiset toimenpiteet lähteen vaihdon jälkeen:\n 1) Lähteen aktiivisuuden verifiointi: Mittaus kuulujakammiolla tai Farmer-kammiolla tunnetussa geometriassa. Vertailu valmistajan sertifikaattiin (±3%).\n 2) Lähteen position ta"
+  },
+  {
+    "id": 849,
+    "subject_area": "Sädehoito",
+    "year": 2019,
+    "question_text": "Hengityspidätys ja hengitystahdistus sädehoidossa",
+    "answer_length": 821,
+    "answer_preview": "Ks. vastaus kysymyksessä 56 (Liikkeen hallinta sädehoidossa).\n\nDIBH (Deep Inspiration Breath Hold): Potilas hengittää syvään ja pidättää hengitystä säteilytyksen ajan. Monitorointi: RPM, Varian RGSC, AlignRT, spirometri. Toleranssi-ikkuna (gating window) määrittelee hyväksyttävän sisäänhengityksen t"
+  },
+  {
+    "id": 852,
+    "subject_area": "Sädehoito",
+    "year": 2020,
+    "question_text": "Sädetyksen paikan monitorointi hoidon aikana",
+    "answer_length": 206,
+    "answer_preview": "Ks. vastaus kysymyksessä 62 (Kuvantaminen fraktion aikaisen liikkeen havaitsemiseksi). Sama aihe. Menetelmät: MV/kV-kuvaus, CBCT, pintaseuranta, implantoidut markerit, sähkömagneettinen paikannus, MR-linac."
+  },
+  {
+    "id": 853,
+    "subject_area": "Sädehoito",
+    "year": 2020,
+    "question_text": "Lineaarikiihdyttimen moniliuskarajaimen suorituskyvyn vaikutus annosjakaumaan",
+    "answer_length": 1350,
+    "answer_preview": "MLC:n ominaisuudet ja vaikutukset:\n\n1) Lehden leveys: Kapeammat lehdet (2,5–5 mm isosentritasossa) tuottavat tarkempia kenttämuotoja ja paremman PTV-konformaalisuuden. Leveämmät lehdet (10 mm) nopeampia ja yksinkertaisempia mutta rajoittavat konformaalisuutta.\n\n2) Lehden pään muotoilu (leaf tip): Py"
+  },
+  {
+    "id": 854,
+    "subject_area": "Sädehoito",
+    "year": 2020,
+    "question_text": "SPECT-TT, PET-TT ja MRI kuvantaminen sädehoidossa",
+    "answer_length": 1020,
+    "answer_preview": "SPECT-TT: Funktionaalinen kuvantaminen + anatominen CT. Sädehoidossa: ⁹⁹ᵐTc-MAA keuhkoperfuusio → keuhkon funktionaalisten alueiden huomiointi suunnitelmassa. ⁹⁹ᵐTc-DMSA munuaiskortikaalinen toiminta. Rajoitus: matala spatiaalinen resoluutio.\n\nPET-TT: ¹⁸F-FDG metabolinen aktiivisuus → GTV:n rajaus ("
+  },
+  {
+    "id": 855,
+    "subject_area": "Sädehoito",
+    "year": 2020,
+    "question_text": "Lineaarikiihdyttimen fotoni- ja elektronikenttien muotoilutavat",
+    "answer_length": 1203,
+    "answer_preview": "Fotonikentät:\n 1) Leuat (jaws): Primäärinen kenttäkoon rajaus. Kaksi paria (X ja Y), tyypillisesti 0,5–40 cm isosentritasossa. Asymmetriset leuat mahdollistavat puoli-kenttien käytön.\n 2) MLC (Multi-Leaf Collimator): 40-80 lehtiparia. Lehden leveys 2,5–10 mm isosentritasossa. Dynaaminen ja step-and-"
+  },
+  {
+    "id": 856,
+    "subject_area": "Sädehoito",
+    "year": 2020,
+    "question_text": "Metalliartefaktan vaikutus annokseen sädehoidossa, sekä korjausmahdollisuudet",
+    "answer_length": 28,
+    "answer_preview": "Ks. vastaus kysymyksessä 55."
+  },
+  {
+    "id": 857,
+    "subject_area": "Sädehoito",
+    "year": 2021,
+    "question_text": "Miten vertailet eri fraktiointien biologista vaikutusta",
+    "answer_length": 889,
+    "answer_preview": "BED (Biologically Effective Dose): BED = nd(1 + d/(α/β)), missä n = fraktioiden lukumäärä, d = fraktioannos.\n\nEQD2 (Equivalent Dose in 2 Gy fractions): EQD2 = BED / (1 + 2/(α/β)) = D × (d + α/β) / (2 + α/β).\n\nVertailu esimerkeillä (α/β = 10 Gy kasvaimelle, α/β = 3 Gy myöhään reagoivalle kudokselle):"
+  },
+  {
+    "id": 858,
+    "subject_area": "Sädehoito",
+    "year": 2021,
+    "question_text": "Kaksoisenergia TT sädehoidon suunnittelussa",
+    "answer_length": 984,
+    "answer_preview": "DECT sädehoidossa: Kaksi eri energiaa antavat tietoa materiaalin koostumuksesta pelkän elektronidensiteetin lisäksi.\n\nHyödyt annossuunnittelussa:\n 1) Tarkempi elektronidensiteetti: DECT mahdollistaa materiaalin erottelun (esim. luu vs. jodivarjoaine, pehmytkudos vs. kalsifikaatio) → tarkempi HU-ED-m"
+  },
+  {
+    "id": 859,
+    "subject_area": "Sädehoito",
+    "year": 2022,
+    "question_text": "Jälkilatauslaite. Toiminta, välineet, laitteet ja säteilyturvallisuus",
+    "answer_length": 833,
+    "answer_preview": "Ks. vastaus kysymyksessä 3 (jälkilataushoidon periaate) ja 11 (dosimetria).\n\nLaitteiston komponentit: Afterloader-yksikkö (lähdesäiliö, ohjausmekanismi, kanavayhteydet). Radioaktiivinen lähde: HDR ¹⁹²Ir (T₁/₂ = 73,8 d, E_avg = 0,38 MeV, tyypillinen aktiivisuus ~370 GBq), PDR ¹⁹²Ir (pienempi aktiivis"
+  },
+  {
+    "id": 860,
+    "subject_area": "Sädehoito",
+    "year": 2022,
+    "question_text": "Diagnostiset näytöt: Laadunvarmistus ja suoritusvälit",
+    "answer_length": 1100,
+    "answer_preview": "Diagnostisten näyttöjen laadunvarmistus on tärkeää sädehoidon kuvantamisessa ja kuvien tulkinnassa.\n\nTestit:\n 1) Luminanssi ja kontrastisuhde: Mittaus luminanssimittarilla. GSDF (DICOM Grayscale Standard Display Function) -vaatimuksen täyttyminen. Minimi- ja maksimiluminanssi. Luminansisuhde ≥250:1."
+  },
+  {
+    "id": 861,
+    "subject_area": "Sädehoito",
+    "year": 2022,
+    "question_text": "Ionisaatiokammion käyttöperiaatteet ja korjauskertoimet absoluuttiannosdosimetriassa",
+    "answer_length": 28,
+    "answer_preview": "Ks. vastaus kysymyksessä 48."
+  },
+  {
+    "id": 862,
+    "subject_area": "Sädehoito",
+    "year": 2022,
+    "question_text": "TT vs TT-simulaattori laadunvalvonnassa",
+    "answer_length": 825,
+    "answer_preview": "TT sädehoidon laadunvalvonnassa: CT-simulaattorin laadunvalvonta on kriittistä, koska CT-data on annossuunnittelun perusta. HU-arvojen tarkkuus → elektronidensiteetti → annoslaskennan tarkkuus. Geometrinen tarkkuus → kohdealueen ja riskielinten sijainnin oikeellisuus.\n\nTT-simulaattori vs. diagnostin"
+  },
+  {
+    "id": 863,
+    "subject_area": "Sädehoito",
+    "year": 2022,
+    "question_text": "Sädehoidon annosmittauksiin käytettävän mittalaitteiston laadunvarmistus",
+    "answer_length": 859,
+    "answer_preview": "Ionisaatiokammiot: Säännöllinen kalibrointi (2-3 v välein STUK:ssa tai vastaavassa). Ristiinkalibrointi sairaalan sisällä. Päivittäinen stabiilisuustarkistus (⁹⁰Sr/¹³⁷Cs check source tai kiihdyttimen referenssimittaus). Vuotovirran tarkistus. Polarisaatio- ja rekombinaatiotestit.\n\nElektrometrit: Vuo"
+  },
+  {
+    "id": 864,
+    "subject_area": "Sädehoito",
+    "year": 2022,
+    "question_text": "Metalliartefaktit sädehoidon suunnittelukuvauksissa",
+    "answer_length": 28,
+    "answer_preview": "Ks. vastaus kysymyksessä 55."
+  }
+]

@@ -13,29 +13,386 @@ This file contains all view functions organized by functionality:
 # =============================================================================
 # IMPORTS
 # =============================================================================
+from django.contrib.auth import login
+from django.db import models as db_models
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_GET
 from django.http import JsonResponse, HttpResponse
-from django.db.models import F, Max
-from django.shortcuts import render, get_object_or_404
-from .models import Section, EPA, Specialty
+from django.db.models import F, Max, Q
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Section, EPA, Specialty, ExamQuestion
 import json
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+
+# =============================================================================
+# AUTHENTICATION VIEWS
+# =============================================================================
+
+def register_view(request):
+    """User registration page."""
+    from .forms import RegistrationForm
+
+    if request.user.is_authenticated:
+        return redirect('frontpage')
+
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('frontpage')
+    else:
+        form = RegistrationForm()
+    return render(request, 'registration/register.html', {'form': form})
+
+
+def search_view(request):
+    """Full-text search across EPA sections and exam questions."""
+    import re
+    from django.utils.html import strip_tags
+
+    query = request.GET.get('q', '').strip()
+    sections = []
+    exam_questions = []
+
+    if query and len(query) >= 2:
+        sections = list(
+            Section.objects.filter(
+                Q(title__icontains=query) | Q(content__icontains=query)
+            ).select_related('epa', 'epa__specialty').order_by(
+                'epa__specialty__order', 'epa__order'
+            )[:50]
+        )
+        exam_questions = list(
+            ExamQuestion.objects.filter(
+                Q(question_text__icontains=query) | Q(model_answer__icontains=query)
+            ).order_by('-year')[:50]
+        )
+
+        # Build snippets for sections
+        for section in sections:
+            plain = strip_tags(section.content)
+            pos = plain.lower().find(query.lower())
+            if pos >= 0:
+                start = max(0, pos - 80)
+                end = min(len(plain), pos + len(query) + 120)
+                snippet = ('...' if start > 0 else '') + plain[start:end] + ('...' if end < len(plain) else '')
+                snippet = re.sub(
+                    re.escape(query), lambda m: f'<mark>{m.group()}</mark>', snippet, flags=re.IGNORECASE
+                )
+            else:
+                snippet = plain[:200] + ('...' if len(plain) > 200 else '')
+            section.snippet = snippet
+
+    return render(request, 'sisalto/search_results.html', {
+        'query': query,
+        'sections': sections,
+        'exam_questions': exam_questions,
+        'total': len(sections) + len(exam_questions),
+    })
+
 
 # =============================================================================
 # GENERAL PAGE VIEWS
 # =============================================================================
 
 def frontpage_view(request):
-	"""Main landing page view - TESTING NEW CKEDITOR"""
+	"""Main landing page view with statistics and navigation"""
+	from quiz.models import Question
+
+	# Statistics
+	epa_count = EPA.objects.exclude(
+		specialty__name__in=['Yleinen', 'Yleiset', 'raportoi_ongelma']
+	).count()
+	exam_question_count = ExamQuestion.objects.count()
+	model_answer_count = ExamQuestion.objects.exclude(model_answer='').count()
+	quiz_question_count = Question.objects.count()
+
+	# Specialties with EPA counts and colors
+	specialty_data = []
+	color_map = {
+		'Radiologia': '#60a5fa',
+		'Sädehoito': '#34d399',
+		'Isotooppilääketiede': '#a78bfa',
+		'Isotooppi': '#a78bfa',
+		'KNF': '#fb923c',
+		'Fysiologia': '#f87171',
+	}
+	icon_map = {
+		'Radiologia': 'fa-x-ray',
+		'Sädehoito': 'fa-radiation',
+		'Isotooppilääketiede': 'fa-atom',
+		'Isotooppi': 'fa-atom',
+		'KNF': 'fa-brain',
+		'Fysiologia': 'fa-heartbeat',
+	}
+	slug_map = {
+		'Radiologia': 'radiologia',
+		'Sädehoito': 'sadehoito',
+		'Isotooppilääketiede': 'isotooppikuvantaminen',
+		'Isotooppi': 'isotooppikuvantaminen',
+		'KNF': 'knf',
+		'Fysiologia': 'fysiologia',
+	}
+	exclude_names = ['Yleinen', 'Yleiset', 'raportoi_ongelma', 'Isotooppi']
+	for spec in Specialty.objects.exclude(name__in=exclude_names).order_by('order'):
+		epa_in_spec = EPA.objects.filter(specialty=spec).count()
+		if epa_in_spec > 0:
+			specialty_data.append({
+				'name': spec.name,
+				'epa_count': epa_in_spec,
+				'color': color_map.get(spec.name, '#60a5fa'),
+				'icon': icon_map.get(spec.name, 'fa-book'),
+				'slug': slug_map.get(spec.name, spec.slug),
+			})
+
+	return render(request, 'sisalto/frontpage_new.html', {
+		'page_title': 'Etusivu',
+		'epa_count': epa_count,
+		'exam_question_count': exam_question_count,
+		'model_answer_count': model_answer_count,
+		'quiz_question_count': quiz_question_count,
+		'specialty_count': len(specialty_data),
+		'specialties': specialty_data,
+	})
+
+def modaliteetit_view(request):
+	"""Modalities theory listing page"""
+	modalities = [
+		{
+			'name': 'Radiologia',
+			'description': 'Natiivikuvantaminen, TT, MRI, läpivalaisu, mammografia, ultraääni, näytöt, hammas, säteilysuojelu',
+			'count': 9,
+			'url': '/modaliteetit/radiologia/',
+			'color': '#60a5fa',
+			'icon': 'fa-x-ray',
+			'available': True,
+		},
+		{
+			'name': 'Sädehoito',
+			'description': 'Peruskäsitteet, kuvantaminen, ulkoinen, sisäinen, dosimetria, laitteet, säteilybiologia',
+			'count': 7,
+			'url': '/modaliteetit/sadehoito/',
+			'color': '#34d399',
+			'icon': 'fa-radiation',
+			'available': True,
+		},
+		{
+			'name': 'Isotooppilääketiede',
+			'description': 'Gammakamera, PET, radiofarmasia, SPET, radionuklidihoidot, säteilysuojelu',
+			'count': 7,
+			'url': '/modaliteetit/isotooppi/',
+			'color': '#a78bfa',
+			'icon': 'fa-atom',
+			'available': True,
+		},
+		{
+			'name': 'Kliininen neurofysiologia',
+			'description': 'EEG, herätepotentiaali, ENMG, TMS, uni, IOM',
+			'count': 6,
+			'url': '#',
+			'color': '#fb923c',
+			'icon': 'fa-brain',
+			'available': False,
+		},
+		{
+			'name': 'Kliininen fysiologia',
+			'description': 'EKG, verenkierto, keuhkofunktio, GI-kanava, DXA',
+			'count': 5,
+			'url': '#',
+			'color': '#f87171',
+			'icon': 'fa-heartbeat',
+			'available': False,
+		},
+	]
+	return render(request, 'sisalto/modaliteetit/index.html', {
+		'page_title': 'Modaliteetit',
+		'modalities': modalities,
+	})
+
+
+def modaliteetit_radiologia_view(request):
+	"""Radiologia theory page with tabs for each sub-modality"""
+	import random as _random  # noqa: F811
+	spec = Specialty.objects.filter(name__icontains='Radiolog').first()
+	tab_epa_map = {}
+	if spec:
+		epas = EPA.objects.filter(specialty=spec)
+		TAB_TITLES = {
+			'natiivi': 'Natiivikuvantaminen',
+			'tt': 'Tietokonetomografia',
+			'mri': 'Magneettikuvaus',
+			'lapivalaisu': 'Läpivalaisu',
+			'mammografia': 'Mammografia',
+			'ultraaani': 'Ultraääni',
+			'naytot': 'Kuvankatselunäytöt',
+			'hammas': 'Hammaskuvantaminen',
+			'sateilysuojelu': 'Säteilybiologia',
+		}
+		for tab_id, title_prefix in TAB_TITLES.items():
+			epa = epas.filter(title__istartswith=title_prefix).first()
+			if epa:
+				tab_epa_map[tab_id] = epa.id
+	return render(request, 'sisalto/modaliteetit/radiologia.html', {
+		'page_title': 'Radiologian teoria',
+		'tab_epa_map': json.dumps(tab_epa_map),
+	})
+
+
+def modaliteetit_sadehoito_view(request):
+	"""Sädehoito theory page with tabs for each sub-modality"""
+	spec = Specialty.objects.filter(name__icontains='dehoito').first()
+	tab_epa_map = {}
+	if spec:
+		epas = EPA.objects.filter(specialty=spec)
+		TAB_TITLES = {
+			'peruskasitteet': 'Peruskäsitteet',
+			'kuvantaminen': 'Kuvantaminen',
+			'ulkoinen': 'Ulkoinen',
+			'sisainen': 'Sisäinen',
+			'dosimetria': 'Dosimetria',
+			'laitteet': 'Laitteet',
+			'sateilybiologia': 'Säteilybiologia',
+		}
+		for tab_id, title_prefix in TAB_TITLES.items():
+			epa = epas.filter(title__istartswith=title_prefix).first()
+			if epa:
+				tab_epa_map[tab_id] = epa.id
+
+	return render(request, 'sisalto/modaliteetit/sadehoito.html', {
+		'page_title': 'Sädehoidon teoria',
+		'tab_epa_map': json.dumps(tab_epa_map),
+	})
+
+
+def modaliteetit_isotooppi_view(request):
+	"""Isotooppilääketiede theory page with tabs for each sub-modality"""
+	return render(request, 'sisalto/modaliteetit/isotooppi.html', {
+		'page_title': 'Isotooppilääketieteen teoria',
+	})
+
+
+def modaliteetit_fysiologia_view(request):
+	"""Kliininen fysiologia theory page with tabs for each sub-modality"""
+	spec = Specialty.objects.filter(name__icontains='fysiolog').first()
+	tab_epa_map = {}
+	if spec:
+		epas = EPA.objects.filter(specialty=spec)
+		TAB_TITLES = {
+			'ekg': 'EKG',
+			'verenkierto': 'Verenkierto',
+			'keuhkofunktio': 'Keuhkofunktio',
+			'gi': 'GI-kanavan',
+			'dxa': 'Luuston',
+		}
+		for tab_id, title_prefix in TAB_TITLES.items():
+			epa = epas.filter(title__istartswith=title_prefix).first()
+			if epa:
+				tab_epa_map[tab_id] = epa.id
+
+	return render(request, 'sisalto/modaliteetit/fysiologia.html', {
+		'page_title': 'Kliinisen fysiologian teoria',
+		'tab_epa_map': json.dumps(tab_epa_map),
+	})
+
+
+# =============================================================================
+# THEORY QUIZ API (inline quiz on theory pages)
+# =============================================================================
+
+@require_GET
+def theory_quiz_question(request, epa_id):
+	"""Return a random MCQ question for the given EPA."""
+	import random
+	from quiz.models import Question
+
+	questions = Question.objects.filter(
+		epa_id=epa_id,
+		question_type__in=['multiple_choice', 'multi_select'],
+		is_active=True,
+	)
+	# Exclude already-answered questions (session-based)
+	session_key = f'theory_quiz_answered_{epa_id}'
+	answered = request.session.get(session_key, [])
+	pool = questions.exclude(id__in=answered)
+	if not pool.exists():
+		# All questions answered — reset pool
+		request.session[session_key] = []
+		answered = []
+		pool = questions
+
+	question = pool.order_by('?').first()
+	if not question:
+		return JsonResponse({'error': 'Ei kysymyksiä'}, status=404)
+
+	choices = list(question.choices.all().values('id', 'text', 'order'))
+	random.shuffle(choices)
+
+	return JsonResponse({
+		'question_id': question.id,
+		'question_type': question.question_type,
+		'text': question.text,
+		'choices': choices,
+		'total_available': questions.count(),
+		'answered_count': len(answered),
+	})
+
+
+@require_POST
+def theory_quiz_answer(request):
+	"""Check the user's answer and return results."""
+	from quiz.models import Question
+
 	try:
-		from .models import FrontPage, Specialty
-		page = FrontPage.objects.first()
-		specialties = Specialty.objects.all()
-	except:
-		page = None
-		specialties = []
-	# Use new template for testing
-	return render(request, 'sisalto/frontpage_new.html', {'page': page, 'specialties': specialties})
+		data = json.loads(request.body)
+	except json.JSONDecodeError:
+		return JsonResponse({'error': 'Invalid JSON'}, status=400)
+
+	question_id = data.get('question_id')
+	selected_ids = data.get('selected_ids', [])
+
+	if not question_id or not selected_ids:
+		return JsonResponse({'error': 'Missing data'}, status=400)
+
+	try:
+		question = Question.objects.get(id=question_id, is_active=True)
+	except Question.DoesNotExist:
+		return JsonResponse({'error': 'Question not found'}, status=404)
+
+	choices = question.choices.all()
+	correct_ids = set(choices.filter(is_correct=True).values_list('id', flat=True))
+	selected_set = set(int(x) for x in selected_ids)
+	is_correct = (selected_set == correct_ids)
+
+	# Track in session
+	session_key = f'theory_quiz_answered_{question.epa_id}'
+	answered = request.session.get(session_key, [])
+	if question_id not in answered:
+		answered.append(question_id)
+		request.session[session_key] = answered
+	request.session.modified = True
+
+	# Update question stats
+	question.times_answered += 1
+	if is_correct:
+		question.times_correct += 1
+	question.save(update_fields=['times_answered', 'times_correct'])
+
+	choice_results = [{
+		'id': c.id,
+		'text': c.text,
+		'is_correct': c.is_correct,
+		'was_selected': c.id in selected_set,
+		'explanation': c.explanation or '',
+	} for c in choices]
+
+	return JsonResponse({
+		'is_correct': is_correct,
+		'explanation': question.explanation or '',
+		'choices': choice_results,
+	})
+
 
 def specialty_list_view(request):
 	"""List all medical specialties"""
@@ -47,49 +404,249 @@ def specialty_detail_view(request, specialty_id):
 	specialty = get_object_or_404(Specialty, id=specialty_id)
 	return render(request, 'sisalto/specialty_detail.html', {'specialty': specialty})
 
+_EPA_URL_CACHE = None
+
+def _build_epa_url_cache():
+	"""Build EPA (specialty_name, title) → canonical URL mapping from URL config."""
+	import inspect, re
+	from django.urls import get_resolver, reverse
+
+	cache = {}
+	resolver = get_resolver()
+	prefixes = ['radiologia', 'sadehoito', 'isotooppi', 'knf', 'fysiologia']
+	skip = ['add_', 'edit_', 'delete_', 'update_', '_epas', '_subpages']
+
+	patterns = list(resolver.url_patterns)
+	for pattern in patterns:
+		if hasattr(pattern, 'url_patterns'):
+			patterns.extend(pattern.url_patterns)
+			continue
+		name = getattr(pattern, 'name', '') or ''
+		if not any(name.startswith(p + '_') for p in prefixes):
+			continue
+		if any(k in name for k in skip):
+			continue
+		try:
+			source = inspect.getsource(pattern.callback)
+			spec_m = re.search(r'get_or_create\(name=["\'](.+?)["\']', source)
+			title_m = re.search(r'title=["\'](.+?)["\']', source)
+			if spec_m and title_m:
+				cache[(spec_m.group(1), title_m.group(1))] = reverse(name)
+		except Exception:
+			pass
+	return cache
+
+
 def epa_detail_view(request, epa_id):
-	"""Show details for a specific EPA"""
+	"""Redirect to specialty-specific EPA page, or render generic template."""
+	global _EPA_URL_CACHE
 	epa = get_object_or_404(EPA, id=epa_id)
+
+	# Try redirect to canonical specialty URL
+	if _EPA_URL_CACHE is None:
+		_EPA_URL_CACHE = _build_epa_url_cache()
+	canonical = _EPA_URL_CACHE.get((epa.specialty.name, epa.title))
+	if canonical:
+		return redirect(canonical)
+
+	# Fallback: render generic template
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/epa_detail.html', {'epa': epa, 'sections': sections})
+	return render(request, 'sisalto/epa_detail.html', {
+		'page_title': epa.title,
+		'epa': epa,
+		'sections': sections,
+	})
+
+
+@csrf_exempt
+def generic_add_section_view(request, epa_id):
+	"""Generic add section endpoint for /epa/<id>/"""
+	return add_section_view(request)
+
+
+@csrf_exempt
+def generic_edit_section_view(request, epa_id):
+	"""Generic edit section endpoint for /epa/<id>/"""
+	return edit_section_view(request)
+
+
+@csrf_exempt
+def generic_delete_section_view(request, epa_id):
+	"""Generic delete section endpoint for /epa/<id>/"""
+	return delete_section_view(request)
+
+
+@csrf_exempt
+def generic_update_proficiency_view(request, epa_id):
+	"""Generic update proficiency endpoint for /epa/<id>/"""
+	return update_proficiency_view(request)
+
 
 def examquestion_list_view(request):
-	"""List exam questions"""
+	"""List exam questions grouped by modality."""
+	from collections import OrderedDict
+	from .models import ExamQuestion
+
+	questions = ExamQuestion.objects.all().order_by('-year', 'exam_date', 'question_number')
+
+	# Group by subject_area
+	modality_order = [
+		'Radiologia', 'Sädehoito', 'Isotooppilääketiede', 'KNF',
+		'Fysiologia', 'Kliininen fysiologia', 'Anatomia',
+		'Sädehoito/Kuvantaminen', '',
+	]
+	modality_icons = {
+		'Radiologia': 'fa-x-ray',
+		'Sädehoito': 'fa-radiation',
+		'Isotooppilääketiede': 'fa-atom',
+		'KNF': 'fa-brain',
+		'Fysiologia': 'fa-heartbeat',
+		'Kliininen fysiologia': 'fa-stethoscope',
+		'Anatomia': 'fa-bone',
+		'Sädehoito/Kuvantaminen': 'fa-camera',
+		'': 'fa-question-circle',
+	}
+	modality_colors = {
+		'Radiologia': '#3498db',
+		'Sädehoito': '#e74c3c',
+		'Isotooppilääketiede': '#9b59b6',
+		'KNF': '#e67e22',
+		'Fysiologia': '#2ecc71',
+		'Kliininen fysiologia': '#1abc9c',
+		'Anatomia': '#f1c40f',
+		'Sädehoito/Kuvantaminen': '#e74c3c',
+		'': '#7f8c8d',
+	}
+
+	grouped = OrderedDict()
+	for area in modality_order:
+		area_questions = [q for q in questions if q.subject_area == area]
+		if area_questions:
+			label = area if area else 'Luokittelematon'
+			model_answer_count = len([q for q in area_questions if q.model_answer])
+			grouped[label] = {
+				'questions': area_questions,
+				'count': len(area_questions),
+				'model_answer_count': model_answer_count,
+				'icon': modality_icons.get(area, 'fa-question-circle'),
+				'color': modality_colors.get(area, '#7f8c8d'),
+			}
+
+	# Stats
+	years = [q.year for q in questions if q.year]
+	years_range = f"{min(years)}-{max(years)}" if years else "N/A"
+	model_answer_count = len([q for q in questions if q.model_answer])
+
+	return render(request, 'sisalto/examquestion_list.html', {
+		'grouped': grouped,
+		'total_count': questions.count(),
+		'modality_count': len(grouped),
+		'model_answer_count': model_answer_count,
+		'years_range': years_range,
+	})
+
+def examquestion_area_view(request, area_slug):
+	"""List exam questions for a specific subject area."""
+	from .models import ExamQuestion
+
+	# Map slugs to subject areas
+	slug_to_area = {
+		'radiologia': 'Radiologia',
+		'sadehoito': 'Sädehoito',
+		'isotooppilaaketiede': 'Isotooppilääketiede',
+		'knf': 'KNF',
+		'fysiologia': 'Fysiologia',
+		'kliininen-fysiologia': 'Kliininen fysiologia',
+		'anatomia': 'Anatomia',
+		'anatomia-fysiologia': 'Anatomia/Fysiologia',
+		'kliininen-neurofysiologia': 'Kliininen neurofysiologia',
+	}
+
+	area_name = slug_to_area.get(area_slug)
+	if not area_name:
+		return render(request, 'sisalto/examquestion_list.html', {
+			'error': f'Aihealuetta "{area_slug}" ei loydy',
+		})
+
+	# Get questions for this area
+	questions = ExamQuestion.objects.filter(
+		subject_area=area_name
+	).order_by('-year', 'exam_date', 'question_number')
+
+	modality_icons = {
+		'Radiologia': 'fa-x-ray',
+		'Sädehoito': 'fa-radiation',
+		'Isotooppilääketiede': 'fa-atom',
+		'KNF': 'fa-brain',
+		'Fysiologia': 'fa-heartbeat',
+		'Kliininen fysiologia': 'fa-stethoscope',
+		'Anatomia': 'fa-bone',
+		'Anatomia/Fysiologia': 'fa-bone',
+		'Kliininen neurofysiologia': 'fa-brain',
+	}
+	modality_colors = {
+		'Radiologia': '#3498db',
+		'Sädehoito': '#e74c3c',
+		'Isotooppilääketiede': '#9b59b6',
+		'KNF': '#e67e22',
+		'Fysiologia': '#2ecc71',
+		'Kliininen fysiologia': '#1abc9c',
+		'Anatomia': '#f1c40f',
+		'Anatomia/Fysiologia': '#f1c40f',
+		'Kliininen neurofysiologia': '#e67e22',
+	}
+
+	years = [q.year for q in questions if q.year]
+	years_range = f"{min(years)}-{max(years)}" if years else "N/A"
+
+	return render(request, 'sisalto/examquestion_area.html', {
+		'area_name': area_name,
+		'area_slug': area_slug,
+		'questions': questions,
+		'icon': modality_icons.get(area_name, 'fa-question-circle'),
+		'color': modality_colors.get(area_name, '#7f8c8d'),
+		'total_count': questions.count(),
+		'years_range': years_range,
+	})
+
+def table_questions_view(request):
+	"""Modern table view for exam questions"""
 	try:
 		from .models import ExamQuestion
 		questions = ExamQuestion.objects.all().order_by('-year', 'exam_date', 'question_number')
-		
-		# Lisätään tilastotietoja
-		subject_areas = ExamQuestion.objects.values_list('subject_area', flat=True).distinct()
-		years_range = ExamQuestion.objects.values_list('year', flat=True).distinct().order_by('year')
-		years_range = [year for year in years_range if year is not None]
-		
-		context = {
-			'questions': questions,
-			'subject_areas_count': len(subject_areas),
-			'years_range': f"{min(years_range)}-{max(years_range)}" if years_range else "N/A"
-		}
 	except:
-		context = {
-			'questions': [],
-			'subject_areas_count': 0,
-			'years_range': "N/A"
-		}
-	return render(request, 'sisalto/examquestion_list.html', context)
+		questions = []
+	
+	return render(request, 'sisalto/table_questions.html', {'questions': questions})
 
 def exam_practice_view(request):
-	"""Tenttikysymysten harjoittelusivu"""
+	"""Tenttikysymysten harjoittelusivu - yksittainen tai satunnainen kysymys."""
 	from .models import ExamQuestion
-	
-	# Haetaan kaikki vuodet dropdown-valikkoa varten
-	years = ExamQuestion.objects.values_list('year', flat=True).distinct().order_by('-year')
-	years = [year for year in years if year is not None]
-	
-	context = {
-		'page_title': 'Tenttikysymysten harjoittelu',
-		'years': years
-	}
-	return render(request, 'sisalto/exam_practice.html', context)
+
+	question_id = request.GET.get('question')
+	question = None
+	if question_id:
+		try:
+			question = ExamQuestion.objects.get(id=int(question_id))
+		except (ExamQuestion.DoesNotExist, ValueError):
+			pass
+
+	# If no specific question, pick a random one
+	if not question:
+		question = ExamQuestion.objects.order_by('?').first()
+
+	# Get next/prev for navigation
+	next_q = None
+	prev_q = None
+	if question:
+		next_q = ExamQuestion.objects.filter(id__gt=question.id).order_by('id').first()
+		prev_q = ExamQuestion.objects.filter(id__lt=question.id).order_by('-id').first()
+
+	return render(request, 'sisalto/exam_practice.html', {
+		'question': question,
+		'next_q': next_q,
+		'prev_q': prev_q,
+	})
 
 @csrf_exempt
 def generate_exam_view(request):
@@ -197,9 +754,101 @@ def submit_exam_answers_view(request):
 	
 	return JsonResponse({'success': False})
 
+
+@require_POST
+def ai_evaluate_exam_answer(request):
+    """API endpoint for AI evaluation of a single exam answer."""
+    import uuid
+    from django.utils import timezone
+    from .models import ExamQuestion, ExamAnswer
+    from .ai_evaluator import evaluate_exam_answer
+
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Virheellinen pyyntö.'}, status=400)
+
+    question_id = data.get('question_id')
+    user_answer = data.get('answer', '').strip()
+    self_score = data.get('self_score')
+
+    if not question_id or not user_answer:
+        return JsonResponse({'error': 'Kysymys ja vastaus vaaditaan.'}, status=400)
+
+    if len(user_answer) < 10:
+        return JsonResponse({'error': 'Vastaus on liian lyhyt arvioitavaksi.'}, status=400)
+
+    try:
+        question = ExamQuestion.objects.get(id=question_id)
+    except ExamQuestion.DoesNotExist:
+        return JsonResponse({'error': 'Kysymystä ei löydy.'}, status=404)
+
+    if not question.model_answer:
+        return JsonResponse({'error': 'Tällä kysymyksellä ei ole mallivastausta.'}, status=400)
+
+    user_id = request.user.id if request.user.is_authenticated else None
+
+    result = evaluate_exam_answer(
+        question_text=question.question_text,
+        model_answer=question.model_answer,
+        user_answer=user_answer,
+        subject_area=question.subject_area,
+        user_id=user_id,
+    )
+
+    if 'error' in result:
+        status_code = 429 if result.get('rate_limited') else 500
+        return JsonResponse({'error': result['error']}, status=status_code)
+
+    # Save to database — use simulation session_id if provided
+    sim_session = request.headers.get('X-Simulation-Session', '')
+    answer_session_id = sim_session if sim_session else str(uuid.uuid4())
+    ExamAnswer.objects.create(
+        session_id=answer_session_id,
+        question=question,
+        user=request.user if request.user.is_authenticated else None,
+        user_answer=user_answer,
+        ai_score=result['score'],
+        ai_feedback=result['feedback'],
+        ai_strengths=result['strengths'],
+        ai_weaknesses=result['weaknesses'],
+        ai_suggestions=result['suggestions'],
+        ai_evaluated_at=timezone.now(),
+        self_score=self_score,
+    )
+
+    # Check for newly earned achievements
+    new_achievements = []
+    if request.user.is_authenticated:
+        from progress.achievement_checker import check_achievements
+        newly_earned = check_achievements(request.user)
+        new_achievements = [
+            {'name': a.name, 'icon': a.icon, 'xp_reward': a.xp_reward}
+            for a in newly_earned
+        ]
+
+    response_data = {
+        'success': True,
+        'score': result['score'],
+        'feedback': result['feedback'],
+        'strengths': result['strengths'],
+        'weaknesses': result['weaknesses'],
+        'suggestions': result['suggestions'],
+    }
+    if new_achievements:
+        response_data['new_achievements'] = new_achievements
+    return JsonResponse(response_data)
+
+
 def epas_view(request):
 	"""Main EPAs overview page"""
-	return render(request, 'sisalto/epas.html', {'page_title': 'EPA:t'})
+	from sisalto.models import Specialty
+	valid_names = ['Radiologia', 'Sädehoito', 'Isotooppilääketiede', 'KNF', 'Fysiologia']
+	specialties = Specialty.objects.filter(name__in=valid_names).prefetch_related('epas')
+	return render(request, 'sisalto/epas.html', {
+		'page_title': 'EPA:t',
+		'specialties': specialties
+	})
 
 # =============================================================================
 # EPA LISTING VIEWS BY SPECIALTY
@@ -241,14 +890,14 @@ def fysiologia_epas_view(request):
 
 def radiologia_subpages_view(request):
 	"""Radiologia overview page with links to sub-specialties"""
-	return render(request, 'sisalto/radiologia_subpages.html', {'page_title': 'Radiologian alisivut'})
+	return render(request, 'sisalto/radiologia/radiologia_subpages.html', {'page_title': 'Radiologian alisivut'})
 
 def radiologia_lapivalaisu_angiografia_view(request):
 	"""Läpivalaisu ja angiografia EPA page"""
 	specialty, _ = Specialty.objects.get_or_create(name="Radiologia")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="Läpivalaisu ja angiografia (ml kardiologia)")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/radiologia_lapivalaisu_angiografia.html', {
+	return render(request, 'sisalto/radiologia/radiologia_lapivalaisu_angiografia.html', {
 		'page_title': 'Läpivalaisu ja angiografia (ml kardiologia)',
 		'epa': epa,
 		'sections': sections
@@ -259,7 +908,7 @@ def radiologia_magneettikuvaus_view(request):
 	specialty, _ = Specialty.objects.get_or_create(name="Radiologia")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="Magneettikuvaus")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/radiologia_magneettikuvaus.html', {
+	return render(request, 'sisalto/radiologia/radiologia_magneettikuvaus.html', {
 		'page_title': 'Magneettikuvaus',
 		'epa': epa,
 		'sections': sections
@@ -270,7 +919,7 @@ def radiologia_mammografia_view(request):
 	specialty, _ = Specialty.objects.get_or_create(name="Radiologia")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="Mammografia")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/radiologia_mammografia.html', {
+	return render(request, 'sisalto/radiologia/radiologia_mammografia.html', {
 		'page_title': 'Mammografia',
 		'epa': epa,
 		'sections': sections
@@ -281,7 +930,7 @@ def radiologia_natiivikuvantaminen_view(request):
 	specialty, _ = Specialty.objects.get_or_create(name="Radiologia")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="Natiivikuvantaminen")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/radiologia_natiivikuvantaminen.html', {
+	return render(request, 'sisalto/radiologia/radiologia_natiivikuvantaminen.html', {
 		'page_title': 'Natiivikuvantaminen',
 		'epa': epa,
 		'sections': sections
@@ -292,7 +941,7 @@ def radiologia_tietokonetomografia_view(request):
 	specialty, _ = Specialty.objects.get_or_create(name="Radiologia")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="Tietokonetomografia")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/radiologia_tietokonetomografia.html', {
+	return render(request, 'sisalto/radiologia/radiologia_tietokonetomografia.html', {
 		'page_title': 'Tietokonetomografia',
 		'epa': epa,
 		'sections': sections
@@ -303,7 +952,7 @@ def radiologia_ultraaani_view(request):
 	specialty, _ = Specialty.objects.get_or_create(name="Radiologia")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="Ultraääni")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/radiologia_ultraaani.html', {
+	return render(request, 'sisalto/radiologia/radiologia_ultraaani.html', {
 		'page_title': 'Ultraääni',
 		'epa': epa,
 		'sections': sections
@@ -314,7 +963,7 @@ def radiologia_kuvankatselunaytot_view(request):
 	specialty, _ = Specialty.objects.get_or_create(name="Radiologia")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="Kuvankatselunäytöt")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/radiologia_kuvankatselunaytot.html', {
+	return render(request, 'sisalto/radiologia/radiologia_kuvankatselunaytot.html', {
 		'page_title': 'Kuvankatselunäytöt',
 		'epa': epa,
 		'sections': sections
@@ -325,7 +974,7 @@ def radiologia_hammaskuvantaminen_view(request):
 	specialty, _ = Specialty.objects.get_or_create(name="Radiologia")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="Hammaskuvantaminen")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/radiologia_hammaskuvantaminen.html', {
+	return render(request, 'sisalto/radiologia/radiologia_hammaskuvantaminen.html', {
 		'page_title': 'Hammaskuvantaminen',
 		'epa': epa,
 		'sections': sections
@@ -336,7 +985,7 @@ def radiologia_sateilybiologia_suojelu_view(request):
 	specialty, _ = Specialty.objects.get_or_create(name="Radiologia")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="Säteilybiologia ja säteilysuojelu radiologiassa")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/radiologia_sateilybiologia_suojelu.html', {
+	return render(request, 'sisalto/radiologia/radiologia_sateilybiologia_suojelu.html', {
 		'page_title': 'Säteilybiologia ja säteilysuojelu radiologiassa',
 		'epa': epa,
 		'sections': sections
@@ -351,7 +1000,7 @@ def sadehoito_peruskasitteet_view(request):
 	specialty, _ = Specialty.objects.get_or_create(name="Sädehoito")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="Peruskäsitteet")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/sadehoito_peruskasitteet.html', {
+	return render(request, 'sisalto/sadehoito/sadehoito_peruskasitteet.html', {
 		'page_title': 'Sädehoidon peruskäsitteet',
 		'epa': epa,
 		'sections': sections
@@ -362,7 +1011,7 @@ def sadehoito_kuvantaminen_suunnittelu_view(request):
 	specialty, _ = Specialty.objects.get_or_create(name="Sädehoito")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="Kuvantaminen ja suunnittelu")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/sadehoito_kuvantaminen_suunnittelu.html', {
+	return render(request, 'sisalto/sadehoito/sadehoito_kuvantaminen_suunnittelu.html', {
 		'page_title': 'Kuvantaminen sädehoidon suunnittelua varten',
 		'epa': epa,
 		'sections': sections
@@ -373,7 +1022,7 @@ def sadehoito_ulkoinen_view(request):
 	specialty, _ = Specialty.objects.get_or_create(name="Sädehoito")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="Ulkoinen sädehoito")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/sadehoito_ulkoinen.html', {
+	return render(request, 'sisalto/sadehoito/sadehoito_ulkoinen.html', {
 		'page_title': 'Ulkoinen sädehoito',
 		'epa': epa,
 		'sections': sections
@@ -384,7 +1033,7 @@ def sadehoito_sisainen_view(request):
 	specialty, _ = Specialty.objects.get_or_create(name="Sädehoito")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="Sisäinen sädehoito")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/sadehoito_sisainen.html', {
+	return render(request, 'sisalto/sadehoito/sadehoito_sisainen.html', {
 		'page_title': 'Sisäinen sädehoito',
 		'epa': epa,
 		'sections': sections
@@ -395,7 +1044,7 @@ def sadehoito_dosimetria_view(request):
 	specialty, _ = Specialty.objects.get_or_create(name="Sädehoito")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="Dosimetria")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/sadehoito_dosimetria.html', {
+	return render(request, 'sisalto/sadehoito/sadehoito_dosimetria.html', {
 		'page_title': 'Sädehoidon dosimetria',
 		'epa': epa,
 		'sections': sections
@@ -406,7 +1055,7 @@ def sadehoito_laitteet_view(request):
 	specialty, _ = Specialty.objects.get_or_create(name="Sädehoito")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="Laitteet")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/sadehoito_laitteet.html', {
+	return render(request, 'sisalto/sadehoito/sadehoito_laitteet.html', {
 		'page_title': 'Säteilyä tuottavat laitteet sädehoidossa',
 		'epa': epa,
 		'sections': sections
@@ -417,7 +1066,7 @@ def sadehoito_sateilybiologia_view(request):
 	specialty, _ = Specialty.objects.get_or_create(name="Sädehoito")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="Säteilybiologia")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/sadehoito_sateilybiologia.html', {
+	return render(request, 'sisalto/sadehoito/sadehoito_sateilybiologia.html', {
 		'page_title': 'Säteilybiologia ja säteily­suojelu sädehoidossa',
 		'epa': epa,
 		'sections': sections
@@ -432,18 +1081,18 @@ def isotooppi_gammakamera_view(request):
 	specialty, _ = Specialty.objects.get_or_create(name="Isotooppilääketiede")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="Gammakamera")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/isotooppi_gammakamera.html', {
+	return render(request, 'sisalto/isotooppi/isotooppi_gammakamera.html', {
 		'page_title': 'Gammakamerateknologia',
 		'epa': epa,
 		'sections': sections
 	})
 
-def isotooppi_petkamera_view(request):
+def isotooppi_pet_kamera_view(request):
 	"""PET-kamerateknologia EPA page"""
 	specialty, _ = Specialty.objects.get_or_create(name="Isotooppilääketiede")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="PET-kamera")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/isotooppi_petkamera.html', {
+	return render(request, 'sisalto/isotooppi/isotooppi_petkamera.html', {
 		'page_title': 'PET-kamerateknologia',
 		'epa': epa,
 		'sections': sections
@@ -454,8 +1103,9 @@ def isotooppi_annostelu_radiofarmasia_view(request):
 	specialty, _ = Specialty.objects.get_or_create(name="Isotooppilääketiede")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="Annostelu ja radiofarmasia")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/isotooppi_annostelu_radiofarmasia.html', {
-		'page_title': 'Annostelu ja radiofarmasiatoiminta',
+	
+	return render(request, 'sisalto/isotooppi/isotooppi_annostelu_radiofarmasia.html', {
+		'page_title': 'Isotooppi: Annostelu ja radiofarmasia',
 		'epa': epa,
 		'sections': sections
 	})
@@ -465,7 +1115,7 @@ def isotooppi_gammakuvaus_spet_view(request):
 	specialty, _ = Specialty.objects.get_or_create(name="Isotooppilääketiede")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="Gammakuvaus ja SPET")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/isotooppi_gammakuvaus_spet.html', {
+	return render(request, 'sisalto/isotooppi/isotooppi_gammakuvaus_spet.html', {
 		'page_title': 'Gammakuvaus ja SPET-tutkimukset',
 		'epa': epa,
 		'sections': sections
@@ -476,7 +1126,7 @@ def isotooppi_pet_tutkimukset_view(request):
 	specialty, _ = Specialty.objects.get_or_create(name="Isotooppilääketiede")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="PET-tutkimukset")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/isotooppi_pet_tutkimukset.html', {
+	return render(request, 'sisalto/isotooppi/isotooppi_pet_tutkimukset.html', {
 		'page_title': 'PET-tutkimukset',
 		'epa': epa,
 		'sections': sections
@@ -487,7 +1137,7 @@ def isotooppi_radionuklidihoidot_view(request):
 	specialty, _ = Specialty.objects.get_or_create(name="Isotooppilääketiede")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="Radionuklidihoidot")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/isotooppi_radionuklidihoidot.html', {
+	return render(request, 'sisalto/isotooppi/isotooppi_radionuklidihoidot.html', {
 		'page_title': 'Radionuklidihoidot',
 		'epa': epa,
 		'sections': sections
@@ -498,7 +1148,7 @@ def isotooppi_sateilybiologia_suojelu_view(request):
 	specialty, _ = Specialty.objects.get_or_create(name="Isotooppilääketiede")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="Säteilybiologia ja suojelu")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/isotooppi_sateilybiologia_suojelu.html', {
+	return render(request, 'sisalto/isotooppi/isotooppi_sateilybiologia_suojelu.html', {
 		'page_title': 'Säteilybiologia ja säteily­suojelu isotooppitoiminnassa',
 		'epa': epa,
 		'sections': sections
@@ -513,42 +1163,42 @@ def knf_eeg_view(request):
 	specialty, _ = Specialty.objects.get_or_create(name="KNF")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="EEG")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/knf_eeg.html', {'epa': epa, 'sections': sections})
+	return render(request, 'sisalto/knf/knf_eeg.html', {'epa': epa, 'sections': sections})
 
 def knf_heratepotentiaali_enmg_view(request):
 	"""Herätepotentiaali ja ENMG EPA page"""
 	specialty, _ = Specialty.objects.get_or_create(name="KNF")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="Herätepotentiaali ja ENMG-tutkimukset")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/knf_heratepotentiaali_enmg.html', {'epa': epa, 'sections': sections})
+	return render(request, 'sisalto/knf/knf_heratepotentiaali_enmg.html', {'epa': epa, 'sections': sections})
 
 def knf_iom_view(request):
 	"""IOM EPA page"""
 	specialty, _ = Specialty.objects.get_or_create(name="KNF")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="IOM")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/knf_iom.html', {'epa': epa, 'sections': sections})
+	return render(request, 'sisalto/knf/knf_iom.html', {'epa': epa, 'sections': sections})
 
 def knf_laite_sahkoturvallisuus_view(request):
 	"""Laite- ja sähköturvallisuus EPA page"""
 	specialty, _ = Specialty.objects.get_or_create(name="KNF")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="Laite- ja sähköturvallisuus")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/knf_laite_sahkoturvallisuus.html', {'epa': epa, 'sections': sections})
+	return render(request, 'sisalto/knf/knf_laite_sahkoturvallisuus.html', {'epa': epa, 'sections': sections})
 
 def knf_sarja_tms_hoidot_view(request):
 	"""Sarja-TMS-hoidot EPA page"""
 	specialty, _ = Specialty.objects.get_or_create(name="KNF")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="Sarja-TMS-hoidot ja navigoidut TMS-tutkimukset")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/knf_sarja_tms_hoidot.html', {'epa': epa, 'sections': sections})
+	return render(request, 'sisalto/knf/knf_sarja_tms_hoidot.html', {'epa': epa, 'sections': sections})
 
 def knf_uni_view(request):
 	"""Uni EPA page"""
 	specialty, _ = Specialty.objects.get_or_create(name="KNF")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="Uni")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/knf_uni.html', {'epa': epa, 'sections': sections})
+	return render(request, 'sisalto/knf/knf_uni.html', {'epa': epa, 'sections': sections})
 
 # =============================================================================
 # FYSIOLOGIA VIEWS
@@ -559,36 +1209,151 @@ def fysiologia_ekg_view(request):
 	specialty, _ = Specialty.objects.get_or_create(name="Fysiologia")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="EKG-tutkimukset")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/fysiologia_ekg.html', {'epa': epa, 'sections': sections})
+	return render(request, 'sisalto/fysiologia/fysiologia_ekg.html', {'epa': epa, 'sections': sections})
 
 def fysiologia_gi_kanava_view(request):
 	"""GI-kanavan tutkimukset EPA page"""
 	specialty, _ = Specialty.objects.get_or_create(name="Fysiologia")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="GI-kanavan tutkimukset")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/fysiologia_gi_kanava.html', {'epa': epa, 'sections': sections})
+	return render(request, 'sisalto/fysiologia/fysiologia_gi_kanava.html', {'epa': epa, 'sections': sections})
 
 def fysiologia_keuhkofunktio_view(request):
 	"""Keuhkofunktiotutkimukset EPA page"""
 	specialty, _ = Specialty.objects.get_or_create(name="Fysiologia")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="Keuhkofunktiotutkimukset")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/fysiologia_keuhkofunktio.html', {'epa': epa, 'sections': sections})
+	return render(request, 'sisalto/fysiologia/fysiologia_keuhkofunktio.html', {'epa': epa, 'sections': sections})
 
 def fysiologia_luuston_mineraali_view(request):
 	"""Luuston mineraalitiheyden mittaus EPA page"""
 	specialty, _ = Specialty.objects.get_or_create(name="Fysiologia")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="Luuston mineraalitiheyden mittaus")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/fysiologia_luuston_mineraali.html', {'epa': epa, 'sections': sections})
+	return render(request, 'sisalto/fysiologia/fysiologia_luuston_mineraali.html', {'epa': epa, 'sections': sections})
 
 def fysiologia_verenkierto_view(request):
 	"""Verenkiertotutkimukset EPA page"""
 	specialty, _ = Specialty.objects.get_or_create(name="Fysiologia")
 	epa, _ = EPA.objects.get_or_create(specialty=specialty, title="Verenkiertotutkimukset")
 	sections = Section.objects.filter(epa=epa).order_by('order', 'id')
-	return render(request, 'sisalto/fysiologia_verenkierto.html', {'epa': epa, 'sections': sections})
+	return render(request, 'sisalto/fysiologia/fysiologia_verenkierto.html', {'epa': epa, 'sections': sections})
 
+
+# =============================================================================
+# Helper functions
+# =============================================================================
+@csrf_exempt
+def add_section_view(request):
+	"""Add new section to EPA"""
+	if request.method == "POST":
+		data = json.loads(request.body)
+		title = data.get("title")
+		content = data.get("content")
+		epa_id = data.get("epa_id")
+		proficiency_level = data.get("proficiency_level", "1")  # Default to level 1
+		after_section_id = data.get("after_section_id")
+		
+		if title and epa_id:
+			epa = EPA.objects.filter(id=epa_id).first()
+			if epa:
+				if after_section_id:
+					# Find the section after which to insert
+					after_section = Section.objects.filter(id=after_section_id, epa=epa).first()
+					if after_section:
+						# Update order of subsequent sections
+						Section.objects.filter(epa=epa, order__gt=after_section.order).update(order=F('order') + 1)
+						order = after_section.order + 1
+					else:
+						# If section not found, add to end
+						last_section = Section.objects.filter(epa=epa).order_by('-order').first()
+						order = (last_section.order + 1) if last_section else 1
+				else:
+					# No specific position, add to end
+					last_section = Section.objects.filter(epa=epa).order_by('-order').first()
+					order = (last_section.order + 1) if last_section else 1
+				
+				Section.objects.create(
+					epa=epa, 
+					title=title, 
+					content=content, 
+					order=order,
+					proficiency_level=proficiency_level
+				)
+				return JsonResponse({"success": True})
+	return JsonResponse({"success": False})
+
+@csrf_exempt
+def edit_section_view(request):
+	"""Edit existing section EPA"""
+	if request.method == "POST":
+		try:
+			# Try JSON first for compatibility with old code
+			data = json.loads(request.body)
+			section_id = data.get("section_id")
+			title = data.get("title")
+			content = data.get("content")
+			proficiency_level = data.get("proficiency_level")
+			action = data.get("action")
+		except:
+			# Fall back to POST data for new form-based requests
+			section_id = request.POST.get("section_id")
+			title = request.POST.get("title", "").strip()
+			content = request.POST.get("content", "")
+			proficiency_level = request.POST.get("proficiency_level")
+			action = request.POST.get("action")
+		
+		if section_id:
+			section = Section.objects.filter(id=section_id).first()
+			if section:
+				# Handle proficiency level update specifically
+				if action == 'update_proficiency' and proficiency_level:
+					section.proficiency_level = proficiency_level
+					section.save()
+					return JsonResponse({"success": True})
+				# Handle full section edit
+				elif title:
+					section.title = title
+					section.content = content
+					if proficiency_level:
+						section.proficiency_level = proficiency_level
+					section.save()
+					return JsonResponse({"success": True})
+	return JsonResponse({"success": False})
+
+@csrf_exempt
+def delete_section_view(request):
+	"""Delete section EPA"""
+	if request.method == "POST":
+		data = json.loads(request.body)
+		section_id = data.get("section_id")
+		
+		if section_id:
+			section = Section.objects.filter(id=section_id).first()
+			if section:
+				section.delete()
+				return JsonResponse({"success": True})
+	return JsonResponse({"success": False})
+
+
+@csrf_exempt
+def update_proficiency_view(request):
+	"""Update proficiency level for section"""
+	if request.method == "POST":
+		try:
+			data = json.loads(request.body)
+			section_id = data.get("section_id")
+			proficiency_level = data.get("proficiency_level")
+			
+			if section_id and proficiency_level:
+				section = Section.objects.filter(id=section_id).first()
+				if section:
+					section.proficiency_level = int(proficiency_level)
+					section.save()
+					return JsonResponse({"success": True})
+		except Exception as e:
+			print(f"Proficiency update error: {e}")
+	return JsonResponse({"success": False})
 # =============================================================================
 # RADIOLOGIA SECTION MANAGEMENT ENDPOINTS
 # =============================================================================
@@ -596,479 +1361,199 @@ def fysiologia_verenkierto_view(request):
 # Lapivalaisu-angiografia section endpoints
 @csrf_exempt
 def add_radiologia_lapivalaisu_angiografia_section_view(request):
-	"""Add new section to Lapivalaisu-angiografia EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		title = data.get("title")
-		content = data.get("content")
-		epa_id = data.get("epa_id")
-		after_order = data.get("after_order")
-		
-		if title and content and epa_id:
-			epa = EPA.objects.filter(id=epa_id).first()
-			if epa:
-				if after_order is not None:
-					order = after_order + 1
-					Section.objects.filter(epa=epa, order__gte=order).update(order=F('order') + 1)
-				else:
-					last_section = Section.objects.filter(epa=epa).order_by('-order').first()
-					order = (last_section.order + 1) if last_section else 1
-				
-				Section.objects.create(title=title, content=content, epa=epa, order=order)
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	"""Add new section to Radiologia Läpivalaisu ja angiografia EPA"""
+	return add_section_view(request)
+	
 
 @csrf_exempt
 def edit_radiologia_lapivalaisu_angiografia_section_view(request):
-	"""Edit existing section in Lapivalaisu-angiografia EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		title = data.get("title")
-		content = data.get("content")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.title = title
-			section.content = content
-			section.save()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	"""Edit existing section in Radiologia Läpivalaisu ja angiografia EPA"""
+	return edit_section_view(request)
+	
 
 @csrf_exempt
 def delete_radiologia_lapivalaisu_angiografia_section_view(request):
-	"""Delete section from Lapivalaisu-angiografia EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.delete()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	"""Delete section from Radiologia Läpivalaisu ja angiografia EPA"""
+	return delete_section_view(request)
 
-# Magneettikuvaus section endpoints  
+
+@csrf_exempt
+def update_radiologia_lapivalaisu_angiografia_proficiency_view(request):
+	"""Update proficiency level for Läpivalaisu ja angiografia section"""
+	return update_proficiency_view(request)
+
+
+# Magneettikuvaus section endpoints
 @csrf_exempt
 def add_magneettikuvaus_section_view(request):
 	"""Add new section to Magneettikuvaus EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		title = data.get("title")
-		content = data.get("content")
-		epa_id = data.get("epa_id")
-		after_order = data.get("after_order")
-		
-		if title and content and epa_id:
-			epa = EPA.objects.filter(id=epa_id).first()
-			if epa:
-				if after_order is not None:
-					order = after_order + 1
-					Section.objects.filter(epa=epa, order__gte=order).update(order=F('order') + 1)
-				else:
-					last_section = Section.objects.filter(epa=epa).order_by('-order').first()
-					order = (last_section.order + 1) if last_section else 1
-				
-				Section.objects.create(title=title, content=content, epa=epa, order=order)
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return add_section_view(request)
+	
 
 @csrf_exempt
 def edit_magneettikuvaus_section_view(request):
 	"""Edit existing section in Magneettikuvaus EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		title = data.get("title")
-		content = data.get("content")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.title = title
-			section.content = content
-			section.save()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return edit_section_view(request)
 
 @csrf_exempt
 def delete_magneettikuvaus_section_view(request):
-	"""Delete section from Magneettikuvaus EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.delete()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	"""Delete section from Radiologia Magneettikuvaus EPA"""
+	return delete_section_view(request)
+
+@csrf_exempt
+def update_magneettikuvaus_proficiency_view(request):
+	"""Update proficiency level for Magneettikuvaus section"""
+	return update_proficiency_view(request)
+
 
 # Mammografia section endpoints
 @csrf_exempt
 def add_mammografia_section_view(request):
 	"""Add new section to Mammografia EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		title = data.get("title")
-		content = data.get("content")
-		epa_id = data.get("epa_id")
-		after_order = data.get("after_order")
-		
-		if title and content and epa_id:
-			epa = EPA.objects.filter(id=epa_id).first()
-			if epa:
-				if after_order is not None:
-					order = after_order + 1
-					Section.objects.filter(epa=epa, order__gte=order).update(order=F('order') + 1)
-				else:
-					last_section = Section.objects.filter(epa=epa).order_by('-order').first()
-					order = (last_section.order + 1) if last_section else 1
-				
-				Section.objects.create(title=title, content=content, epa=epa, order=order)
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return add_section_view(request)
 
 @csrf_exempt
 def edit_mammografia_section_view(request):
 	"""Edit existing section in Mammografia EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		title = data.get("title")
-		content = data.get("content")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.title = title
-			section.content = content
-			section.save()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return edit_section_view(request)
 
 @csrf_exempt
 def delete_mammografia_section_view(request):
 	"""Delete section from Mammografia EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.delete()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return delete_section_view(request)
+
+@csrf_exempt
+def update_mammografia_proficiency_view(request):
+	"""Update proficiency level for Mammografia section"""
+	return update_proficiency_view(request)
 
 # Natiivikuvantaminen section endpoints
 @csrf_exempt
 def add_natiivikuvantaminen_section_view(request):
 	"""Add new section to Natiivikuvantaminen EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		title = data.get("title")
-		content = data.get("content")
-		epa_id = data.get("epa_id")
-		after_order = data.get("after_order")
-		
-		if title and content and epa_id:
-			epa = EPA.objects.filter(id=epa_id).first()
-			if epa:
-				if after_order is not None:
-					order = after_order + 1
-					Section.objects.filter(epa=epa, order__gte=order).update(order=F('order') + 1)
-				else:
-					last_section = Section.objects.filter(epa=epa).order_by('-order').first()
-					order = (last_section.order + 1) if last_section else 1
-				
-				Section.objects.create(title=title, content=content, epa=epa, order=order)
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return add_section_view(request)
 
 @csrf_exempt
 def edit_natiivikuvantaminen_section_view(request):
 	"""Edit existing section in Natiivikuvantaminen EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		title = data.get("title")
-		content = data.get("content")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.title = title
-			section.content = content
-			section.save()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return edit_section_view(request)
 
 @csrf_exempt
 def delete_natiivikuvantaminen_section_view(request):
 	"""Delete section from Natiivikuvantaminen EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.delete()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return delete_section_view(request)
+
+@csrf_exempt
+def update_natiivikuvantaminen_proficiency_view(request):
+	"""Update proficiency level for Natiivikuvantaminen section"""
+	return update_proficiency_view(request)
+
 
 # Tietokonetomografia section endpoints
 @csrf_exempt
 def add_tietokonetomografia_section_view(request):
 	"""Add new section to Tietokonetomografia EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		title = data.get("title")
-		content = data.get("content")
-		epa_id = data.get("epa_id")
-		after_order = data.get("after_order")
-		
-		if title and content and epa_id:
-			epa = EPA.objects.filter(id=epa_id).first()
-			if epa:
-				if after_order is not None:
-					order = after_order + 1
-					Section.objects.filter(epa=epa, order__gte=order).update(order=F('order') + 1)
-				else:
-					last_section = Section.objects.filter(epa=epa).order_by('-order').first()
-					order = (last_section.order + 1) if last_section else 1
-				
-				Section.objects.create(title=title, content=content, epa=epa, order=order)
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return add_section_view(request)
 
 @csrf_exempt
 def edit_tietokonetomografia_section_view(request):
 	"""Edit existing section in Tietokonetomografia EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		title = data.get("title")
-		content = data.get("content")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.title = title
-			section.content = content
-			section.save()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return edit_section_view(request)
 
 @csrf_exempt
 def delete_tietokonetomografia_section_view(request):
 	"""Delete section from Tietokonetomografia EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.delete()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return delete_section_view(request)
+
+@csrf_exempt
+def update_tietokonetomografia_proficiency_view(request):
+	"""Update proficiency level for Tietokonetomografia section"""
+	return update_proficiency_view(request)
 
 # Ultraaani section endpoints
 @csrf_exempt
 def add_ultraaani_section_view(request):
 	"""Add new section to Ultraaani EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		title = data.get("title")
-		content = data.get("content")
-		epa_id = data.get("epa_id")
-		after_order = data.get("after_order")
-		
-		if title and content and epa_id:
-			epa = EPA.objects.filter(id=epa_id).first()
-			if epa:
-				if after_order is not None:
-					order = after_order + 1
-					Section.objects.filter(epa=epa, order__gte=order).update(order=F('order') + 1)
-				else:
-					last_section = Section.objects.filter(epa=epa).order_by('-order').first()
-					order = (last_section.order + 1) if last_section else 1
-				
-				Section.objects.create(title=title, content=content, epa=epa, order=order)
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return add_section_view(request)
 
 @csrf_exempt
 def edit_ultraaani_section_view(request):
 	"""Edit existing section in Ultraaani EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		title = data.get("title")
-		content = data.get("content")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.title = title
-			section.content = content
-			section.save()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return edit_section_view(request)
 
 @csrf_exempt
 def delete_ultraaani_section_view(request):
 	"""Delete section from Ultraaani EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.delete()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return delete_section_view(request)
+
+@csrf_exempt
+def update_ultraaani_proficiency_view(request):
+	"""Update proficiency level for Ultraaani section"""
+	return update_proficiency_view(request)
 
 # Kuvankatselunaytot section endpoints
 @csrf_exempt
 def add_kuvankatselunaytot_section_view(request):
 	"""Add new section to Kuvankatselunaytot EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		title = data.get("title")
-		content = data.get("content")
-		epa_id = data.get("epa_id")
-		after_order = data.get("after_order")
-		
-		if title and content and epa_id:
-			epa = EPA.objects.filter(id=epa_id).first()
-			if epa:
-				if after_order is not None:
-					order = after_order + 1
-					Section.objects.filter(epa=epa, order__gte=order).update(order=F('order') + 1)
-				else:
-					last_section = Section.objects.filter(epa=epa).order_by('-order').first()
-					order = (last_section.order + 1) if last_section else 1
-				
-				Section.objects.create(title=title, content=content, epa=epa, order=order)
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return add_section_view(request)
 
 @csrf_exempt
 def edit_kuvankatselunaytot_section_view(request):
 	"""Edit existing section in Kuvankatselunaytot EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		title = data.get("title")
-		content = data.get("content")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.title = title
-			section.content = content
-			section.save()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return edit_section_view(request)
 
 @csrf_exempt
 def delete_kuvankatselunaytot_section_view(request):
 	"""Delete section from Kuvankatselunaytot EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.delete()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return delete_section_view(request)
+
+@csrf_exempt
+def update_kuvankatselunaytot_proficiency_view(request):
+	"""Update proficiency level for Kuvankatselunaytot section"""
+	return update_proficiency_view(request)
 
 # Hammaskuvantaminen section endpoints
 @csrf_exempt
 def add_hammaskuvantaminen_section_view(request):
 	"""Add new section to Hammaskuvantaminen EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		title = data.get("title")
-		content = data.get("content")
-		epa_id = data.get("epa_id")
-		after_order = data.get("after_order")
-		
-		if title and content and epa_id:
-			epa = EPA.objects.filter(id=epa_id).first()
-			if epa:
-				if after_order is not None:
-					order = after_order + 1
-					Section.objects.filter(epa=epa, order__gte=order).update(order=F('order') + 1)
-				else:
-					last_section = Section.objects.filter(epa=epa).order_by('-order').first()
-					order = (last_section.order + 1) if last_section else 1
-				
-				Section.objects.create(title=title, content=content, epa=epa, order=order)
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return add_section_view(request)
 
 @csrf_exempt
 def edit_hammaskuvantaminen_section_view(request):
 	"""Edit existing section in Hammaskuvantaminen EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		title = data.get("title")
-		content = data.get("content")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.title = title
-			section.content = content
-			section.save()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return edit_section_view(request)
 
 @csrf_exempt
 def delete_hammaskuvantaminen_section_view(request):
 	"""Delete section from Hammaskuvantaminen EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.delete()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return delete_section_view(request)
+
+@csrf_exempt
+def update_hammaskuvantaminen_proficiency_view(request):
+	"""Update proficiency level for Hammaskuvantaminen section"""
+	return update_proficiency_view(request)
 
 # Radiologia Sateilybiologia-suojelu section endpoints  
 @csrf_exempt
 def add_radiologia_sateilybiologia_suojelu_section_view(request):
-	"""Add new section to Radiologia Sateilybiologia-suojelu EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		title = data.get("title")
-		content = data.get("content")
-		epa_id = data.get("epa_id")
-		after_order = data.get("after_order")
-		
-		if title and content and epa_id:
-			epa = EPA.objects.filter(id=epa_id).first()
-			if epa:
-				if after_order is not None:
-					order = after_order + 1
-					Section.objects.filter(epa=epa, order__gte=order).update(order=F('order') + 1)
-				else:
-					last_section = Section.objects.filter(epa=epa).order_by('-order').first()
-					order = (last_section.order + 1) if last_section else 1
-				
-				Section.objects.create(title=title, content=content, epa=epa, order=order)
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	"""Add new section to Sateilybiologia-suojelu EPA"""
+	return add_section_view(request)
 
 @csrf_exempt
 def edit_radiologia_sateilybiologia_suojelu_section_view(request):
-	"""Edit existing section in Radiologia Sateilybiologia-suojelu EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		title = data.get("title")
-		content = data.get("content")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.title = title
-			section.content = content
-			section.save()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	"""Edit existing section in Sateilybiologia-suojelu EPA"""
+	return edit_section_view(request)
 
 @csrf_exempt
 def delete_radiologia_sateilybiologia_suojelu_section_view(request):
-	"""Delete section from Radiologia Sateilybiologia-suojelu EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.delete()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	"""Delete section from Sateilybiologia-suojelu EPA"""
+	return delete_section_view(request)
+
+@csrf_exempt
+def update_radiologia_sateilybiologia_suojelu_proficiency_view(request):
+	"""Update proficiency level for Sateilybiologia-suojelu section"""
+	return update_proficiency_view(request)
+
 
 # =============================================================================
 # SADEHOITO SECTION MANAGEMENT ENDPOINTS
@@ -1078,448 +1563,151 @@ def delete_radiologia_sateilybiologia_suojelu_section_view(request):
 @csrf_exempt
 def add_sadehoito_peruskasitteet_section_view(request):
 	"""Add new section to Sädehoidon peruskäsitteet EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		title = data.get("title")
-		content = data.get("content")
-		epa_id = data.get("epa_id")
-		proficiency_level = data.get("proficiency_level", "1")  # Default to level 1
-		
-		if title and epa_id:
-			epa = EPA.objects.filter(id=epa_id).first()
-			if epa:
-				last_section = Section.objects.filter(epa=epa).order_by('-order').first()
-				order = (last_section.order + 1) if last_section else 1
-				Section.objects.create(
-					epa=epa, 
-					title=title, 
-					content=content, 
-					order=order,
-					proficiency_level=proficiency_level
-				)
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return add_section_view(request)
+
 
 @csrf_exempt
 def edit_sadehoito_peruskasitteet_section_view(request):
 	"""Edit existing section in Sädehoidon peruskäsitteet EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		title = data.get("title")
-		content = data.get("content")
-		proficiency_level = data.get("proficiency_level")
-		action = data.get("action")
-		
-		if section_id:
-			section = Section.objects.filter(id=section_id).first()
-			if section:
-				# Handle proficiency level update specifically
-				if action == 'update_proficiency' and proficiency_level:
-					section.proficiency_level = proficiency_level
-					section.save()
-					return JsonResponse({"success": True})
-				# Handle full section edit
-				elif title:
-					section.title = title
-					section.content = content
-					if proficiency_level:
-						section.proficiency_level = proficiency_level
-					section.save()
-					return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return edit_section_view(request)
 
 @csrf_exempt
 def delete_sadehoito_peruskasitteet_section_view(request):
 	"""Delete section from Sädehoidon peruskäsitteet EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		
-		if section_id:
-			section = Section.objects.filter(id=section_id).first()
-			if section:
-				section.delete()
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return delete_section_view(request)
+
+@csrf_exempt
+def update_sadehoito_peruskasitteet_proficiency_view(request):
+	"""Update proficiency level for Sädehoidon peruskäsitteet section"""
+	return update_proficiency_view(request)
 
 # Kuvantaminen ja suunnittelu section endpoints
 @csrf_exempt
 def add_sadehoito_kuvantaminen_suunnittelu_section_view(request):
 	"""Add new section to Kuvantaminen ja suunnittelu EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		title = data.get("title")
-		content = data.get("content")
-		proficiency_level = data.get("proficiency_level", "1")
-		epa_id = data.get("epa_id")
-		
-		if title and epa_id:
-			epa = EPA.objects.filter(id=epa_id).first()
-			if epa:
-				last_section = Section.objects.filter(epa=epa).order_by('-order').first()
-				order = (last_section.order + 1) if last_section else 1
-				Section.objects.create(
-					epa=epa, 
-					title=title, 
-					content=content, 
-					proficiency_level=proficiency_level,
-					order=order
-				)
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return add_section_view(request)
+
 
 @csrf_exempt
 def edit_sadehoito_kuvantaminen_suunnittelu_section_view(request):
 	"""Edit existing section in Kuvantaminen ja suunnittelu EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		title = data.get("title")
-		content = data.get("content")
-		proficiency_level = data.get("proficiency_level")
-		action = data.get("action")
-		
-		if section_id:
-			section = Section.objects.filter(id=section_id).first()
-			if section:
-				# If it's just updating proficiency level
-				if action == 'update_proficiency' and proficiency_level:
-					section.proficiency_level = proficiency_level
-					section.save()
-					return JsonResponse({"success": True})
-				# If it's updating title and content
-				elif title:
-					section.title = title
-					section.content = content
-					if proficiency_level:
-						section.proficiency_level = proficiency_level
-					section.save()
-					return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return edit_section_view(request)
 
 @csrf_exempt
 def delete_sadehoito_kuvantaminen_suunnittelu_section_view(request):
 	"""Delete section from Kuvantaminen ja suunnittelu EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		
-		if section_id:
-			section = Section.objects.filter(id=section_id).first()
-			if section:
-				section.delete()
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return delete_section_view(request)
+
+@csrf_exempt
+def update_sadehoito_kuvantaminen_suunnittelu_proficiency_view(request):
+	"""Update proficiency level for Kuvantaminen ja suunnittelu section"""
+	return update_proficiency_view(request)
 
 # Ulkoinen sädehoito section endpoints
 @csrf_exempt
 def add_sadehoito_ulkoinen_section_view(request):
-	"""Add new section to Ulkoinen sädehoito EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		title = data.get("title")
-		content = data.get("content")
-		epa_id = data.get("epa_id")
-		proficiency_level = data.get("proficiency_level", "1")  # Default to level 1
-		
-		if title and epa_id:
-			epa = EPA.objects.filter(id=epa_id).first()
-			if epa:
-				last_section = Section.objects.filter(epa=epa).order_by('-order').first()
-				order = (last_section.order + 1) if last_section else 1
-				Section.objects.create(
-					epa=epa, 
-					title=title, 
-					content=content, 
-					order=order,
-					proficiency_level=proficiency_level
-				)
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	"""Add new section to Ulkoinen EPA"""
+	return add_section_view(request)
 
 @csrf_exempt
 def edit_sadehoito_ulkoinen_section_view(request):
-	"""Edit existing section in Ulkoinen sädehoito EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		title = data.get("title")
-		content = data.get("content")
-		proficiency_level = data.get("proficiency_level")
-		action = data.get("action")
-		
-		if section_id:
-			section = Section.objects.filter(id=section_id).first()
-			if section:
-				# Handle proficiency level update specifically
-				if action == 'update_proficiency' and proficiency_level:
-					section.proficiency_level = proficiency_level
-					section.save()
-					return JsonResponse({"success": True})
-				# Handle full section edit
-				elif title:
-					section.title = title
-					section.content = content
-					if proficiency_level:
-						section.proficiency_level = proficiency_level
-					section.save()
-					return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	"""Edit existing section in Ulkoinen EPA"""
+	return edit_section_view(request)
 
 @csrf_exempt
 def delete_sadehoito_ulkoinen_section_view(request):
-	"""Delete section from Ulkoinen sädehoito EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		
-		if section_id:
-			section = Section.objects.filter(id=section_id).first()
-			if section:
-				section.delete()
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	"""Delete section from Ulkoinen EPA"""
+	return delete_section_view(request)
+
+@csrf_exempt
+def update_sadehoito_ulkoinen_proficiency_view(request):
+	"""Update proficiency level for Ulkoinen section"""
+	return update_proficiency_view(request)
 
 # Sisäinen sädehoito section endpoints
 @csrf_exempt
 def add_sadehoito_sisainen_section_view(request):
 	"""Add new section to Sisäinen sädehoito EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		title = data.get("title")
-		content = data.get("content")
-		epa_id = data.get("epa_id")
-		proficiency_level = data.get("proficiency_level", "1")  # Default to level 1
-		
-		if title and epa_id:
-			epa = EPA.objects.filter(id=epa_id).first()
-			if epa:
-				last_section = Section.objects.filter(epa=epa).order_by('-order').first()
-				order = (last_section.order + 1) if last_section else 1
-				Section.objects.create(
-					epa=epa, 
-					title=title, 
-					content=content, 
-					order=order,
-					proficiency_level=proficiency_level
-				)
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return add_section_view(request)
 
 @csrf_exempt
 def edit_sadehoito_sisainen_section_view(request):
 	"""Edit existing section in Sisäinen sädehoito EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		title = data.get("title")
-		content = data.get("content")
-		proficiency_level = data.get("proficiency_level")
-		action = data.get("action")
-		
-		if section_id:
-			section = Section.objects.filter(id=section_id).first()
-			if section:
-				# Handle proficiency level update specifically
-				if action == 'update_proficiency' and proficiency_level:
-					section.proficiency_level = proficiency_level
-					section.save()
-					return JsonResponse({"success": True})
-				# Handle full section edit
-				elif title:
-					section.title = title
-					section.content = content
-					if proficiency_level:
-						section.proficiency_level = proficiency_level
-					section.save()
-					return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return edit_section_view(request)
 
 @csrf_exempt
 def delete_sadehoito_sisainen_section_view(request):
 	"""Delete section from Sisäinen sädehoito EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		
-		if section_id:
-			section = Section.objects.filter(id=section_id).first()
-			if section:
-				section.delete()
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return delete_section_view(request)
+
+@csrf_exempt
+def update_sadehoito_sisainen_proficiency_view(request):
+	"""Update proficiency level for Sisäinen sädehoito section"""
+	return update_proficiency_view(request)
 
 # Dosimetria section endpoints
 @csrf_exempt
 def add_sadehoito_dosimetria_section_view(request):
 	"""Add new section to Dosimetria EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		title = data.get("title")
-		content = data.get("content")
-		epa_id = data.get("epa_id")
-		proficiency_level = data.get("proficiency_level", "1")  # Default to level 1
-		
-		if title and epa_id:
-			epa = EPA.objects.filter(id=epa_id).first()
-			if epa:
-				last_section = Section.objects.filter(epa=epa).order_by('-order').first()
-				order = (last_section.order + 1) if last_section else 1
-				Section.objects.create(
-					epa=epa, 
-					title=title, 
-					content=content, 
-					order=order,
-					proficiency_level=proficiency_level
-				)
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return add_section_view(request)
 
 @csrf_exempt
 def edit_sadehoito_dosimetria_section_view(request):
 	"""Edit existing section in Dosimetria EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		title = data.get("title")
-		content = data.get("content")
-		proficiency_level = data.get("proficiency_level")
-		action = data.get("action")
-		
-		if section_id:
-			section = Section.objects.filter(id=section_id).first()
-			if section:
-				# Handle proficiency level update specifically
-				if action == 'update_proficiency' and proficiency_level:
-					section.proficiency_level = proficiency_level
-					section.save()
-					return JsonResponse({"success": True})
-				# Handle full section edit
-				elif title:
-					section.title = title
-					section.content = content
-					if proficiency_level:
-						section.proficiency_level = proficiency_level
-					section.save()
-					return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return edit_section_view(request)
 
 @csrf_exempt
 def delete_sadehoito_dosimetria_section_view(request):
 	"""Delete section from Dosimetria EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		
-		if section_id:
-			section = Section.objects.filter(id=section_id).first()
-			if section:
-				section.delete()
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return delete_section_view(request)
+
+@csrf_exempt
+def update_sadehoito_dosimetria_proficiency_view(request):
+	"""Update proficiency level for Dosimetria section"""
+	return update_proficiency_view(request)
 
 # Laitteet section endpoints
 @csrf_exempt
 def add_sadehoito_laitteet_section_view(request):
 	"""Add new section to Laitteet EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		title = data.get("title")
-		content = data.get("content")
-		epa_id = data.get("epa_id")
-		
-		if title and epa_id:
-			epa = EPA.objects.filter(id=epa_id).first()
-			if epa:
-				last_section = Section.objects.filter(epa=epa).order_by('-order').first()
-				order = (last_section.order + 1) if last_section else 1
-				Section.objects.create(epa=epa, title=title, content=content, order=order)
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return add_section_view(request)
 
 @csrf_exempt
 def edit_sadehoito_laitteet_section_view(request):
 	"""Edit existing section in Laitteet EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		title = data.get("title")
-		content = data.get("content")
-		
-		if section_id and title:
-			section = Section.objects.filter(id=section_id).first()
-			if section:
-				section.title = title
-				section.content = content
-				section.save()
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return edit_section_view(request)
 
 @csrf_exempt
 def delete_sadehoito_laitteet_section_view(request):
 	"""Delete section from Laitteet EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		
-		if section_id:
-			section = Section.objects.filter(id=section_id).first()
-			if section:
-				section.delete()
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return delete_section_view(request)
+
+@csrf_exempt
+def update_sadehoito_laitteet_proficiency_view(request):
+	"""Update proficiency level for Laitteet section"""
+	return update_proficiency_view(request)
 
 # Säteilybiologia section endpoints
 @csrf_exempt
 def add_sadehoito_sateilybiologia_section_view(request):
 	"""Add new section to Säteilybiologia EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		title = data.get("title")
-		content = data.get("content")
-		epa_id = data.get("epa_id")
-		
-		if title and epa_id:
-			epa = EPA.objects.filter(id=epa_id).first()
-			if epa:
-				last_section = Section.objects.filter(epa=epa).order_by('-order').first()
-				order = (last_section.order + 1) if last_section else 1
-				Section.objects.create(epa=epa, title=title, content=content, order=order)
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return add_section_view(request)
 
 @csrf_exempt
 def edit_sadehoito_sateilybiologia_section_view(request):
 	"""Edit existing section in Säteilybiologia EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		title = data.get("title")
-		content = data.get("content")
-		
-		if section_id and title:
-			section = Section.objects.filter(id=section_id).first()
-			if section:
-				section.title = title
-				section.content = content
-				section.save()
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return edit_section_view(request)
 
 @csrf_exempt
 def delete_sadehoito_sateilybiologia_section_view(request):
 	"""Delete section from Säteilybiologia EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("section_id")
-		
-		if section_id:
-			section = Section.objects.filter(id=section_id).first()
-			if section:
-				section.delete()
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return delete_section_view(request)
+
+@csrf_exempt
+def update_sadehoito_sateilybiologia_proficiency_view(request):
+	"""Update proficiency level for Säteilybiologia section"""
+	return update_proficiency_view(request)
+
 
 # =============================================================================
 # ISOTOOPPI SECTION MANAGEMENT ENDPOINTS
@@ -1529,372 +1717,148 @@ def delete_sadehoito_sateilybiologia_section_view(request):
 @csrf_exempt
 def add_isotooppi_gammakamera_section_view(request):
 	"""Add new section to Gammakamera EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		title = data.get("title")
-		content = data.get("content")
-		epa_id = data.get("epa_id")
-		after_order = data.get("after_order")
-		
-		if epa_id:
-			epa = EPA.objects.filter(id=epa_id).first()
-			if epa:
-				if after_order is not None:
-					Section.objects.filter(epa=epa, order__gt=after_order).update(order=F('order') + 1)
-					order = after_order + 1
-				else:
-					max_order = Section.objects.filter(epa=epa).aggregate(max_order=Max('order'))['max_order'] or 0
-					order = max_order + 1
-				
-				Section.objects.create(epa=epa, title=title, content=content, order=order)
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return add_section_view(request)
 
 @csrf_exempt
 def edit_isotooppi_gammakamera_section_view(request):
 	"""Edit existing section in Gammakamera EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("id")
-		title = data.get("title")
-		content = data.get("content")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.title = title
-			section.content = content
-			section.save()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return edit_section_view(request)
 
 @csrf_exempt
 def delete_isotooppi_gammakamera_section_view(request):
 	"""Delete section from Gammakamera EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("id")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.delete()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return delete_section_view(request)
+
+@csrf_exempt
+def update_isotooppi_gammakamera_proficiency_view(request):
+	"""Update proficiency level for Gammakamera section"""
+	return update_proficiency_view(request)
 
 # PET-kamera section endpoints
 @csrf_exempt
-def add_isotooppi_petkamera_section_view(request):
+def add_isotooppi_pet_kamera_section_view(request):
 	"""Add new section to PET-kamera EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		title = data.get("title")
-		content = data.get("content")
-		epa_id = data.get("epa_id")
-		after_order = data.get("after_order")
-		
-		if epa_id:
-			epa = EPA.objects.filter(id=epa_id).first()
-			if epa:
-				if after_order is not None:
-					Section.objects.filter(epa=epa, order__gt=after_order).update(order=F('order') + 1)
-					order = after_order + 1
-				else:
-					max_order = Section.objects.filter(epa=epa).aggregate(max_order=Max('order'))['max_order'] or 0
-					order = max_order + 1
-				
-				Section.objects.create(epa=epa, title=title, content=content, order=order)
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return add_section_view(request)
 
 @csrf_exempt
-def edit_isotooppi_petkamera_section_view(request):
+def edit_isotooppi_pet_kamera_section_view(request):
 	"""Edit existing section in PET-kamera EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("id")
-		title = data.get("title")
-		content = data.get("content")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.title = title
-			section.content = content
-			section.save()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return edit_section_view(request)
 
 @csrf_exempt
-def delete_isotooppi_petkamera_section_view(request):
+def delete_isotooppi_pet_kamera_section_view(request):
 	"""Delete section from PET-kamera EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("id")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.delete()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return delete_section_view(request)
+
+@csrf_exempt
+def update_isotooppi_pet_kamera_proficiency_view(request):
+	"""Update proficiency level for PET-kamera section"""
+	return update_proficiency_view(request)
 
 # Annostelu ja radiofarmasia section endpoints
 @csrf_exempt
 def add_isotooppi_annostelu_radiofarmasia_section_view(request):
 	"""Add new section to Annostelu ja radiofarmasia EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		title = data.get("title")
-		content = data.get("content")
-		epa_id = data.get("epa_id")
-		after_order = data.get("after_order")
-		
-		if epa_id:
-			epa = EPA.objects.filter(id=epa_id).first()
-			if epa:
-				if after_order is not None:
-					Section.objects.filter(epa=epa, order__gt=after_order).update(order=F('order') + 1)
-					order = after_order + 1
-				else:
-					max_order = Section.objects.filter(epa=epa).aggregate(max_order=Max('order'))['max_order'] or 0
-					order = max_order + 1
-				
-				Section.objects.create(epa=epa, title=title, content=content, order=order)
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return add_section_view(request)
 
 @csrf_exempt
 def edit_isotooppi_annostelu_radiofarmasia_section_view(request):
 	"""Edit existing section in Annostelu ja radiofarmasia EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("id")
-		title = data.get("title")
-		content = data.get("content")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.title = title
-			section.content = content
-			section.save()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return edit_section_view(request)
 
 @csrf_exempt
 def delete_isotooppi_annostelu_radiofarmasia_section_view(request):
 	"""Delete section from Annostelu ja radiofarmasia EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("id")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.delete()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return delete_section_view(request)
+
+@csrf_exempt
+def update_isotooppi_annostelu_radiofarmasia_proficiency_view(request):
+	"""Update proficiency level for Annostelu ja radiofarmasia section"""
+	return update_proficiency_view(request)
 
 # Gammakuvaus ja SPET section endpoints
 @csrf_exempt
 def add_isotooppi_gammakuvaus_spet_section_view(request):
 	"""Add new section to Gammakuvaus ja SPET EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		title = data.get("title")
-		content = data.get("content")
-		epa_id = data.get("epa_id")
-		after_order = data.get("after_order")
-		
-		if epa_id:
-			epa = EPA.objects.filter(id=epa_id).first()
-			if epa:
-				if after_order is not None:
-					Section.objects.filter(epa=epa, order__gt=after_order).update(order=F('order') + 1)
-					order = after_order + 1
-				else:
-					max_order = Section.objects.filter(epa=epa).aggregate(max_order=Max('order'))['max_order'] or 0
-					order = max_order + 1
-				
-				Section.objects.create(epa=epa, title=title, content=content, order=order)
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return add_section_view(request)
 
 @csrf_exempt
 def edit_isotooppi_gammakuvaus_spet_section_view(request):
 	"""Edit existing section in Gammakuvaus ja SPET EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("id")
-		title = data.get("title")
-		content = data.get("content")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.title = title
-			section.content = content
-			section.save()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return edit_section_view(request)
 
 @csrf_exempt
 def delete_isotooppi_gammakuvaus_spet_section_view(request):
 	"""Delete section from Gammakuvaus ja SPET EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("id")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.delete()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return delete_section_view(request)
+
+@csrf_exempt
+def update_isotooppi_gammakuvaus_spet_proficiency_view(request):
+	"""Update proficiency level for Gammakuvaus ja SPET section"""
+	return update_proficiency_view(request)
 
 # PET-tutkimukset section endpoints
 @csrf_exempt
 def add_isotooppi_pet_tutkimukset_section_view(request):
 	"""Add new section to PET-tutkimukset EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		title = data.get("title")
-		content = data.get("content")
-		epa_id = data.get("epa_id")
-		after_order = data.get("after_order")
-		
-		if epa_id:
-			epa = EPA.objects.filter(id=epa_id).first()
-			if epa:
-				if after_order is not None:
-					Section.objects.filter(epa=epa, order__gt=after_order).update(order=F('order') + 1)
-					order = after_order + 1
-				else:
-					max_order = Section.objects.filter(epa=epa).aggregate(max_order=Max('order'))['max_order'] or 0
-					order = max_order + 1
-				
-				Section.objects.create(epa=epa, title=title, content=content, order=order)
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return add_section_view(request)
 
 @csrf_exempt
 def edit_isotooppi_pet_tutkimukset_section_view(request):
 	"""Edit existing section in PET-tutkimukset EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("id")
-		title = data.get("title")
-		content = data.get("content")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.title = title
-			section.content = content
-			section.save()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return edit_section_view(request)
 
 @csrf_exempt
 def delete_isotooppi_pet_tutkimukset_section_view(request):
 	"""Delete section from PET-tutkimukset EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("id")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.delete()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return delete_section_view(request)
+
+@csrf_exempt
+def update_isotooppi_pet_tutkimukset_proficiency_view(request):
+	"""Update proficiency level for PET-tutkimukset section"""
+	return update_proficiency_view(request)
 
 # Radionuklidihoidot section endpoints
 @csrf_exempt
 def add_isotooppi_radionuklidihoidot_section_view(request):
 	"""Add new section to Radionuklidihoidot EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		title = data.get("title")
-		content = data.get("content")
-		epa_id = data.get("epa_id")
-		after_order = data.get("after_order")
-		
-		if epa_id:
-			epa = EPA.objects.filter(id=epa_id).first()
-			if epa:
-				if after_order is not None:
-					Section.objects.filter(epa=epa, order__gt=after_order).update(order=F('order') + 1)
-					order = after_order + 1
-				else:
-					max_order = Section.objects.filter(epa=epa).aggregate(max_order=Max('order'))['max_order'] or 0
-					order = max_order + 1
-				
-				Section.objects.create(epa=epa, title=title, content=content, order=order)
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return add_section_view(request)
 
 @csrf_exempt
 def edit_isotooppi_radionuklidihoidot_section_view(request):
 	"""Edit existing section in Radionuklidihoidot EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("id")
-		title = data.get("title")
-		content = data.get("content")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.title = title
-			section.content = content
-			section.save()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return edit_section_view(request)
 
 @csrf_exempt
 def delete_isotooppi_radionuklidihoidot_section_view(request):
 	"""Delete section from Radionuklidihoidot EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("id")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.delete()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return delete_section_view(request)
+
+@csrf_exempt
+def update_isotooppi_radionuklidihoidot_proficiency_view(request):
+	"""Update proficiency level for Radionuklidihoidot section"""
+	return update_proficiency_view(request)
 
 # Säteilybiologia ja suojelu section endpoints
 @csrf_exempt
 def add_isotooppi_sateilybiologia_suojelu_section_view(request):
 	"""Add new section to Säteilybiologia ja suojelu EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		title = data.get("title")
-		content = data.get("content")
-		epa_id = data.get("epa_id")
-		after_order = data.get("after_order")
-		
-		if epa_id:
-			epa = EPA.objects.filter(id=epa_id).first()
-			if epa:
-				if after_order is not None:
-					Section.objects.filter(epa=epa, order__gt=after_order).update(order=F('order') + 1)
-					order = after_order + 1
-				else:
-					max_order = Section.objects.filter(epa=epa).aggregate(max_order=Max('order'))['max_order'] or 0
-					order = max_order + 1
-				
-				Section.objects.create(epa=epa, title=title, content=content, order=order)
-				return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return add_section_view(request)
 
 @csrf_exempt
 def edit_isotooppi_sateilybiologia_suojelu_section_view(request):
 	"""Edit existing section in Säteilybiologia ja suojelu EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("id")
-		title = data.get("title")
-		content = data.get("content")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.title = title
-			section.content = content
-			section.save()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return edit_section_view(request)
 
 @csrf_exempt
 def delete_isotooppi_sateilybiologia_suojelu_section_view(request):
 	"""Delete section from Säteilybiologia ja suojelu EPA"""
-	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("id")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.delete()
-			return JsonResponse({"success": True})
-	return JsonResponse({"success": False})
+	return delete_section_view(request)
+
+@csrf_exempt
+def update_isotooppi_sateilybiologia_suojelu_proficiency_view(request):
+	"""Update proficiency level for Säteilybiologia ja suojelu section"""
+	return update_proficiency_view(request)
 
 # =============================================================================
 # KNF SECTION MANAGEMENT ENDPOINTS
@@ -1903,57 +1867,116 @@ def delete_isotooppi_sateilybiologia_suojelu_section_view(request):
 # EEG section endpoints
 @csrf_exempt
 def add_knf_eeg_section_view(request):
-	"""Add new section to EEG EPA"""
+	"""Add new section to KNF EEG"""
 	if request.method == "POST":
 		data = json.loads(request.body)
 		title = data.get("title")
 		content = data.get("content")
 		epa_id = data.get("epa_id")
-		after_order = data.get("after_order")
+		proficiency_level = data.get("proficiency_level", "1")  # Default to level 1
+		after_section_id = data.get("after_section_id")
 		
 		if title and epa_id:
 			epa = EPA.objects.filter(id=epa_id).first()
 			if epa:
-				if after_order is not None:
-					Section.objects.filter(epa=epa, order__gt=after_order).update(order=F('order') + 1)
-					order = after_order + 1
+				if after_section_id:
+					# Find the section after which to insert
+					after_section = Section.objects.filter(id=after_section_id, epa=epa).first()
+					if after_section:
+						# Update order of subsequent sections
+						Section.objects.filter(epa=epa, order__gt=after_section.order).update(order=F('order') + 1)
+						order = after_section.order + 1
+					else:
+						# If section not found, add to end
+						last_section = Section.objects.filter(epa=epa).order_by('-order').first()
+						order = (last_section.order + 1) if last_section else 1
 				else:
-					max_order = Section.objects.filter(epa=epa).aggregate(max_order=Max('order'))['max_order'] or 0
-					order = max_order + 1
+					# No specific position, add to end
+					last_section = Section.objects.filter(epa=epa).order_by('-order').first()
+					order = (last_section.order + 1) if last_section else 1
 				
-				Section.objects.create(epa=epa, title=title, content=content, order=order)
+				Section.objects.create(
+					epa=epa, 
+					title=title, 
+					content=content, 
+					order=order,
+					proficiency_level=proficiency_level
+				)
 				return JsonResponse({"success": True})
 	return JsonResponse({"success": False})
 
 @csrf_exempt
 def edit_knf_eeg_section_view(request):
-	"""Edit existing section in EEG EPA"""
+	"""Edit existing section in KNF EEG"""
 	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("id")
-		title = data.get("title")
-		content = data.get("content")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.title = title
-			section.content = content
-			section.save()
-			return JsonResponse({"success": True})
+		try:
+			# Try JSON first for compatibility with old code
+			data = json.loads(request.body)
+			section_id = data.get("section_id")
+			title = data.get("title")
+			content = data.get("content")
+			proficiency_level = data.get("proficiency_level")
+			action = data.get("action")
+		except:
+			# Fall back to POST data for new form-based requests
+			section_id = request.POST.get("section_id")
+			title = request.POST.get("title", "").strip()
+			content = request.POST.get("content", "")
+			proficiency_level = request.POST.get("proficiency_level")
+			action = request.POST.get("action")
+		
+		if section_id:
+			section = Section.objects.filter(id=section_id).first()
+			if section:
+				# Handle proficiency level update specifically
+				if action == 'update_proficiency' and proficiency_level:
+					section.proficiency_level = proficiency_level
+					section.save()
+					return JsonResponse({"success": True})
+				# Handle full section edit
+				elif title:
+					section.title = title
+					section.content = content
+					if proficiency_level:
+						section.proficiency_level = proficiency_level
+					section.save()
+					return JsonResponse({"success": True})
 	return JsonResponse({"success": False})
 
 @csrf_exempt
 def delete_knf_eeg_section_view(request):
-	"""Delete section from EEG EPA"""
+	"""Delete section from KNF EEG"""
 	if request.method == "POST":
 		data = json.loads(request.body)
-		section_id = data.get("id")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.delete()
-			return JsonResponse({"success": True})
+		section_id = data.get("section_id")
+		
+		if section_id:
+			section = Section.objects.filter(id=section_id).first()
+			if section:
+				section.delete()
+				return JsonResponse({"success": True})
 	return JsonResponse({"success": False})
 
-# Herätepotentiaali ja ENMG section endpoints
+@csrf_exempt
+def update_knf_eeg_proficiency_view(request):
+	"""Update proficiency level for EEG section"""
+	if request.method == "POST":
+		try:
+			data = json.loads(request.body)
+			section_id = data.get("section_id")
+			proficiency_level = data.get("proficiency_level")
+			
+			if section_id and proficiency_level:
+				section = Section.objects.filter(id=section_id).first()
+				if section:
+					section.proficiency_level = int(proficiency_level)
+					section.save()
+					return JsonResponse({"success": True})
+		except Exception as e:
+			print(f"Proficiency update error: {e}")
+	return JsonResponse({"success": False})
+
+#Herätepotentiaali ja ENMG section endpoints
 @csrf_exempt
 def add_knf_heratepotentiaali_enmg_section_view(request):
 	"""Add new section to Herätepotentiaali ja ENMG EPA"""
@@ -1962,19 +1985,35 @@ def add_knf_heratepotentiaali_enmg_section_view(request):
 		title = data.get("title")
 		content = data.get("content")
 		epa_id = data.get("epa_id")
-		after_order = data.get("after_order")
+		proficiency_level = data.get("proficiency_level", "1")  # Default to level 1
+		after_section_id = data.get("after_section_id")
 		
 		if title and epa_id:
 			epa = EPA.objects.filter(id=epa_id).first()
 			if epa:
-				if after_order is not None:
-					Section.objects.filter(epa=epa, order__gt=after_order).update(order=F('order') + 1)
-					order = after_order + 1
+				if after_section_id:
+					# Find the section after which to insert
+					after_section = Section.objects.filter(id=after_section_id, epa=epa).first()
+					if after_section:
+						# Update order of subsequent sections
+						Section.objects.filter(epa=epa, order__gt=after_section.order).update(order=F('order') + 1)
+						order = after_section.order + 1
+					else:
+						# If section not found, add to end
+						last_section = Section.objects.filter(epa=epa).order_by('-order').first()
+						order = (last_section.order + 1) if last_section else 1
 				else:
-					max_order = Section.objects.filter(epa=epa).aggregate(max_order=Max('order'))['max_order'] or 0
-					order = max_order + 1
+					# No specific position, add to end
+					last_section = Section.objects.filter(epa=epa).order_by('-order').first()
+					order = (last_section.order + 1) if last_section else 1
 				
-				Section.objects.create(epa=epa, title=title, content=content, order=order)
+				Section.objects.create(
+					epa=epa, 
+					title=title, 
+					content=content, 
+					order=order,
+					proficiency_level=proficiency_level
+				)
 				return JsonResponse({"success": True})
 	return JsonResponse({"success": False})
 
@@ -1982,16 +2021,38 @@ def add_knf_heratepotentiaali_enmg_section_view(request):
 def edit_knf_heratepotentiaali_enmg_section_view(request):
 	"""Edit existing section in Herätepotentiaali ja ENMG EPA"""
 	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("id")
-		title = data.get("title")
-		content = data.get("content")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.title = title
-			section.content = content
-			section.save()
-			return JsonResponse({"success": True})
+		try:
+			# Try JSON first for compatibility with old code
+			data = json.loads(request.body)
+			section_id = data.get("section_id")
+			title = data.get("title")
+			content = data.get("content")
+			proficiency_level = data.get("proficiency_level")
+			action = data.get("action")
+		except:
+			# Fall back to POST data for new form-based requests
+			section_id = request.POST.get("section_id")
+			title = request.POST.get("title", "").strip()
+			content = request.POST.get("content", "")
+			proficiency_level = request.POST.get("proficiency_level")
+			action = request.POST.get("action")
+		
+		if section_id:
+			section = Section.objects.filter(id=section_id).first()
+			if section:
+				# Handle proficiency level update specifically
+				if action == 'update_proficiency' and proficiency_level:
+					section.proficiency_level = proficiency_level
+					section.save()
+					return JsonResponse({"success": True})
+				# Handle full section edit
+				elif title:
+					section.title = title
+					section.content = content
+					if proficiency_level:
+						section.proficiency_level = proficiency_level
+					section.save()
+					return JsonResponse({"success": True})
 	return JsonResponse({"success": False})
 
 @csrf_exempt
@@ -1999,64 +2060,144 @@ def delete_knf_heratepotentiaali_enmg_section_view(request):
 	"""Delete section from Herätepotentiaali ja ENMG EPA"""
 	if request.method == "POST":
 		data = json.loads(request.body)
-		section_id = data.get("id")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.delete()
-			return JsonResponse({"success": True})
+		section_id = data.get("section_id")
+		
+		if section_id:
+			section = Section.objects.filter(id=section_id).first()
+			if section:
+				section.delete()
+				return JsonResponse({"success": True})
+	return JsonResponse({"success": False})
+
+@csrf_exempt
+def update_knf_heratepotentiaali_enmg_proficiency_view(request):
+	"""Update proficiency level for Herätepotentiaali ja ENMG section"""
+	if request.method == "POST":
+		try:
+			data = json.loads(request.body)
+			section_id = data.get("section_id")
+			proficiency_level = data.get("proficiency_level")
+			
+			if section_id and proficiency_level:
+				section = Section.objects.filter(id=section_id).first()
+				if section:
+					section.proficiency_level = int(proficiency_level)
+					section.save()
+					return JsonResponse({"success": True})
+		except Exception as e:
+			print(f"Proficiency update error: {e}")
 	return JsonResponse({"success": False})
 
 # IOM section endpoints
 @csrf_exempt
 def add_knf_iom_section_view(request):
-	"""Add new section to IOM EPA"""
+	"""Add new section to KNF IOM EPA"""
 	if request.method == "POST":
 		data = json.loads(request.body)
 		title = data.get("title")
 		content = data.get("content")
 		epa_id = data.get("epa_id")
-		after_order = data.get("after_order")
+		proficiency_level = data.get("proficiency_level", "1")  # Default to level 1
+		after_section_id = data.get("after_section_id")
 		
 		if title and epa_id:
 			epa = EPA.objects.filter(id=epa_id).first()
 			if epa:
-				if after_order is not None:
-					Section.objects.filter(epa=epa, order__gt=after_order).update(order=F('order') + 1)
-					order = after_order + 1
+				if after_section_id:
+					# Find the section after which to insert
+					after_section = Section.objects.filter(id=after_section_id, epa=epa).first()
+					if after_section:
+						# Update order of subsequent sections
+						Section.objects.filter(epa=epa, order__gt=after_section.order).update(order=F('order') + 1)
+						order = after_section.order + 1
+					else:
+						# If section not found, add to end
+						last_section = Section.objects.filter(epa=epa).order_by('-order').first()
+						order = (last_section.order + 1) if last_section else 1
 				else:
-					max_order = Section.objects.filter(epa=epa).aggregate(max_order=Max('order'))['max_order'] or 0
-					order = max_order + 1
+					# No specific position, add to end
+					last_section = Section.objects.filter(epa=epa).order_by('-order').first()
+					order = (last_section.order + 1) if last_section else 1
 				
-				Section.objects.create(epa=epa, title=title, content=content, order=order)
+				Section.objects.create(
+					epa=epa, 
+					title=title, 
+					content=content, 
+					order=order,
+					proficiency_level=proficiency_level
+				)
 				return JsonResponse({"success": True})
 	return JsonResponse({"success": False})
 
 @csrf_exempt
 def edit_knf_iom_section_view(request):
-	"""Edit existing section in IOM EPA"""
+	"""Edit existing section in KNF IOM EPA"""
 	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("id")
-		title = data.get("title")
-		content = data.get("content")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.title = title
-			section.content = content
-			section.save()
-			return JsonResponse({"success": True})
+		try:
+			# Try JSON first for compatibility with old code
+			data = json.loads(request.body)
+			section_id = data.get("section_id")
+			title = data.get("title")
+			content = data.get("content")
+			proficiency_level = data.get("proficiency_level")
+			action = data.get("action")
+		except:
+			# Fall back to POST data for new form-based requests
+			section_id = request.POST.get("section_id")
+			title = request.POST.get("title", "").strip()
+			content = request.POST.get("content", "")
+			proficiency_level = request.POST.get("proficiency_level")
+			action = request.POST.get("action")
+		
+		if section_id:
+			section = Section.objects.filter(id=section_id).first()
+			if section:
+				# Handle proficiency level update specifically
+				if action == 'update_proficiency' and proficiency_level:
+					section.proficiency_level = proficiency_level
+					section.save()
+					return JsonResponse({"success": True})
+				# Handle full section edit
+				elif title:
+					section.title = title
+					section.content = content
+					if proficiency_level:
+						section.proficiency_level = proficiency_level
+					section.save()
+					return JsonResponse({"success": True})
 	return JsonResponse({"success": False})
 
 @csrf_exempt
 def delete_knf_iom_section_view(request):
-	"""Delete section from IOM EPA"""
+	"""Delete section from KNF IOM EPA"""
 	if request.method == "POST":
 		data = json.loads(request.body)
-		section_id = data.get("id")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.delete()
-			return JsonResponse({"success": True})
+		section_id = data.get("section_id")
+		
+		if section_id:
+			section = Section.objects.filter(id=section_id).first()
+			if section:
+				section.delete()
+				return JsonResponse({"success": True})
+	return JsonResponse({"success": False})
+
+@csrf_exempt
+def update_knf_iom_proficiency_view(request):
+	"""Update proficiency level for IOM section"""
+	if request.method == "POST":
+		try:
+			data = json.loads(request.body)
+			section_id = data.get("section_id")
+			proficiency_level = data.get("proficiency_level")
+			
+			if section_id and proficiency_level:
+				section = Section.objects.filter(id=section_id).first()
+				if section:
+					section.proficiency_level = int(proficiency_level)
+					section.save()
+					return JsonResponse({"success": True})
+		except Exception as e:
+			print(f"Proficiency update error: {e}")
 	return JsonResponse({"success": False})
 
 # Laite- ja sähköturvallisuus section endpoints
@@ -2068,19 +2209,35 @@ def add_knf_laite_sahkoturvallisuus_section_view(request):
 		title = data.get("title")
 		content = data.get("content")
 		epa_id = data.get("epa_id")
-		after_order = data.get("after_order")
+		proficiency_level = data.get("proficiency_level", "1")  # Default to level 1
+		after_section_id = data.get("after_section_id")
 		
 		if title and epa_id:
 			epa = EPA.objects.filter(id=epa_id).first()
 			if epa:
-				if after_order is not None:
-					Section.objects.filter(epa=epa, order__gt=after_order).update(order=F('order') + 1)
-					order = after_order + 1
+				if after_section_id:
+					# Find the section after which to insert
+					after_section = Section.objects.filter(id=after_section_id, epa=epa).first()
+					if after_section:
+						# Update order of subsequent sections
+						Section.objects.filter(epa=epa, order__gt=after_section.order).update(order=F('order') + 1)
+						order = after_section.order + 1
+					else:
+						# If section not found, add to end
+						last_section = Section.objects.filter(epa=epa).order_by('-order').first()
+						order = (last_section.order + 1) if last_section else 1
 				else:
-					max_order = Section.objects.filter(epa=epa).aggregate(max_order=Max('order'))['max_order'] or 0
-					order = max_order + 1
+					# No specific position, add to end
+					last_section = Section.objects.filter(epa=epa).order_by('-order').first()
+					order = (last_section.order + 1) if last_section else 1
 				
-				Section.objects.create(epa=epa, title=title, content=content, order=order)
+				Section.objects.create(
+					epa=epa, 
+					title=title, 
+					content=content, 
+					order=order,
+					proficiency_level=proficiency_level
+				)
 				return JsonResponse({"success": True})
 	return JsonResponse({"success": False})
 
@@ -2088,16 +2245,38 @@ def add_knf_laite_sahkoturvallisuus_section_view(request):
 def edit_knf_laite_sahkoturvallisuus_section_view(request):
 	"""Edit existing section in Laite- ja sähköturvallisuus EPA"""
 	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("id")
-		title = data.get("title")
-		content = data.get("content")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.title = title
-			section.content = content
-			section.save()
-			return JsonResponse({"success": True})
+		try:
+			# Try JSON first for compatibility with old code
+			data = json.loads(request.body)
+			section_id = data.get("section_id")
+			title = data.get("title")
+			content = data.get("content")
+			proficiency_level = data.get("proficiency_level")
+			action = data.get("action")
+		except:
+			# Fall back to POST data for new form-based requests
+			section_id = request.POST.get("section_id")
+			title = request.POST.get("title", "").strip()
+			content = request.POST.get("content", "")
+			proficiency_level = request.POST.get("proficiency_level")
+			action = request.POST.get("action")
+		
+		if section_id:
+			section = Section.objects.filter(id=section_id).first()
+			if section:
+				# Handle proficiency level update specifically
+				if action == 'update_proficiency' and proficiency_level:
+					section.proficiency_level = proficiency_level
+					section.save()
+					return JsonResponse({"success": True})
+				# Handle full section edit
+				elif title:
+					section.title = title
+					section.content = content
+					if proficiency_level:
+						section.proficiency_level = proficiency_level
+					section.save()
+					return JsonResponse({"success": True})
 	return JsonResponse({"success": False})
 
 @csrf_exempt
@@ -2105,11 +2284,32 @@ def delete_knf_laite_sahkoturvallisuus_section_view(request):
 	"""Delete section from Laite- ja sähköturvallisuus EPA"""
 	if request.method == "POST":
 		data = json.loads(request.body)
-		section_id = data.get("id")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.delete()
-			return JsonResponse({"success": True})
+		section_id = data.get("section_id")
+		
+		if section_id:
+			section = Section.objects.filter(id=section_id).first()
+			if section:
+				section.delete()
+				return JsonResponse({"success": True})
+	return JsonResponse({"success": False})
+
+@csrf_exempt
+def update_knf_laite_sahkoturvallisuus_proficiency_view(request):
+	"""Update proficiency level for Laite- ja sähköturvallisuus section"""
+	if request.method == "POST":
+		try:
+			data = json.loads(request.body)
+			section_id = data.get("section_id")
+			proficiency_level = data.get("proficiency_level")
+			
+			if section_id and proficiency_level:
+				section = Section.objects.filter(id=section_id).first()
+				if section:
+					section.proficiency_level = int(proficiency_level)
+					section.save()
+					return JsonResponse({"success": True})
+		except Exception as e:
+			print(f"Proficiency update error: {e}")
 	return JsonResponse({"success": False})
 
 # Sarja-TMS-hoidot section endpoints
@@ -2121,19 +2321,35 @@ def add_knf_sarja_tms_hoidot_section_view(request):
 		title = data.get("title")
 		content = data.get("content")
 		epa_id = data.get("epa_id")
-		after_order = data.get("after_order")
+		proficiency_level = data.get("proficiency_level", "1")  # Default to level 1
+		after_section_id = data.get("after_section_id")
 		
 		if title and epa_id:
 			epa = EPA.objects.filter(id=epa_id).first()
 			if epa:
-				if after_order is not None:
-					Section.objects.filter(epa=epa, order__gt=after_order).update(order=F('order') + 1)
-					order = after_order + 1
+				if after_section_id:
+					# Find the section after which to insert
+					after_section = Section.objects.filter(id=after_section_id, epa=epa).first()
+					if after_section:
+						# Update order of subsequent sections
+						Section.objects.filter(epa=epa, order__gt=after_section.order).update(order=F('order') + 1)
+						order = after_section.order + 1
+					else:
+						# If section not found, add to end
+						last_section = Section.objects.filter(epa=epa).order_by('-order').first()
+						order = (last_section.order + 1) if last_section else 1
 				else:
-					max_order = Section.objects.filter(epa=epa).aggregate(max_order=Max('order'))['max_order'] or 0
-					order = max_order + 1
+					# No specific position, add to end
+					last_section = Section.objects.filter(epa=epa).order_by('-order').first()
+					order = (last_section.order + 1) if last_section else 1
 				
-				Section.objects.create(epa=epa, title=title, content=content, order=order)
+				Section.objects.create(
+					epa=epa, 
+					title=title, 
+					content=content, 
+					order=order,
+					proficiency_level=proficiency_level
+				)
 				return JsonResponse({"success": True})
 	return JsonResponse({"success": False})
 
@@ -2141,16 +2357,38 @@ def add_knf_sarja_tms_hoidot_section_view(request):
 def edit_knf_sarja_tms_hoidot_section_view(request):
 	"""Edit existing section in Sarja-TMS-hoidot EPA"""
 	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("id")
-		title = data.get("title")
-		content = data.get("content")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.title = title
-			section.content = content
-			section.save()
-			return JsonResponse({"success": True})
+		try:
+			# Try JSON first for compatibility with old code
+			data = json.loads(request.body)
+			section_id = data.get("section_id")
+			title = data.get("title")
+			content = data.get("content")
+			proficiency_level = data.get("proficiency_level")
+			action = data.get("action")
+		except:
+			# Fall back to POST data for new form-based requests
+			section_id = request.POST.get("section_id")
+			title = request.POST.get("title", "").strip()
+			content = request.POST.get("content", "")
+			proficiency_level = request.POST.get("proficiency_level")
+			action = request.POST.get("action")
+		
+		if section_id:
+			section = Section.objects.filter(id=section_id).first()
+			if section:
+				# Handle proficiency level update specifically
+				if action == 'update_proficiency' and proficiency_level:
+					section.proficiency_level = proficiency_level
+					section.save()
+					return JsonResponse({"success": True})
+				# Handle full section edit
+				elif title:
+					section.title = title
+					section.content = content
+					if proficiency_level:
+						section.proficiency_level = proficiency_level
+					section.save()
+					return JsonResponse({"success": True})
 	return JsonResponse({"success": False})
 
 @csrf_exempt
@@ -2158,64 +2396,144 @@ def delete_knf_sarja_tms_hoidot_section_view(request):
 	"""Delete section from Sarja-TMS-hoidot EPA"""
 	if request.method == "POST":
 		data = json.loads(request.body)
-		section_id = data.get("id")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.delete()
-			return JsonResponse({"success": True})
+		section_id = data.get("section_id")
+		
+		if section_id:
+			section = Section.objects.filter(id=section_id).first()
+			if section:
+				section.delete()
+				return JsonResponse({"success": True})
+	return JsonResponse({"success": False})
+
+@csrf_exempt
+def update_knf_sarja_tms_hoidot_proficiency_view(request):
+	"""Update proficiency level for Sarja-TMS-hoidot section"""
+	if request.method == "POST":
+		try:
+			data = json.loads(request.body)
+			section_id = data.get("section_id")
+			proficiency_level = data.get("proficiency_level")
+			
+			if section_id and proficiency_level:
+				section = Section.objects.filter(id=section_id).first()
+				if section:
+					section.proficiency_level = int(proficiency_level)
+					section.save()
+					return JsonResponse({"success": True})
+		except Exception as e:
+			print(f"Proficiency update error: {e}")
 	return JsonResponse({"success": False})
 
 # Uni section endpoints
 @csrf_exempt
 def add_knf_uni_section_view(request):
-	"""Add new section to Uni EPA"""
+	"""Add new section to Unitutkimukset EPA"""
 	if request.method == "POST":
 		data = json.loads(request.body)
 		title = data.get("title")
 		content = data.get("content")
 		epa_id = data.get("epa_id")
-		after_order = data.get("after_order")
+		proficiency_level = data.get("proficiency_level", "1")  # Default to level 1
+		after_section_id = data.get("after_section_id")
 		
 		if title and epa_id:
 			epa = EPA.objects.filter(id=epa_id).first()
 			if epa:
-				if after_order is not None:
-					Section.objects.filter(epa=epa, order__gt=after_order).update(order=F('order') + 1)
-					order = after_order + 1
+				if after_section_id:
+					# Find the section after which to insert
+					after_section = Section.objects.filter(id=after_section_id, epa=epa).first()
+					if after_section:
+						# Update order of subsequent sections
+						Section.objects.filter(epa=epa, order__gt=after_section.order).update(order=F('order') + 1)
+						order = after_section.order + 1
+					else:
+						# If section not found, add to end
+						last_section = Section.objects.filter(epa=epa).order_by('-order').first()
+						order = (last_section.order + 1) if last_section else 1
 				else:
-					max_order = Section.objects.filter(epa=epa).aggregate(max_order=Max('order'))['max_order'] or 0
-					order = max_order + 1
+					# No specific position, add to end
+					last_section = Section.objects.filter(epa=epa).order_by('-order').first()
+					order = (last_section.order + 1) if last_section else 1
 				
-				Section.objects.create(epa=epa, title=title, content=content, order=order)
+				Section.objects.create(
+					epa=epa, 
+					title=title, 
+					content=content, 
+					order=order,
+					proficiency_level=proficiency_level
+				)
 				return JsonResponse({"success": True})
 	return JsonResponse({"success": False})
 
 @csrf_exempt
 def edit_knf_uni_section_view(request):
-	"""Edit existing section in Uni EPA"""
+	"""Edit existing section in Unitutkimukset EPA"""
 	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("id")
-		title = data.get("title")
-		content = data.get("content")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.title = title
-			section.content = content
-			section.save()
-			return JsonResponse({"success": True})
+		try:
+			# Try JSON first for compatibility with old code
+			data = json.loads(request.body)
+			section_id = data.get("section_id")
+			title = data.get("title")
+			content = data.get("content")
+			proficiency_level = data.get("proficiency_level")
+			action = data.get("action")
+		except:
+			# Fall back to POST data for new form-based requests
+			section_id = request.POST.get("section_id")
+			title = request.POST.get("title", "").strip()
+			content = request.POST.get("content", "")
+			proficiency_level = request.POST.get("proficiency_level")
+			action = request.POST.get("action")
+		
+		if section_id:
+			section = Section.objects.filter(id=section_id).first()
+			if section:
+				# Handle proficiency level update specifically
+				if action == 'update_proficiency' and proficiency_level:
+					section.proficiency_level = proficiency_level
+					section.save()
+					return JsonResponse({"success": True})
+				# Handle full section edit
+				elif title:
+					section.title = title
+					section.content = content
+					if proficiency_level:
+						section.proficiency_level = proficiency_level
+					section.save()
+					return JsonResponse({"success": True})
 	return JsonResponse({"success": False})
 
 @csrf_exempt
 def delete_knf_uni_section_view(request):
-	"""Delete section from Uni EPA"""
+	"""Delete section from Unitutkimukset EPA"""
 	if request.method == "POST":
 		data = json.loads(request.body)
-		section_id = data.get("id")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.delete()
-			return JsonResponse({"success": True})
+		section_id = data.get("section_id")
+		
+		if section_id:
+			section = Section.objects.filter(id=section_id).first()
+			if section:
+				section.delete()
+				return JsonResponse({"success": True})
+	return JsonResponse({"success": False})
+
+@csrf_exempt
+def update_knf_uni_proficiency_view(request):
+	"""Update proficiency level for Unitutkimukset section"""
+	if request.method == "POST":
+		try:
+			data = json.loads(request.body)
+			section_id = data.get("section_id")
+			proficiency_level = data.get("proficiency_level")
+			
+			if section_id and proficiency_level:
+				section = Section.objects.filter(id=section_id).first()
+				if section:
+					section.proficiency_level = int(proficiency_level)
+					section.save()
+					return JsonResponse({"success": True})
+		except Exception as e:
+			print(f"Proficiency update error: {e}")
 	return JsonResponse({"success": False})
 
 # =============================================================================
@@ -2231,19 +2549,35 @@ def add_fysiologia_ekg_section_view(request):
 		title = data.get("title")
 		content = data.get("content")
 		epa_id = data.get("epa_id")
-		after_order = data.get("after_order")
+		proficiency_level = data.get("proficiency_level", "1")  # Default to level 1
+		after_section_id = data.get("after_section_id")
 		
 		if title and epa_id:
 			epa = EPA.objects.filter(id=epa_id).first()
 			if epa:
-				if after_order is not None:
-					Section.objects.filter(epa=epa, order__gt=after_order).update(order=F('order') + 1)
-					order = after_order + 1
+				if after_section_id:
+					# Find the section after which to insert
+					after_section = Section.objects.filter(id=after_section_id, epa=epa).first()
+					if after_section:
+						# Update order of subsequent sections
+						Section.objects.filter(epa=epa, order__gt=after_section.order).update(order=F('order') + 1)
+						order = after_section.order + 1
+					else:
+						# If section not found, add to end
+						last_section = Section.objects.filter(epa=epa).order_by('-order').first()
+						order = (last_section.order + 1) if last_section else 1
 				else:
-					max_order = Section.objects.filter(epa=epa).aggregate(max_order=Max('order'))['max_order'] or 0
-					order = max_order + 1
+					# No specific position, add to end
+					last_section = Section.objects.filter(epa=epa).order_by('-order').first()
+					order = (last_section.order + 1) if last_section else 1
 				
-				Section.objects.create(epa=epa, title=title, content=content, order=order)
+				Section.objects.create(
+					epa=epa, 
+					title=title, 
+					content=content, 
+					order=order,
+					proficiency_level=proficiency_level
+				)
 				return JsonResponse({"success": True})
 	return JsonResponse({"success": False})
 
@@ -2251,16 +2585,38 @@ def add_fysiologia_ekg_section_view(request):
 def edit_fysiologia_ekg_section_view(request):
 	"""Edit existing section in EKG EPA"""
 	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("id")
-		title = data.get("title")
-		content = data.get("content")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.title = title
-			section.content = content
-			section.save()
-			return JsonResponse({"success": True})
+		try:
+			# Try JSON first for compatibility with old code
+			data = json.loads(request.body)
+			section_id = data.get("section_id")
+			title = data.get("title")
+			content = data.get("content")
+			proficiency_level = data.get("proficiency_level")
+			action = data.get("action")
+		except:
+			# Fall back to POST data for new form-based requests
+			section_id = request.POST.get("section_id")
+			title = request.POST.get("title", "").strip()
+			content = request.POST.get("content", "")
+			proficiency_level = request.POST.get("proficiency_level")
+			action = request.POST.get("action")
+		
+		if section_id:
+			section = Section.objects.filter(id=section_id).first()
+			if section:
+				# Handle proficiency level update specifically
+				if action == 'update_proficiency' and proficiency_level:
+					section.proficiency_level = proficiency_level
+					section.save()
+					return JsonResponse({"success": True})
+				# Handle full section edit
+				elif title:
+					section.title = title
+					section.content = content
+					if proficiency_level:
+						section.proficiency_level = proficiency_level
+					section.save()
+					return JsonResponse({"success": True})
 	return JsonResponse({"success": False})
 
 @csrf_exempt
@@ -2268,11 +2624,32 @@ def delete_fysiologia_ekg_section_view(request):
 	"""Delete section from EKG EPA"""
 	if request.method == "POST":
 		data = json.loads(request.body)
-		section_id = data.get("id")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.delete()
-			return JsonResponse({"success": True})
+		section_id = data.get("section_id")
+		
+		if section_id:
+			section = Section.objects.filter(id=section_id).first()
+			if section:
+				section.delete()
+				return JsonResponse({"success": True})
+	return JsonResponse({"success": False})
+
+@csrf_exempt
+def update_fysiologia_ekg_proficiency_view(request):
+	"""Update proficiency level for EKG section"""
+	if request.method == "POST":
+		try:
+			data = json.loads(request.body)
+			section_id = data.get("section_id")
+			proficiency_level = data.get("proficiency_level")
+			
+			if section_id and proficiency_level:
+				section = Section.objects.filter(id=section_id).first()
+				if section:
+					section.proficiency_level = int(proficiency_level)
+					section.save()
+					return JsonResponse({"success": True})
+		except Exception as e:
+			print(f"Proficiency update error: {e}")
 	return JsonResponse({"success": False})
 
 # GI-kanava section endpoints
@@ -2284,19 +2661,35 @@ def add_fysiologia_gi_kanava_section_view(request):
 		title = data.get("title")
 		content = data.get("content")
 		epa_id = data.get("epa_id")
-		after_order = data.get("after_order")
+		proficiency_level = data.get("proficiency_level", "1")  # Default to level 1
+		after_section_id = data.get("after_section_id")
 		
 		if title and epa_id:
 			epa = EPA.objects.filter(id=epa_id).first()
 			if epa:
-				if after_order is not None:
-					Section.objects.filter(epa=epa, order__gt=after_order).update(order=F('order') + 1)
-					order = after_order + 1
+				if after_section_id:
+					# Find the section after which to insert
+					after_section = Section.objects.filter(id=after_section_id, epa=epa).first()
+					if after_section:
+						# Update order of subsequent sections
+						Section.objects.filter(epa=epa, order__gt=after_section.order).update(order=F('order') + 1)
+						order = after_section.order + 1
+					else:
+						# If section not found, add to end
+						last_section = Section.objects.filter(epa=epa).order_by('-order').first()
+						order = (last_section.order + 1) if last_section else 1
 				else:
-					max_order = Section.objects.filter(epa=epa).aggregate(max_order=Max('order'))['max_order'] or 0
-					order = max_order + 1
+					# No specific position, add to end
+					last_section = Section.objects.filter(epa=epa).order_by('-order').first()
+					order = (last_section.order + 1) if last_section else 1
 				
-				Section.objects.create(epa=epa, title=title, content=content, order=order)
+				Section.objects.create(
+					epa=epa, 
+					title=title, 
+					content=content, 
+					order=order,
+					proficiency_level=proficiency_level
+				)
 				return JsonResponse({"success": True})
 	return JsonResponse({"success": False})
 
@@ -2304,16 +2697,38 @@ def add_fysiologia_gi_kanava_section_view(request):
 def edit_fysiologia_gi_kanava_section_view(request):
 	"""Edit existing section in GI-kanava EPA"""
 	if request.method == "POST":
-		data = json.loads(request.body)
-		section_id = data.get("id")
-		title = data.get("title")
-		content = data.get("content")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.title = title
-			section.content = content
-			section.save()
-			return JsonResponse({"success": True})
+		try:
+			# Try JSON first for compatibility with old code
+			data = json.loads(request.body)
+			section_id = data.get("section_id")
+			title = data.get("title")
+			content = data.get("content")
+			proficiency_level = data.get("proficiency_level")
+			action = data.get("action")
+		except:
+			# Fall back to POST data for new form-based requests
+			section_id = request.POST.get("section_id")
+			title = request.POST.get("title", "").strip()
+			content = request.POST.get("content", "")
+			proficiency_level = request.POST.get("proficiency_level")
+			action = request.POST.get("action")
+		
+		if section_id:
+			section = Section.objects.filter(id=section_id).first()
+			if section:
+				# Handle proficiency level update specifically
+				if action == 'update_proficiency' and proficiency_level:
+					section.proficiency_level = proficiency_level
+					section.save()
+					return JsonResponse({"success": True})
+				# Handle full section edit
+				elif title:
+					section.title = title
+					section.content = content
+					if proficiency_level:
+						section.proficiency_level = proficiency_level
+					section.save()
+					return JsonResponse({"success": True})
 	return JsonResponse({"success": False})
 
 @csrf_exempt
@@ -2321,11 +2736,368 @@ def delete_fysiologia_gi_kanava_section_view(request):
 	"""Delete section from GI-kanava EPA"""
 	if request.method == "POST":
 		data = json.loads(request.body)
-		section_id = data.get("id")
-		section = Section.objects.filter(id=section_id).first()
-		if section:
-			section.delete()
-			return JsonResponse({"success": True})
+		section_id = data.get("section_id")
+		
+		if section_id:
+			section = Section.objects.filter(id=section_id).first()
+			if section:
+				section.delete()
+				return JsonResponse({"success": True})
+	return JsonResponse({"success": False})
+
+@csrf_exempt
+def update_fysiologia_gi_kanava_proficiency_view(request):
+	"""Update proficiency level for GI-kanava section"""
+	if request.method == "POST":
+		try:
+			data = json.loads(request.body)
+			section_id = data.get("section_id")
+			proficiency_level = data.get("proficiency_level")
+			
+			if section_id and proficiency_level:
+				section = Section.objects.filter(id=section_id).first()
+				if section:
+					section.proficiency_level = int(proficiency_level)
+					section.save()
+					return JsonResponse({"success": True})
+		except Exception as e:
+			print(f"Proficiency update error: {e}")
+	return JsonResponse({"success": False})
+
+#Keuhkofunktio section endpoints
+@csrf_exempt
+def add_fysiologia_keuhkofunktio_section_view(request):
+	"""Add new section to Keuhkofunktio EPA"""
+	if request.method == "POST":
+		data = json.loads(request.body)
+		title = data.get("title")
+		content = data.get("content")
+		epa_id = data.get("epa_id")
+		proficiency_level = data.get("proficiency_level", "1")  # Default to level 1
+		after_section_id = data.get("after_section_id")
+		
+		if title and epa_id:
+			epa = EPA.objects.filter(id=epa_id).first()
+			if epa:
+				if after_section_id:
+					# Find the section after which to insert
+					after_section = Section.objects.filter(id=after_section_id, epa=epa).first()
+					if after_section:
+						# Update order of subsequent sections
+						Section.objects.filter(epa=epa, order__gt=after_section.order).update(order=F('order') + 1)
+						order = after_section.order + 1
+					else:
+						# If section not found, add to end
+						last_section = Section.objects.filter(epa=epa).order_by('-order').first()
+						order = (last_section.order + 1) if last_section else 1
+				else:
+					# No specific position, add to end
+					last_section = Section.objects.filter(epa=epa).order_by('-order').first()
+					order = (last_section.order + 1) if last_section else 1
+				
+				Section.objects.create(
+					epa=epa, 
+					title=title, 
+					content=content, 
+					order=order,
+					proficiency_level=proficiency_level
+				)
+				return JsonResponse({"success": True})
+	return JsonResponse({"success": False})
+
+@csrf_exempt
+def edit_fysiologia_keuhkofunktio_section_view(request):
+	"""Edit existing section in Keuhkofunktio EPA"""
+	if request.method == "POST":
+		try:
+			# Try JSON first for compatibility with old code
+			data = json.loads(request.body)
+			section_id = data.get("section_id")
+			title = data.get("title")
+			content = data.get("content")
+			proficiency_level = data.get("proficiency_level")
+			action = data.get("action")
+		except:
+			# Fall back to POST data for new form-based requests
+			section_id = request.POST.get("section_id")
+			title = request.POST.get("title", "").strip()
+			content = request.POST.get("content", "")
+			proficiency_level = request.POST.get("proficiency_level")
+			action = request.POST.get("action")
+		
+		if section_id:
+			section = Section.objects.filter(id=section_id).first()
+			if section:
+				# Handle proficiency level update specifically
+				if action == 'update_proficiency' and proficiency_level:
+					section.proficiency_level = proficiency_level
+					section.save()
+					return JsonResponse({"success": True})
+				# Handle full section edit
+				elif title:
+					section.title = title
+					section.content = content
+					if proficiency_level:
+						section.proficiency_level = proficiency_level
+					section.save()
+					return JsonResponse({"success": True})
+	return JsonResponse({"success": False})
+
+@csrf_exempt
+def delete_fysiologia_keuhkofunktio_section_view(request):
+	"""Delete section from Keuhkofunktio EPA"""
+	if request.method == "POST":
+		data = json.loads(request.body)
+		section_id = data.get("section_id")
+		
+		if section_id:
+			section = Section.objects.filter(id=section_id).first()
+			if section:
+				section.delete()
+				return JsonResponse({"success": True})
+	return JsonResponse({"success": False})
+
+@csrf_exempt
+def update_fysiologia_keuhkofunktio_proficiency_view(request):
+	"""Update proficiency level for Keuhkofunktio section"""
+	if request.method == "POST":
+		try:
+			data = json.loads(request.body)
+			section_id = data.get("section_id")
+			proficiency_level = data.get("proficiency_level")
+			
+			if section_id and proficiency_level:
+				section = Section.objects.filter(id=section_id).first()
+				if section:
+					section.proficiency_level = int(proficiency_level)
+					section.save()
+					return JsonResponse({"success": True})
+		except Exception as e:
+			print(f"Proficiency update error: {e}")
+	return JsonResponse({"success": False})
+
+# Luuston mineraalitiheys section endpoints
+@csrf_exempt
+def add_fysiologia_luuston_mineraali_section_view(request):
+	"""Add new section to Luuston mineraalitiheys EPA"""
+	if request.method == "POST":
+		data = json.loads(request.body)
+		title = data.get("title")
+		content = data.get("content")
+		epa_id = data.get("epa_id")
+		proficiency_level = data.get("proficiency_level", "1")  # Default to level 1
+		after_section_id = data.get("after_section_id")
+		
+		if title and epa_id:
+			epa = EPA.objects.filter(id=epa_id).first()
+			if epa:
+				if after_section_id:
+					# Find the section after which to insert
+					after_section = Section.objects.filter(id=after_section_id, epa=epa).first()
+					if after_section:
+						# Update order of subsequent sections
+						Section.objects.filter(epa=epa, order__gt=after_section.order).update(order=F('order') + 1)
+						order = after_section.order + 1
+					else:
+						# If section not found, add to end
+						last_section = Section.objects.filter(epa=epa).order_by('-order').first()
+						order = (last_section.order + 1) if last_section else 1
+				else:
+					# No specific position, add to end
+					last_section = Section.objects.filter(epa=epa).order_by('-order').first()
+					order = (last_section.order + 1) if last_section else 1
+				
+				Section.objects.create(
+					epa=epa, 
+					title=title, 
+					content=content, 
+					order=order,
+					proficiency_level=proficiency_level
+				)
+				return JsonResponse({"success": True})
+	return JsonResponse({"success": False})
+
+@csrf_exempt
+def edit_fysiologia_luuston_mineraali_section_view(request):
+	"""Edit existing section in Luuston mineraalitiheys EPA"""
+	if request.method == "POST":
+		try:
+			# Try JSON first for compatibility with old code
+			data = json.loads(request.body)
+			section_id = data.get("section_id")
+			title = data.get("title")
+			content = data.get("content")
+			proficiency_level = data.get("proficiency_level")
+			action = data.get("action")
+		except:
+			# Fall back to POST data for new form-based requests
+			section_id = request.POST.get("section_id")
+			title = request.POST.get("title", "").strip()
+			content = request.POST.get("content", "")
+			proficiency_level = request.POST.get("proficiency_level")
+			action = request.POST.get("action")
+		
+		if section_id:
+			section = Section.objects.filter(id=section_id).first()
+			if section:
+				# Handle proficiency level update specifically
+				if action == 'update_proficiency' and proficiency_level:
+					section.proficiency_level = proficiency_level
+					section.save()
+					return JsonResponse({"success": True})
+				# Handle full section edit
+				elif title:
+					section.title = title
+					section.content = content
+					if proficiency_level:
+						section.proficiency_level = proficiency_level
+					section.save()
+					return JsonResponse({"success": True})
+	return JsonResponse({"success": False})
+
+@csrf_exempt
+def delete_fysiologia_luuston_mineraali_section_view(request):
+	"""Delete section from Luuston mineraalitiheys EPA"""
+	if request.method == "POST":
+		data = json.loads(request.body)
+		section_id = data.get("section_id")
+		
+		if section_id:
+			section = Section.objects.filter(id=section_id).first()
+			if section:
+				section.delete()
+				return JsonResponse({"success": True})
+	return JsonResponse({"success": False})
+
+@csrf_exempt
+def update_fysiologia_luuston_mineraali_proficiency_view(request):
+	"""Update proficiency level for Luuston mineraalitiheys section"""
+	if request.method == "POST":
+		try:
+			data = json.loads(request.body)
+			section_id = data.get("section_id")
+			proficiency_level = data.get("proficiency_level")
+			
+			if section_id and proficiency_level:
+				section = Section.objects.filter(id=section_id).first()
+				if section:
+					section.proficiency_level = int(proficiency_level)
+					section.save()
+					return JsonResponse({"success": True})
+		except Exception as e:
+			print(f"Proficiency update error: {e}")
+	return JsonResponse({"success": False})
+
+# Verenkierto section endpoints
+@csrf_exempt
+def add_fysiologia_verenkierto_section_view(request):
+	"""Add new section to Verenkierto EPA"""
+	if request.method == "POST":
+		data = json.loads(request.body)
+		title = data.get("title")
+		content = data.get("content")
+		epa_id = data.get("epa_id")
+		proficiency_level = data.get("proficiency_level", "1")  # Default to level 1
+		after_section_id = data.get("after_section_id")
+		
+		if title and epa_id:
+			epa = EPA.objects.filter(id=epa_id).first()
+			if epa:
+				if after_section_id:
+					# Find the section after which to insert
+					after_section = Section.objects.filter(id=after_section_id, epa=epa).first()
+					if after_section:
+						# Update order of subsequent sections
+						Section.objects.filter(epa=epa, order__gt=after_section.order).update(order=F('order') + 1)
+						order = after_section.order + 1
+					else:
+						# If section not found, add to end
+						last_section = Section.objects.filter(epa=epa).order_by('-order').first()
+						order = (last_section.order + 1) if last_section else 1
+				else:
+					# No specific position, add to end
+					last_section = Section.objects.filter(epa=epa).order_by('-order').first()
+					order = (last_section.order + 1) if last_section else 1
+				
+				Section.objects.create(
+					epa=epa, 
+					title=title, 
+					content=content, 
+					order=order,
+					proficiency_level=proficiency_level
+				)
+				return JsonResponse({"success": True})
+	return JsonResponse({"success": False})
+
+@csrf_exempt
+def edit_fysiologia_verenkierto_section_view(request):
+	"""Edit existing section in Verenkierto EPA"""
+	if request.method == "POST":
+		try:
+			# Try JSON first for compatibility with old code
+			data = json.loads(request.body)
+			section_id = data.get("section_id")
+			title = data.get("title")
+			content = data.get("content")
+			proficiency_level = data.get("proficiency_level")
+			action = data.get("action")
+		except:
+			# Fall back to POST data for new form-based requests
+			section_id = request.POST.get("section_id")
+			title = request.POST.get("title", "").strip()
+			content = request.POST.get("content", "")
+			proficiency_level = request.POST.get("proficiency_level")
+			action = request.POST.get("action")
+		
+		if section_id:
+			section = Section.objects.filter(id=section_id).first()
+			if section:
+				# Handle proficiency level update specifically
+				if action == 'update_proficiency' and proficiency_level:
+					section.proficiency_level = proficiency_level
+					section.save()
+					return JsonResponse({"success": True})
+				# Handle full section edit
+				elif title:
+					section.title = title
+					section.content = content
+					if proficiency_level:
+						section.proficiency_level = proficiency_level
+					section.save()
+					return JsonResponse({"success": True})
+	return JsonResponse({"success": False})
+
+@csrf_exempt
+def delete_fysiologia_verenkierto_section_view(request):
+	"""Delete section from Verenkierto EPA"""
+	if request.method == "POST":
+		data = json.loads(request.body)
+		section_id = data.get("section_id")
+		
+		if section_id:
+			section = Section.objects.filter(id=section_id).first()
+			if section:
+				section.delete()
+				return JsonResponse({"success": True})
+	return JsonResponse({"success": False})
+
+@csrf_exempt
+def update_fysiologia_verenkierto_proficiency_view(request):
+	"""Update proficiency level for Verenkierto section"""
+	if request.method == "POST":
+		try:
+			data = json.loads(request.body)
+			section_id = data.get("section_id")
+			proficiency_level = data.get("proficiency_level")
+			
+			if section_id and proficiency_level:
+				section = Section.objects.filter(id=section_id).first()
+				if section:
+					section.proficiency_level = int(proficiency_level)
+					section.save()
+					return JsonResponse({"success": True})
+		except Exception as e:
+			print(f"Proficiency update error: {e}")
 	return JsonResponse({"success": False})
 
 # =============================================================================
@@ -2334,12 +3106,82 @@ def delete_fysiologia_gi_kanava_section_view(request):
 
 def raportoi_ongelma_view(request):
     """
-    Näyttää "Raportoi ongelmasta" -sivun joka käyttää base_new2.html pohjaa
-    ja CKEditor 5 Super Buildia kaikilla ominaisuuksilla.
+    Näyttää "Raportoi ongelmasta" -sivun joka käyttää base_summereditor.html pohjaa
+    ja Summernote editoria muokkaukseen. Sisältää samaa section-toiminnallisuutta kuin EPA-sivut.
     """
+    # Luodaan erityinen EPA "Raportoi ongelma" sisällölle
+    specialty, _ = Specialty.objects.get_or_create(name="Yleiset")
+    epa, created = EPA.objects.get_or_create(specialty=specialty, title="Raportoi ongelma")
+    
+    # Luodaan default-osiot jos EPA on uusi
+    if created or not Section.objects.filter(epa=epa).exists():
+        default_sections = [
+            {
+                'title': 'Yleistä tietoa raportoimisesta',
+                'content': '''<p>Tämän sivun kautta voit raportoida sivustossa havaitsemistasi ongelmista, virheistä tai puutteista. Voit myös ehdottaa parannuksia sisältöön tai sivuston toiminnallisuuteen.</p>
+<p><strong>Mitä voit raportoida:</strong></p>
+<ul>
+<li>Virheitä sisällössä (kirjoitusvirheet, väärät tiedot)</li>
+<li>Teknisiä ongelmia (sivut eivät lataudu, linkit eivät toimi)</li>
+<li>Puuttuvia tietoja tai osiota</li>
+<li>Ehdotuksia sisällön parantamiseksi</li>
+<li>Käytettävyysongelmia</li>
+</ul>''',
+                'order': 1
+            },
+            {
+                'title': 'Tekniset ongelmat',
+                'content': '''<p>Jos kohtaat teknisiä ongelmia sivuston käytössä, kerro meille:</p>
+<ul>
+<li>Mitä yritit tehdä?</li>
+<li>Mitä tapahtui sen sijaan?</li>
+<li>Mitä selainta käytät?</li>
+<li>Millä laitteella (tietokone, tablet, puhelin)?</li>
+</ul>
+<p><strong>Esimerkki hyvästä raportista:</strong><br>
+"Yritin ladata kuvaa Summernote-editorissa Radiologia &gt; Magneettikuvaus -sivulla, mutta kuva ei latautunut. Käytän Chrome-selainta Windows 10 -tietokoneella."</p>''',
+                'order': 2
+            },
+            {
+                'title': 'Sisältöön liittyvät raportit',
+                'content': '''<p>Sisältöön liittyvät raportit voivat koskea:</p>
+<ul>
+<li><strong>Virheitä:</strong> Kirjoitusvirheet, väärät kaavat tai faktat</li>
+<li><strong>Puutteita:</strong> Tärkeää tietoa puuttuu jostakin osiosta</li>
+<li><strong>Vanhentuneita tietoja:</strong> Tiedot eivät ole ajan tasalla</li>
+<li><strong>Epäselviä kohtia:</strong> Jotain on vaikea ymmärtää</li>
+</ul>
+<p>Kerro aina tarkkaan, mistä osiosta ja sivusta on kyse, jotta voimme korjata ongelmat nopeasti.</p>''',
+                'order': 3
+            },
+            {
+                'title': 'Yhteystiedot ja palautteen antaminen',
+                'content': '''<p>Voit ottaa yhteyttä seuraavilla tavoilla:</p>
+<ul>
+<li><strong>Sähköposti:</strong> <a href="mailto:admin@example.com">admin@example.com</a></li>
+<li><strong>GitHub Issues:</strong> <a href="#" target="_blank">Luo issue GitHubissa</a></li>
+<li><strong>Suora palaute:</strong> Käytä sivuston AI-chat toimintoa</li>
+</ul>
+<p><strong>Kiitos avustasi!</strong> Jokainen raportti auttaa tekemään sivustosta paremman kaikille käyttäjille.</p>''',
+                'order': 4
+            }
+        ]
+        
+        for section_data in default_sections:
+            Section.objects.create(
+                epa=epa,
+                title=section_data['title'],
+                content=section_data['content'],
+                order=section_data['order']
+            )
+    
+    sections = Section.objects.filter(epa=epa).order_by('order', 'id')
+    
     context = {
         'page_title': 'Raportoi ongelmasta - Sairaalafyysikon erikoistumiskirja',
-        'page_description': 'Ilmoita sivuston toiminnassa havaitsemistasi ongelmista tai ehdota parannuksia. Käytämme CKEditor 5 Super Buildia kaikkien muokkausominaisuuksien kanssa.',
+        'page_description': 'Ilmoita sivuston toiminnassa havaitsemistasi ongelmista tai ehdota parannuksia.',
+        'epa': epa,
+        'sections': sections
     }
     return render(request, 'sisalto/raportoi_ongelma.html', context)
 
@@ -2372,9 +3214,6 @@ def upload_image_view(request):
     # Create unique name
     import uuid
     name = f"editor/{uuid.uuid4().hex}{ext}"
-
-    from django.core.files.storage import default_storage
-    from django.core.files.base import ContentFile
     
     try:
         saved_path = default_storage.save(name, ContentFile(f.read()))
@@ -2394,3 +3233,39 @@ def upload_image_view(request):
         
     except Exception as e:
         return JsonResponse({ 'error': { 'message': str(e) } }, status=500)
+
+# =============================================================================
+# RAPORTOI ONGELMA SECTION MANAGEMENT
+# =============================================================================
+
+
+
+# =============================================================================
+# RAPORTOI ONGELMA SECTION MANAGEMENT
+# =============================================================================
+
+@csrf_exempt
+def edit_raportoi_ongelma_section_view(request):
+	"""Edit section in Raportoi ongelma page"""
+	if request.method == "POST":
+		try:
+			section_id = request.POST.get("section_id")
+			title = request.POST.get("title", "").strip()
+			content = request.POST.get("content", "")
+			
+			if not title:
+				return JsonResponse({"success": False, "error": "Otsikko vaaditaan"})
+			
+			section = Section.objects.filter(id=section_id).first()
+			if section:
+				section.title = title
+				section.content = content
+				section.save()
+				return JsonResponse({"success": True})
+			else:
+				return JsonResponse({"success": False, "error": "Osiota ei löytynyt"})
+				
+		except Exception as e:
+			return JsonResponse({"success": False, "error": str(e)})
+	
+	return JsonResponse({"success": False, "error": "Virheellinen pyyntö"})

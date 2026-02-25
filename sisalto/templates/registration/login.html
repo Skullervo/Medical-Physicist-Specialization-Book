@@ -1,0 +1,44 @@
+{% extends "sisalto/base_summereditor.html" %}
+
+{% block title %}Kirjaudu sisään - Sairaalafyysikon erikoistumiskirja{% endblock %}
+
+{% block content %}
+<div style="max-width: 420px; margin: 60px auto; padding: 0 20px;">
+    <div style="background: var(--bg-surface, #161b26); border-radius: 12px; padding: 32px; border: 1px solid var(--border-default, rgba(255,255,255,0.10));">
+        <div style="text-align: center; margin-bottom: 24px;">
+            <i class="fas fa-user-circle" style="font-size: 2.5em; color: var(--color-primary, #60a5fa); margin-bottom: 12px; display: block;"></i>
+            <h1 style="font-family: var(--font-display, 'Outfit'); font-size: 1.5em; color: var(--text-primary, #e2e8f0); margin: 0;">Kirjaudu sisään</h1>
+        </div>
+
+        {% if form.errors %}
+        <div style="background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.3); border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; color: #f87171; font-size: 0.9em;">
+            <i class="fas fa-exclamation-circle" style="margin-right: 6px;"></i>
+            Virheellinen käyttäjänimi tai salasana.
+        </div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <div style="margin-bottom: 16px;">
+                <label for="id_username" style="display: block; color: var(--text-secondary, #94a3b8); font-size: 0.9em; margin-bottom: 6px; font-weight: 500;">Käyttäjänimi</label>
+                <input type="text" name="username" id="id_username" autofocus required
+                    style="width: 100%; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-default, rgba(255,255,255,0.10)); background: var(--bg-raised, #1c2333); color: var(--text-primary, #e2e8f0); font-size: 1em; box-sizing: border-box;">
+            </div>
+            <div style="margin-bottom: 24px;">
+                <label for="id_password" style="display: block; color: var(--text-secondary, #94a3b8); font-size: 0.9em; margin-bottom: 6px; font-weight: 500;">Salasana</label>
+                <input type="password" name="password" id="id_password" required
+                    style="width: 100%; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-default, rgba(255,255,255,0.10)); background: var(--bg-raised, #1c2333); color: var(--text-primary, #e2e8f0); font-size: 1em; box-sizing: border-box;">
+            </div>
+            <button type="submit"
+                style="width: 100%; padding: 12px; border-radius: 8px; border: none; background: var(--color-primary, #60a5fa); color: white; font-size: 1em; font-weight: 600; cursor: pointer;">
+                <i class="fas fa-sign-in-alt" style="margin-right: 6px;"></i>Kirjaudu
+            </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 20px; color: var(--text-tertiary, #64748b); font-size: 0.9em;">
+            Ei vielä tunnusta?
+            <a href="{% url 'register' %}" style="color: var(--color-primary, #60a5fa); text-decoration: none; font-weight: 500;">Rekisteröidy</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

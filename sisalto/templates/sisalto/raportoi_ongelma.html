@@ -105,6 +105,8 @@
         color: #e9d9d9ff;
         min-height: 60px;
         padding: 15px 0;
+        overflow-wrap: anywhere;   /* moderni tapa: sallii rivinvaihdot missä tahansa */
+        word-break: break-word;    /* varmistaa tuen vanhemmille selaimille */
     }
     
     .section-content p {
@@ -327,111 +329,38 @@
 {% endblock %}
 
 {% block content %}
+{% csrf_token %}
 <div class="report-container">
-    <!-- Yleistä tietoa osio -->
-    <div class="report-section" data-section-id="1">
+    {% for section in sections %}
+    <!-- {{ section.title }} osio -->
+    <div class="report-section" data-section-id="{{ section.id }}">
         <div class="section-header">
             <h2 class="section-title">
                 <div class="section-icon">
-                    <i class="fas fa-info-circle"></i>
+                    {% if forloop.first %}
+                        <i class="fas fa-info-circle"></i>
+                    {% elif forloop.counter == 2 %}
+                        <i class="fas fa-cogs"></i>
+                    {% elif forloop.counter == 3 %}
+                        <i class="fas fa-file-text"></i>
+                    {% elif forloop.counter == 4 %}
+                        <i class="fas fa-envelope"></i>
+                    {% else %}
+                        <i class="fas fa-file-text"></i>
+                    {% endif %}
                 </div>
-                Yleistä tietoa raportoimisesta
+                {{ section.title }}
             </h2>
-            <button class="edit-button" onclick="editSection(1)">
+            <button class="edit-button" onclick="editSection({{ section.id }})">
                 <i class="fas fa-edit"></i>
                 Muokkaa
             </button>
         </div>
-        <div class="section-content" id="section-content-1">
-            <p>Tämän sivun kautta voit raportoida sivustossa havaitsemistasi ongelmista, virheistä tai puutteista. Voit myös ehdottaa parannuksia sisältöön tai sivuston toiminnallisuuteen.</p>
-            <p><strong>Mitä voit raportoida:</strong></p>
-            <ul>
-                <li>Virheitä sisällössä (kirjoitusvirheet, väärät tiedot)</li>
-                <li>Teknisiä ongelmia (sivut eivät lataudu, linkit eivät toimi)</li>
-                <li>Puuttuvia tietoja tai osiota</li>
-                <li>Ehdotuksia sisällön parantamiseksi</li>
-                <li>Käytettävyysongelmia</li>
-            </ul>
+        <div class="section-content" id="section-content-{{ section.id }}">
+            {{ section.content|safe }}
         </div>
     </div>
-
-    <!-- Teknisten ongelmien raportointi -->
-    <div class="report-section" data-section-id="2">
-        <div class="section-header">
-            <h2 class="section-title">
-                <div class="section-icon">
-                    <i class="fas fa-cogs"></i>
-                </div>
-                Tekniset ongelmat
-            </h2>
-            <button class="edit-button" onclick="editSection(2)">
-                <i class="fas fa-edit"></i>
-                Muokkaa
-            </button>
-        </div>
-        <div class="section-content" id="section-content-2">
-            <p>Jos kohtaat teknisiä ongelmia sivuston käytössä, kerro meille:</p>
-            <ul>
-                <li>Mitä yritit tehdä?</li>
-                <li>Mitä tapahtui sen sijaan?</li>
-                <li>Mitä selainta käytät?</li>
-                <li>Millä laitteella (tietokone, tablet, puhelin)?</li>
-            </ul>
-            <p><strong>Esimerkki hyvästä raportista:</strong><br>
-            "Yritin ladata kuvaa Summernote-editorissa Radiologia > Magneettikuvaus -sivulla, mutta kuva ei latautunut. Käytän Chrome-selainta Windows 10 -tietokoneella."</p>
-        </div>
-    </div>
-
-    <!-- Sisältöön liittyvät raportit -->
-    <div class="report-section" data-section-id="3">
-        <div class="section-header">
-            <h2 class="section-title">
-                <div class="section-icon">
-                    <i class="fas fa-file-text"></i>
-                </div>
-                Sisältöön liittyvät raportit
-            </h2>
-            <button class="edit-button" onclick="editSection(3)">
-                <i class="fas fa-edit"></i>
-                Muokkaa
-            </button>
-        </div>
-        <div class="section-content" id="section-content-3">
-            <p>Sisältöön liittyvät raportit voivat koskea:</p>
-            <ul>
-                <li><strong>Virheitä:</strong> Kirjoitusvirheet, väärät kaavat tai faktat</li>
-                <li><strong>Puutteita:</strong> Tärkeää tietoa puuttuu jostakin osiosta</li>
-                <li><strong>Vanhentuneita tietoja:</strong> Tiedot eivät ole ajan tasalla</li>
-                <li><strong>Epäselviä kohtia:</strong> Jotain on vaikea ymmärtää</li>
-            </ul>
-            <p>Kerro aina tarkkaan, mistä osiosta ja sivusta on kyse, jotta voimme korjata ongelmat nopeasti.</p>
-        </div>
-    </div>
-
-    <!-- Yhteystiedot -->
-    <div class="report-section" data-section-id="4">
-        <div class="section-header">
-            <h2 class="section-title">
-                <div class="section-icon">
-                    <i class="fas fa-envelope"></i>
-                </div>
-                Yhteystiedot ja palautteen antaminen
-            </h2>
-            <button class="edit-button" onclick="editSection(4)">
-                <i class="fas fa-edit"></i>
-                Muokkaa
-            </button>
-        </div>
-        <div class="section-content" id="section-content-4">
-            <p>Voit ottaa yhteyttä seuraavilla tavoilla:</p>
-            <ul>
-                <li><strong>Sähköposti:</strong> <a href="mailto:admin@example.com">admin@example.com</a></li>
-                <li><strong>GitHub Issues:</strong> <a href="#" target="_blank">Luo issue GitHubissa</a></li>
-                <li><strong>Suora palaute:</strong> Käytä sivuston AI-chat toimintoa</li>
-            </ul>
-            <p><strong>Kiitos avustasi!</strong> Jokainen raportti auttaa tekemään sivustosta paremman kaikille käyttäjille.</p>
-        </div>
-    </div>
+    {% endfor %}
 </div>
 
 <!-- Modal for editing sections -->
@@ -473,13 +402,21 @@
     let currentEditSectionId = null;
     let editModalEditorInstance = null;
 
+    // CSRF token for AJAX requests
+    function getCSRFToken() {
+        return $('[name=csrfmiddlewaretoken]').val() || 
+               $('meta[name=csrf-token]').attr('content') || 
+               '{{ csrf_token }}';
+    }
+
     // Section management functions
     function editSection(sectionId) {
         console.log('Editing section:', sectionId);
         currentEditSectionId = sectionId;
         
         // Get current title and content
-        const titleEl = document.querySelector(`[data-section-id="${sectionId}"] h2.section-title`);
+        const sectionEl = document.querySelector(`[data-section-id="${sectionId}"]`);
+        const titleEl = sectionEl.querySelector('h2.section-title');
         let actualTitle = 'Osio';
         
         if (titleEl) {
@@ -547,27 +484,21 @@
                 </div>
                 <textarea id="fallback-editor" style="width: 100%; height: 350px; border: 1px solid #ddd; padding: 10px; font-family: monospace; box-sizing: border-box;">${content}</textarea>
             `;
-            
-            // Create fallback editor instance
-            editModalEditorInstance = {
-                summernote: function(action) {
-                    const textarea = document.getElementById('fallback-editor');
-                    if (action === 'code') {
-                        return textarea ? textarea.value : '';
-                    } else if (action === 'destroy') {
-                        return Promise.resolve();
-                    }
-                }
-            };
         }
     }
     
     function saveEditSection() {
-        if (!currentEditSectionId || !editModalEditorInstance) {
+        if (!currentEditSectionId) {
             return;
         }
         
-        const title = document.getElementById('edit-section-title').value;
+        const title = document.getElementById('edit-section-title').value.trim();
+        
+        if (!title) {
+            showSaveStatus('Kirjoita osion otsikko!', 'error');
+            return;
+        }
+        
         let content;
         
         try {
@@ -578,33 +509,54 @@
             content = textarea ? textarea.value : '';
         }
         
-        // Update the DOM
-        const sectionEl = document.querySelector(`[data-section-id="${currentEditSectionId}"]`);
-        if (sectionEl) {
-            const titleEl = sectionEl.querySelector('h2.section-title');
-            if (titleEl) {
-                // Keep the icon and update only the text part
-                const icon = titleEl.querySelector('.section-icon');
-                titleEl.innerHTML = '';
-                if (icon) {
-                    titleEl.appendChild(icon);
+        // Send AJAX request to update section
+        $.ajax({
+            url: '/raportoi-ongelma/edit_section/',
+            method: 'POST',
+            data: {
+                section_id: currentEditSectionId,
+                title: title,
+                content: content,
+                csrfmiddlewaretoken: getCSRFToken()
+            },
+            success: function(response) {
+                if (response.success) {
+                    // Update the DOM
+                    const sectionEl = document.querySelector(`[data-section-id="${currentEditSectionId}"]`);
+                    if (sectionEl) {
+                        const titleEl = sectionEl.querySelector('h2.section-title');
+                        if (titleEl) {
+                            // Keep the icon and update only the text part
+                            const icon = titleEl.querySelector('.section-icon');
+                            titleEl.innerHTML = '';
+                            if (icon) {
+                                titleEl.appendChild(icon);
+                            }
+                            // Add the new title text as a text node
+                            const textNode = document.createTextNode(' ' + title);
+                            titleEl.appendChild(textNode);
+                        }
+                        
+                        const contentEl = sectionEl.querySelector(`#section-content-${currentEditSectionId}`);
+                        if (contentEl) {
+                            contentEl.innerHTML = content;
+                        }
+                    }
+                    
+                    showSaveStatus('Osio tallennettu onnistuneesti!', 'success');
+                    
+                    setTimeout(() => {
+                        closeEditSectionModal();
+                    }, 1000);
+                } else {
+                    showSaveStatus('Virhe osiota tallentaessa: ' + (response.error || 'Tuntematon virhe'), 'error');
                 }
-                // Add the new title text as a text node
-                const textNode = document.createTextNode(title);
-                titleEl.appendChild(textNode);
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX error:', xhr, status, error);
+                showSaveStatus('Verkkovirhe osiota tallentaessa!', 'error');
             }
-            
-            const contentEl = sectionEl.querySelector(`#section-content-${currentEditSectionId}`);
-            if (contentEl) {
-                contentEl.innerHTML = content;
-            }
-        }
-        
-        showSaveStatus('Osio tallennettu onnistuneesti!', 'success');
-        
-        setTimeout(() => {
-            closeEditSectionModal();
-        }, 1000);
+        });
     }
     
     function closeEditSectionModal() {
@@ -644,7 +596,7 @@
 
     // Initialize when page loads
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('Raportoi ongelmasta page loaded with Summernote support!');
+        console.log('Raportoi ongelmasta page loaded with database persistence support!');
     });
 </script>
 {% endblock %}

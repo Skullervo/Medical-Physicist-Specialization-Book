@@ -1,21 +1,111 @@
-{% extends "sisalto/base.html" %}
-{% block title %}Kaikki EPA:t{% endblock %}
+{% extends "sisalto/base_summereditor.html" %}
+{% load static %}
+
+{% block title %}EPA-kortit - Fyysikkoportti{% endblock %}
+
 {% block content %}
-    <h1>Kaikki EPA:t</h1>
-    {% for specialty in specialties %}
-        <h2>{{ specialty.name }}</h2>
-        <ul>
-        {% for epa in specialty.epas.all %}
-            <li><a href="/epa/{{ epa.id }}/">{{ epa.title }}</a></li>
-        {% empty %}
-            <li>Ei EPA:ja</li>
+<div class="specialty-overview">
+    <div class="page-header" style="margin-bottom: var(--space-6);">
+        <h1 style="font-size: 1.75rem; margin-bottom: var(--space-2);">
+            <i class="fas fa-book-medical" style="color: var(--accent-blue);"></i>
+            EPA-kortit
+        </h1>
+        <p class="text-secondary" style="font-size: 0.95rem;">
+            Sairaalafyysikon erikoistumiskoulutuksen EPA-kortit erikoisaloittain
+        </p>
+    </div>
+
+    {% if specialties %}
+        {% for specialty in specialties %}
+        <div class="specialty-section" style="margin-bottom: var(--space-6);">
+            <!-- Specialty Header -->
+            <div class="card card-compact" style="margin-bottom: var(--space-4);
+                {% if specialty.name == 'Radiologia' %}border-left: 4px solid var(--color-radiologia);
+                {% elif specialty.name == 'Sädehoito' %}border-left: 4px solid var(--color-sadehoito);
+                {% elif specialty.name == 'Isotooppilääketiede' or specialty.name == 'Isotooppi' %}border-left: 4px solid var(--color-isotooppi);
+                {% elif specialty.name == 'KNF' %}border-left: 4px solid var(--color-knf);
+                {% elif specialty.name == 'Fysiologia' %}border-left: 4px solid var(--color-fysiologia);
+                {% endif %}">
+                <div class="card-header">
+                    <h2 class="card-title" style="font-size: 1.25rem; margin: 0;">
+                        {% if specialty.name == 'Radiologia' %}
+                            <i class="fas fa-x-ray" style="color: var(--color-radiologia);"></i>
+                        {% elif specialty.name == 'Sädehoito' %}
+                            <i class="fas fa-radiation" style="color: var(--color-sadehoito);"></i>
+                        {% elif specialty.name == 'Isotooppilääketiede' or specialty.name == 'Isotooppi' %}
+                            <i class="fas fa-atom" style="color: var(--color-isotooppi);"></i>
+                        {% elif specialty.name == 'KNF' %}
+                            <i class="fas fa-brain" style="color: var(--color-knf);"></i>
+                        {% elif specialty.name == 'Fysiologia' %}
+                            <i class="fas fa-heartbeat" style="color: var(--color-fysiologia);"></i>
+                        {% endif %}
+                        {{ specialty.name }}
+                    </h2>
+                    <span class="badge badge-primary">
+                        <i class="fas fa-layer-group"></i>
+                        {{ specialty.epas.all|length }} EPA
+                    </span>
+                </div>
+            </div>
+
+            <!-- EPA Cards Grid -->
+            {% with epas=specialty.epas.all %}
+            {% if epas %}
+            <div class="dashboard-grid" style="grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--space-4);">
+                {% for epa in epas %}
+                <div class="card card-compact card-clickable
+                    {% if specialty.name == 'Radiologia' %}card-radiologia
+                    {% elif specialty.name == 'Sädehoito' %}card-sadehoito
+                    {% elif specialty.name == 'Isotooppilääketiede' or specialty.name == 'Isotooppi' %}card-isotooppi
+                    {% elif specialty.name == 'KNF' %}card-knf
+                    {% elif specialty.name == 'Fysiologia' %}card-fysiologia
+                    {% endif %}"
+                    onclick="window.location.href='/epa/{{ epa.id }}/'">
+                    <div class="card-header" style="margin-bottom: var(--space-2); padding-bottom: var(--space-2);">
+                        <h3 class="card-title" style="font-size: 0.95rem;">{{ epa.title }}</h3>
+                        {% if epa.code %}
+                        <span class="badge badge-neutral" style="font-size: 0.75rem;">{{ epa.code }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        {% if epa.description %}
+                            <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">
+                                {{ epa.description|truncatewords:15 }}
+                            </p>
+                        {% else %}
+                            <p class="text-muted">Klikkaa avataksesi EPA-kortin sisällön</p>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer" style="margin-top: var(--space-2); padding-top: var(--space-2);">
+                        <small class="text-muted" style="font-size: 0.8rem;">
+                            <i class="fas fa-layer-group"></i>
+                            {% with epa.sections.count as sc %}{{ sc }} osio{{ sc|pluralize:"a,a" }}{% endwith %}
+                        </small>
+                        <i class="fas fa-arrow-right" style="
+                            {% if specialty.name == 'Radiologia' %}color: var(--color-radiologia);
+                            {% elif specialty.name == 'Sädehoito' %}color: var(--color-sadehoito);
+                            {% elif specialty.name == 'Isotooppilääketiede' or specialty.name == 'Isotooppi' %}color: var(--color-isotooppi);
+                            {% elif specialty.name == 'KNF' %}color: var(--color-knf);
+                            {% elif specialty.name == 'Fysiologia' %}color: var(--color-fysiologia);
+                            {% endif %}"></i>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i>
+                Tämän erikoisalan EPA-kortteja ei löytynyt.
+            </div>
+            {% endif %}
+            {% endwith %}
+        </div>
         {% endfor %}
-        </ul>
-    {% endfor %}
-{% endblock %}
-{% block toc %}
-    <li>Kaikki EPA:t</li>
-    {% for specialty in specialties %}
-        <li>{{ specialty.name }}</li>
-    {% endfor %}
+    {% else %}
+    <div class="alert alert-warning">
+        <i class="fas fa-exclamation-triangle"></i>
+        Erikoisaloja ei löytynyt tietokannasta.
+    </div>
+    {% endif %}
+</div>
 {% endblock %}

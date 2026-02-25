@@ -1,47 +1,367 @@
+/*
+ * Header Component - Modern Navigation
+ * Käyttää CSS-muuttujia modern-theme.css:stä
+ */
+
+/* ============================================
+   HEADER (Top Navigation Bar)
+   ============================================ */
+
 .header {
-    position: sticky;
-    top: 0;
-    display: flex;
-    align-items: center;
-    background: #23232b;
-    color: #fff;
-    height: 56px;
-    padding: 0 32px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    z-index: 1000;
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-md);
+  height: 64px;
+  transition: box-shadow var(--transition-base);
 }
-.header-logo {
-    width: 32px;
-    height: 32px;
-    margin-right: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+
+/* Header scrolled state (optional enhancement) */
+.header.scrolled {
+  box-shadow: var(--shadow-lg);
 }
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0 var(--space-1);
+  max-width: 100%;
+}
+
+/* ============================================
+   HEADER TITLE/LOGO
+   ============================================ */
+
 .header-title {
-    font-size: 1.3em;
-    font-weight: 600;
-    letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1;
 }
+
+.header-title a {
+  color: inherit;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  transition: opacity var(--transition-fast);
+}
+
+.header-title a:hover {
+  opacity: 0.8;
+  text-decoration: none;
+}
+
+.header-title .highlight {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.header-title i {
+  font-size: 1.5rem;
+  color: var(--color-primary);
+}
+
+.header-logo {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+  font-size: 1.5rem;
+}
+
+/* ============================================
+   HEADER NAVIGATION
+   ============================================ */
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-left: auto;
+}
+
+.header-nav a,
+.header-nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all var(--transition-base);
+  white-space: nowrap;
+}
+
+.header-nav a:hover,
+.header-nav-item:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.header-nav a.active,
+.header-nav-item.active {
+  background: var(--color-primary-muted);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.header-nav i {
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+/* Hide nav text on small screens, show only icons */
+@media (max-width: 768px) {
+  .header-nav span {
+    display: none;
+  }
+
+  .header-nav a,
+  .header-nav-item {
+    padding: var(--space-2);
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+  }
+
+  .header-nav i {
+    margin: 0;
+  }
+}
+
+/* ============================================
+   HEADER SEARCH (if needed)
+   ============================================ */
+
 .header-search {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-left: var(--space-6);
 }
+
 .header-search input {
-    background: #333;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    padding: 6px 12px;
-    font-size: 1em;
-    margin-right: 8px;
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-4);
+  font-size: 0.875rem;
+  min-width: 200px;
+  transition: all var(--transition-base);
 }
+
+.header-search input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-muted);
+}
+
+.header-search input::placeholder {
+  color: var(--text-tertiary);
+}
+
 .header-search button {
-    background: #4b5fc9;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    padding: 6px 12px;
-    cursor: pointer;
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-4);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.header-search button:hover {
+  background: var(--color-primary-hover);
+  box-shadow: 0 0 16px rgba(96, 165, 250, 0.25);
+}
+
+@media (max-width: 768px) {
+  .header-search input {
+    min-width: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-search {
+    display: none;
+  }
+}
+
+/* ============================================
+   HEADER USER MENU (if needed)
+   ============================================ */
+
+.header-user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-left: var(--space-6);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background var(--transition-base);
+}
+
+.header-user:hover {
+  background: var(--bg-hover);
+}
+
+.header-user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.header-user-name {
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .header-user-name {
+    display: none;
+  }
+}
+
+/* ============================================
+   MOBILE HEADER ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 768px) {
+  .header {
+    height: 56px;
+  }
+
+  .header-content {
+    padding: 0 var(--space-4);
+  }
+
+  .header-title {
+    font-size: 1rem;
+  }
+
+  .header-title .highlight {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-content {
+    padding: 0 var(--space-2);
+  }
+
+  .header-title {
+    font-size: 0.875rem;
+  }
+
+  .header-title i {
+    font-size: 1.25rem;
+  }
+}
+
+/* ============================================
+   PROGRESS CONTAINER (Progress Bar Below Header)
+   ============================================ */
+
+.progress-container {
+  position: sticky;
+  top: 64px;
+  z-index: calc(var(--z-sticky) - 1);
+  height: 4px;
+  background: var(--bg-hover);
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-isotooppi));
+  width: 0%;
+  transition: width var(--transition-slow);
+}
+
+@media (max-width: 768px) {
+  .progress-container {
+    top: 56px;
+  }
+}
+
+/* ============================================
+   SAVE STATUS INDICATOR
+   ============================================ */
+
+.save-status {
+  position: fixed;
+  top: 80px;
+  right: var(--space-6);
+  z-index: var(--z-fixed);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 500;
+  box-shadow: var(--shadow-lg);
+  animation: slideInRight 0.3s ease;
+}
+
+.save-status.saving {
+  background: var(--color-primary-muted);
+  color: var(--color-primary);
+  border: 1px solid rgba(66, 153, 225, 0.3);
+}
+
+.save-status.saved {
+  background: rgba(52, 211, 153, 0.12);
+  color: var(--color-success);
+  border: 1px solid rgba(72, 187, 120, 0.3);
+}
+
+.save-status.error {
+  background: rgba(248, 113, 113, 0.12);
+  color: var(--color-error);
+  border: 1px solid rgba(245, 101, 101, 0.3);
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .save-status {
+    top: 72px;
+    right: var(--space-4);
+    font-size: 0.75rem;
+    padding: 6px 10px;
+  }
 }

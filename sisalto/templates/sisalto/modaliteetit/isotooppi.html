@@ -1,0 +1,1671 @@
+{% extends "sisalto/base_summereditor.html" %}
+{% load static %}
+
+{% block title %}Isotooppilääketieteen teoria - Fyysikkoportti{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'sisalto/css/theory.css' %}?v=1">
+{% endblock %}
+
+{% block content %}
+
+<div class="theory-container">
+    <div class="theory-header">
+        <h1><i class="fas fa-atom" style="color: #a78bfa; margin-right: 8px;"></i> Isotooppilääketieteen teoria</h1>
+        <p>Kattava teoriamateriaali isotooppilääketieteen fysikaalisista perusteista, kuvantamislaitteista, radiofarmasiasta, tutkimuksista, hoidoista ja säteilysuojelusta. Valitse aihealue alla olevista välilehdistä.</p>
+    </div>
+
+    <!-- Tab navigation -->
+    <div class="theory-tabs" role="tablist">
+        <button class="theory-tab active" role="tab" data-tab="gammakamera" aria-selected="true">
+            <i class="fas fa-camera"></i> Gammakamera
+        </button>
+        <button class="theory-tab" role="tab" data-tab="pet">
+            <i class="fas fa-circle-notch"></i> PET-kamera
+        </button>
+        <button class="theory-tab" role="tab" data-tab="radiofarmasia">
+            <i class="fas fa-flask"></i> Radiofarmasia
+        </button>
+        <button class="theory-tab" role="tab" data-tab="spet">
+            <i class="fas fa-x-ray"></i> Gammakuvaus ja SPET
+        </button>
+        <button class="theory-tab" role="tab" data-tab="pet-tutkimukset">
+            <i class="fas fa-search"></i> PET-tutkimukset
+        </button>
+        <button class="theory-tab" role="tab" data-tab="radionuklidihoidot">
+            <i class="fas fa-prescription-bottle-alt"></i> Radionuklidihoidot
+        </button>
+        <button class="theory-tab" role="tab" data-tab="sateilybiologia">
+            <i class="fas fa-shield-alt"></i> Säteilybiologia
+        </button>
+    </div>
+
+    <!-- ================================================================
+         VÄLILEHTI 1: GAMMAKAMERA
+         ================================================================ -->
+    <div class="theory-panel active" id="panel-gammakamera" role="tabpanel">
+        <div class="theory-content">
+
+            <h2>1. Johdanto</h2>
+            <p>Gammakamera (Anger-kamera) on isotooppilääketieteen perusilmaisinlaite, joka tuottaa kaksiulotteisia kuvia radioaktiivisen merkkiaineen jakautumisesta potilaan kehossa. Laite perustuu Hal Angerin vuonna 1958 kehittämään periaatteeseen: gammasäteilyn kollimointi, tuikekideilmaisu ja paikannus Anger-logiikalla. Gammakamera on edelleen isotooppilääketieteen yleisimmin käytetty kuvantamislaite, ja sairaalafyysikon on hallittava sen rakenne, toiminta, kuvanlaatuparametrit ja laadunvarmistus.</p>
+
+            <h2>2. Gammakameran rakenne</h2>
+
+            <h3>2.1 Kollimaattori</h3>
+            <p>Kollimaattori on gammakameran ensimmäinen komponentti, joka määrittää kuvantamisgeometrian. Se koostuu lyijyseinämistä (septa), jotka päästävät läpi vain tietyistä suunnista tulevat fotonit.</p>
+            <table>
+                <thead>
+                    <tr><th>Kollimaattorityyppi</th><th>Rakenne</th><th>K&auml;ytt&ouml;alue</th><th>Ominaisuudet</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>LEHR (low-energy high-resolution)</td><td>Yhdensuuntaiset reiät, ohuet septat</td><td>Tc-99m (140 keV)</td><td>Paras resoluutio, matala herkkyys</td></tr>
+                    <tr><td>LEGP (low-energy general-purpose)</td><td>Yhdensuuntaiset rei&auml;t, suuremmat rei&auml;t</td><td>Tc-99m yleistutkimukset</td><td>Kompromissi resoluutio/herkkyys</td></tr>
+                    <tr><td>LEHS (low-energy high-sensitivity)</td><td>Yhdensuuntaiset rei&auml;t, isot rei&auml;t</td><td>Dynaamiset tutkimukset</td><td>Korkea herkkyys, heikompi resoluutio</td></tr>
+                    <tr><td>MEGP (medium-energy)</td><td>Paksummat septat</td><td>Ga-67 (93&ndash;300 keV), In-111 (171, 245 keV)</td><td>Paksummat septat estävät septapenetraation</td></tr>
+                    <tr><td>HEGP (high-energy)</td><td>Paksut septat</td><td>I-131 (364 keV)</td><td>Korkea septan paksuus, matala resoluutio</td></tr>
+                    <tr><td>Pinhole</td><td>Yksi kartiomainen aukko</td><td>Kilpirauhas, pienet eläimet</td><td>Suurennettu kuva, korkea resoluutio lähellä</td></tr>
+                    <tr><td>Fan-beam / Cone-beam</td><td>Fokusoidut reiät</td><td>Aivot (SPET)</td><td>Parempi herkkyys kohdealueelle</td></tr>
+                </tbody>
+            </table>
+
+            <div class="theory-info">
+                <p><strong>Suunnittelun kompromissi:</strong> Kollimaattorin suunnittelussa herkkyys ja resoluutio ovat vastakkaisia: suuremmat reiät lisäävät herkkyyttä mutta heikentävät resoluutiota. Septan paksuus on mitoitettava energian mukaan niin, että septapenetraatio on &lt; 5 %.</p>
+            </div>
+
+            <h3>2.2 Tuikekide (scintillation crystal)</h3>
+            <p>Gammakameran tuikekide on tyypillisesti NaI(Tl) (natriumjodidi, tallium-aktivoitu). Sen ominaisuudet:</p>
+            <ul>
+                <li><strong>Paksuus</strong>: 9,5 mm (3/8 tuumaa) on yleisin &mdash; kompromissi ilmaisutehokuuden ja luontaisen resoluution välillä. Ohuempi kide parantaa resoluutiota mutta heikentää ilmaisutehokkuutta korkeaenergiaisille fotoneille.</li>
+                <li><strong>Ilmaisutehokkuus</strong>: ~90 % Tc-99m:n 140 keV:n fotoneille (9,5 mm kide). Laskee korkeammilla energioilla: ~30 % I-131:n 364 keV:lle.</li>
+                <li><strong>Energiaresoluutio</strong>: Tyypillisesti 9&ndash;10 % (FWHM) 140 keV:lla. Mahdollistaa energiaikkunoinnin ja hajasäteilyn poiston.</li>
+                <li><strong>Valon tuotto</strong>: ~38 fotonia/keV. Korkein kaikista kaupallisista tuikekiteistä.</li>
+                <li><strong>Hajoamisaika</strong>: 230 ns. Riittävän nopea kliinisille laskentanopeuksille (tyypillisesti &lt; 100 000 cps).</li>
+                <li><strong>Hygroskooppisuus</strong>: NaI(Tl) imee vettä ja vahingoittuu kosteudesta &rarr; kide on hermeettisesti koteloitu.</li>
+            </ul>
+
+            <h3>2.3 Valomonistinputket (PMT) ja digitaalinen elektroniikka</h3>
+            <p>Tuikekiteestä saapuva valo kerätään valomonistinputkilla (PMT, photomultiplier tube), jotka on järjestetty kuusikulmaiseen matriisiin kiteen takapinnalle. Tyypillisesti 50&ndash;90 PMT:tä per ilmaisinpää.</p>
+            <ul>
+                <li><strong>Anger-logiikka</strong>: Fotonin osumakohta lasketaan PMT-signaalien painotettuna keskiarvona (X, Y -koordinaatit). Energiasignaali Z = &Sigma;PMT<sub>i</sub> mahdollistaa energiaikkunoinnin.</li>
+                <li><strong>Digitaalinen gammakamera</strong>: Moderneissa kameroissa analogiset PMT-signaalit digitoidaan välittömästi (ADC) ja paikannus tehdään digitaalisesti. Tämä parantaa lineaarisuutta, energiaresoluutiota ja laskentanopeutta. Osa uusimmista kameroista käyttää puolijohdeilmaisimia (CZT, kadmium-sinkki-telluridi) PMT:iden sijaan.</li>
+            </ul>
+
+            <h3>2.4 CZT-puolijohdeilmaisimet (kadmium-sinkki-telluridi)</h3>
+            <p>CZT (CdZnTe) -ilmaisimet edustavat gammakameratekniikan merkittävintä kehitysaskelta. Ne muuntavat gammafotonin suoraan sähköiseksi signaaliksi ilman tuikekidettä ja PMT:tä:</p>
+            <ul>
+                <li><strong>Parempi energiaresoluutio</strong>: 5&ndash;6 % @ 140 keV (vs. 9&ndash;10 % NaI(Tl)). Mahdollistaa kapeamman energiaikkunan &rarr; tehokkaampi hajasäteilyn poisto ja parempi monienergiainen kuvantaminen.</li>
+                <li><strong>Parempi luontainen resoluutio</strong>: Pikselin koko ~2,5 mm (vs. 3&ndash;4 mm NaI). Pikselöity ilmaisin &rarr; ei Anger-logiikan epätarkkuutta.</li>
+                <li><strong>Kompakti rakenne</strong>: Ei PMT:itä &rarr; pienempi ilmaisinpää, mahdollistaa uudenlaisia kamerageometrioita (esim. sydänkamerat, joissa useita liikkuvia ilmaisimia).</li>
+                <li><strong>Korkea laskentanopeuskyky</strong>: Pikselikohtainen elektroniikka &rarr; ei globaalia kuollutta aikaa.</li>
+                <li><strong>Haitat</strong>: Kallis, rajoitettu kidekoko, herkkyys lämpötilavaihteluille, pienempi ilmaisutehokkuus korkeilla energioilla kuin paksu NaI(Tl).</li>
+            </ul>
+            <table>
+                <thead>
+                    <tr><th>Ominaisuus</th><th>NaI(Tl) + PMT</th><th>CZT</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Energiaresoluutio (140 keV)</td><td>9&ndash;10 %</td><td>5&ndash;6 %</td></tr>
+                    <tr><td>Luontainen resoluutio</td><td>3&ndash;4 mm</td><td>2&ndash;2,5 mm</td></tr>
+                    <tr><td>Ilmaisutehokkuus (140 keV)</td><td>~90 %</td><td>~85 %</td></tr>
+                    <tr><td>Kuollut aika</td><td>4&ndash;8 &micro;s (globaali)</td><td>&lt; 1 &micro;s (pikselikohtainen)</td></tr>
+                    <tr><td>Magneettikent&auml;nherkkyys</td><td>Kyll&auml; (PMT)</td><td>Ei</td></tr>
+                    <tr><td>Kliiniset laitteet</td><td>Yleisin (Siemens, GE, Canon)</td><td>GE Discovery NM 530c/570c, Spectrum Dynamics VERITON</td></tr>
+                </tbody>
+            </table>
+
+            <div class="theory-info">
+                <p><strong>Kliininen merkitys:</strong> CZT-sydänkamerat (esim. GE Discovery NM 530c) mahdollistavat sydänperfuusio-SPET:n merkittävästi pienemmällä aktiivisuudella (jopa 50 % vähennys) tai lyhyemmällä kuvausajalla (2&ndash;5 min vs. 15&ndash;20 min perinteisellä kameralla) säilyttäen diagnostisen kuvanlaadun. Tämä hyödyttää erityisesti potilaan säteilyannoksen optimointia.</p>
+            </div>
+
+            <h2>3. Fotonin ilmaisuun liittyvät käsitteet</h2>
+
+            <h3>3.1 Energiaikkuna ja hajasäteilyn poisto</h3>
+            <p>Gammakamera tallentaa vain ne fotonit, joiden energia osuu asetettuun energiaikkunaan (energy window). Tyypillinen ikkuna on &plusmn;10 % fotonopiikin ympärillä (esim. 140 keV &plusmn; 14 keV = 126&ndash;154 keV Tc-99m:lle).</p>
+            <ul>
+                <li><strong>Hajasäteilyn (scatter) vaikutus</strong>: Compton-sironneet fotonit menettävät energiaa mutta voivat silti osua energiaikkunaan. Ne heikentävät kontrastia ja kvantitaatiota.</li>
+                <li><strong>TEW (triple energy window)</strong>: Hajasäteilyn korjausmenetelmä, jossa pääikkunan lisäksi asetetaan kaksi kapeaa alaikkunaa pääpiikin molemmin puolin. Hajasäteilyn osuus arvioidaan interpoloimalla.</li>
+                <li><strong>DEW (dual energy window)</strong>: Yksinkertaisempi menetelmä, yksi alaikkuna Compton-alueella.</li>
+            </ul>
+
+            <h3>3.2 Kuollut aika (dead time)</h3>
+            <p>Gammakameran kuollut aika on ajanjakso kunkin fotonin ilmaisun jälkeen, jolloin kamera ei voi ilmaista uutta fotonia. Tämä johtaa laskentanopeuden saturoitumiseen korkeilla aktiviteeteilla.</p>
+            <div class="formula">
+                <p>Paralysoituva malli (paralyzable): \( R_m = R_t \cdot e^{-R_t \cdot \tau} \)</p>
+                <p>Ei-paralysoituva malli (non-paralyzable): \( R_m = \frac{R_t}{1 + R_t \cdot \tau} \)</p>
+                <p>missä \( R_m \) = mitattu laskentanopeus, \( R_t \) = todellinen laskentanopeus, \( \tau \) = kuollut aika. Tyypillinen \( \tau \) gammakameralle on 4&ndash;8 &micro;s.</p>
+            </div>
+
+            <h3>3.3 Energiaresoluutio</h3>
+            <p>Energiaresoluutio kuvaa kameran kykyä erottaa eri energiaiset fotonit. Se ilmaistaan fotopiikin FWHM:nä prosentteina piikkienergiasta:</p>
+            <div class="formula">
+                \[ R_E = \frac{\text{FWHM}}{E_0} \times 100\% \]
+            </div>
+            <p>Tyypillinen energiaresoluutio NaI(Tl)-kameralle on 9&ndash;10 % @ 140 keV. CZT-ilmaisimilla päästään 5&ndash;6 %:iin, mikä mahdollistaa paremman hajasäteilyn poiston ja monienergiaisen kuvantamisen.</p>
+
+            <h3>3.4 Kaksoisisotooppitutkimus</h3>
+            <p>Gammakameralla voidaan kuvata samanaikaisesti kahta eri radionuklidia, jos niiden gammaenergiat eroavat riittävästi (esim. Tc-99m 140 keV + I-123 159 keV tai Tc-99m 140 keV + Tl-201 70 keV). Kullekin isotoopille asetetaan oma energiaikkuna. Hajasäteilyn ristikkäiskontaminaatio (crosstalk) on huomioitava ja korjattava.</p>
+
+            <h2>4. Kuvaustyypit</h2>
+
+            <h3>4.1 Staattinen planaarikuvaus</h3>
+            <p>Yksittäinen projektio (tasokuva) tietystä suunnasta. Kuvausaika tyypillisesti 2&ndash;10 minuuttia tai ennalta asetettu laskentamäärä. Käytetään esim. kilpirauhaskuvauksissa, luustokuvauksissa (koko keho), munuaiskuvauksissa.</p>
+
+            <h3>4.2 Dynaaminen kuvaus</h3>
+            <p>Sarja peräkkäisiä kuvia ajallisen jakautumisen seuraamiseksi. Kuva-aika tyypillisesti 1&ndash;60 s/kuva, kokonaiskesto minuuteista tunteihin. Käytetään mm. munuaiskuvauksissa (MAG3, DTPA), sydämen ensiläpikulkututkimuksissa ja mahalaukkutyhjennysmittauksissa.</p>
+
+            <h3>4.3 Gated-kuvaus (EKG-tahdistettu)</h3>
+            <p>EKG-signaalin avulla kuvankeräys jaetaan sydänsyklin eri vaiheisiin (tyypillisesti 8 tai 16 framea/sykli). Mahdollistaa sydämen pumppaustoiminnan arvioinnin: ejektiofraktio (LVEF), seinämäliike, seinämäpaksuuntuminen. Käytetään sydänperfuusio-SPET:ssä ja MUGA-tutkimuksessa.</p>
+
+            <h3>4.4 Koko kehon kuvaus (whole-body scan)</h3>
+            <p>Ilmaisinpää liikkuu potilaan yli keräten jatkuvan kuvan koko kehosta. Tyypillinen nopeus 5&ndash;15 cm/min. Käytetään luustokuvauksessa ja I-131-jälkikuvauksessa.</p>
+
+            <h2>5. Kuvausparametrien vaikutus kuvaan</h2>
+
+            <h3>5.1 Matriisikoko</h3>
+            <p>Kuvausmatriisi määrittää digitaalisen kuvan pikselikoon. Yleisimmät koot:</p>
+            <ul>
+                <li><strong>64 &times; 64</strong>: Dynaamiset tutkimukset, sydäntutkimukset (riittävä ajalliselle resoluutiolle)</li>
+                <li><strong>128 &times; 128</strong>: Yleisin SPET-matriisi</li>
+                <li><strong>256 &times; 256</strong>: Staattiset planaarikuvat, luustokuvaus (parempi paikkaresoluutio)</li>
+                <li><strong>512 &times; 512 tai 1024 &times; 1024</strong>: Korkean resoluution staattiset kuvat</li>
+            </ul>
+
+            <h3>5.2 Kuvanlaatuparametrit</h3>
+            <table>
+                <thead>
+                    <tr><th>Parametri</th><th>Määritelmä</th><th>Tyypillinen arvo</th><th>Vaikuttavat tekijät</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Luontainen resoluutio</td><td>Kiteen paikannustarkkuus (ilman kollimaattoria)</td><td>3&ndash;4 mm FWHM</td><td>Kiteen paksuus, PMT:n koko, elektroniikka</td></tr>
+                    <tr><td>Systeemiresoluutio</td><td>Kokonaisresoluutio (kollimaattori + kide)</td><td>7&ndash;12 mm FWHM (10 cm et&auml;isyydell&auml;)</td><td>Kollimaattorityyppi, et&auml;isyys</td></tr>
+                    <tr><td>Herkkyys</td><td>Ilmaistujen fotonien osuus l&auml;hteen emissioista</td><td>150&ndash;300 cpm/&micro;Ci (LEHR)</td><td>Kollimaattori, kiteen paksuus</td></tr>
+                    <tr><td>Tasaisuus (uniformity)</td><td>Vasteen tasaisuus koko kiteen alueella</td><td>&lt; 2,5 % (integral), &lt; 2 % (diff.)</td><td>PMT-kalibraatio, kiteen tasalaatuisuus</td></tr>
+                    <tr><td>Lineaarisuus</td><td>Paikan esityksen oikeellisuus</td><td>&lt; 0,5 mm</td><td>Korrektiokartat, PMT-asettelu</td></tr>
+                </tbody>
+            </table>
+
+            <h2>6. Vaimennuskorjaus ja kvantitaatio</h2>
+
+            <h3>6.1 Vaimennusongelma</h3>
+            <p>Potilaan kehossa gammasäteily vaimenee eksponentiaalisesti kudoksen läpäisemisen myötä. Syvemmällä olevista kohteista saapuu kameralle vähemmän fotoneita kuin pinnallisista &rarr; kuvissa syvät kohteet aliarvioituvat ilman korjausta.</p>
+            <div class="formula">
+                \[ I = I_0 \cdot e^{-\mu x} \]
+                <p>missä \( \mu \) on lineaarinen vaimennuskerroin kudoksessa (140 keV:lla pehmytkudoksessa \( \mu \approx 0{,}15 \) cm<sup>-1</sup>) ja \( x \) on kudospaksuus.</p>
+            </div>
+
+            <h3>6.2 Vaimennuskorjausmenetelmät</h3>
+            <ul>
+                <li><strong>Chang-menetelmä</strong>: Yksinkertainen analyyttinen korjaus, joka olettaa tasaisen vaimennuskertoimen koko kuvaustilavuudessa. Riittävä tasalaatisille alueille (esim. aivot) mutta epätarkka epähomogeenisille alueille.</li>
+                <li><strong>TT-pohjainen vaimennuskorjaus (CTAC)</strong>: Käyttää TT-kuvia (SPET/TT) vaimennuskartan luomiseen. Tarkka anatominen tieto, energiamuunnos (bilineaarinen HU &rarr; &mu; muunnos). Nykypäivän standardi.</li>
+                <li><strong>Transmissiokuvaus</strong>: Ulkoinen gammalähde (Gd-153 tai Ba-133) transmissiomittaukseen. Käytetty ennen SPET/TT:n yleistymistä.</li>
+            </ul>
+
+            <h3>6.3 Kvantitatiivinen SPET (QSPECT)</h3>
+            <p>Kvantitatiivinen SPET pyrkii määrittämään absoluuttisen aktiivisuuskonsentraation (kBq/ml) kuvausalueella. Tämä edellyttää:</p>
+            <ul>
+                <li>Vaimennuskorjausta (CTAC)</li>
+                <li>Hajasäteilyn korjausta (TEW tai Monte Carlo)</li>
+                <li>Kollimaaattorin vasteen mallinnusta (CDR, collimator-detector response)</li>
+                <li>Kuolleen ajan korjausta</li>
+                <li>Kalibrointikertoimen määritystä (cps/MBq)</li>
+            </ul>
+
+            <div class="theory-info">
+                <p><strong>Kliininen merkitys:</strong> Kvantitatiivinen SPET mahdollistaa esimerkiksi dosimetrisen suunnittelun radionuklidihoitoja varten (Lu-177-hoitojen annosvaste), kun aktiivisuusjakauma voidaan muuntaa annos&shy;jakaumaksi MIRD-formalismilla.</p>
+            </div>
+
+            <h2>7. Rekonstruktiomenetelmät</h2>
+
+            <h3>7.1 Suodatettu takaisinprojektio (FBP)</h3>
+            <p>Perinteinen analyyttinen menetelmä: projektiodata takaisinprojisoidaan ja suodatetaan ramppifiltterillä (ramp filter) kuvan terävöittämiseksi. Matala laskentateho mutta herkkä kohinalle. Butterworth- tai Hann-suodattimia käytetään kohinan hallintaan (cut-off-taajuus ja potenssi).</p>
+
+            <h3>7.2 Iteratiivinen rekonstruktio (OSEM)</h3>
+            <p>OSEM (ordered subsets expectation maximization) on nykyisin yleisin rekonstruktiomenetelmä. Se mallintaa kuvantamisprosessin (systeemimatriisi) ja iteratiivisesti lähestyy todellista aktiivisuusjakaumaa:</p>
+            <ul>
+                <li><strong>Edut</strong>: Voidaan sisällyttää kollimaattorin vaste, vaimennus, hajasäteily ja kuollut aika suoraan malliin &rarr; tarkempi kvantitaatio</li>
+                <li><strong>Parametrit</strong>: Iteraatioiden lukumäärä (tyypillisesti 3&ndash;8) ja osajoukkoerien lukumäärä (subsets, tyypillisesti 8&ndash;16). Liikaa iteraatioita &rarr; kohinan vahvistuminen.</li>
+                <li><strong>Post-suodatus</strong>: Gaussinen suodatus (FWHM 5&ndash;10 mm) kohinan tasoittamiseksi</li>
+            </ul>
+
+            <h3>7.3 Kuvan prosessointi</h3>
+            <ul>
+                <li><strong>Liikkeen korjaus</strong>: Potilaan liikkeen havaitseminen ja korjaus projektiodatasta tai rekonstruoidusta kuvasta</li>
+                <li><strong>Uudelleenorientointi</strong>: Sydän-SPET:ssä kuvat uudelleenorientoidaan sydämen akselien mukaan (short axis, horizontal long axis, vertical long axis)</li>
+                <li><strong>Suodatus ja tasoitus</strong>: Butterworth-suodatin, Gaussinen tasoitus, Metz-suodatin</li>
+            </ul>
+
+            <h2>8. Laadunvarmistus</h2>
+
+            <h3>8.1 Päivittäinen QA</h3>
+            <ul>
+                <li><strong>Tasaisuustarkistus (uniformity flood)</strong>: Tasalähde (Co-57 levy tai Tc-99m-pistelähde kollimaattorilla) &rarr; vähintään 3 miljoonaa laskentaa. Arvioidaan integraalinen ja differentiaalinen tasaisuus. Hyväksymisraja: integral &lt; 2,5 %, differential &lt; 2,0 %.</li>
+                <li><strong>Visuaalinen tarkistus</strong>: Kollimaattorin kunto, ilmaisinpään mekaaninen toiminta, energiaikkunan keskitys</li>
+            </ul>
+
+            <h3>8.2 Viikoittainen / kuukausittainen QA</h3>
+            <ul>
+                <li><strong>Resoluutio ja lineaarisuus</strong>: 4-kvadrantti-viiva&shy;lähde (bar phantom) &rarr; visuaalinen arviointi ja/tai MTF</li>
+                <li><strong>Energiaspektrin tarkistus</strong>: Fotopiikin sijainti ja energiaresoluutio (FWHM)</li>
+                <li><strong>COR (center of rotation)</strong>: SPET:n pyörityskeskipisteen tarkistus. Poikkeama &lt; 0,5 pikseliä.</li>
+                <li><strong>Kuolleen ajan mittaus</strong>: Kaksi-lähde-menetelmä tai puoliintumismenetelmä</li>
+            </ul>
+
+            <h3>8.3 NEMA-suorituskykymittaukset</h3>
+            <p>NEMA NU 1 -standardi määrittelee gammakameran suorituskykymittaukset:</p>
+            <ul>
+                <li>Luontainen spatiaalinen resoluutio ja lineaarisuus</li>
+                <li>Systeemiresoluutio (kollimaattorin kanssa)</li>
+                <li>Integraalinen ja differentiaalinen tasaisuus</li>
+                <li>Herkkyys (luodeilla ja ilman)</li>
+                <li>Kuolleen ajan parametrit</li>
+                <li>Energiaresoluutio</li>
+            </ul>
+
+            <h2>9. Artefaktit ja niiden tunnistaminen</h2>
+
+            <h3>9.1 Laitteistoperäiset artefaktit</h3>
+            <ul>
+                <li><strong>Tasaisuusvirhe (non-uniformity)</strong>: Epätasainen PMT-vaste tai kidevirhe näkyy kylmänä tai kuumana alueena. Erityisen kriittinen SPET:ssä, jossa epätasaisuus tuottaa rengasartefaktin. Korjaus: tasaisuuskalibraatio (uniformity correction map).</li>
+                <li><strong>Lineaarisuusvirhe</strong>: Suorien viivojen vääristyminen kuvan reunoilla. Korjaus: lineaarisuuskorjausmatriisi.</li>
+                <li><strong>COR-virhe (center of rotation)</strong>: SPET-pyöritysakselin poikkeama kuvakentän keskipisteestä. Näkyy kuvissa: pistelähteet muuttuvat kaareutuneiksi. Toleranssi: &lt; 0,5 pikseliä.</li>
+                <li><strong>Energiaikkunan drift</strong>: Fotopiikin siirtymä aiheuttaa herkkyyden muutoksen ja hajasäteilyn lisääntymisen. Tarkistettava päivittäin.</li>
+                <li><strong>PMT:n vikaantuminen</strong>: Yksittäinen viallinen PMT näkyy kylmänä alueena tasaisuuskuvassa. CZT-kameroissa vastaavasti pikselivika.</li>
+            </ul>
+
+            <h3>9.2 Potilasperäiset artefaktit</h3>
+            <ul>
+                <li><strong>Liikeartefakti</strong>: Potilaan liike SPET-kuvauksen aikana aiheuttaa sumennusta ja geometrista vääristymää. Tunnistaminen: sinogrammi (cine-kierto). Korjaus: liikkeenkorjausalgoritmi tai kuvauksen uusinta.</li>
+                <li><strong>Vaimennusartefakti</strong>: Ilman vaimennuskorjausta syvät kohteet aliarvioituvat. Sydänkuvauksessa pallean alla oleva maksa-aktiivisuus vaimentaa inferiorista seinämää (erityisesti miehillä).</li>
+                <li><strong>Rinta-artefakti (breast attenuation)</strong>: Naispotilailla rinta vaimentaa sydämen anteriorista ja anterolateraalista seinämää. CTAC korjaa tämän, mutta ylikorjaus on mahdollinen.</li>
+                <li><strong>Kontaminaatio</strong>: Iholla, vaatteissa tai pöydällä oleva radioaktiivinen kontaminaatio näkyy kuumana pisteenä. Tunnistaminen: epäanatominen sijainti, näkyy vain yhdessä projektiossa tai muuttaa paikkaa.</li>
+                <li><strong>Metalliproteesiartefakti</strong>: SPET/TT:ssä metalliesineet aiheuttavat TT-artefakteja, jotka propagoituvat CTAC:n kautta PET/SPET-kuvaan ylikorjauksena.</li>
+            </ul>
+
+            <h3>9.3 Menetelmäperäiset artefaktit</h3>
+            <ul>
+                <li><strong>Star artifact (FBP)</strong>: Suodatetun takaisinprojektion tyypillinen artefakti korkeaaktiivisuuskohteiden ympärillä. Iteratiivinen rekonstruktio eliminoi tämän.</li>
+                <li><strong>Gibbs-artefakti (ringing)</strong>: Terävien rajojen ympärille syntyvät vaaleat ja tummat raidat suodatuksesta johtuen.</li>
+                <li><strong>Rekonstruktioon liittyvä kohina</strong>: Liian monta iteraatiota OSEM:ssä vahvistaa kohinaa. Liian vähän iteraatioita &rarr; konvergenssia ei saavuteta &rarr; vääristynyt kuva.</li>
+            </ul>
+
+            <h2>10. Perustutkimusten analyysin perusteet</h2>
+
+            <h3>10.1 Kvantitatiivisen analyysin työkalut</h3>
+            <ul>
+                <li><strong>ROI-analyysi (Region of Interest)</strong>: Piirretään kiinnostusalue kuvaan &rarr; lasketaan laskentamäärä, keskiarvo, maksimi ja pinta-ala. Perusta kaikelle kvantitatiiviselle analyysille.</li>
+                <li><strong>Time-activity-käyrä (TAC)</strong>: Dynaamisessa kuvauksessa ROI:n laskentamäärä ajan funktiona. Kuvaa merkkiaineen farmakokinetiikkaa.</li>
+                <li><strong>Profiilianalyysi</strong>: Laskentaprofiilin piirtäminen kuvan poikki &rarr; resoluution ja konsentraation arviointi.</li>
+            </ul>
+
+            <h3>10.2 Tutkimuskohtaiset analyysit</h3>
+            <table>
+                <thead>
+                    <tr><th>Tutkimus</th><th>Analysointimenetelm&auml;</th><th>P&auml;&auml;tulossuure</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Munuaiskuvaus (MAG3/DTPA)</td><td>Renogrammianalyysi (TAC munuaisille)</td><td>Split function (%), T<sub>max</sub>, T<sub>&frac12;</sub>, GFR</td></tr>
+                    <tr><td>Syd&auml;nperfuusio-SPET</td><td>Polar map (bull's eye), 17-segmenttimalli</td><td>SSS, SRS, SDS, LVEF (gated)</td></tr>
+                    <tr><td>Kilpirauhaskuvaus</td><td>Visuaalinen + uptake-laskenta</td><td>Uptake-% (24 h), kylm&auml;t/kuumat alueet</td></tr>
+                    <tr><td>Luustokuvaus</td><td>Visuaalinen + semikvantitiivinen</td><td>Fokaalinen kertym&auml;, BSI (bone scan index)</td></tr>
+                    <tr><td>Keuhkoperfuusio</td><td>Visuaalinen + segmenttianalyysi</td><td>V/Q-mismatch, perfuusiodefektien laajuus</td></tr>
+                    <tr><td>MUGA</td><td>Automaattinen reunan&shy;tunnistus, TAC</td><td>LVEF, seinämäliike, loppudiastolinen/systolinen tilavuus</td></tr>
+                </tbody>
+            </table>
+
+            <h3>10.3 Munuaisen renogrammianalyysi (esimerkki)</h3>
+            <p>Renogrammianalyysi on tyypillinen esimerkki dynaamisesta kvantitatiivisesta analyysistä:</p>
+            <ol>
+                <li>Piirretään ROI:t molemmille munuaisille ja taustalle</li>
+                <li>Muodostetaan taustavähennetyt time-activity-käyrät</li>
+                <li>Lasketaan <strong>split function</strong> (differentiaalinen munuaisfunktio): osuus kokonaisaktiviteetista 1&ndash;2 min injektiosta (normaali: 45&ndash;55 % / 55&ndash;45 %)</li>
+                <li>Arvioidaan erityskäyrän huippu (T<sub>max</sub> &lt; 5 min normaali) ja puolittumisaika (T<sub>&frac12;</sub> &lt; 15 min normaali)</li>
+                <li>Furosemidi-testi (F+20 tai F&minus;15): arvioi obstruktion astetta</li>
+            </ol>
+
+            <h3>10.4 Sydänperfuusio-SPET:n kvantitatiivinen analyysi</h3>
+            <p>Sydänperfuusio-SPET analysoidaan uudelleen&shy;orientoiduista lyhyen akselin leikkeistä:</p>
+            <ul>
+                <li><strong>Polar map (bull's eye)</strong>: Sydämen vasemman kammion perfuusio projisoituna 2D-esitykseen. Vertailu normaalitietokantaan (z-score) paljastaa perfuusiodefektit.</li>
+                <li><strong>17-segmenttimalli</strong>: AHA-standardin mukainen jaottelu. Jokainen segmentti pisteytetään 0&ndash;4 (0 = normaali, 4 = ei kertymää).</li>
+                <li><strong>Summed scores</strong>: SSS (summed stress score), SRS (summed rest score), SDS = SSS &minus; SRS (summed difference score, iskemian laajuus). SDS &ge; 4 viittaa merkittävään iskemiaan.</li>
+                <li><strong>Gated-SPET</strong>: LVEF, EDV (loppudiastolinen tilavuus), ESV (loppusystolinen tilavuus), seinämäliike ja -paksuuntuminen. LVEF &lt; 35 % viittaa merkittävään systoliseen toimintahäiriöön.</li>
+            </ul>
+
+            <h2>11. Henkilökunnan ohjaus ja potilaskommunikaatio</h2>
+
+            <h3>11.1 Sairaalafyysikon rooli henkilökunnan ohjauksessa</h3>
+            <ul>
+                <li><strong>Kuvausprotokollien optimointi</strong>: Fyysikko suunnittelee ja validoi kuvausprotokollat (matriisikoko, kuvausaika, kollimaattori, energiaikkuna, rekonstruktioparametrit)</li>
+                <li><strong>Laitteiden käyttökoulutus</strong>: Kameran käyttöliittymä, kuvaus&shy;parametrien asetus, perus-QC, vikojen tunnistaminen</li>
+                <li><strong>Analysointiohjelmiston koulutus</strong>: ROI-piirto, rekonstruktioparametrien valinta, QC-datan tulkinta</li>
+                <li><strong>Ongelmatilanteiden selvittely</strong>: Kuvanlaadun poikkeamien syiden analyysi, laitevikojen tunnistaminen, varaprotokollien käyttöönotto</li>
+            </ul>
+
+            <h3>11.2 Potilaskommunikaatio säteilyturvallisuudesta</h3>
+            <ul>
+                <li>Selitä tutkimuksen tarkoitus ja mitä radioaktiivinen aine tekee kehossa</li>
+                <li>Kerro säteilyannoksen suuruusluokka vertaamalla luonnolliseen taustasäteilyyn (esim. &bdquo;vastaa muutaman kuukauden taustasäteilyä&rdquo;)</li>
+                <li>Ohjeista mahdolliset rajoitukset tutkimuksen jälkeen (pienten lasten kontakti, imetys)</li>
+                <li>Kerro, että radioaktiivinen aine poistuu pääosin virtsan kautta ja annos pienenee nopeasti</li>
+            </ul>
+
+            <h2>12. Laitehankintaprosessi</h2>
+            <p>Sairaalafyysikko osallistuu gammakameran hankintaan keskeisesti:</p>
+            <ul>
+                <li><strong>Vaatimusmäärittely</strong>: Kliiniset tarpeet (tutkimusmäärät, tutkimustyypit), tekniset vaatimukset (ilmaisintyyppi, kollimaattorit, SPET/TT)</li>
+                <li><strong>Hyväksymistestaus</strong>: Valmistajan spesifikaatioiden verifiointi NEMA-standardin mukaisesti</li>
+                <li><strong>Commissioning</strong>: Kalibrointimittaukset, energiaikkunoiden asetus, tasaisuus- ja resoluutiokarttojen luonti, SPET-rekonstruktion parametrien optimointi</li>
+                <li><strong>STUK:n käyttöönottotarkastus</strong>: Ennen kliinistä käyttöä</li>
+            </ul>
+
+            <div class="theory-references">
+                <h3>Viitekirjallisuus</h3>
+                <ol>
+                    <li>Cherry SR, Sorenson JA, Phelps ME. <em>Physics in Nuclear Medicine</em>, 4th ed., Elsevier, 2012. Luvut 13&ndash;15.</li>
+                    <li>NEMA NU 1-2018: <em>Performance Measurements of Gamma Cameras</em>.</li>
+                    <li>EANM Physics Committee. <em>Routine quality control recommendations for nuclear medicine instrumentation</em>, Eur J Nucl Med Mol Imaging, 2010.</li>
+                    <li>IAEA Human Health Series No. 6: <em>Quality Assurance for SPECT Systems</em>, 2009.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+         VÄLILEHTI 2: PET-KAMERA
+         ================================================================ -->
+    <div class="theory-panel" id="panel-pet" role="tabpanel">
+        <div class="theory-content">
+
+            <h2>1. Johdanto</h2>
+            <p>PET (positroniemissiotomografia) perustuu positroni&shy;emitterin hajoamisessa syntyvien annihilaatiofotonien (511 keV) koinsidenssimittaukseen. PET tarjoaa merkittävästi paremman herkkyyden ja spatiaalisen resoluution kuin SPET, sekä luontaisesti kvantitatiivisen kuvantamisen. PET/TT on nykyisin standardilaite, ja PET/MRI on kasvava modaliteetti.</p>
+
+            <h2>2. PET-kameran rakenne</h2>
+
+            <h3>2.1 Ilmaisinrenkaat</h3>
+            <p>PET-kamera koostuu ilmaisinrenkaista, joissa on tuhansia pieniä tuikekideblokkeja ympäri potilasta. Modernissa PET:ssä on tyypillisesti 20 000&ndash;30 000 ilmaisinelementtiä.</p>
+            <table>
+                <thead>
+                    <tr><th>Kidemateriaali</th><th>Tiheys (g/cm&sup3;)</th><th>Valon tuotto (% NaI:sta)</th><th>Hajoamisaika (ns)</th><th>Erityisominaisuus</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>BGO (Bi<sub>4</sub>Ge<sub>3</sub>O<sub>12</sub>)</td><td>7,13</td><td>15</td><td>300</td><td>Korkein ilmaisutehokkuus, hidas</td></tr>
+                    <tr><td>LSO (Lu<sub>2</sub>SiO<sub>5</sub>:Ce)</td><td>7,40</td><td>75</td><td>40</td><td>Nopea, korkea valon tuotto &rarr; TOF-PET</td></tr>
+                    <tr><td>LYSO (Lu<sub>1,8</sub>Y<sub>0,2</sub>SiO<sub>5</sub>:Ce)</td><td>7,10</td><td>75</td><td>41</td><td>Kuten LSO, yleisimmin k&auml;ytetty</td></tr>
+                    <tr><td>LaBr<sub>3</sub></td><td>5,08</td><td>165</td><td>16</td><td>Erinomainen energiaresoluutio, kallis</td></tr>
+                </tbody>
+            </table>
+
+            <h3>2.2 Fotodetektorit</h3>
+            <ul>
+                <li><strong>PMT (valomonistinputki)</strong>: Perinteinen vaihtoehto. Hyvä vahvistus, mutta suuri koko ja magneettikenttäherkkyys &rarr; ei sovellu PET/MRI:hin.</li>
+                <li><strong>SiPM (piikuvafotomultiplikaattori)</strong>: Nykystandardi. Kompakti, magneettikenttää sietävä, hyvä ajoitusresoluutio. Mahdollistaa PET/MRI:n ja parantaa TOF-resoluutiota.</li>
+                <li><strong>APD (avalanche photodiode)</strong>: Käytetty varhaisissa PET/MRI-laitteissa. Korvattu SiPM:llä.</li>
+            </ul>
+
+            <h3>2.3 Koinsidenssimittaus</h3>
+            <p>PET perustuu kahden 511 keV:n annihilaatiofotonin samanaikaiseen ilmaisuun vastakkaisissa ilmaisimissa. Koinsidenssityypit:</p>
+            <ul>
+                <li><strong>True coincidence</strong>: Molemmat fotonit samasta annihilaatiosta, ei sironnut. Haluttu signaali.</li>
+                <li><strong>Scattered coincidence</strong>: Toinen tai molemmat fotonit ovat sironeet kudoksessa. Väärä LOR (line of response) &rarr; kontrastin heikkeneminen.</li>
+                <li><strong>Random coincidence</strong>: Kaksi fotonia eri annihilaatioista osuu sattumalta samaan aika&shy;ikkunaan. Määrä kasvaa nopeasti aktiivisuuden kasvaessa (\( R_r \propto 2\tau \cdot R_1 \cdot R_2 \)).</li>
+            </ul>
+
+            <div class="formula">
+                <p>Koinsidenssien kokonaismäärä:</p>
+                \[ R_{\text{total}} = R_{\text{true}} + R_{\text{scatter}} + R_{\text{random}} \]
+                <p>Signaalinpoistosuhde (NEC, noise-equivalent count rate):</p>
+                \[ NEC = \frac{R_{\text{true}}^2}{R_{\text{total}}} \]
+                <p>NEC-käyrän huippu määrittää optimaalisen aktiivisuuden kuvaushetkellä.</p>
+            </div>
+
+            <h2>3. Kuvausmoodit</h2>
+
+            <h3>3.1 2D- ja 3D-moodi</h3>
+            <p>Varhaisissa PET-kameroissa käytettiin septoja ilmaisinrenkaiden välillä (2D-moodi) hajasäteilyn ja randomi-koinsidenssien vähentämiseksi. Modernit kamerat toimivat aina 3D-moodissa (ilman septoja), mikä lisää herkkyyttä 5&ndash;10-kertaisesti. Hajasäteilyn korjaus tehdään algoritmisesti.</p>
+
+            <h3>3.2 TOF-PET (time-of-flight)</h3>
+            <p>TOF-PET mittaa kahden annihilaatiofotonin ilmaisuhetkien eron, mikä rajaa annihilaatiopisteen todennäköisintä sijaintia LOR:lla:</p>
+            <div class="formula">
+                \[ \Delta x = \frac{c \cdot \Delta t}{2} \]
+                <p>missä \( \Delta t \) on aikaresoluutio (nykyisin 200&ndash;400 ps) ja \( \Delta x \) on paikan epävarmuus. 200 ps:n resoluutiolla \( \Delta x \approx 3 \) cm.</p>
+            </div>
+            <p>TOF-PET parantaa signaali-kohinasuhdetta erityisesti suurilla potilailla (missä vaimennus on voimakasta). SNR-parannus verrattuna ei-TOF:iin on \( \sqrt{D / \Delta x} \), missä \( D \) on potilaan halkaisija.</p>
+
+            <h3>3.3 Dynaamiset ja gated-kuvaukset</h3>
+            <p>Dynaaminen PET kerää dataa useissa aikapisteissä merkkiaineen injektion jälkeen. Mahdollistaa farmakokineettisen mallinnuksen (Patlak, Logan, compartment models) ja kvantitatiivisten parametrien laskemisen (K<sub>i</sub>, V<sub>d</sub>). Cardiac-gated PET mahdollistaa sydänperfuusion ja viabiliteetin arvioinnin.</p>
+
+            <h2>4. Vaimennuskorjaus</h2>
+
+            <h3>4.1 TT-pohjainen vaimennuskorjaus (CTAC)</h3>
+            <p>PET/TT:ssä TT-data muunnetaan 511 keV:n vaimennuskartaksi bilineaarisella muunnoksella. Potentiaaliset virhelähteet:</p>
+            <ul>
+                <li><strong>Metalliproteesin artefaktit</strong>: TT:n korkeat HU-arvot &rarr; yliarvioitu vaimennus &rarr; väärä hotspot PET-kuvassa</li>
+                <li><strong>TT-kontrastiaine</strong>: Jodipitoinen kontrastiaine nostaa HU-arvoja &rarr; mahdollinen yliarviointi. Voidaan minimoida käyttämällä matalaa kV TT:tä tai viivästettyä kuvausprotokollaa.</li>
+                <li><strong>Hengitysliike</strong>: TT ja PET kuvataan eri hengitysvaiheissa &rarr; rekisteröintivirhe erityisesti pallea-keuhko-rajalla</li>
+            </ul>
+
+            <h3>4.2 MRI-pohjainen vaimennuskorjaus (MRAC)</h3>
+            <p>PET/MRI:ssä vaimennuskorjaus on haasteellisempi, koska MRI-signaali ei korreloi suoraan elektroni&shy;tiheyden kanssa. Menetelmiä:</p>
+            <ul>
+                <li><strong>Dixon-pohjainen segmentointi</strong>: Erottelee vesi/rasva/ilma/luu 2&ndash;4 luokkaan ja asettaa kiinteät &mu;-arvot</li>
+                <li><strong>UTE/ZTE-sekvenssit</strong>: Lyhyen TE:n sekvenssit luun erottamiseksi</li>
+                <li><strong>Koneoppimispohjaiset menetelmät</strong>: Deep learning generoi pseudo-TT:n MRI:stä</li>
+            </ul>
+
+            <h2>5. Oheislaitteet</h2>
+            <ul>
+                <li><strong>Annoskalibraattori</strong>: Mittaa injektoitavan aktiivisuuden. Kalibroitava säännöllisesti.</li>
+                <li><strong>Automaattinen injektori</strong>: Vähentää henkilökunnan säteilyaltistusta FDG-injektiossa</li>
+                <li><strong>Infuusiopumppu</strong>: Dynaamisten tutkimusten merkkiaineen annostelu</li>
+                <li><strong>Verikaasunäytteenotto</strong>: Arteriaaliset verinäytteet input-funktion mittaamiseen (kvantitatiivinen PET)</li>
+                <li><strong>Hengityksenhallintalaitteisto</strong>: Respiratory gating keuhko-/maksatutkimuksissa</li>
+            </ul>
+
+            <h2>6. Rekonstruktio ja kvantitaatio</h2>
+
+            <h3>6.1 Iteratiivinen rekonstruktio</h3>
+            <p>PET:ssä käytetään nykyisin aina iteratiivista rekonstruktiota (OSEM tai sen muunnoksia). Mallinnettavat ilmiöt:</p>
+            <ul>
+                <li>Vaimennus (CTAC tai MRAC)</li>
+                <li>Hajasäteilyn korjaus (single-scatter simulation, SSS)</li>
+                <li>Random-koinsidenssien korjaus (delayed window tai singles-based)</li>
+                <li>Normalisointi (ilmaisinelementtien herkkyyserot)</li>
+                <li>Kuolleen ajan korjaus</li>
+                <li>Puoliintumiskorjaus (radioaktiivinen hajoaminen kuvauksen aikana)</li>
+                <li>PSF-mallinnus (point spread function &rarr; resoluution parannus)</li>
+                <li>TOF-tieto (jos käytettävissä)</li>
+            </ul>
+
+            <h3>6.2 SUV (Standardized Uptake Value)</h3>
+            <p>SUV on PET-kuvantamisen yleisin semikvantitiivinen mitta:</p>
+            <div class="formula">
+                \[ SUV = \frac{C_{\text{tissue}} \text{ (kBq/ml)}}{A_{\text{inj}} \text{ (kBq)} / m_{\text{patient}} \text{ (g)}} \]
+                <p>missä \( C_{\text{tissue}} \) on kudoksen aktiivisuuskonsentraatio, \( A_{\text{inj}} \) on injektoitu aktiivisuus (hajoamiskorjattu) ja \( m_{\text{patient}} \) on potilaan massa.</p>
+            </div>
+            <p>SUV-variantteja: SUV<sub>max</sub> (pikselikohtainen maksimi, yleisimmin käytetty), SUV<sub>mean</sub> (ROI:n keskiarvo), SUV<sub>peak</sub> (1 cm&sup3;:n keskiarvo maksimiarvon ympärillä), SUL (lean body mass -normalisoitu).</p>
+
+            <h2>7. Laadunvarmistus</h2>
+
+            <h3>7.1 Päivittäinen QA</h3>
+            <ul>
+                <li><strong>Ilmaisimien toiminta</strong>: Normalisointikalibraatio tai blank scan</li>
+                <li><strong>TT-kalibraatio</strong>: HU-arvon tarkistus vesi/ilma-fantomilla (PET/TT)</li>
+            </ul>
+
+            <h3>7.2 Neljännesvuosittainen / vuosittainen QA</h3>
+            <ul>
+                <li><strong>SUV-kvantitaation tarkistus</strong>: Kalibrointifantomin mittaus &rarr; mitattu ja tunnettu aktiivisuuskonsentraatio &plusmn; 10 %</li>
+                <li><strong>Kuvanlaatufantomi</strong>: NEMA IEC body phantom (6 kuumapalloa, tausta) &rarr; kontrasti, recovery coefficients</li>
+                <li><strong>PET/TT-rekisteröinti</strong>: Kohdistustarkkuus &lt; 5 mm</li>
+            </ul>
+
+            <h3>7.3 NEMA NU 2 -suorituskykymittaukset</h3>
+            <p>NEMA NU 2 -standardi määrittelee PET-kameran suorituskykymittaukset:</p>
+            <ul>
+                <li>Spatiaalinen resoluutio (FWHM, FWTM)</li>
+                <li>Herkkyys (cps/kBq)</li>
+                <li>Scatter fraction ja NEC-käyrä</li>
+                <li>Kuvanlaatu (IEC-fantomi: kontrasti, taustanvaihtelu)</li>
+                <li>Ajoitusresoluutio (TOF-PET)</li>
+                <li>Laskentanopeuden lineaarisuus</li>
+            </ul>
+
+            <h2>8. Artefaktit ja niiden tunnistaminen PET-kuvantamisessa</h2>
+
+            <h3>8.1 Laitteistoperäiset artefaktit</h3>
+            <ul>
+                <li><strong>Normalisointivirhe</strong>: Ilmaisinelementtien herkkyyserojen puutteellinen korjaus näkyy rengasmaisina artefakteina kuvissa. Korjaus: säännöllinen normalisointikalibraatio.</li>
+                <li><strong>Viallinen ilmaisinelementti</strong>: Yksittäinen toimimaton kristalli/SiPM näkyy vaimentuneena viivana sinogrammissa. Tunnistaminen: päivittäinen blank-scan.</li>
+                <li><strong>Ajoitusresoluution heikkeneminen</strong>: TOF-PET:ssä ajoituskalibroinnin virhe heikentää SNR-parannusta. Tarkistettava vähintään kuukausittain.</li>
+                <li><strong>Randomi-koinsidenssien ylikorjaus</strong>: Voi johtaa negatiivisiin arvoihin matalakertymäisillä alueilla. Näkyy erityisesti 3D-moodissa korkeilla aktiivisuuksilla.</li>
+            </ul>
+
+            <h3>8.2 Potilasperäiset artefaktit</h3>
+            <ul>
+                <li><strong>Metalliproteesin artefakti</strong>: TT:n korkeat HU-arvot (metalli) &rarr; yliarvioitu vaimennuskorjaus &rarr; väärä hotspot PET-kuvassa. Korjaus: MAR (metal artifact reduction) TT:ssä, kuvien tarkistus ilman vaimennuskorjausta (NAC).</li>
+                <li><strong>TT-kontrastiaineen artefakti</strong>: Jodipitoinen kontrastiaine nostaa HU-arvoja &rarr; mahdollinen yliarviointi. Voidaan minimoida matalalla kV TT:llä tai viivästetyllä protokollalla.</li>
+                <li><strong>Hengitysliikeartefakti</strong>: PET (3&ndash;5 min/petipositio) ja TT (muutama sekunti) kuvaavat eri hengitysvaiheissa &rarr; rekisteröintivirhe pallea-keuhko-rajalla &rarr; &bdquo;banaaniartefakti&rdquo; (kylmä kaistale pallean yläpuolella, kuuma alla). Korjaus: hengitystahdistettu PET (respiratory gating), deep-inspiration breath-hold TT.</li>
+                <li><strong>Liikeartefakti</strong>: Potilaan liike kuvauksen aikana näkyy sumennuksena ja epäsovituksena PET/TT-fuusiokuvissa.</li>
+                <li><strong>Ruskean rasvakudoksen (BAT) kertymä</strong>: Aktivoitunut ruskea rasvakudos kaulalla ja ylävartalolla näyttää voimakasta FDG-kertymää, joka voi sekoittua patologiseen kertymään. Ehkäisy: lämmin ympäristö, mahdollisesti beetasalpaaja.</li>
+                <li><strong>Fysiologinen kertymä</strong>: FDG kertyy normaalisti aivoihin, sydänlihakseen, munuaisiin ja virtsarakkoon. Myös lihasjännitys (esim. puremalihas, kurkunpään lihakset) voi aiheuttaa diagnostisia haasteita.</li>
+            </ul>
+
+            <h3>8.3 Menetelmäperäiset artefaktit</h3>
+            <ul>
+                <li><strong>Truncation artifact</strong>: Potilas ylittää PET:n FOV:n &rarr; vaimennuskorjaus epätarkka reunoilla. Korjaus: extended FOV -rekonstruktio.</li>
+                <li><strong>PSF-rekonstruktion Gibbs-artefakti</strong>: PSF-mallinnus (SharpIR, HD-PET) voi tuottaa reunojen ylikorostumista pienissä korkeakertymäisissä kohteissa &rarr; SUV<sub>max</sub> yliarvioituu. Tiedostettava erityisesti hoitovasteen seurannassa.</li>
+                <li><strong>Hajasäteilyn ylikorjaus</strong>: Ilmenee negatiivisina arvoina keuhkoissa tai muissa matalakertymäisissä alueissa.</li>
+            </ul>
+
+            <div class="theory-warning">
+                <p><strong>Kliininen merkitys:</strong> PET/TT-artefaktien tunnistaminen on kriittinen taito, sillä virheellinen vaimennuskorjaus voi johtaa vääriin positiivisiin (metalliproteesi, kontrastiaine) tai vääriin negatiivisiin (hengitysartefakti) löydöksiin. Aina kun vaimennuskorjattu kuva (AC) näyttää epäilyttävää, tarkista korjaamaton kuva (NAC).</p>
+            </div>
+
+            <h2>9. Pitkän aksiaalikentän PET (Long Axial FOV / Total-Body PET)</h2>
+
+            <h3>9.1 Periaate ja teknologia</h3>
+            <p>Perinteisen PET-kameran aksiaalinen FOV on 15&ndash;30 cm. Pitkän aksiaalikentän PET-kameroissa FOV on 70&ndash;194 cm, mikä mahdollistaa koko kehon kuvaamisen yhdellä petipositiolla:</p>
+            <ul>
+                <li><strong>uEXPLORER (United Imaging)</strong>: 194 cm FOV, ensimmäinen koko kehon PET</li>
+                <li><strong>PennPET Explorer (Siemens)</strong>: 140 cm FOV</li>
+                <li><strong>Biograph Vision Quadra (Siemens)</strong>: 106 cm FOV</li>
+            </ul>
+
+            <h3>9.2 Fysikaaliset edut</h3>
+            <ul>
+                <li><strong>Geometrinen herkkyys</strong>: Pitkä FOV kasvattaa geometristä herkkyyttä merkittävästi (jopa 40-kertainen perinteiseen nähden). Tämä mahdollistaa: (a) huomattavasti pienemmän aktiivisuuden (jopa 1/10&ndash;1/40), (b) merkittävästi lyhyemmän kuvausajan (jopa 30&ndash;60 s koko keho), tai (c) paremman kuvanlaadun samalla aktiivisuudella ja ajalla.</li>
+                <li><strong>Dynaaminen koko kehon kuvantaminen</strong>: Mahdollistaa samanaikaisen farmakokineettisen mallinnuksen kaikissa elimissä. Tämä avaa täysin uusia kliinisiä ja tutkimussovelluksia.</li>
+                <li><strong>Parantunut TOF-hyöty</strong>: Pidempi aksiaalinen FOV hyödyntää TOF-informaatiota tehokkaammin, koska useampi LOR osallistuu kunkin vokselin rekonstruktioon.</li>
+            </ul>
+
+            <h3>9.3 Kliiniset sovellukset</h3>
+            <ul>
+                <li>Ultramatala-annos-PET: erityisesti pediatrinen kuvantaminen, toistuvat seurantakuvaukset</li>
+                <li>Ultranopea kuvantaminen: liikkuvat potilaat, lapset ilman sedaatiota</li>
+                <li>Koko kehon dynaaminen PET: merkkiaineen farmakokinetiikka kaikissa elimissä samanaikaisesti</li>
+                <li>Viivästetty kuvantaminen (delayed imaging): pitkän puoliintumisajan merkkiaineet tai viivästetty FDG-kuvantaminen kohonneen kontrastin saavuttamiseksi</li>
+            </ul>
+
+            <div class="theory-info">
+                <p><strong>Sairaalafyysikon näkökulma:</strong> Total-body PET muuttaa merkittävästi annosteluprotokollien, kuvausparametrien ja QA-menetelmien suunnittelua. Geometrisen herkkyyden kasvu mahdollistaa potilasannoksen pienentämisen tai kuvausajan lyhentämisen, mutta vaatii uudenlaista protokollaoptimointia.</p>
+            </div>
+
+            <h2>10. Laiteturvallisuus ja henkilökunnan ohjaus PET-yksikössä</h2>
+
+            <h3>10.1 PET/TT:n erityiset turvallisuusnäkökohdat</h3>
+            <ul>
+                <li><strong>TT-komponentti</strong>: Röntgensäteilyn käyttöön liittyvät turvallisuusvaatimukset (STUK:n ohjeet). Scatter-säteilyn hallinta tutkimushuoneessa.</li>
+                <li><strong>Sähköturvallisuus</strong>: IEC 60601 -standardin mukaiset vaatimukset. PET-kameran ja TT:n erilliset sähkötarkastukset.</li>
+                <li><strong>Magneettikenttä (PET/MRI)</strong>: Voimakas staattinen magneettikenttä (1,5&ndash;3 T) asettaa rajoituksia metalliproteesien ja implanttien suhteen, sekä henkilökunnan työskentelylle tutkimushuoneessa.</li>
+                <li><strong>Laservalot</strong>: Potilaan asettelun laservalot vaativat silmäturvallisuuden huomioimisen (luokka 2&ndash;3R).</li>
+            </ul>
+
+            <h3>10.2 Henkilökunnan säteilysuojelu PET-yksikössä</h3>
+            <ul>
+                <li><strong>511 keV fotonit</strong>: FDG:n 511 keV:n gammasäteily vaimentuu merkittävästi heikommin kuin Tc-99m:n 140 keV &rarr; lyijylasit vähemmän tehokkaita. TVL (lyijy) ~6 mm vs. ~0,3 mm (Tc-99m).</li>
+                <li><strong>Automaattinen injektori</strong>: Suositus kaikissa PET-yksiköissä henkilökunnan käsiannoksen pienentämiseksi (60&ndash;90 % vähennys)</li>
+                <li><strong>Uptake-huone</strong>: Potilas odottaa 60 min injektiosta erillisessä suojatussa huoneessa &rarr; henkilökunnan kontakti minimoidaan</li>
+                <li><strong>Potilaskontaktin minimointi</strong>: Rajoita aika potilaan lähellä kuvauksen asettelun aikana. Sormidosimetri pakollinen.</li>
+            </ul>
+
+            <h3>10.3 Laitehankinta ja komissointi</h3>
+            <ul>
+                <li><strong>Vaatimusmäärittely</strong>: Kliiniset tarpeet (tutkimusmäärät, tutkimustyypit, PET/TT vs. PET/MRI), tekniset vaatimukset (TOF-resoluutio, aksiaalinen FOV, TT-tyyppi)</li>
+                <li><strong>Hyväksymistestaus</strong>: NEMA NU 2 -mittaukset valmistajan spesifikaatioiden verifioimiseksi</li>
+                <li><strong>Commissioning</strong>: SUV-kalibraatio, cross-calibration annoskalibraattorin kanssa, kuvanlaatufantomin mittaus, TT-HU-kalibraatio, rekisteröinnin tarkkuus</li>
+                <li><strong>STUK:n käyttöönottotarkastus</strong>: Ennen kliinistä käyttöönottoa</li>
+            </ul>
+
+            <div class="theory-references">
+                <h3>Viitekirjallisuus</h3>
+                <ol>
+                    <li>Cherry SR, Sorenson JA, Phelps ME. <em>Physics in Nuclear Medicine</em>, 4th ed., Elsevier, 2012. Luvut 16&ndash;18.</li>
+                    <li>NEMA NU 2-2018: <em>Performance Measurements of Positron Emission Tomographs (PETs)</em>.</li>
+                    <li>Boellaard R et al. <em>FDG PET/CT: EANM procedure guidelines for tumour imaging, version 2.0</em>, Eur J Nucl Med Mol Imaging, 2015.</li>
+                    <li>IAEA Human Health Series No. 1: <em>Quality Assurance for PET and PET/CT Systems</em>, 2009.</li>
+                    <li>Badawi RD et al. <em>First Human Imaging Studies with the EXPLORER Total-Body PET Scanner</em>, J Nucl Med, 2019.</li>
+                    <li>Vandenberghe S et al. <em>State of the art in total body PET</em>, EJNMMI Physics, 2020.</li>
+                    <li>IEC 60601-2-44: <em>Medical electrical equipment &mdash; Particular requirements for X-ray equipment for computed tomography</em>.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+         VÄLILEHTI 3: RADIOFARMASIA JA ANNOSTELU
+         ================================================================ -->
+    <div class="theory-panel" id="panel-radiofarmasia" role="tabpanel">
+        <div class="theory-content">
+
+            <h2>1. Johdanto</h2>
+            <p>Radiofarmasia on isotooppilääketieteen osa-alue, joka käsittelee radioaktiivisten lääkeaineiden (radiolääkkeiden) tuotantoa, valmistusta, laadunvalvontaa ja annostelua. Sairaalafyysikon on tunnettava radioisotooppien tuotantotavat, generaattoreiden toiminta, radiolääkkeen valmistuksen periaatteet ja aktiivisuusmittauksen menetelmät.</p>
+
+            <h2>2. Radioisotooppien tuotanto</h2>
+
+            <h3>2.1 Reaktorituotanto</h3>
+            <p>Ydinreaktorissa tuotetaan neutronirikas isotoopit neutronisieppauksen (\( (n, \gamma) \)-reaktio) tai fission kautta:</p>
+            <ul>
+                <li><strong>Mo-99</strong>: U-235:n fissiotuote &rarr; Mo-99/Tc-99m-generaattorin emäisotpoopi. Puoliintumisaika 66 h.</li>
+                <li><strong>I-131</strong>: Tuotetaan Te-130:n neutronisäteilytyksellä. T&frac12; = 8,02 d. Beetaemitteri (&beta;<sup>&minus;</sup>, 606 keV max) + gamma (364 keV).</li>
+                <li><strong>Sm-153, Y-90, Lu-177</strong>: Hoitonuklidit, tuotetaan reaktorissa.</li>
+            </ul>
+
+            <h3>2.2 Syklotronituotanto</h3>
+            <p>Syklotronissa tuotetaan protoninrikas isotooppeja protonikiihdytyksellä:</p>
+            <ul>
+                <li><strong>F-18</strong>: O-18(p,n)F-18 -reaktio. T&frac12; = 109,8 min. PET:n ylivoimaisesti käytetyin. Tuotetaan FDG-synteesiin.</li>
+                <li><strong>C-11</strong>: N-14(p,&alpha;)C-11. T&frac12; = 20,4 min. Lyhyt puoliintumisaika vaatii lähellä olevan syklotronin.</li>
+                <li><strong>N-13</strong>: O-16(p,&alpha;)N-13. T&frac12; = 9,97 min. Ammoniakki sydänperfuusioon.</li>
+                <li><strong>O-15</strong>: N-14(d,n)O-15. T&frac12; = 2,04 min. Vesimolekyyli aivojen verenkiertomittauksiin.</li>
+                <li><strong>Ga-68</strong>: Ge-68/Ga-68-generaattori (emäisotooppi tuotetaan syklotronissa). T&frac12; = 67,7 min.</li>
+            </ul>
+
+            <h2>3. Säteilyfysiikan perusteet isotooppilääketieteessä</h2>
+
+            <h3>3.1 Hajoamistyypit</h3>
+            <table>
+                <thead>
+                    <tr><th>Hajoamistyyppi</th><th>Emittoi</th><th>Esimerkki</th><th>Kuvantaminen</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>&gamma;-hajoaminen / isomeerinen transitio</td><td>Gammafotonit</td><td>Tc-99m (140 keV)</td><td>Gammakamera, SPET</td></tr>
+                    <tr><td>&beta;<sup>+</sup> (positroniemissio)</td><td>Positroni &rarr; 2 &times; 511 keV fotonit</td><td>F-18, Ga-68, C-11</td><td>PET</td></tr>
+                    <tr><td>&beta;<sup>&minus;</sup> (beetahajoaminen)</td><td>Elektroni + antineutriino</td><td>I-131, Y-90, Lu-177</td><td>Hoito (&beta;<sup>&minus;</sup>) + kuvantaminen (&gamma;)</td></tr>
+                    <tr><td>&alpha;-hajoaminen</td><td>Alfahiukkanen (He-4)</td><td>Ra-223, Ac-225</td><td>Hoito (korkea LET)</td></tr>
+                    <tr><td>Elektronisieppaus (EC)</td><td>R&ouml;ntgens&auml;teily / Auger-elektronit</td><td>Tl-201, I-123, In-111</td><td>Gammakamera, SPET</td></tr>
+                </tbody>
+            </table>
+
+            <h3>3.2 Hajoamislait ja aktiivisuuslaskenta</h3>
+            <div class="formula">
+                \[ A(t) = A_0 \cdot e^{-\lambda t} = A_0 \cdot 2^{-t/T_{1/2}} \]
+                <p>Efektiivinen puoliintumisaika (biologinen eliminaatio + fysikaalinen hajoaminen):</p>
+                \[ \frac{1}{T_{\text{eff}}} = \frac{1}{T_{\text{phys}}} + \frac{1}{T_{\text{biol}}} \]
+            </div>
+
+            <h2>4. Generaattorit</h2>
+
+            <h3>4.1 Mo-99/Tc-99m-generaattori</h3>
+            <p>Yleisin isotooppilääketieteen generaattori. Mo-99 (T&frac12; = 66 h) hajoaa Tc-99m:ksi (T&frac12; = 6,01 h), joka eluoidaan fysiologisella keittosuolaliuoksella (NaCl 0,9 %).</p>
+            <ul>
+                <li><strong>Emä-tytär-tasapaino</strong>: Transientti tasapaino, koska T&frac12;(emä) &gt; T&frac12;(tytär). Tc-99m:n aktiivisuus saavuttaa noin 95 % tasapainosta ~23 h eluution jälkeen.</li>
+                <li><strong>Eluointitaajuus</strong>: Tyypillisesti kerran päivässä aamulla</li>
+                <li><strong>Laadunvalvonta</strong>: Mo-99-läpimurto (&lt; 0,15 kBq Mo-99 / MBq Tc-99m), Al-kontaminaatio (&lt; 10 &micro;g/ml), radiokemiallinen puhtaus (&gt; 95 % TcO<sub>4</sub><sup>&minus;</sup>)</li>
+            </ul>
+
+            <h3>4.2 Ge-68/Ga-68-generaattori</h3>
+            <p>Ge-68 (T&frac12; = 270,8 d) hajoaa elektronisieppauksella Ga-68:ksi (T&frac12; = 67,7 min). Pitkä emäisotoopin puoliintumisaika mahdollistaa generaattorin käytön ~1 vuosi. Ga-68 on PET-nuklidi, jota käytetään mm. DOTATOC/DOTATATE-tutkimuksissa (neuroendokriiniset kasvaimet) ja PSMA-tutkimuksissa (eturauhassyöpä).</p>
+
+            <h3>4.3 Sr-82/Rb-82-generaattori</h3>
+            <p>Sr-82 (T&frac12; = 25,4 d) hajoaa elektronisieppauksella Rb-82:ksi (T&frac12; = 76 s). Rb-82 on PET-nuklidi, jota käytetään sydänperfuusio-PET:ssä:</p>
+            <ul>
+                <li><strong>Ultralyhyt puoliintumisaika</strong>: 76 s mahdollistaa toistuvan kuvantamisen lyhyin väliajoin (rasitus + lepo samassa istunnossa, ~10 min välein)</li>
+                <li><strong>Automaattinen infuusio</strong>: Rb-82 annostellaan suoraan generaattorista potilaaseen automaattisella infuusiolaitteistolla (elution/infusion system)</li>
+                <li><strong>Laadunvalvonta</strong>: Sr-82-läpimurto on kriittinen turvallisuusparametri (&lt; 0,02 kBq Sr-82 / MBq Rb-82) &mdash; Sr-82 kertyy luustoon pitkäaikaisesti. Sr-85-läpimurto tarkistettava myös. Päivittäinen eluaatin tarkistus ennen käyttöä.</li>
+                <li><strong>Generaattorin käyttöikä</strong>: ~6&ndash;8 viikkoa (riippuen alkuaktiivisuudesta ja eluointien määrästä)</li>
+            </ul>
+
+            <div class="theory-warning">
+                <p><strong>Turvallisuuskriittistä:</strong> Sr-82/Rb-82-generaattorin Sr-82-läpimurto voi aiheuttaa merkittävää pitkäaikaista säteily&shy;altistusta potilaalle (Sr-82 kertyy luustoon). FDA:n ja EANM:n suositukset edellyttävät päivittäistä läpimurtotestiä ja eluaatin hylkäämistä, jos rajat ylittyvät.</p>
+            </div>
+
+            <h2>5. Radiolääkkeen valmistus</h2>
+
+            <h3>5.1 Gamma-radiolääkkeet (Tc-99m)</h3>
+            <p>Tc-99m-leimatut radiolääkkeet valmistetaan yhdistämällä eluoitu Tc-99m-perteknetaatti (TcO<sub>4</sub><sup>&minus;</sup>) kaupalliseen leimausmittaan (kit). Kittiin sisältyy:</p>
+            <ul>
+                <li>Ligandin (kohdentava molekyyli), esim. DTPA, MAG3, MIBI, HMPAO, MDP</li>
+                <li>Pelkistin (tyypillisesti tina(II)kloridi, SnCl<sub>2</sub>) &rarr; pelkistää Tc-99m:n +VII-hapetusasteelta alempaan &rarr; kompleksinmuodostus ligandin kanssa</li>
+                <li>Puskuri ja stabilaattorit</li>
+            </ul>
+
+            <h3>5.2 PET-radiolääkkeet</h3>
+            <p>PET-radiolääkkeiden valmistus on vaativampaa lyhyen puoliintumisajan vuoksi:</p>
+            <ul>
+                <li><strong>[<sup>18</sup>F]FDG</strong>: Fluorodeoksiglukoosin synteesi automatisoidussa syntetisoijassa (esim. TRACERlab). Nukleofiilinen substituutio, kesto ~30 min + QC.</li>
+                <li><strong>Ga-68-peptidit</strong>: DOTATOC/DOTATATE/PSMA leimaus generaattorieluaatista. Automatisoitu valmistus (esim. iQS, Modular-Lab). Kesto ~30 min.</li>
+                <li><strong>[<sup>18</sup>F]PSMA-1007</strong>: Nukleofiilinen fluoraus, pidempi puoliintumisaika kuin Ga-68 &rarr; mahdollistaa keskitetyn tuotannon ja jakelun</li>
+            </ul>
+
+            <h3>5.3 GMP-vaatimukset (Good Manufacturing Practice)</h3>
+            <p>Radiolääkkeiden valmistus edellyttää GMP-ehtojen noudattamista:</p>
+            <ul>
+                <li><strong>Puhdastilat</strong>: Luokka A (laminaarinen virtaus, partikkelimäärä &lt; 3 520/m&sup3; &ge; 0,5 &micro;m) työskentelypisteessä, luokka B/C ympäröivässä tilassa</li>
+                <li><strong>Steriilivalmistus</strong>: Aseptinen tekniikka, lopullinen steriilisuodatus (0,22 &micro;m), prosessin validointi</li>
+                <li><strong>Dokumentaatio</strong>: Erä&shy;kohtainen valmistusprotokolla (batch record), laadunvalvontaresurssit, poikkeamaraportit</li>
+                <li><strong>Henkilökunnan koulutus</strong>: GMP-koulutus, hygieniakoulutus, aseptisen työskentelyn validointi (media fill -testi)</li>
+                <li><strong>Fimean valvonta</strong>: Radiolääkkeiden valmistus edellyttää Fimean (Lääkealan turvallisuus- ja kehittämiskeskus) lupaa</li>
+            </ul>
+
+            <div class="theory-info">
+                <p><strong>Kliininen merkitys:</strong> Sairaalafyysikko osallistuu GMP-prosessiin erityisesti laadun&shy;valvontamittausten osalta: radionuklidipuhtauden mittaus, aktiivisuus&shy;mittauksen kalibrointi, ja prosessin säteilyturvallisuuden arviointi.</p>
+            </div>
+
+            <h3>5.4 Laadunvalvonta yksityiskohtaisesti</h3>
+            <table>
+                <thead>
+                    <tr><th>QC-parametri</th><th>Menetelm&auml;</th><th>Hyv&auml;ksymisraja</th><th>Ajankohta</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Radionuklidipuhtaus</td><td>Gammasektrometria (HPGe/NaI)</td><td>&gt; 99,5 % kohdenuklidi</td><td>Ennen k&auml;ytt&ouml;&auml;</td></tr>
+                    <tr><td>Radiokemiallinen puhtaus</td><td>TLC (ohutkerroskromatografia) / HPLC</td><td>&gt; 95 % (Tc-99m), &gt; 95 % (FDG)</td><td>Ennen k&auml;ytt&ouml;&auml;</td></tr>
+                    <tr><td>Kemiallinen puhtaus</td><td>HPLC, v&auml;ritesti (Al<sup>3+</sup>)</td><td>Al &lt; 10 &micro;g/ml (Tc-99m-generaattori)</td><td>Ennen k&auml;ytt&ouml;&auml;</td></tr>
+                    <tr><td>pH</td><td>Indikaattoripaperilla tai pH-mittarilla</td><td>4,5&ndash;8,5 (tuotespesifinen)</td><td>Ennen k&auml;ytt&ouml;&auml;</td></tr>
+                    <tr><td>Steriiliys</td><td>Viljelytesti (14 pv inkubaatio)</td><td>Ei kasvua</td><td>J&auml;lkik&auml;teen (er&auml;kohtainen)</td></tr>
+                    <tr><td>Endotoksiinit</td><td>LAL-testi (Limulus amebocyte lysate)</td><td>&lt; 175 EU/V (FDG); tuotespesifinen</td><td>Ennen k&auml;ytt&ouml;&auml; tai retrospektiivisesti</td></tr>
+                    <tr><td>Partikkelim&auml;&auml;r&auml;</td><td>Visuaalinen / partikkelilaskuri</td><td>Kirkas, partikkeliton liuos</td><td>Ennen k&auml;ytt&ouml;&auml;</td></tr>
+                </tbody>
+            </table>
+
+            <h2>6. Potilasannostelu</h2>
+
+            <h3>6.1 Annostelureitit</h3>
+            <p>Radiolääkkeitä annostellaan useilla eri reiteillä tutkimuksen mukaan:</p>
+            <table>
+                <thead>
+                    <tr><th>Annostelureitti</th><th>Esimerkit</th><th>Erityishuomiot</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>Suonensisäinen (i.v.)</strong></td><td>FDG, Tc-99m-MIBI, Tc-99m-MDP, Lu-177</td><td>Yleisin. Bolus-injektio tai infuusio. Tarkista, ettei ekstravasaatiota tapahdu.</td></tr>
+                    <tr><td><strong>Suun kautta (p.o.)</strong></td><td>I-131-natriumjodidi (kapseli/liuos), I-123</td><td>Jodihoitojen yleisin reitti. Potilas paastonnut. Kontaminaation ehkäisy suussa.</td></tr>
+                    <tr><td><strong>Inhalaatio</strong></td><td>Tc-99m-Technegas, Kr-81m, Tc-99m-DTPA-aerosoli, Xe-133</td><td>Keuhkoventilaation kuvantaminen. Technegas-generaattorin käyttö vaatii erityiskoulutuksen.</td></tr>
+                    <tr><td><strong>Ihonsisäinen / subcutaaninen</strong></td><td>Tc-99m-nanokolloidit (sentinel node)</td><td>Injektio tuumorin ympärille. Usein ultralyhyt etäisyys &rarr; säteilysuojelu kätensä.</td></tr>
+                    <tr><td><strong>Intrakavitaarinen</strong></td><td>Y-90-mikrosfäärit (hepatinen), Y-90/Er-169 (nivelet)</td><td>Radioembolisaatio: angiografinen kanylointi. Radiosynoviorthesis: nivelinjektio.</td></tr>
+                </tbody>
+            </table>
+
+            <div class="theory-warning">
+                <p><strong>Ekstravasaatio:</strong> I.v.-injektiossa ekstravasaatio (radiolääkkeen vuoto kudokseen) aiheuttaa: (1) diagnostisen virheen (puuttuva aktiivisuus kohdekudoksessa), (2) paikallisen säteily&shy;annoksen injektikohtaan. Tunnistaminen: kuumat alueet injektiokohdassa. Ehkäisy: kanyyli testataan keittosuolalla ennen injektiota, bolus annetaan hitaasti.</p>
+            </div>
+
+            <h3>6.2 Annosteluprotokollat</h3>
+            <p>Radiolääkkeen annostelumäärä (aktiivisuus, MBq) riippuu tutkimuksesta, laitteesta ja potilaasta:</p>
+            <table>
+                <thead>
+                    <tr><th>Tutkimus</th><th>Radiol&auml;&auml;ke</th><th>Tyypillinen aktiivisuus (MBq)</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Luustokuvaus</td><td>Tc-99m-MDP</td><td>500&ndash;740</td></tr>
+                    <tr><td>Sydänperfuusio (SPET)</td><td>Tc-99m-MIBI / tetrofosmiini</td><td>300&ndash;900 (1 pv tai 2 pv protokolla)</td></tr>
+                    <tr><td>Munuaisfunktio</td><td>Tc-99m-MAG3</td><td>100&ndash;200</td></tr>
+                    <tr><td>Keuhkoperfuusio</td><td>Tc-99m-MAA</td><td>100&ndash;200</td></tr>
+                    <tr><td>Aivojen perfuusio</td><td>Tc-99m-HMPAO</td><td>500&ndash;740</td></tr>
+                    <tr><td>Koko kehon PET</td><td>[<sup>18</sup>F]FDG</td><td>3&ndash;5 MBq/kg</td></tr>
+                    <tr><td>Neuroendokriininen PET</td><td>Ga-68-DOTATOC</td><td>100&ndash;200</td></tr>
+                    <tr><td>Eturauhasen PET</td><td>Ga-68-PSMA tai F-18-PSMA</td><td>100&ndash;200 (Ga-68) tai 200&ndash;350 (F-18)</td></tr>
+                </tbody>
+            </table>
+
+            <h3>6.2 Lasten annosten optimointi</h3>
+            <p>Lapsipotilaiden aktiivisuudet skaalataan painon mukaan (EANM Dosage Card tai NACG). Minimi&shy;aktiivisuus on määritelty tutkimuskohtaisesti kuvanlaadun varmistamiseksi.</p>
+
+            <h2>7. Aktiivisuusmittaus</h2>
+
+            <h3>7.1 Annoskalibraattori (dose calibrator)</h3>
+            <p>Annoskalibraattori on kaivotyyppinen ionisaatiokammio, joka mittaa radioaktiivisen lähteen aktiivisuuden. Se on isotooppilääketieteen perusmittauslaite.</p>
+            <ul>
+                <li><strong>Mittausperiaate</strong>: Kaasutäytteinen (argon) ionisaatiokammio tuottaa virran, joka on verrannollinen aktiivisuuteen</li>
+                <li><strong>Kalibrointi</strong>: Kalibrointikertoimet eri nukleideille (Tc-99m, F-18, I-131, Ga-68 jne.). Kertoimet tarkistetaan vuosittain sertifioiduilla kalibrointilähteillä.</li>
+                <li><strong>Laadunvarmistus</strong>: Päivittäinen: taustamittaus, constancy-testi (Cs-137 tai Co-57 referenssilähde). Vuosittainen: lineaarisuustesti (hajoamismenetelmä), geometriavaikutus, tarkkuus (&plusmn; 10 % tai &plusmn; 5 % hoitonuklideille).</li>
+            </ul>
+
+            <h2>8. Säteilyturvallisuuden erityispiirteet</h2>
+
+            <h3>8.1 Avolähteiden käsittely</h3>
+            <p>Isotooppilääketieteessä käytetään avoimia radioaktiivisia lähteitä (toisin kuin sädehoidossa). Tämä tuo lisähaasteen: kontaminaatioriski.</p>
+            <ul>
+                <li><strong>Kontaminaation ehkäisy</strong>: Lyijylasivitriinikaappi, suojakäsineet, suojalasit, juominen/syöminen kielletty työskentelyalueilla</li>
+                <li><strong>Kontaminaatiomittaukset</strong>: Pyyhintänäytteet työskentelypinnoilta säännöllisesti, kynnysarvo &lt; 4 kBq/100 cm&sup2;</li>
+                <li><strong>Henkilökohtaiset suojaimet</strong>: Sormidosimetrit (eluointi, injektiotyö), kokovartalodosimetri</li>
+                <li><strong>Säteilysuoja-aineet</strong>: Lyijylasi-ruiskusuojat, volframisuojat, lyijysuojat annoskalibraattorille</li>
+            </ul>
+
+            <h3>8.2 Jätteiden käsittely</h3>
+            <ul>
+                <li><strong>Lyhytikäiset nuklidi (T&frac12; &lt; 100 d)</strong>: Varastointi hajoamiseen asti (vähintään 10 puoliintumisaikaa) &rarr; normaali jätteenkäsittely</li>
+                <li><strong>Pitkäikäiset nuklidit</strong>: Radioaktiivisena jätteenä käsittelyyn STUK:n ohjeiden mukaisesti</li>
+                <li><strong>Nestemäiset jätteet</strong>: Potilaiden eritteet (WC), pesuvesi &rarr; viemäröinti sallittu, kun aktiivisuus&shy;pitoisuus alittaa STUK:n rajat</li>
+            </ul>
+
+            <h2>9. Henkilökunnan ohjaus radiofarmasiassa</h2>
+
+            <h3>9.1 Sairaalafyysikon rooli</h3>
+            <ul>
+                <li><strong>Säteilysuojelukoulutus</strong>: Avolähteiden käsittelyn säteilyturvallisuus, kontaminaation ehkäisy, dosimetriset perusteet</li>
+                <li><strong>Protokollakoulutus</strong>: Radiolääkkeen valmistusprosessin säteilyturvallisuusnäkökohdat, aktiivisuusmittauksen oikeellisuus</li>
+                <li><strong>Annoskalibraattorin koulutus</strong>: Oikea mittaustekniikka (geometria, taustamittaus, nuklidivalinta), QC-tarkistusten suorittaminen</li>
+                <li><strong>Ongelmatilanteiden ohjaus</strong>: Kontaminaatiotilanteen toimintaohjeet, laitevian tunnistaminen ja varatoimenpiteet</li>
+            </ul>
+
+            <h3>9.2 Toiminnanharjoittajan opastaminen</h3>
+            <ul>
+                <li><strong>Turvallisuuslupa-asiat</strong>: Nuklidien käyttölupien ylläpito, uusien nuklidien käyttölupahakemukset</li>
+                <li><strong>Tilojen suunnittelu</strong>: Uusien valmistustilojen suojausvaatimusten määrittely, ilmanvaihdon suunnittelu</li>
+                <li><strong>Laitehankinnat</strong>: Annoskalibraattorit, kontaminaatiomittarit, suojavälineet</li>
+                <li><strong>Dokumentaation ylläpito</strong>: Säteilyturvallisuusasiakirjat, laadunvarmistusohjelma, poikkeamaraportointi</li>
+            </ul>
+
+            <div class="theory-references">
+                <h3>Viitekirjallisuus</h3>
+                <ol>
+                    <li>Cherry SR, Sorenson JA, Phelps ME. <em>Physics in Nuclear Medicine</em>, 4th ed., Elsevier, 2012. Luvut 3&ndash;7.</li>
+                    <li>EANM Radiopharmacy Committee. <em>Guidelines on current good radiopharmacy practice</em>, Eur J Nucl Med Mol Imaging, 2011.</li>
+                    <li>Saha GB. <em>Fundamentals of Nuclear Pharmacy</em>, 7th ed., Springer, 2018.</li>
+                    <li>STUK ohje ST 6.3: <em>Säteilyturvallisuus isotooppilääketieteessä</em>.</li>
+                    <li>European Pharmacopoeia: <em>Monographs on Radiopharmaceutical Preparations</em>.</li>
+                    <li>PIC/S: <em>Guide to Good Manufacturing Practice for Medicinal Products Annexes</em>, Annex 3 (Radiopharmaceuticals).</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+         VÄLILEHTI 4: GAMMAKUVAUS JA SPET
+         ================================================================ -->
+    <div class="theory-panel" id="panel-spet" role="tabpanel">
+        <div class="theory-content">
+
+            <h2>1. Johdanto</h2>
+            <p>Gammakuvaus ja SPET (single photon emission computed tomography) muodostavat isotooppilääketieteen kliinisen tutkimuskäytännön ytimen. Tässä osassa käsitellään tärkeimmät kliiniset tutkimukset, niiden fysikaaliset perusteet, protokollat ja tulkinnan periaatteet.</p>
+
+            <h2>2. Perusosaamisen tutkimukset (A-taso)</h2>
+
+            <h3>2.1 Luustokuvaus (bone scan)</h3>
+            <ul>
+                <li><strong>Merkkiaine</strong>: Tc-99m-MDP tai Tc-99m-HDP. Kertyy aktiiviseen luun muodostukseen (osteoblastiseen aktiivisuuteen).</li>
+                <li><strong>Protokolla</strong>: Injektio (500&ndash;740 MBq) &rarr; 2&ndash;3 h odotus &rarr; koko kehon kuvaus (anteriorinen + posteriorinen)</li>
+                <li><strong>Indikaatiot</strong>: Luumetastaasien etsintä, osteomyeliitti, stressimurtumat, artroosin arviointi</li>
+                <li><strong>Kolmivaiheinen luustokuvaus</strong>: Perfuusio (1. vaihe, 1&ndash;5 s/kuva), blood pool (2. vaihe, 5 min), viivästetty (3. vaihe, 2&ndash;3 h). Erottelee infektiota ja tulehdusta.</li>
+            </ul>
+
+            <h3>2.2 Sydänperfuusio-SPET (MPI)</h3>
+            <ul>
+                <li><strong>Merkkiaineet</strong>: Tc-99m-MIBI (sestamibi) tai Tc-99m-tetrofosmiini. Vanhempi: Tl-201 (harvemmin käytetty).</li>
+                <li><strong>Protokolla</strong>: Rasitus (ergometria/farmakologinen) + lepokuva. 1 pv (rasitus &rarr; lepo, 300+900 MBq) tai 2 pv (300+300 MBq) protokolla. Gated-SPET ejektiofraktiolle.</li>
+                <li><strong>Kuvantaminen</strong>: 180&deg; tai 360&deg; SPET, 64 projektiota, 25&ndash;40 s/projektio</li>
+                <li><strong>Tulkinta</strong>: Polar map (bull's eye), 17-segmenttimalli, SRS/SSS/SDS-pisteet, LVEF gated-datasta</li>
+            </ul>
+
+            <h3>2.3 Kilpirauhaskuvaus</h3>
+            <ul>
+                <li><strong>Merkkiaineet</strong>: Tc-99m-perteknetaatti (TcO<sub>4</sub><sup>&minus;</sup>) tai I-123</li>
+                <li><strong>Protokolla</strong>: Tc-99m: 75&ndash;150 MBq, kuvaus 20 min injektiosta. I-123: 7&ndash;15 MBq, kuvaus 4&ndash;24 h.</li>
+                <li><strong>Pinhole-kollimaattori</strong>: Suurennettu kuva kilpirauhasesta, paras resoluutio</li>
+                <li><strong>Indikaatiot</strong>: Kyhmy, Basedow, toksinen adenooma, monikyhmystruuma</li>
+            </ul>
+
+            <h3>2.4 Munuaiskuvaus</h3>
+            <ul>
+                <li><strong>Merkkiaineet</strong>: Tc-99m-MAG3 (tubulaarinen eritys), Tc-99m-DTPA (glomerulusfiltrus)</li>
+                <li><strong>Protokolla</strong>: Dynaaminen kuvaus: 1&ndash;2 s/kuva ensimmäiset 60 s (perfuusio), sitten 15&ndash;30 s/kuva 20&ndash;30 min</li>
+                <li><strong>Analyysit</strong>: Renogrammi (time-activity curve), split function (differentiaalinen munuaisfunktio), GFR-laskenta (DTPA)</li>
+            </ul>
+
+            <h3>2.5 Keuhkoperfuusio ja -ventilaatio</h3>
+            <ul>
+                <li><strong>Perfuusio</strong>: Tc-99m-MAA (makroaggregoidut albumiinit), 100&ndash;200 MBq, 200 000&ndash;400 000 partikkelia</li>
+                <li><strong>Ventilaatio</strong>: Tc-99m-Technegas (hiilinanopartikkelit), Kr-81m-kaasu, tai Tc-99m-DTPA-aerosoli</li>
+                <li><strong>Indikaatio</strong>: Keuhkoembolian diagnostiikka (V/Q-mismatch), keuhkofunktion arviointi ennen leikkausta</li>
+            </ul>
+
+            <h2>3. Täydentävän osaamisen tutkimukset (B-taso)</h2>
+
+            <h3>3.1 Aivoperfuusio-SPET</h3>
+            <ul>
+                <li><strong>Merkkiaine</strong>: Tc-99m-HMPAO tai Tc-99m-ECD. Kertyvät aivojen verenkierron mukaisesti ja lukittuvat aivokudokseen.</li>
+                <li><strong>Indikaatiot</strong>: Epilepsiakirurgian suunnittelu (iktaalinen vs. interiktaalinen), dementian erotusdiagnostiikka</li>
+            </ul>
+
+            <h3>3.2 Vartijaimusolmukekuvaus (sentinel node)</h3>
+            <ul>
+                <li><strong>Merkkiaine</strong>: Tc-99m-nanokolloidit (Nanocoll), injektio tuumorin ympärille tai ihonsisäisesti</li>
+                <li><strong>Kuvantaminen</strong>: Planaarikuvaus + SPET/TT + intraoperatiivinen gammakoettimen käyttö</li>
+                <li><strong>Indikaatiot</strong>: Rintasyöpä, melanooma, gynekologiset syövät</li>
+            </ul>
+
+            <h3>3.3 I-131-jälkikuvaus ja MIBG</h3>
+            <ul>
+                <li><strong>I-131 koko kehon kuvaus</strong>: Kilpirauhassyövän seuranta jodihoidon jälkeen. HEGP-kollimaattori, 364 keV.</li>
+                <li><strong>I-123/I-131-MIBG</strong>: Lisämunuaisen medulla (feokromosytooma, neuroblastooma). I-123 kuvantamiseen, I-131 hoitoon.</li>
+            </ul>
+
+            <h3>3.4 Lisämunuaiskuoren ja -ytimen tutkimukset</h3>
+            <ul>
+                <li><strong>I-123/I-131-MIBG (metajodobentsyyliguanidiini)</strong>: MIBG on noradrenaliinin analogi, joka kertyy sympaattisiin hermopäätteisiin ja feokromosytoomiin/paraganglioomiin. I-123 kuvantamiseen (SPET/TT), I-131 hoitoon (neuroblastooma).</li>
+                <li><strong>I-131-norkolestreoli (NP-59)</strong>: Lisämunuaiskuoren kuvantaminen. Harvinainen tutkimus, pitkä uptake-aika (5&ndash;7 d).</li>
+                <li><strong>Sydämen sympaattinen hermotus</strong>: I-123-MIBG sydänkuvantaminen: sydämen ja mediastiinumin aktiivisuuden suhde (H/M ratio) ja washout-nopeus ovat hyödyllisiä sydämen vajaatoiminnan ja Lewyn kappale -taudin diagnostiikassa.</li>
+            </ul>
+
+            <h3>3.5 Mahasuolikanavan tutkimukset</h3>
+            <ul>
+                <li><strong>Mahalaukun tyhjennysmittaus</strong>: Tc-99m-leimattu kiinteä ruoka (esim. munakas) + dynaaminen kuvaus 4 h. Analyysit: T&frac12;, tyhjennysnopeus, retention-% eri ajanhetkillä. EANM/SNMMI standardoitu protokolla.</li>
+                <li><strong>Meckelin divertikkeli</strong>: Tc-99m-perteknetaatti kertyy kohdun ulkopuoliseen mahalaukun limakalvoon Meckelin divertikkelissä. Erityisesti lapsipotilailla.</li>
+                <li><strong>GI-vuodon paikannus</strong>: Tc-99m-leimatut punasolut, dynaaminen kuvaus. Tunnistaa aktiivisen vuodon (&gt; 0,1 ml/min).</li>
+                <li><strong>Sappiteiden kuvantaminen (HIDA)</strong>: Tc-99m-mebrofeniini/disofeniini. Akuutin kolekystiitin diagnostiikka, sappiteiden avoimuus.</li>
+            </ul>
+
+            <h3>3.6 Inflammaatio- ja infektiokuvantaminen</h3>
+            <ul>
+                <li><strong>Leukosiittikuvaus</strong>: Tc-99m- tai In-111-leimatut autologiset leukosyytit. Infektioherkkien proteesien, osteomyeliitin ja inflammatorisen suolistosairauden diagnostiikka.</li>
+                <li><strong>Anti-granulosyyttivasta-aineet</strong>: Tc-99m-sulesomab (LeukoScan). Vaihtoehto leukosyyttikuvaukselle ilman in vitro -leimausvaiheitta.</li>
+                <li><strong>Ga-67-sitraatti</strong>: Vanha inflammaatio/infektiomerkkiaine. Korvattu pääosin FDG-PET:llä ja leukosyyttikuvauksella.</li>
+            </ul>
+
+            <h2>4. Kuvantamisprotokollien optimointiperiaatteet</h2>
+
+            <h3>4.1 Protokollan suunnittelun fysikaaliset perusteet</h3>
+            <p>Sairaalafyysikko vastaa kuvantamisprotokollien fysikaalisesta optimoinnista. Keskeiset parametrit ja niiden keskinäinen riippuvuus:</p>
+            <table>
+                <thead>
+                    <tr><th>Parametri</th><th>Vaikutus kuvanlaatuun</th><th>Kompromissi</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Aktiivisuus (MBq)</td><td>Lis&auml;&auml; laskentam&auml;&auml;r&auml;&auml;, parantaa SNR:&auml;&auml;</td><td>Suurempi potilasannos, kuollut aika</td></tr>
+                    <tr><td>Kuvausaika (s/projektio)</td><td>Lis&auml;&auml; laskentam&auml;&auml;r&auml;&auml;</td><td>Liikeartefaktin riski kasvaa</td></tr>
+                    <tr><td>Matriisikoko</td><td>Suurempi matriisi &rarr; parempi spatiaaliresoluutio</td><td>V&auml;hemm&auml;n laskentoja/pikseli &rarr; enemm&auml;n kohinaa</td></tr>
+                    <tr><td>Kollimaattori</td><td>LEHR: paras resoluutio; LEHS: paras herkkyys</td><td>Resoluutio vs. herkkyys</td></tr>
+                    <tr><td>Projektioiden lkm (SPET)</td><td>Lis&auml;&auml; angulaarista n&auml;ytteistyst&auml;</td><td>Pidempi kuvausaika tai v&auml;hemm&auml;n aikaa/projektio</td></tr>
+                    <tr><td>Energiaikkuna</td><td>Kapea: v&auml;hemm&auml;n hajasäteily&auml;; leveä: enemm&auml;n herkkyyttä</td><td>Kontrasti vs. herkkyys</td></tr>
+                </tbody>
+            </table>
+
+            <h3>4.2 EANM-ohjeistusten soveltaminen</h3>
+            <p>EANM (European Association of Nuclear Medicine) julkaisee tutkimuskohtaisia ohjeistuksia, jotka sisältävät suositukset kuvaus&shy;parametreille. Sairaalafyysikon on tunnettava nämä ja sovellettava niitä paikallisiin olosuhteisiin:</p>
+            <ul>
+                <li>EANM Bone Scintigraphy Guidelines</li>
+                <li>EANM/ASNC Guidelines for Myocardial Perfusion Imaging</li>
+                <li>EANM Guidelines for Ventilation/Perfusion Scintigraphy</li>
+                <li>EANM Practice Guideline for Renal Cortical Scintigraphy</li>
+                <li>EANM Thyroid Committee Guidelines for Radioiodine Therapy</li>
+            </ul>
+
+            <h3>4.3 Lasten kuvantamisen erityispiirteet</h3>
+            <ul>
+                <li><strong>EANM Paediatric Dosage Card</strong>: Aktiivisuuden laskeminen painon perusteella. Minimi&shy;aktiivisuudet määritelty tutkimuskohtaisesti kuvanlaadun varmistamiseksi.</li>
+                <li><strong>Kuvausajan pidentäminen</strong>: Pienemmän aktiivisuuden kompensoimiseksi voidaan pidentää kuvausaikaa</li>
+                <li><strong>Liikkumattomuuden varmistaminen</strong>: Lapsipotilaat saattavat tarvita sedaation. Fyysikon on huomioitava tämä protokollan suunnittelussa (kuvausaika, liikkeenkorjaus).</li>
+                <li><strong>Immobilisaatiovälineet</strong>: Hiekkasäkit, tukityynyt, kiinnitysvyöt</li>
+            </ul>
+
+            <h2>5. Artefaktit ja virheiden tunnistaminen</h2>
+
+            <h3>5.1 Liikeartefakti</h3>
+            <p>Potilaan liike SPET:n aikana on yleisin artefaktien syy. Tunnistaminen ja korjaus:</p>
+            <ul>
+                <li><strong>Tunnistaminen</strong>: Sinogrammitarkistus (cine-review) &mdash; epäjatkuvuus projektiodatan vaakasuuntaisissa viivoissa viittaa liikkeeseen</li>
+                <li><strong>Korjaus</strong>: Motion correction -algoritmit (cross-correlation-pohjainen kohdistus projektioiden välillä). Jos liike on merkittävä, kuvaus uusitaan.</li>
+                <li><strong>Sydän-SPET</strong>: Liike aiheuttaa tyypillisesti anterolateraalisen ja inferoseptaalisen artefaktin (perfuusiodefekti, jota ei ole).</li>
+            </ul>
+
+            <h3>5.2 Vaimennusartefaktit</h3>
+            <ul>
+                <li><strong>Pallean vaikutus</strong>: Sydän-SPET:ssä pallea vaimentaa sydämen inferiorista seinämää (erityisesti miehillä). Tunnistaminen: defekti näkyy lepo- ja rasituskuvissa samalla tavalla.</li>
+                <li><strong>Rinta-artefakti</strong>: Naispotilailla rinta vaimentaa anteriorista/anterolateraalista seinämää. CTAC korjaa, mutta ylikorjaus on mahdollinen.</li>
+                <li><strong>CTAC:n artefaktit</strong>: Metalliproteesin korkeat HU-arvot &rarr; yliarvioitu vaimennus &rarr; väärä hotspot. Tarkista aina NAC-kuvat rinnakkain.</li>
+            </ul>
+
+            <h3>5.3 Kontaminaatio ja muut artefaktit</h3>
+            <ul>
+                <li><strong>Ihokontaminaatio</strong>: Näkyy kuumana pisteenä, epäanatominen sijainti, näkyy vain yhdessä tai muutamassa projektiossa</li>
+                <li><strong>Rengasartefakti (SPET)</strong>: Aiheutuu tasaisuusvirheestä &rarr; pyöritysliikkeen mukaisesti renkaan muotoinen artefakti. Korjaus: päivittäinen uniformity flood.</li>
+                <li><strong>COR-virhe</strong>: Pyöritysakselin poikkeama &rarr; pistelähteet näyttävät kaareutuneita. Korjaus: COR-kalibrointi.</li>
+            </ul>
+
+            <div class="theory-references">
+                <h3>Viitekirjallisuus</h3>
+                <ol>
+                    <li>Mettler FA, Guiberteau MJ. <em>Essentials of Nuclear Medicine and Molecular Imaging</em>, 7th ed., Elsevier, 2019.</li>
+                    <li>EANM procedure guidelines (tutkimuskohtaiset): <a href="https://www.eanm.org/publications/guidelines/" target="_blank">www.eanm.org/publications/guidelines/</a></li>
+                    <li>Cherry SR, Sorenson JA, Phelps ME. <em>Physics in Nuclear Medicine</em>, 4th ed. Luvut 13&ndash;15.</li>
+                    <li>Verberne ECMM et al. <em>EANM procedural guidelines for radionuclide myocardial perfusion imaging with SPECT and SPECT/CT</em>, Eur J Nucl Med Mol Imaging, 2015.</li>
+                    <li>Defined EANM Paediatric Dosage Card: <em>EANM Dosage Card version 5.7.2014</em>.</li>
+                    <li>IAEA Human Health Series No. 6: <em>Quality Assurance for SPECT Systems</em>, 2009.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+         VÄLILEHTI 5: PET-TUTKIMUKSET
+         ================================================================ -->
+    <div class="theory-panel" id="panel-pet-tutkimukset" role="tabpanel">
+        <div class="theory-content">
+
+            <h2>1. Johdanto</h2>
+            <p>PET-tutkimukset tarjoavat herkkää, kvantitatiivista tietoa aineenvaihdunnasta, reseptorisitoutumisesta ja geeniekspressiosta in vivo. Tärkein kliininen sovellus on [<sup>18</sup>F]FDG-PET/TT syövän diagnostiikassa ja seurannassa, mutta PET:n käyttöalue laajenee jatkuvasti uusien merkkiaineiden myötä.</p>
+
+            <h2>2. Perusosaamisen tutkimukset (A-taso)</h2>
+
+            <h3>2.1 [<sup>18</sup>F]FDG-PET/TT (onkologia)</h3>
+            <ul>
+                <li><strong>Periaate</strong>: FDG on glukoosi&shy;analogi, joka kertyyy soluihin glukoositransporttereiden (GLUT) kautta ja fosforyloituu heksokinaasilla. Syöpäsolut käyttävät enemmän glukoosia (Warburg-ilmiö) &rarr; korkea FDG-kertymä.</li>
+                <li><strong>Aktiivisuus</strong>: 3&ndash;5 MBq/kg, tyypillisesti 250&ndash;400 MBq aikuisella</li>
+                <li><strong>Protokolla</strong>: 60 min uptake-aika (potilas levossa, hiljaisessa huoneessa). Paasto vähintään 6 h. Verenglukoosi tarkistetaan (&lt; 11 mmol/l). Kuvaus: koko keho (kantapäistä päälaelle) 2&ndash;3 min/petipositio.</li>
+                <li><strong>Indikaatiot</strong>: Syövän levinneisyyden arviointi, hoitovasteen seuranta, epäselvien löydösten karakterisointi, residiiviepäily</li>
+                <li><strong>Kvantitaatio</strong>: SUV<sub>max</sub>, SUV<sub>mean</sub>, metabolinen tuumorien tilavuus (MTV), total lesion glycolysis (TLG)</li>
+            </ul>
+
+            <h3>2.2 Sydänperfuusio-PET</h3>
+            <ul>
+                <li><strong>Merkkiaineet</strong>: Rb-82 (generaattori, T&frac12; = 76 s), N-13-ammoniakki (T&frac12; = 10 min), F-18-flurpiridaz</li>
+                <li><strong>Periaate</strong>: Rasitus (farmakologinen: adenosiini, regadenosoni) + lepokuva. PET mahdollistaa absoluuttisen myokardiaalisen verenkierron (MBF, ml/min/g) ja koronaarisen virtausreseervin (CFR) kvantitatiivisen mittauksen.</li>
+                <li><strong>Etu SPET:iin nähden</strong>: Parempi spatiaalinen resoluutio, luontainen vaimennuskorjaus, kvantitatiivinen MBF &rarr; tunnistaa tasapainoisen 3-suoniiskemian</li>
+            </ul>
+
+            <h3>2.3 Aivoperfuusio- ja aivojen FDG-PET</h3>
+            <ul>
+                <li><strong>FDG-PET (aivojen metabolia)</strong>: Standardoitu protokolla, kuvaus 30 min injektiosta. Käytetään dementian diagnostiikassa (Alzheimerin hypometabolia temporoparietaalisesti), epilepsian fokuksen paikannuksessa (interiktaalinen hypometabolia).</li>
+                <li><strong>Amyloidi-PET</strong>: [<sup>18</sup>F]Flutemetamoli, [<sup>18</sup>F]florbetapiiri, [<sup>18</sup>F]florbetabeeni. Amyloidiplakkien osoitus Alzheimerin taudissa.</li>
+                <li><strong>Tau-PET</strong>: [<sup>18</sup>F]Flortaucipir. Tau-kertymien osoitus neurodegeneratiivisissa sairauksissa.</li>
+            </ul>
+
+            <h2>3. Täydentävän osaamisen tutkimukset (B-taso)</h2>
+
+            <h3>3.1 PSMA-PET (eturauhassyöpä)</h3>
+            <ul>
+                <li><strong>Merkkiaineet</strong>: Ga-68-PSMA-11, F-18-PSMA-1007, F-18-DCFPyL</li>
+                <li><strong>Käyttö</strong>: Eturauhassyövän levinneisyyden arviointi, PSA-relapsin jälkeinen residiivin paikannus</li>
+                <li><strong>Etu</strong>: Merkittävästi herkempi kuin perinteinen kuvantaminen (TT, luustokuvaus) pienillä PSA-arvoilla</li>
+            </ul>
+
+            <h3>3.2 Somatostatiinireseptori-PET</h3>
+            <ul>
+                <li><strong>Merkkiaineet</strong>: Ga-68-DOTATOC, Ga-68-DOTATATE, Ga-68-DOTANOC</li>
+                <li><strong>Käyttö</strong>: Neuroendokriinisten kasvainten (NET) diagnostiikka ja seuranta, Lu-177-DOTATATE-hoidon suunnittelu</li>
+            </ul>
+
+            <h3>3.3 Muut PET-merkkiaineet</h3>
+            <table>
+                <thead>
+                    <tr><th>Merkkiaine</th><th>Kohde</th><th>K&auml;ytt&ouml;alue</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>F-18-NaF</td><td>Luusto (hydroksyapatiitti)</td><td>Luumetastaasien etsint&auml; (korkeampi herkkyys kuin luustokuvaus)</td></tr>
+                    <tr><td>C-11-metioniini / F-18-FET</td><td>Aminohappometabolia</td><td>Aivokasvainten kuvantaminen</td></tr>
+                    <tr><td>F-18-FLT</td><td>Tymidiini (DNA-synteesi)</td><td>Proliferaation arviointi</td></tr>
+                    <tr><td>F-18-FMISO / Cu-64-ATSM</td><td>Hypoksia</td><td>Kasvaimen hapetustilan arviointi</td></tr>
+                    <tr><td>F-18-FES</td><td>Estrogeenireseptori</td><td>Rintasy&ouml;v&auml;n reseptoristatuksen arviointi</td></tr>
+                </tbody>
+            </table>
+
+            <h2>4. Farmakokineettinen mallinnus ja kvantitaatio</h2>
+
+            <h3>4.1 Kompartmenttimallit</h3>
+            <p>Farmakokineettinen mallinnus kuvaa merkkiaineen jakautumista ja aineenvaihduntaa kudoksessa matemaattisilla malleilla:</p>
+            <ul>
+                <li><strong>1-kompartmenttimalli</strong>: Yksinkertainen malli, jossa merkkiaine siirtyy verestä kudokseen ja takaisin. Parametrit: K<sub>1</sub> (influx), k<sub>2</sub> (efflux). Sopii esim. perfuusiomerkkiaineille.</li>
+                <li><strong>2-kompartmenttimalli (FDG)</strong>: Veri &harr; vapaa FDG kudoksessa &harr; FDG-6-fosfaatti (loukkuuntunut). Parametrit: K<sub>1</sub>, k<sub>2</sub>, k<sub>3</sub>, k<sub>4</sub> (~0 FDG:lle). Metabolinen nopeus: \( K_i = \frac{K_1 \cdot k_3}{k_2 + k_3} \).</li>
+                <li><strong>Referenssikudosmalli</strong>: Ei vaadi verinäytteitä. Referenssialue (esim. pikkuaivot amyloidi-PET:ssä) toimii input-funktiona. SRTM (simplified reference tissue model).</li>
+            </ul>
+
+            <div class="formula">
+                <p>Patlak-analyysi (irreversiibelit merkkiaineet, esim. FDG):</p>
+                \[ \frac{C_T(t)}{C_P(t)} = K_i \cdot \frac{\int_0^t C_P(\tau)d\tau}{C_P(t)} + V_0 \]
+                <p>missä \( C_T \) = kudoksen konsentraatio, \( C_P \) = plasman konsentraatio, \( K_i \) = nettoinfluenssivakio, \( V_0 \) = jakautumistilavuus. Lineaarinen sovitus tasaantumisen jälkeen (tyypillisesti &gt; 30 min FDG:lle).</p>
+            </div>
+
+            <h3>4.2 Input-funktio</h3>
+            <ul>
+                <li><strong>Arteriaalinen verinäytteenotto</strong>: Kulta-standardi. Arteriakanyylin kautta otetaan sarjanäytteitä, joista mitataan plasman aktiivisuus&shy;konsentraatio ajan funktiona. Teknisesti vaativa ja invasiivinen.</li>
+                <li><strong>Image-derived input function (IDIF)</strong>: Input-funktio määritetään suoraan PET-kuvasta (esim. aorta tai kaulavaltimo). Vaatii riittävän resoluution ja partiaali&shy;tilavuusefektin korjauksen.</li>
+                <li><strong>Population-based input function</strong>: Standardoitu keskimääräinen plasmakäyrä, skaalattu yksittäisille potilaille. Yksinkertaisin, mutta epätarkin.</li>
+            </ul>
+
+            <h3>4.3 SUV ja sen rajoitukset</h3>
+            <p>SUV on laajimmin käytetty PET:n semikvantitiivinen mitta, mutta siihen liittyy useita virhelähteitä:</p>
+            <ul>
+                <li><strong>Uptake-aika</strong>: FDG-kertymä jatkaa kasvamistaan &gt; 60 min. Vakioimaton uptake-aika vaikeuttaa seurantatutkimusten vertailua.</li>
+                <li><strong>Verenglukoosi</strong>: Korkea verenglukoosi kilpailee FDG:n kanssa GLUT-kuljettajista &rarr; alentunut SUV. Insuliini kääntää FDG:n lihaksiin.</li>
+                <li><strong>Kehon koostumus</strong>: Obeeseilla potilailla SUV (painonormalisoitu) yliarvioituu &rarr; SUL (lean body mass) tai BSA-normalisointi parempi.</li>
+                <li><strong>Partiaalitilavuusefekti (PVE)</strong>: Pienet leesiot (&lt; 2&ndash;3 &times; resoluutio) aliarvioituvat. Recovery coefficient -korjaus mahdollinen.</li>
+                <li><strong>Rekonstruktioparametrit</strong>: Eri rekonstruktioasetukset (iteraatiot, suodatus, PSF) vaikuttavat SUV-arvoihin &rarr; standardointi kriittistä (EARL-akkreditointi).</li>
+            </ul>
+
+            <div class="theory-info">
+                <p><strong>EARL-akkreditointi:</strong> EANM Research Ltd (EARL) tarjoaa PET/TT-kameroiden akkreditointiohjelman, joka varmistaa SUV-kvantitaation yhdenmukaisuuden eri keskusten ja laitteiden välillä. Tämä on erityisen tärkeää monikeskustutkimuksissa ja hoitovasteen seurannassa.</p>
+            </div>
+
+            <h2>5. Raakadatan rakenne ja talletusmenetelmät</h2>
+            <ul>
+                <li><strong>Listmode-data</strong>: Jokainen koinsidenssitapahtuma tallennetaan erikseen aikaleiman, ilmaisinelementin ja energian kanssa. Mahdollistaa retrospektiivisen rekonstruktion eri parametreillä (dynaaminen framing, gating, motion correction).</li>
+                <li><strong>Sinogrammi</strong>: Projektiodata LOR-esityksessä (kulma vs. offset). Perinteinen tapa tallentaa PET-dataa, mutta listmode on nykyisin yleisempi.</li>
+                <li><strong>DICOM-standardi</strong>: PET-kuvat tallennetaan ja siirretään DICOM-standardin mukaisesti (PET Image Storage, PET Raw Data, korjatut ja korjaamattomat kuvat).</li>
+            </ul>
+
+            <h2>6. Total-body PET:n sovellukset tutkimuksissa</h2>
+            <p>Pitkän aksiaalikentän PET avaa uusia sovelluksia kliiniseen tutkimukseen:</p>
+            <ul>
+                <li><strong>Koko kehon dynaaminen PET</strong>: Merkkiaineen farmakokinetiikka kaikissa elimissä samanaikaisesti. Mahdollistaa Patlak/Logan-analyysin koko kehon tasolla.</li>
+                <li><strong>Ultramatala-annoskuvantaminen</strong>: 10&ndash;50 MBq FDG riittää diagnostiseen kuvanlaatuun &rarr; pediatriset potilaat, toistuvat seurannat.</li>
+                <li><strong>Viivästetty kuvantaminen</strong>: 2&ndash;8 h injektiosta parantunut tuumori-tausta-kontrasti erityisesti FDG:llä (kohonnut kertymä tuumorissa, puhdistuma terveestä kudoksesta).</li>
+                <li><strong>Nopeat tutkimusprotokollat</strong>: Koko kehon PET 30&ndash;60 sekunnissa &rarr; erityisesti lapset ja levottomat potilaat.</li>
+            </ul>
+
+            <h2>7. Hoitovasteen arviointi PET:llä</h2>
+
+            <h3>7.1 PERCIST-kriteerit</h3>
+            <p>PERCIST (PET Response Criteria in Solid Tumors) standardoi hoitovasteen arvioinnin FDG-PET:llä:</p>
+            <ul>
+                <li><strong>CMR</strong> (complete metabolic response): FDG-kertymä katoaa kokonaan</li>
+                <li><strong>PMR</strong> (partial metabolic response): SUL<sub>peak</sub> alenee &ge; 30 %</li>
+                <li><strong>SMD</strong> (stable metabolic disease): Muutos &lt; 30 % alenema ja &lt; 30 % nousu</li>
+                <li><strong>PMD</strong> (progressive metabolic disease): SUL<sub>peak</sub> nousee &ge; 30 % tai uusia leesioita</li>
+            </ul>
+
+            <h3>7.2 Deauville-pisteet (lymfoomat)</h3>
+            <p>Lymfoomien hoitovasteen arviointi perustuu visuaaliseen 5-pisteiseen asteikkoon (Deauville/Lugano):</p>
+            <ul>
+                <li>1 = Ei kertymää</li>
+                <li>2 = Kertymä &le; mediastinum</li>
+                <li>3 = Kertymä &gt; mediastinum mutta &le; maksa</li>
+                <li>4 = Kertymä kohtalaisesti &gt; maksa</li>
+                <li>5 = Kertymä merkittävästi &gt; maksa tai uusia leesioita</li>
+            </ul>
+            <p>Pisteet 1&ndash;3 katsotaan tyypillisesti hoitovasteeksi (CMR).</p>
+
+            <div class="theory-references">
+                <h3>Viitekirjallisuus</h3>
+                <ol>
+                    <li>Boellaard R et al. <em>FDG PET/CT: EANM procedure guidelines for tumour imaging, version 2.0</em>, Eur J Nucl Med Mol Imaging, 2015.</li>
+                    <li>Cherry SR, Sorenson JA, Phelps ME. <em>Physics in Nuclear Medicine</em>, 4th ed. Luvut 16&ndash;18.</li>
+                    <li>Mettler FA, Guiberteau MJ. <em>Essentials of Nuclear Medicine and Molecular Imaging</em>, 7th ed., 2019.</li>
+                    <li>Wahl RL et al. <em>From RECIST to PERCIST: Evolving Considerations for PET Response Criteria in Solid Tumors</em>, J Nucl Med, 2009.</li>
+                    <li>Barrington SF, Mikhaeel NG. <em>When should FDG-PET be used in the modern management of lymphoma?</em>, Br J Haematol, 2014.</li>
+                    <li>Gunn RN, Gunn SR, Cunningham VJ. <em>Positron Emission Tomography Compartmental Models</em>, J Cereb Blood Flow Metab, 2001.</li>
+                    <li>Badawi RD et al. <em>First Human Imaging Studies with the EXPLORER Total-Body PET Scanner</em>, J Nucl Med, 2019.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+         VÄLILEHTI 6: RADIONUKLIDIHOIDOT
+         ================================================================ -->
+    <div class="theory-panel" id="panel-radionuklidihoidot" role="tabpanel">
+        <div class="theory-content">
+
+            <h2>1. Johdanto</h2>
+            <p>Radionuklidihoidot (radioligand therapy, RLT; molecular radiotherapy, MRT) käyttävät radioaktiivisia aineita kasvainten tai toimintahäiriöisten kudosten hoitoon. Radionuklidi kohdentuu kasvaimeen joko fysiologisen kertymän (jodihoito) tai spesifisen ligandi-reseptori-sitoutumisen (PSMA, somatostatiinireseptori) kautta. Sairaalafyysikko vastaa annos&shy;dosimetriasta, säteilysuojelusta ja laadunvarmistuksesta.</p>
+
+            <h2>2. Säteilylajit ja säteilybiologian perusteet</h2>
+
+            <h3>2.1 Beetaemitterit (&beta;<sup>&minus;</sup>)</h3>
+            <p>Beetasäteilyn kantama kudoksessa on muutamasta millimetristä senttimetriin, mikä mahdollistaa tehokaan hoidon myös heterogeenisessa tuumorissa (crossfire-efekti).</p>
+            <table>
+                <thead>
+                    <tr><th>Nuklidi</th><th>T<sub>&frac12;</sub></th><th>&beta;<sub>max</sub> (MeV)</th><th>Kantama (mm)</th><th>Gamma</th><th>K&auml;ytt&ouml;</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>I-131</td><td>8,02 d</td><td>0,61</td><td>~2</td><td>364 keV (81 %)</td><td>Kilpirauhasen hoito</td></tr>
+                    <tr><td>Lu-177</td><td>6,65 d</td><td>0,50</td><td>~1,7</td><td>208 keV (11 %)</td><td>DOTATATE, PSMA</td></tr>
+                    <tr><td>Y-90</td><td>64,1 h</td><td>2,28</td><td>~11</td><td>Ei merkittävää</td><td>Radioembolisaatio, nivelhoidot</td></tr>
+                    <tr><td>Sm-153</td><td>46,3 h</td><td>0,81</td><td>~3</td><td>103 keV (28 %)</td><td>Luustokivun lievitys</td></tr>
+                </tbody>
+            </table>
+
+            <h3>2.2 Alfaemitterit (&alpha;)</h3>
+            <p>Alfahiukkasten korkea LET (linear energy transfer, ~100 keV/&micro;m) aiheuttaa tiheää, usein korjautu&shy;matonta DNA-vauriota. Kantama on vain 50&ndash;100 &micro;m (muutaman solun halkaisija) &rarr; lähes ei crossfire-efektiä, mutta erittäin tehokas yksittäisille soluille.</p>
+            <ul>
+                <li><strong>Ra-223 (Xofigo)</strong>: T&frac12; = 11,4 d. Kalsiumanalogia kertyy luustometastaaseihin. Ensimmäinen hyväksytty alfaemitterilääke (eturauhassyövän luustometastaasit).</li>
+                <li><strong>Ac-225</strong>: T&frac12; = 10 d. Hajoamisketjussa 4 alfaemissiota &rarr; erittäin korkea biologinen teho. Tutkimuskäytössä Ac-225-PSMA ja Ac-225-DOTATATE.</li>
+            </ul>
+
+            <div class="theory-warning">
+                <p><strong>Turvallisuuskriittist&auml;:</strong> Alfaemitterit aiheuttavat erityisiä kontaminaatioriskejä: hajoamisketjun tytärnuklidit voivat irrota kohdennusmolekyylistä ja levitä elimistössä. Kontaminaation puhdistus on haasteellista, ja alfa-kontaminaation havaitseminen vaatii erityisiä mittausmenetelmiä (pyyhintänäytteet + nestetuikelaskenta).</p>
+            </div>
+
+            <h2>3. Jodihoidot</h2>
+
+            <h3>3.1 Kilpirauhasen liikatoiminnan hoito</h3>
+            <ul>
+                <li><strong>Nuklidi</strong>: I-131 (natriumjodidi, kapseli tai liuos)</li>
+                <li><strong>Aktiivisuus</strong>: 200&ndash;600 MBq (riippuen indikaatiosta: Graves, toksinen adenooma, monikyhmystruuma)</li>
+                <li><strong>Periaate</strong>: Joditrappaus (NIS, natrium-jodidi-symporttien) kilpirauhasessa &rarr; paikallinen beetasäteilyannos tuhoaa kilpirauhaskudosta</li>
+                <li><strong>Säteilysuojelu</strong>: Aktiviteetti &lt; 800 MBq tyypillisesti avohoitona. Kotiutusohjeet: etäisyys (ei samaa sänkyä 1&ndash;2 vk), erikseen WC-huuhtelu, lasten ja raskaana olevien välttäminen.</li>
+            </ul>
+
+            <h3>3.2 Kilpirauhassyövän radiojodhoito</h3>
+            <ul>
+                <li><strong>Aktiivisuus</strong>: 1100&ndash;7400 MBq (riippuen riskitasosta). Korkeat aktiivisuudet edellyttävät sairaalahoitoa eristyshuoneessa.</li>
+                <li><strong>TSH-stimulaatio</strong>: Tyroksiinin tauko (4 viikkoa) tai rhTSH (Thyrogen) &rarr; TSH-stimulaatio parantaa jodin kertymistä jäännöskudokseen ja metastaaseihin</li>
+                <li><strong>Jälkikuvaus</strong>: I-131 koko kehon kuvaus 3&ndash;7 pv hoidon jälkeen HEGP-kollimaattorilla tai SPET/TT:llä</li>
+                <li><strong>Dosimetria</strong>: Blood-based dosimetry (Benua-menetelmä): rajaa vereen absorboituneen annoksen &lt; 2 Gy. Lesion dosimetry mahdollista SPET/TT-pohjaisesti.</li>
+            </ul>
+
+            <h2>4. Peptidireseptoriradionuklidihoito (PRRT)</h2>
+            <ul>
+                <li><strong>Lu-177-DOTATATE (Lutathera)</strong>: Neuroendokriinisten kasvainten hoito. 4 sykliä, 7400 MBq/sykli, 8 viikon välein.</li>
+                <li><strong>Säteilysuojelu</strong>: Potilas erittää aktiivisuutta virtsaan ensimmäiset 24 h. Eristyshuone tarvittaessa.</li>
+                <li><strong>Dosimetria</strong>: Munuaisannos kriittinen rajoite (tyypillisesti kumulatiivinen BED &lt; 28&ndash;40 Gy). Luuytimen annos seuraava rajoite. SPET/TT-pohjainen dosimetria mahdollista.</li>
+            </ul>
+
+            <h2>5. PSMA-radionuklidihoito</h2>
+            <ul>
+                <li><strong>Lu-177-PSMA-617 (Pluvicto)</strong>: Metastaattisen kastroresistentin eturauhassyövän hoito. 6 sykliä, 7400 MBq/sykli.</li>
+                <li><strong>Edellytys</strong>: PSMA-PET osoittaa riittävän PSMA-ilmentymisen kasvaimissa</li>
+                <li><strong>Dosimetria</strong>: Sylkirauhaset, munuaiset ja luuydin ovat kriittisiä elimiä</li>
+            </ul>
+
+            <h2>6. Alfahoidon erityispiirteet</h2>
+            <ul>
+                <li><strong>Ra-223 (Xofigo)</strong>: 55 kBq/kg i.v., 6 sykliä 4 viikon välein. Kertyminen osteoblastisiin luustometastaaseihin.</li>
+                <li><strong>Kontaminaatioriskit</strong>: Alfasäteily vaikeasti mitattavissa suorilla ilmaisimilla. Pyyhintänäytteet + nestetuikelaskenta välttämättömiä.</li>
+                <li><strong>Jätteiden käsittely</strong>: Alfakontaminoidut jätteet merkittävä ja eristettävä erikseen</li>
+            </ul>
+
+            <h2>7. Annosdosimetrian formalismi (MIRD/OLINDA)</h2>
+
+            <h3>7.1 MIRD-formalismi</h3>
+            <p>MIRD (Medical Internal Radiation Dose) -formalismi on radionuklidihoidon dosimetrian perusta:</p>
+            <div class="formula">
+                \[ D(r_T) = \sum_{r_S} \tilde{A}(r_S) \cdot S(r_T \leftarrow r_S) \]
+                <p>missä:</p>
+            </div>
+            <ul>
+                <li>\( D(r_T) \) = keskimääräinen absorboitunut annos kohde-elimeen \( r_T \) (Gy)</li>
+                <li>\( \tilde{A}(r_S) \) = kumulatiivinen aktiivisuus lähde-elimessä \( r_S \) (Bq&middot;s). Vastaa time-activity-käyrän integraalia.</li>
+                <li>\( S(r_T \leftarrow r_S) \) = S-arvo (Gy/(Bq&middot;s)). Kuvaa annosta kohde-elimeen yhtä hajottumista kohti lähde-elimestä. Taulukoitu eri nuklideille ja elimille.</li>
+            </ul>
+
+            <h3>7.2 Kumulatiivisen aktiivisuuden määritys</h3>
+            <p>Kumulatiivinen aktiivisuus \( \tilde{A} \) määritetään sarjakuvantamalla potilasta eri ajanhetkinä hoidon jälkeen (tyypillisesti 4&ndash;7 kuvausjaksoa) ja sovittamalla time-activity-käyrä:</p>
+            <div class="formula">
+                \[ \tilde{A} = \int_0^{\infty} A(t) \, dt \]
+                <p>Käytännössä: eksponentiaalinen sovitus + ekstrapolaatio. Tyypillisesti bi- tai trieksponentiaalinen malli.</p>
+            </div>
+
+            <h3>7.3 OLINDA/EXM</h3>
+            <p>OLINDA (Organ Level INternal Dose Assessment) on MIRD-formalismiin perustuva dosimetria&shy;ohjelmisto. Se käyttää standardifantomin S-arvoja ja residence time -dataa elinkohtaisten annosten laskemiseen. Versio 2.0 sisältää ICRP:n referenssifantomit.</p>
+
+            <h3>7.4 Elinkohtaisen annoksen laskemisen periaatteet</h3>
+            <ul>
+                <li><strong>Munuaisannos</strong>: Kriittinen elin monissa hoidoissa (Lu-177). Tyypillisesti SPET/TT-pohjainen tilavuusannoslaskenta.</li>
+                <li><strong>Luuydinannos</strong>: Voidaan arvioida veripohjaisesti (blood-based dosimetry) tai kuvantamispohjaisesti</li>
+                <li><strong>Kasvainannos</strong>: SPET/TT-pohjainen VOI-analyysi, voxel-tason dosimetria mahdollista</li>
+            </ul>
+
+            <h2>8. Radioembolisaatio (SIRT)</h2>
+
+            <h3>8.1 Periaate</h3>
+            <p>Selektiivinen sisäinen radioterapia (SIRT, selective internal radiation therapy) eli radioembolisaatio käyttää Y-90-leimattuja mikrosfäärejä (lasihelmiä tai hartsihelmiä, halkaisija 20&ndash;60 &micro;m) maksakasvainten paikalliseen hoitoon. Mikrosfäärit injektoidaan angiografisesti maksan valtimoverenkiertoon, jossa ne kiilautuvat tuumorin kapillaaristoon.</p>
+            <ul>
+                <li><strong>TheraSphere</strong>: Lasihelmiä, spesifinen aktiivisuus korkea (2 500 Bq/helmi). Vähemmän embolinen vaikutus.</li>
+                <li><strong>SIR-Spheres</strong>: Hartsihelmiä, matalampi spesifinen aktiivisuus (50 Bq/helmi), enemmän embolinen vaikutus.</li>
+            </ul>
+
+            <h3>8.2 Sairaalafyysikon rooli</h3>
+            <ul>
+                <li><strong>Aktiivisuuslaskenta</strong>: BSA (body surface area) -menetelmä tai partitio-menetelmä. Partitio-malli: \( A = D_{\text{liver}} \cdot m_{\text{liver}} / S_{\text{liver}} \), huomioiden tuumori-normaali-maksa-suhde.</li>
+                <li><strong>MAA-kuvaus (esi-SIRT)</strong>: Tc-99m-MAA injektoidaan hepatiseen valtimoon &rarr; SPET/TT kuvantaminen: MAA:n jakautuminen ennustaa Y-90-mikrosfäärien jakautumisen. Tarkistetaan: keuhkoshuntti (&lt; 20 %), GI-shuntti (ei saa olla).</li>
+                <li><strong>Y-90-SPET/TT tai PET/TT</strong>: Y-90:n bremsstrahlung-SPET tai Y-90:n harvinainen positroniemissio (3,2 &times; 10<sup>&minus;5</sup>) mahdollistaa Y-90-PET/TT:n &rarr; hoidon jälkeinen dosimetria.</li>
+                <li><strong>Dosimetria</strong>: Tavoiteltu tuumoriannos &gt; 120 Gy (hartsihelmet) tai &gt; 400 Gy (lasihelmet). Normaali-maksa-annos &lt; 40&ndash;70 Gy.</li>
+            </ul>
+
+            <div class="theory-warning">
+                <p><strong>Turvallisuuskriittistä:</strong> Keuhkoshuntin ylittäminen (&gt; 20 %) voi johtaa säteilykeuhkokuumeeseen (radiation pneumonitis). GI-shuntti voi aiheuttaa vaikean GI-haavauman. MAA-kuvauksen huolellinen analysointi on välttämätöntä ennen hoitoa.</p>
+            </div>
+
+            <h2>9. Radiosynoviorthesis (nivelhoito)</h2>
+            <ul>
+                <li><strong>Periaate</strong>: Radioaktiivinen kolloidi injektoidaan suoraan niveleen tulehtuneen nivelkalvon (synovium) tuhoamiseksi. Beetasäteily tuhoaa synoviumin, mutta kantama on rajoitettu &rarr; rustoa ja luuta säästetään.</li>
+                <li><strong>Nuklidit</strong>:
+                    <ul>
+                        <li>Y-90 (kolloidi): Suuret nivelet (polvi). &beta;<sub>max</sub> = 2,28 MeV, kantama ~11 mm.</li>
+                        <li>Re-186 (sulfiidi): Keskikokoiset nivelet (olkapää, lonkka, kyynärpää). &beta;<sub>max</sub> = 1,07 MeV, kantama ~3,7 mm.</li>
+                        <li>Er-169 (sitraatti): Pienet nivelet (sormet, varpaat). &beta;<sub>max</sub> = 0,34 MeV, kantama ~1 mm.</li>
+                    </ul>
+                </li>
+                <li><strong>Indikaatiot</strong>: Nivelreuma, hemofilia-artropatia, toistuva nivelnesteen kertyminen</li>
+                <li><strong>Säteilysuojelu</strong>: Injektiokohdan suojaus, nivelen immmobilisaatio 48 h (estää vuodon imukudoksiin), kontaminaation ehkäisy</li>
+            </ul>
+
+            <h2>10. Potilaan kotiuttaminen ja säteilyturvallisuusohjeet</h2>
+
+            <h3>10.1 Kotiutuskriteerit</h3>
+            <p>Potilaan kotiuttaminen radionuklidihoidon jälkeen perustuu annosnopeusmittaukseen ja IAEA/STUK:n suosituksiin:</p>
+            <ul>
+                <li><strong>Annosnopeus 1 m etäisyydellä</strong>: Tyypillinen kotiutusraja &lt; 25&ndash;40 &micro;Sv/h (riippuu nuklidista ja maan säädöksistä)</li>
+                <li><strong>Laskennallinen arvio</strong>: Omaisten kumulatiivinen annos on arvioitava: \( D = \frac{A_0 \cdot \Gamma \cdot T_{\text{eff}}}{d^2 \cdot \ln 2} \cdot OF \), missä \( \Gamma \) = annosnopeusvakio, \( d \) = etäisyys, \( OF \) = oleskelukerroin (occupancy factor).</li>
+                <li><strong>Rajoite</strong>: Omaisten annos tyypillisesti &lt; 1 mSv (yleinen väestö) tai &lt; 5 mSv (perheenjäsenet, tapauskohtainen harkinta)</li>
+            </ul>
+
+            <h3>10.2 Potilasohjeistus kotiutumisen jälkeen</h3>
+            <table>
+                <thead>
+                    <tr><th>Ohje</th><th>I-131 kilpirauhashoito</th><th>Lu-177-hoito</th><th>Ra-223-hoito</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Etäisyys läheisiin</td><td>Ei samaa sänkyä 1&ndash;2 vk, vältä pitkää lähikontaktia 2&ndash;3 vk</td><td>Vältä pitkää lähikontaktia 3&ndash;7 d</td><td>Normaali käyttäytyminen (alfaradikaali, ei merkittävää ulkoista säteilyä)</td></tr>
+                    <tr><td>Lasten ja raskaana olevien lähellä</td><td>Vältä 2&ndash;3 viikkoa</td><td>Vältä 3&ndash;7 päivää</td><td>Ei erityisrajoitusta</td></tr>
+                    <tr><td>WC-hygienia</td><td>Huuhtele 2&times;, pese kädet, istuen virtsaaminen</td><td>Huuhtele 2&times;, 48 h</td><td>Huuhtele 2&times;, 1 vk</td></tr>
+                    <tr><td>Imetys</td><td>Lopetettava pysyvästi (I-131)</td><td>Lopetettava</td><td>Lopetettava</td></tr>
+                    <tr><td>Lentokenttäportit</td><td>Voi laukaista ilmaisimen 2&ndash;3 kk</td><td>Voi laukaista 1&ndash;2 vk</td><td>Ei yleensä</td></tr>
+                </tbody>
+            </table>
+
+            <h3>10.3 Potilaan kuolema radionuklidihoidon jälkeen</h3>
+            <p>Jos potilas kuolee pian radionuklidihoidon jälkeen, on huomioitava:</p>
+            <ul>
+                <li>Ruumiinavaus vain perustelluista syistä, säteilyturvallisuusarvion jälkeen</li>
+                <li>Patologille ja krematorioon ilmoitus radioaktiivisesta aineesta</li>
+                <li>Krematorion ilmanvaihto: erityisesti I-131 voi vapautua tuhkauksessa</li>
+                <li>Sairaalafyysikko arvioi jäljellä olevan aktiivisuuden ja antaa toimintaohjeet</li>
+            </ul>
+
+            <h2>11. Uudemmat hoitomuodot</h2>
+            <ul>
+                <li><strong>Ac-225-PSMA</strong>: Tutkimusvaiheessa. Erittäin lupaavia tuloksia Lu-177-PSMA-refrakterisilla potilailla. Hajoamisketjussa 4 alfaemissiota.</li>
+                <li><strong>Ac-225-DOTATATE</strong>: Neuroendokriinisten kasvainten alfaemitterihoito tutkimusvaiheessa</li>
+                <li><strong>FAP-kohdennetut hoidot</strong>: Fibroblastiaktivaatioproteiinia (FAP) ilmentävien kasvainten hoito radioaktiivisilla FAP-inhibiittoreilla</li>
+                <li><strong>Pb-212-DOTAMTATE</strong>: Alfaemitterihoito, jossa lyijy-212:n tytärnuklidi Bi-212 tuottaa alfasäteilyn</li>
+                <li><strong>Teranostiikka</strong>: Samaa kohdennusmolekyyliä käytetään sekä diagnostiikkaan (PET) että hoitoon (radionuklidihoito), esim. Ga-68/Lu-177-DOTATATE, Ga-68/Lu-177-PSMA</li>
+            </ul>
+
+            <div class="theory-info">
+                <p><strong>Teranostiikan periaate:</strong> "See what you treat, treat what you see" &mdash; kuvantamisella varmistetaan radiolääkkeen kertyminen kohteeseen ennen hoitoa. Tämä mahdollistaa yksilöllisen hoidon valinnan ja dosimetrisen suunnittelun.</p>
+            </div>
+
+            <div class="theory-references">
+                <h3>Viitekirjallisuus</h3>
+                <ol>
+                    <li>Bodei L et al. <em>Joint IAEA, EANM, and SNMMI practical guidance on peptide receptor radionuclide therapy (PRRNT) in neuroendocrine tumours</em>, Eur J Nucl Med Mol Imaging, 2013.</li>
+                    <li>Sgouros G et al. <em>ICRU Report 96: Dosimetry-Guided Radiopharmaceutical Therapy</em>, J ICRU, 2021.</li>
+                    <li>Bolch WE et al. <em>MIRD pamphlet No. 21: A generalized schema for radiopharmaceutical dosimetry</em>, J Nucl Med, 2009.</li>
+                    <li>Cherry SR, Sorenson JA, Phelps ME. <em>Physics in Nuclear Medicine</em>, 4th ed. Luku 22.</li>
+                    <li>STUK ohje ST 6.3: <em>Säteilyturvallisuus isotooppilääketieteessä</em>.</li>
+                    <li>IAEA Safety Reports Series No. 63: <em>Release of Patients After Radionuclide Therapy</em>, 2009.</li>
+                    <li>Salem R, Thurston KG. <em>Radioembolization with Y-90 microspheres: a state-of-the-art brachytherapy treatment for primary and secondary liver malignancies</em>, J Vasc Interv Radiol, 2006.</li>
+                    <li>EANM/SNMMI guideline for radiosynovectomy.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+         VÄLILEHTI 7: SÄTEILYBIOLOGIA JA -SUOJELU
+         ================================================================ -->
+    <div class="theory-panel" id="panel-sateilybiologia" role="tabpanel">
+        <div class="theory-content">
+
+            <h2>1. Johdanto</h2>
+            <p>Isotooppilääketieteen säteilybiologia ja säteilysuojelu eroavat merkittävästi sädehoidon vastaavista: altistus tulee avoimista lähteistä potilaan sisältä, annokset ovat tyypillisesti pienempiä ja jakautuvat laajemmin, mutta kontaminaatioriski on ainutlaatuinen. Sairaalafyysikon on hallittava sekä henkilökunnan ja potilaan säteilysuojelu että lainsäädännölliset vaatimukset.</p>
+
+            <h2>2. Säteilyfysiikan perusteet</h2>
+
+            <h3>2.1 Hajoamismuodot ja säteilylajit</h3>
+            <p>Isotooppilääketieteessä käytetään nuklideja, jotka hajoavat eri mekanismeilla:</p>
+            <ul>
+                <li><strong>&gamma;-emissio (isomeerinen transitio, IT)</strong>: Tc-99m. Pelkkä gammaemissio &rarr; ihanteellinen kuvantamiseen (matala potilasannos, hyvä kuvanlaatu).</li>
+                <li><strong>&beta;<sup>+</sup> (positroniemissio)</strong>: F-18, Ga-68, C-11. Annihilaatiofotoniparit mahdollistavat PET-kuvantamisen.</li>
+                <li><strong>&beta;<sup>&minus;</sup> (beetahajoaminen)</strong>: I-131, Lu-177, Y-90. Beetapartikkelien kineettinen energia absorboituu lähellä olevaan kudokseen &rarr; terapeuttinen vaikutus.</li>
+                <li><strong>&alpha;-hajoaminen</strong>: Ra-223, Ac-225. Korkea LET, lyhyt kantama &rarr; erittäin tehokas, mutta kontaminaatioriskit erityisiä.</li>
+                <li><strong>Elektronisieppaus (EC)</strong>: Tl-201, I-123, In-111. Röntgenemissio ja/tai Auger-elektronit.</li>
+            </ul>
+
+            <h3>2.2 Säteilyn biologiset vaikutukset</h3>
+            <p>Isotooppilääketieteessä säteilyn biologiset vaikutukset jakautuvat:</p>
+            <ul>
+                <li><strong>Diagnostiikan annokset</strong>: Tyypillisesti 1&ndash;20 mSv. Stokastiset vaikutukset (syöpäriski) ovat relevantteja, deterministiset vaikutukset eivät toteudu.</li>
+                <li><strong>Hoitoannokset</strong>: Kohde-elimeen 10&ndash;100+ Gy. Deterministiset vaikutukset tavoiteltuja (kasvaimen tuhoaminen) ja rajoittavia (munuaiset, luuydin).</li>
+            </ul>
+
+            <h2>3. Säteilysuojelun periaatteet isotooppilääketieteessä</h2>
+
+            <h3>3.1 Oikeutus</h3>
+            <p>Jokaisen tutkimuksen ja hoidon on oltava oikeutettu: hyödyn on ylitettävä haitta. Lähettävä lääkäri ja isotooppilääketieteen erikoislääkäri arvioivat oikeutuksen.</p>
+
+            <h3>3.2 Optimointi (ALARA)</h3>
+            <p>Potilaiden altistusta optimoidaan:</p>
+            <ul>
+                <li>Radiolääkkeen aktiivisuuden optimointi tutkimuskohtaisesti (DRL, diagnostiset viitearvot)</li>
+                <li>Kuvausprotokollan optimointi: kuvausaika, matriisikoko, rekonstruktioparametrit</li>
+                <li>Lasten annosten skaalaus (EANM Dosage Card)</li>
+            </ul>
+
+            <h3>3.3 Diagnostiset viitearvot (DRL) Suomessa</h3>
+            <p>STUK määrittelee kansalliset DRL:t isotooppilääketieteen tutkimuksille. Yksikön on verrattava omia annostasojaan näihin viitearvoihin ja pyrittävä alle DRL:n säilyttäen diagnostinen kuvanlaatu:</p>
+            <table>
+                <thead>
+                    <tr><th>Tutkimus</th><th>Radiol&auml;&auml;ke</th><th>DRL (MBq)</th><th>Efektiivinen annos (mSv)</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Luustokuvaus</td><td>Tc-99m-MDP/HDP</td><td>670</td><td>3&ndash;4</td></tr>
+                    <tr><td>Syd&auml;nperfuusio (1 pv)</td><td>Tc-99m-MIBI</td><td>300 + 900</td><td>8&ndash;12</td></tr>
+                    <tr><td>Munuaisfunktio</td><td>Tc-99m-MAG3</td><td>150</td><td>1&ndash;2</td></tr>
+                    <tr><td>Keuhkoperfuusio</td><td>Tc-99m-MAA</td><td>150</td><td>1&ndash;2</td></tr>
+                    <tr><td>Kilpirauhaskuvaus</td><td>Tc-99m-perteknetaatti</td><td>110</td><td>1&ndash;2</td></tr>
+                    <tr><td>FDG-PET/TT</td><td>[<sup>18</sup>F]FDG</td><td>370</td><td>7&ndash;10 (PET)</td></tr>
+                    <tr><td>DOTATATE-PET/TT</td><td>Ga-68-DOTATATE</td><td>150</td><td>3&ndash;4</td></tr>
+                </tbody>
+            </table>
+
+            <div class="theory-info">
+                <p><strong>DRL:n seuranta:</strong> Sairaalafyysikko analysoi yksikön aktiivisuusmäärät vuosittain ja vertaa DRL-arvoihin. Jos aktiivisuusmäärät ylittävät DRL:n systemaattisesti, on selvitettävä syy (laitteiston kunto, kuvausprotokolla, potilaspopulaatio) ja optimoitava toimintaa.</p>
+            </div>
+
+            <h3>3.3 Henkilökunnan suojelu</h3>
+            <ul>
+                <li><strong>Ulkoinen altistus</strong>: Etäisyys, aika, suojaus. Lyijylasi-ruiskusuojat (60&ndash;80 % annos&shy;vähennys FDG:lle). Automaattiset injektorit.</li>
+                <li><strong>Kontaminaatio</strong>: Suojakäsineet, työvaatteet, kontaminaation seuranta. Erityisen tärkeä avolähteitä käsiteltäessä.</li>
+                <li><strong>Sormidosimetri</strong>: Pakollinen eluointi- ja injektiotyössä. Tyypilliset sormidosit: 1&ndash;10 mSv/kk.</li>
+                <li><strong>Kokovartalodosimetri</strong>: Yleensä &lt; 1 mSv/kk, hyvin optimoidussa yksikössä.</li>
+            </ul>
+
+            <h3>3.4 Potilaan suojelu</h3>
+            <ul>
+                <li><strong>Diagnostiset viitearvot (DRL)</strong>: STUK määrittelee radiolääkemäärien viitearvot yleisimmille tutkimuksille. Yksikön on seurattava omia annostasojaan ja verrattava DRL:iin.</li>
+                <li><strong>Imetys ja raskaus</strong>: Imetyksen keskeytys radiolääkkeen antamisen jälkeen (kesto riippuu nuklidista ja lääkkeestä). Raskaana olevalle potilaalle isotooppitutkimus tehdään vain välttämättömästä syystä.</li>
+            </ul>
+
+            <h2>4. Kontaminaatiotilanteet</h2>
+
+            <h3>4.1 Kontaminaation käsite</h3>
+            <p>Kontaminaatiolla tarkoitetaan radioaktiivisen aineen joutumista paikkaan, johon se ei kuulu: ihopinnalle, työtasoille, lattialle tai kehon sisälle (internal contamination). Isotooppilääketieteessä kontaminaatioriski on jatkuvasti läsnä avolähteiden käsittelyssä.</p>
+
+            <h3>4.2 Toimintatavat kontaminaatiotilanteessa</h3>
+            <ol>
+                <li><strong>Eristä</strong>: Rajaa kontaminoitunut alue, estä leviäminen</li>
+                <li><strong>Ilmoita</strong>: STV:lle (säteilyturvallisuusvastaava) ja tarvittaessa STUK:lle</li>
+                <li><strong>Mittaa</strong>: Kontaminaation laajuus ja taso (pyyhintänäytteet, suorat mittaukset)</li>
+                <li><strong>Puhdista</strong>: Systemaattinen puhdistus ulkoa sisälle. Dokumentoi mittaustulokset puhdistuksen jälkeen.</li>
+                <li><strong>Henkilökunnan altistuksen arviointi</strong>: Jos henkilöihin kohdistuu kontaminaatio, arvioidaan ulkoinen ja mahdollinen sisäinen altistus</li>
+            </ol>
+
+            <h3>4.3 Akuutti kontaminaatiotilanne</h3>
+            <p>Sairaalafyysikko johtaa akuutin kontaminaatiotilanteen teknistä selvitystyötä:</p>
+            <ul>
+                <li>Radioaktiivisen aineen identifiointi (nuklidi, aktiivisuus)</li>
+                <li>Leviämisreitin selvittäminen</li>
+                <li>Henkilöstön altistuksen arvioiminen</li>
+                <li>Dekontaminaatiotoimien ohjaaminen</li>
+                <li>Raportointi STUK:lle ja toiminnanharjoittajalle</li>
+            </ul>
+
+            <h2>5. Säteilyriskien arviointi</h2>
+
+            <h3>5.1 Stokastisten riskien arviointi</h3>
+            <p>Isotooppilääketieteen diagnostisten tutkimusten riskit arvioidaan efektiivisen annoksen perusteella. ICRP:n riskikerroin: ~5 % / Sv (koko väestö).</p>
+            <table>
+                <thead>
+                    <tr><th>Tutkimus</th><th>Efektiivinen annos (mSv)</th><th>Verrattavissa</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Luustokuvaus (Tc-99m-MDP)</td><td>3&ndash;4</td><td>Vatsan TT</td></tr>
+                    <tr><td>Syd&auml;nperfuusio (Tc-99m-MIBI, 1 pv)</td><td>8&ndash;12</td><td>Vartalon TT</td></tr>
+                    <tr><td>FDG-PET/TT</td><td>7&ndash;25 (PET 4&ndash;8, TT 3&ndash;17)</td><td>Riippuu TT-protokollasta</td></tr>
+                    <tr><td>Ga-68-DOTATATE PET/TT</td><td>5&ndash;15</td><td>PET-osuus ~4 mSv</td></tr>
+                    <tr><td>I-131 (hoito, 3700 MBq)</td><td>~300 mSv (koko keho)</td><td>Terapeuttinen annos</td></tr>
+                </tbody>
+            </table>
+
+            <h3>5.2 Riskiviestintä potilaalle</h3>
+            <p>Sairaalafyysikon on osattava selittää potilaalle ymmärrettävästi tutkimuksesta aiheutuva säteilyaltistus ja siihen liittyvä riski. Riskin suuruusluokan vertailu arkipäivän riskeihin ja luonnon taustasäteilyyn auttaa potilasta suhteuttamaan riskiä.</p>
+
+            <h2>6. Työperäisen altistuksen optimointi</h2>
+
+            <h3>6.1 Altistuksen vähentämiskeinot</h3>
+            <ul>
+                <li><strong>Automaattiset injektorit</strong>: Vähentävät henkilökunnan kättensa saaman annoksen 60&ndash;90 %</li>
+                <li><strong>Lyijylasi-ruiskusuojat</strong>: Tc-99m: 60&ndash;80 % vähennys. FDG: 40&ndash;60 % vähennys (511 keV vaatii paksumman suojan).</li>
+                <li><strong>Työnkierto</strong>: Altistuksen jakaminen useamman työntekijän kesken</li>
+                <li><strong>Etäkäyttötyökalut</strong>: Pitkävartiset pihdit, etäpipetit</li>
+                <li><strong>Tilojen suunnittelu</strong>: Riittävät suojarakenteet, erillinen injektiohuone, potilaan odotustila etäällä työskentelyalueista</li>
+            </ul>
+
+            <h2>7. Jätteiden ja päästöjen käsittely</h2>
+
+            <h3>7.1 Radioaktiiviset jätteet</h3>
+            <ul>
+                <li><strong>Lyhytikäiset (T&frac12; &lt; 100 d)</strong>: Varastoidaan vähintään 10 &times; T&frac12; &rarr; aktiivisuus laskee alle vapaa&shy;raja-arvon &rarr; tavallinen jäte</li>
+                <li><strong>Pitkäikäiset (T&frac12; &gt; 100 d)</strong>: Toimitetaan radioaktiivisena jätteenä käsittelyyn</li>
+            </ul>
+
+            <h3>7.2 Päästöt viemäriin ja ilmaan</h3>
+            <ul>
+                <li><strong>Potilaseritejärjestelmä</strong>: Potilaiden virtsa sisältää radioaktiivisia aineita. Viemäröinti on sallittu, kun aktiivisuuspitoisuus alittaa STUK:n asettamat rajat.</li>
+                <li><strong>Ilmapäästöt</strong>: I-131-hoitohuoneen ilmanvaihto aktiivihiilisuodattimin &rarr; jodin pidätys &gt; 99 %</li>
+                <li><strong>Päästöjen seuranta</strong>: Dokumentointi ja vuosiraportointi STUK:lle</li>
+            </ul>
+
+            <h2>8. Rakenteellinen säteilysuojelu</h2>
+
+            <h3>8.1 Isotooppilaboratorion suojaus</h3>
+            <ul>
+                <li><strong>Seinärakenteet</strong>: Betoni tai lyijyverhous aktiivisuustasojen ja nuklidien mukaan</li>
+                <li><strong>Injektiohuone</strong>: Lyijylasivitriinikaappi, suojattu jäteastia, lyijysuojattu säilytyspaikka</li>
+                <li><strong>Hoitohuone (I-131, Lu-177)</strong>: Lyijyverhous, WC-lattian pesu mahdollisuus, säteilymonitointi oviaukon luona</li>
+                <li><strong>PET-tilojen suojaus</strong>: 511 keV fotonit vaativat merkittävästi paksumman suojauksen kuin Tc-99m (140 keV). Tyypillinen TVL: 17 mm lyijyä tai 34 cm betonia.</li>
+            </ul>
+
+            <h2>9. Lainsäädäntö ja viranomaismääräykset</h2>
+
+            <h3>9.1 Säteilylaki 859/2018</h3>
+            <p>Säteilylaki ja sen nojalla annetut asetukset säätelevät isotooppilääketieteen säteilyturvallisuutta:</p>
+            <ul>
+                <li>Turvallisuuslupa kaikelle säteilyn käytölle</li>
+                <li>Vastaava johtaja ja STV:n nimeäminen</li>
+                <li>Säteilytyöntekijöiden luokittelu (A/B)</li>
+                <li>Annostarkkailun järjestäminen</li>
+                <li>Poikkeavien tapahtumien ilmoitusvelvollisuus STUK:lle</li>
+            </ul>
+
+            <h3>9.2 Säteilysuojelumittaukset</h3>
+            <ul>
+                <li><strong>Annosnopeusmittaukset</strong>: Ympäristön annosnopeusmittaukset tilojen säteilysuojelun todentamiseksi. Mittauspisteet: oviaukot, seinien takana, odotustilat, henkilökunnan työpisteet.</li>
+                <li><strong>Kontaminaatiomittaukset</strong>: Pyyhintänäytteet säännöllisesti työskentelypinnoilta. Suorat mittaukset käsi/jalka-monitorilla. Kynnysarvo: &lt; 4 kBq/100 cm&sup2; (beta/gamma), &lt; 0,4 kBq/100 cm&sup2; (alfa).</li>
+                <li><strong>Ilma-aktiivisuusmittaukset</strong>: Erityisesti I-131-hoitohuoneissa ja radiolääkkeen valmistustiloissa. Ilmanäytteenottimet tai suorat mittaukset.</li>
+            </ul>
+
+            <h3>9.3 Mittausten epävarmuusarviot</h3>
+            <p>Sairaalafyysikon on arvioitava ja dokumentoitava säteilysuojelumittausten epävarmuudet GUM (Guide to the Expression of Uncertainty in Measurement) -periaattein:</p>
+            <table>
+                <thead>
+                    <tr><th>Ep&auml;varmuusl&auml;hde</th><th>Tyyppi</th><th>Tyypillinen suuruus</th><th>Hallinta</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Mittauslaitteen kalibrointi</td><td>B</td><td>&plusmn; 5&ndash;15 %</td><td>Kalibrointitodistus, s&auml;&auml;nn&ouml;llinen kalibrointi</td></tr>
+                    <tr><td>Mittausgeometria (et&auml;isyys)</td><td>B</td><td>&plusmn; 5&ndash;10 %</td><td>Et&auml;isyyden tarkka mittaus, toistettavat mittauspisteet</td></tr>
+                    <tr><td>Tilastollinen ep&auml;varmuus (Poisson)</td><td>A</td><td>Riippuu laskentam&auml;&auml;r&auml;st&auml;</td><td>Riitt&auml;v&auml; mittausaika</td></tr>
+                    <tr><td>Energiariippuvuus (ilmaisimen vaste)</td><td>B</td><td>&plusmn; 10&ndash;30 %</td><td>Oikea ilmaisimen valinta nuklidille</td></tr>
+                    <tr><td>Taustasäteilyn vaihtelu</td><td>A/B</td><td>&plusmn; 0,05&ndash;0,2 &micro;Sv/h</td><td>Taustamittaus, taustavähenys</td></tr>
+                    <tr><td>Pyyhintänäytteen tehokkuus</td><td>B</td><td>10&ndash;50 % (irtokontaminaatio)</td><td>Käytetään konservatiivista arviota (10 %)</td></tr>
+                </tbody>
+            </table>
+            <div class="formula">
+                <p>Yhdistetty standardiepävarmuus:</p>
+                \[ u_c = \sqrt{\sum_i \left( \frac{\partial f}{\partial x_i} \cdot u(x_i) \right)^2} \]
+                <p>Laajennettu epävarmuus: \( U = k \cdot u_c \), missä \( k = 2 \) (95 % luottamustaso).</p>
+            </div>
+
+            <h3>9.4 Toiminnanharjoittajan opastaminen</h3>
+            <p>Sairaalafyysikon keskeinen tehtävä on toiminnanharjoittajan (sairaalan johto) opastaminen säteilylainsäädännön vaatimuksista ja niiden käytännön toteuttamisesta:</p>
+            <ul>
+                <li><strong>Turvallisuuslupahakemus</strong>: Fyysikko laatii teknisen selvityksen STUK:n turvallisuuslupahakemuksia varten (nuklidit, aktiivisuudet, tilat, suojausrakenteet, henkilöstö)</li>
+                <li><strong>Johtamisjärjestelmä</strong>: Säteilyturvallisuuden organisointi: vastaava johtaja, STV:t, säteilytyöntekijöiden luokittelu</li>
+                <li><strong>Koulutusohjelma</strong>: Henkilökunnan säteilysuojelukoulutuksen suunnittelu ja toteutus (alkukoulutus, täydennyskoulutus)</li>
+                <li><strong>Tilasuunnittelu</strong>: Uusien tilojen ja laitteiden suojaustarpeiden määrittely, suojauslaskelmat</li>
+                <li><strong>Laadunvarmistusohjelma</strong>: Kuvantamislaitteiden ja mittauslaitteiden QA-ohjelman suunnittelu ja seuranta</li>
+                <li><strong>Vuosiraportointi</strong>: Annostarkkailutietojen koonti, DRL-vertailu, jäte- ja päästöraportointi STUK:lle</li>
+            </ul>
+
+            <h2>10. Poikkeamien hallinta</h2>
+
+            <h3>10.1 Poikkeamien raportointi</h3>
+            <ul>
+                <li><strong>STUK:lle ilmoitettavat</strong>: Merkittävät annospoikkeamat, väärä radiolääke potilaalle, kontaminaatiotilanteet, lähteen katoaminen</li>
+                <li><strong>Sisäinen raportointi</strong>: Läheltä piti -tilanteet, pienet kontaminaatiot, laiteviat</li>
+            </ul>
+
+            <h3>10.2 Poikkeamista oppiminen</h3>
+            <p>Systemaattinen poikkeamien analysointi (root cause analysis), korjaavien toimenpiteiden toteutus ja seuranta. STUK:n PORA-rekisteri mahdollistaa kansallisesta datasta oppimisen.</p>
+
+            <h2>11. Kliininen auditointi</h2>
+
+            <h3>11.1 Auditoinnin tarkoitus ja lainsäädäntöperusta</h3>
+            <p>Kliininen auditointi on säteilylain (859/2018) vaatima prosessi, jossa arvioidaan systemaattisesti lääketieteellisen säteilynkäytön toteutumista hyviä käytäntöjä vasten. STUK valvoo auditointien toteutumista.</p>
+
+            <h3>11.2 Auditoitavat alueet isotooppilääketieteessä</h3>
+            <table>
+                <thead>
+                    <tr><th>Auditointialue</th><th>Arvioitavat asiat</th><th>Fyysikon osuus</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Lähetteiden oikeutus</td><td>Lähettämiskriteerit, oikeutusarviointi</td><td>Osallistuu keskusteluun</td></tr>
+                    <tr><td>Tutkimusprotokollat</td><td>Protokollien ajantasaisuus, DRL-vertailu</td><td>Protokollien fysikaaliset parametrit, DRL-data</td></tr>
+                    <tr><td>Laadunvarmistus</td><td>QA-ohjelman noudattaminen, tulokset</td><td>Esittelee QA-tulokset, poikkeamat, korjaavat toimet</td></tr>
+                    <tr><td>Potilasannosten seuranta</td><td>Annostasot vs. DRL, optimointitoimet</td><td>Annosdata, optimointihistoria</td></tr>
+                    <tr><td>S&auml;teilysuojelu</td><td>Henkil&ouml;kunnan ja potilaan suojelu, tilat</td><td>Dosimetriatiedot, suojauslaskelmat, mittaustulokset</td></tr>
+                    <tr><td>Poikkeamien hallinta</td><td>Raportointij&auml;rjestelm&auml;, korjaavat toimet</td><td>Poikkeamaraporttien tekninen analysointi</td></tr>
+                    <tr><td>Koulutus</td><td>Henkil&ouml;kunnan p&auml;tevyys ja koulutus</td><td>Koulutustietojen yll&auml;pito</td></tr>
+                </tbody>
+            </table>
+
+            <h3>11.3 Sairaalafyysikon rooli auditoinnissa</h3>
+            <ul>
+                <li>Valmistelee fysikaaliset QA-raportit ja tilastot</li>
+                <li>Esittelee laitteiden suorituskyvyn ja laadunvarmistustulokset</li>
+                <li>Vastaa dosimetrisiin ja säteilysuojelua koskeviin kysymyksiin</li>
+                <li>Toteuttaa auditoinnin suositukset omalla vastuualueellaan</li>
+                <li>Seuraa edellisen auditoinnin kehitysehdotusten toteutumista</li>
+            </ul>
+
+            <div class="theory-references">
+                <h3>Viitekirjallisuus</h3>
+                <ol>
+                    <li>ICRP Publication 103: <em>The 2007 Recommendations of the International Commission on Radiological Protection</em>.</li>
+                    <li>Säteilylaki 859/2018. <em>Finlex</em>.</li>
+                    <li>STUK ohje ST 6.3: <em>Säteilyturvallisuus isotooppilääketieteessä</em>.</li>
+                    <li>Cherry SR, Sorenson JA, Phelps ME. <em>Physics in Nuclear Medicine</em>, 4th ed. Luvut 21&ndash;23.</li>
+                    <li>EANM: <em>Guidelines on radiation protection following radiopharmaceutical therapy</em>.</li>
+                    <li>IAEA Safety Reports Series No. 63: <em>Release of Patients After Radionuclide Therapy</em>, 2009.</li>
+                    <li>JCGM 100:2008: <em>Evaluation of Measurement Data &mdash; Guide to the Expression of Uncertainty in Measurement (GUM)</em>.</li>
+                    <li>ICRP Publication 135: <em>Diagnostic Reference Levels in Medical Imaging</em>, 2017.</li>
+                    <li>EU BSS Directive 2013/59/Euratom: Artikla 58 (kliininen auditointi).</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+</div> <!-- closes .theory-container -->
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function() {
+    const tabs = document.querySelectorAll('.theory-tab');
+    const panels = document.querySelectorAll('.theory-panel');
+
+    function activateTab(tabId) {
+        tabs.forEach(t => {
+            t.classList.toggle('active', t.dataset.tab === tabId);
+            t.setAttribute('aria-selected', t.dataset.tab === tabId);
+        });
+        panels.forEach(p => {
+            p.classList.toggle('active', p.id === 'panel-' + tabId);
+        });
+        history.replaceState(null, '', '#' + tabId);
+        document.querySelector('.theory-tabs').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (window.MathJax && MathJax.typesetPromise) {
+            var activePanel = document.getElementById('panel-' + tabId);
+            if (activePanel) {
+                MathJax.typesetPromise([activePanel]);
+            }
+        }
+    }
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            activateTab(this.dataset.tab);
+        });
+    });
+
+    var hash = window.location.hash.replace('#', '');
+    if (hash) {
+        var matchingTab = document.querySelector('.theory-tab[data-tab="' + hash + '"]');
+        if (matchingTab) {
+            activateTab(hash);
+        }
+    }
+})();
+</script>
+{% endblock %}

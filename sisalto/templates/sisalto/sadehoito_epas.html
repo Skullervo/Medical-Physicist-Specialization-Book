@@ -1,13 +1,45 @@
-{% extends "sisalto/base.html" %}
-{% block title %}Sädehoidon EPA:t{% endblock %}
+{% extends "sisalto/base_summereditor.html" %}
+{% load static %}
+
+{% block title %}Sädehoito EPA:t{% endblock %}
+
 {% block content %}
-    <h1>Sädehoidon EPA:t</h1>
-    <ul>
+<div class="specialty-header">
+    <h1><i class="fas fa-radiation" style="color: var(--sadehoito);"></i> Sädehoito EPA:t</h1>
+    <p class="text-secondary">Sädehoidon erikoisalaan kuuluvat EPA-koulutuskortit</p>
+</div>
+
+{% if epas %}
+<div class="dashboard-grid" style="margin-top: var(--spacing-xl);">
     {% for epa in epas %}
-        <li><a href="/epa/{{ epa.id }}/">{{ epa.title }}</a></li>
+    <div class="card card-sadehoito card-clickable" onclick="window.location.href='/epa/{{ epa.id }}/'">
+        <div class="card-header">
+            <h3 class="card-title">{{ epa.title }}</h3>
+            <span class="badge badge-success">EPA {{ epa.code }}</span>
+        </div>
+        <div class="card-body">
+            {% if epa.description %}
+                <p>{{ epa.description|truncatewords:30 }}</p>
+            {% else %}
+                <p class="text-muted">Klikkaa avataksesi EPA-kortin sisällön</p>
+            {% endif %}
+        </div>
+        <div class="card-footer">
+            <small class="text-muted">
+                <i class="fas fa-layer-group"></i>
+                {% with epa.sections.count as section_count %}
+                    {{ section_count }} osio{{ section_count|pluralize:"a,a" }}
+                {% endwith %}
+            </small>
+            <i class="fas fa-arrow-right" style="color: var(--accent-green);"></i>
+        </div>
+    </div>
     {% endfor %}
-    </ul>
-{% endblock %}
-{% block toc %}
-    <li>Sädehoidon EPA:t</li>
+</div>
+{% else %}
+<div class="alert alert-info">
+    <i class="fas fa-info-circle"></i>
+    Sädehoidon EPA-kortteja ei löytynyt tietokannasta.
+</div>
+{% endif %}
 {% endblock %}

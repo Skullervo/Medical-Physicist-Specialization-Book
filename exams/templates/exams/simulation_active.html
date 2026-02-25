@@ -1,0 +1,207 @@
+{% extends "sisalto/base_summereditor.html" %}
+
+{% block title %}Tenttisimulaatio - {{ specialty_name }}{% endblock %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 0 auto;">
+
+    <!-- Header with timer -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; position: sticky; top: 0; background: var(--bg-base); padding: 12px 0; z-index: 100;">
+        <div>
+            <h1 style="font-family: var(--font-display); font-size: 1.4em; color: var(--text-primary); margin: 0;">
+                <i class="fas fa-stopwatch" style="color: var(--color-warning); margin-right: 8px;"></i>
+                {{ specialty_name }}
+            </h1>
+            <div style="color: var(--text-tertiary); font-size: 0.85em; margin-top: 4px;">
+                {{ question_count }} kysymysta
+            </div>
+        </div>
+        <div id="timerDisplay" style="background: var(--bg-surface); border: 1px solid var(--border-default); border-radius: 10px; padding: 10px 20px; text-align: center;">
+            <div style="color: var(--text-tertiary); font-size: 0.75em; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Aikaa jaljella</div>
+            <div id="timerValue" style="font-size: 1.5em; font-weight: 700; font-family: var(--font-mono); color: var(--color-primary);">
+                {{ time_limit }}:00
+            </div>
+        </div>
+    </div>
+
+    <!-- Questions -->
+    {% for q in questions %}
+    <div class="sim-question" data-question-id="{{ q.id }}" style="background: var(--bg-surface); border-radius: 12px; padding: 24px; border: 1px solid var(--border-default); margin-bottom: 20px;">
+        <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+            <div style="width: 32px; height: 32px; border-radius: 8px; background: var(--color-primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9em; flex-shrink: 0;">
+                {{ forloop.counter }}
+            </div>
+            <div>
+                {% if q.subject_area %}
+                <div style="color: var(--text-tertiary); font-size: 0.8em; margin-bottom: 4px;">{{ q.subject_area }}</div>
+                {% endif %}
+                <div style="color: var(--text-primary); font-size: 1em; line-height: 1.6;">{{ q.question_text }}</div>
+            </div>
+        </div>
+        <textarea class="sim-answer" data-question-id="{{ q.id }}" rows="8"
+            placeholder="Kirjoita vastauksesi tahan..."
+            style="width: 100%; padding: 12px 14px; border-radius: 8px; border: 1px solid var(--border-default); background: var(--bg-raised); color: var(--text-primary); font-size: 0.95em; line-height: 1.6; resize: vertical; box-sizing: border-box; font-family: var(--font-body);"></textarea>
+    </div>
+    {% endfor %}
+
+    <!-- Submit section -->
+    <div style="text-align: center; margin: 32px 0;">
+        <button id="submitBtn" onclick="submitSimulation()" style="padding: 14px 48px; border-radius: 8px; border: none; background: var(--color-primary); color: white; font-size: 1.1em; font-weight: 600; cursor: pointer; font-family: var(--font-display);">
+            <i class="fas fa-paper-plane" style="margin-right: 8px;"></i>
+            Palauta vastaukset
+        </button>
+    </div>
+
+    <!-- AI evaluation progress -->
+    <div id="evalProgress" style="display: none; background: var(--bg-surface); border-radius: 12px; padding: 28px; border: 1px solid var(--border-default); text-align: center; margin-bottom: 32px;">
+        <div class="loading-spinner" style="width: 48px; height: 48px; border: 3px solid var(--border-default); border-top-color: var(--color-primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 16px;"></div>
+        <div id="evalText" style="color: var(--text-primary); font-weight: 600; font-size: 1.05em;">
+            Arvioidaan vastauksia...
+        </div>
+        <div id="evalDetail" style="color: var(--text-tertiary); font-size: 0.9em; margin-top: 6px;"></div>
+        <!-- Progress bar -->
+        <div style="margin-top: 16px; background: var(--bg-overlay); border-radius: 4px; height: 8px; overflow: hidden;">
+            <div id="evalBar" style="height: 100%; background: var(--color-primary); border-radius: 4px; transition: width 0.3s; width: 0%;"></div>
+        </div>
+    </div>
+</div>
+
+<style>
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function() {
+    var sessionId = '{{ session_id }}';
+    var timeLimit = {{ time_limit }};
+    var totalSeconds = timeLimit * 60;
+    var timerEl = document.getElementById('timerValue');
+    var timerDisplay = document.getElementById('timerDisplay');
+    var submitted = false;
+
+    // Countdown timer
+    var interval = setInterval(function() {
+        totalSeconds--;
+        if (totalSeconds <= 0) {
+            clearInterval(interval);
+            if (!submitted) {
+                submitSimulation();
+            }
+            return;
+        }
+        var min = Math.floor(totalSeconds / 60);
+        var sec = totalSeconds % 60;
+        timerEl.textContent = min + ':' + (sec < 10 ? '0' : '') + sec;
+
+        // Warning colors
+        if (totalSeconds <= 60) {
+            timerEl.style.color = 'var(--color-error)';
+            timerDisplay.style.borderColor = 'var(--color-error)';
+        } else if (totalSeconds <= 300) {
+            timerEl.style.color = 'var(--color-warning)';
+            timerDisplay.style.borderColor = 'var(--color-warning)';
+        }
+    }, 1000);
+
+    // Submit simulation
+    window.submitSimulation = function() {
+        if (submitted) return;
+        submitted = true;
+        clearInterval(interval);
+
+        var submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.5';
+        submitBtn.textContent = 'Lahetetaan...';
+
+        // Collect all answers
+        var answers = [];
+        document.querySelectorAll('.sim-answer').forEach(function(textarea) {
+            answers.push({
+                question_id: parseInt(textarea.getAttribute('data-question-id')),
+                answer: textarea.value.trim()
+            });
+        });
+
+        // Disable all textareas
+        document.querySelectorAll('.sim-answer').forEach(function(t) {
+            t.disabled = true;
+            t.style.opacity = '0.7';
+        });
+
+        // Show progress
+        var evalProgress = document.getElementById('evalProgress');
+        var evalText = document.getElementById('evalText');
+        var evalDetail = document.getElementById('evalDetail');
+        var evalBar = document.getElementById('evalBar');
+        evalProgress.style.display = 'block';
+        evalProgress.scrollIntoView({ behavior: 'smooth' });
+
+        // Sequentially evaluate each answer
+        var total = answers.length;
+        var evaluated = 0;
+        var csrfToken = getCookie('csrftoken');
+
+        function evaluateNext() {
+            if (evaluated >= total) {
+                // All done — redirect to results
+                evalText.textContent = 'Arviointi valmis!';
+                evalDetail.textContent = 'Siirrytaan tuloksiin...';
+                evalBar.style.width = '100%';
+                setTimeout(function() {
+                    window.location.href = '/exams/simulation/' + sessionId + '/results/';
+                }, 1000);
+                return;
+            }
+
+            var a = answers[evaluated];
+            var num = evaluated + 1;
+            evalText.textContent = 'Arvioidaan kysymys ' + num + '/' + total + '...';
+            evalDetail.textContent = 'AI analysoi vastaustasi';
+            evalBar.style.width = Math.round((evaluated / total) * 100) + '%';
+
+            if (!a.answer || a.answer.length < 10) {
+                // Skip empty/too short answers
+                evaluated++;
+                evaluateNext();
+                return;
+            }
+
+            fetch('/exam/ai-evaluate/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,
+                    'X-Simulation-Session': sessionId,
+                },
+                body: JSON.stringify({
+                    question_id: a.question_id,
+                    answer: a.answer,
+                }),
+            })
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                evaluated++;
+                // Mark question card
+                var card = document.querySelector('.sim-question[data-question-id="' + a.question_id + '"]');
+                if (card && data.score !== undefined) {
+                    var scoreColors = {0:'var(--color-error)', 1:'var(--color-error)', 2:'var(--color-warning)', 3:'var(--color-warning)', 4:'var(--color-success)', 5:'var(--color-success)'};
+                    card.style.borderColor = scoreColors[data.score] || 'var(--border-default)';
+                }
+                // Wait 1s between requests (rate limit)
+                setTimeout(evaluateNext, 1500);
+            })
+            .catch(function(err) {
+                console.error('Eval error for Q' + a.question_id, err);
+                evaluated++;
+                setTimeout(evaluateNext, 1500);
+            });
+        }
+
+        evaluateNext();
+    };
+})();
+</script>
+{% endblock %}

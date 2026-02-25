@@ -1,0 +1,228 @@
+{% extends "sisalto/base_summereditor.html" %}
+
+{% block title %}Kysymyspankki - Sairaalafyysikon erikoistumiskirja{% endblock %}
+
+{% block content %}
+<div class="page-header" style="margin-bottom: 30px;">
+    <h1 style="font-size: 1.8em; margin-bottom: 10px;">
+        <i class="fas fa-question-circle" style="color: #3498db; margin-right: 10px;"></i>
+        Kysymyspankki
+    </h1>
+    <p style="color: #95a5a6; font-size: 1.1em;">
+        Valitse aihealueet ja aloita harjoittelu monivalintakysymyksilla.
+    </p>
+</div>
+
+{% if error %}
+<div style="background: #c0392b; color: white; padding: 12px 20px; border-radius: 8px; margin-bottom: 20px;">
+    <i class="fas fa-exclamation-triangle" style="margin-right: 8px;"></i>{{ error }}
+</div>
+{% endif %}
+
+<form method="post" action="/quiz/practice/" id="quizForm">
+    {% csrf_token %}
+
+    <!-- Difficulty selector -->
+    <div style="background: #2c3e50; border-radius: 12px; padding: 20px; border: 1px solid #34495e; margin-bottom: 20px;">
+        <h3 style="color: #ecf0f1; margin: 0 0 14px 0; font-size: 1.05em;">
+            <i class="fas fa-signal" style="color: #f1c40f; margin-right: 8px;"></i>Vaikeustaso
+        </h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+            <label style="display: flex; align-items: center; gap: 8px; padding: 10px 18px; background: #1a252f; border: 2px solid #3498db; border-radius: 8px; cursor: pointer; transition: all 0.15s;" class="difficulty-option" data-difficulty="all">
+                <input type="radio" name="difficulty" value="all" checked style="accent-color: #3498db; width: 16px; height: 16px;">
+                <span style="color: #ecf0f1; font-size: 0.95em;">Kaikki tasot</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; padding: 10px 18px; background: #1a252f; border: 2px solid #34495e; border-radius: 8px; cursor: pointer; transition: all 0.15s;" class="difficulty-option" data-difficulty="easy">
+                <input type="radio" name="difficulty" value="easy" style="accent-color: #2ecc71; width: 16px; height: 16px;">
+                <span style="color: #2ecc71; font-size: 0.95em;">Helppo (1-2)</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; padding: 10px 18px; background: #1a252f; border: 2px solid #34495e; border-radius: 8px; cursor: pointer; transition: all 0.15s;" class="difficulty-option" data-difficulty="medium">
+                <input type="radio" name="difficulty" value="medium" style="accent-color: #e67e22; width: 16px; height: 16px;">
+                <span style="color: #e67e22; font-size: 0.95em;">Haastava (3)</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; padding: 10px 18px; background: #1a252f; border: 2px solid #34495e; border-radius: 8px; cursor: pointer; transition: all 0.15s;" class="difficulty-option" data-difficulty="hard">
+                <input type="radio" name="difficulty" value="hard" style="accent-color: #e74c3c; width: 16px; height: 16px;">
+                <span style="color: #e74c3c; font-size: 0.95em;">Tenttitaso (4-5)</span>
+            </label>
+        </div>
+    </div>
+
+    <!-- Controls bar -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+        <div style="display: flex; gap: 10px;">
+            <button type="button" id="selectAll" style="background: #34495e; color: #ecf0f1; border: 1px solid #4a6785; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
+                <i class="fas fa-check-double"></i> Valitse kaikki
+            </button>
+            <button type="button" id="clearAll" style="background: #34495e; color: #ecf0f1; border: 1px solid #4a6785; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
+                <i class="fas fa-times"></i> Poista valinnat
+            </button>
+        </div>
+        <div id="selectedCount" style="color: #95a5a6; font-size: 0.95em;">
+            <span id="selectedEpaCount">0</span> aihetta valittu &middot; <span id="selectedQuestionCount">0</span> kysymysta
+        </div>
+    </div>
+
+    <!-- Specialty grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; margin-bottom: 100px;">
+        {% for specialty in specialties %}
+        <div class="specialty-card" style="background: #2c3e50; border-radius: 12px; padding: 20px; border: 1px solid #34495e;">
+            <!-- Specialty header with toggle -->
+            <label style="display: flex; align-items: center; gap: 12px; cursor: pointer; margin-bottom: 16px;">
+                <input type="checkbox" class="specialty-checkbox" data-specialty-id="{{ specialty.id }}"
+                       style="width: 18px; height: 18px; accent-color: #3498db; cursor: pointer;">
+                <h3 style="color: #ecf0f1; margin: 0; font-size: 1.15em; flex: 1;">
+                    {{ specialty.name }}
+                </h3>
+            </label>
+
+            <!-- EPA list -->
+            <div class="epa-list" style="margin-left: 8px;">
+                {% for epa in specialty.epas.all %}
+                <label class="epa-label" style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 6px; cursor: pointer; transition: background 0.15s; margin-bottom: 2px;"
+                       onmouseover="this.style.background='rgba(52,152,219,0.1)'"
+                       onmouseout="this.style.background='transparent'">
+                    <input type="checkbox" name="epa_ids" value="{{ epa.id }}" class="epa-checkbox" data-specialty-id="{{ specialty.id }}" data-epa-id="{{ epa.id }}"
+                           style="width: 16px; height: 16px; accent-color: #3498db; cursor: pointer; flex-shrink: 0;">
+                    <span style="color: #b0b8c1; font-size: 0.95em; flex: 1;">{{ epa.title }}</span>
+                    <span class="epa-count" data-epa-id="{{ epa.id }}" style="background: #34495e; color: #7f8c8d; padding: 2px 8px; border-radius: 10px; font-size: 0.8em; white-space: nowrap;">
+                        0 kys.
+                    </span>
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Sticky start button -->
+    <div id="startBar" style="position: fixed; bottom: 0; left: 0; right: 0; background: #1a252f; border-top: 1px solid #34495e; padding: 16px 24px; display: none; z-index: 1000;">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+            <div style="color: #95a5a6;">
+                <span id="barSelectedCount">0</span> aihetta &middot; <span id="barQuestionCount">0</span> kysymysta
+            </div>
+            <button type="submit" style="background: #3498db; color: white; border: none; padding: 12px 32px; border-radius: 8px; font-size: 1.05em; font-weight: 600; cursor: pointer; transition: background 0.2s;"
+                    onmouseover="this.style.background='#2980b9'"
+                    onmouseout="this.style.background='#3498db'">
+                <i class="fas fa-play" style="margin-right: 8px;"></i>Aloita harjoittelu
+            </button>
+        </div>
+    </div>
+</form>
+
+{% if not specialties %}
+<div style="text-align: center; padding: 60px 20px; color: #7f8c8d; background: #2c3e50; border-radius: 12px; border: 1px solid #34495e;">
+    <i class="fas fa-inbox" style="font-size: 3em; margin-bottom: 20px; display: block;"></i>
+    <h3 style="color: #ecf0f1;">Ei aihealueita</h3>
+    <p>Kysymyksia ei ole viela luotu. Ota yhteyttä yllapitajaan.</p>
+</div>
+{% endif %}
+
+<script>
+(function() {
+    const questionCounts = {{ epa_question_counts|safe }};
+    const epaCheckboxes = document.querySelectorAll('.epa-checkbox');
+    const specialtyCheckboxes = document.querySelectorAll('.specialty-checkbox');
+    const difficultyRadios = document.querySelectorAll('input[name="difficulty"]');
+    const startBar = document.getElementById('startBar');
+
+    function getSelectedDifficulty() {
+        const checked = document.querySelector('input[name="difficulty"]:checked');
+        return checked ? checked.value : 'all';
+    }
+
+    function getCountForDifficulty(epaId) {
+        const counts = questionCounts[epaId];
+        if (!counts) return 0;
+        const diff = getSelectedDifficulty();
+        return counts[diff] || 0;
+    }
+
+    function updateEpaCountBadges() {
+        document.querySelectorAll('.epa-count').forEach(el => {
+            const epaId = el.dataset.epaId;
+            const count = getCountForDifficulty(epaId);
+            el.textContent = count + ' kys.';
+            if (count > 0) {
+                el.style.color = '#3498db';
+                el.style.background = 'rgba(52,152,219,0.15)';
+            } else {
+                el.style.color = '#7f8c8d';
+                el.style.background = '#34495e';
+            }
+        });
+    }
+
+    function updateCounts() {
+        let selectedEpas = 0;
+        let totalQuestions = 0;
+
+        epaCheckboxes.forEach(cb => {
+            if (cb.checked) {
+                selectedEpas++;
+                totalQuestions += getCountForDifficulty(cb.dataset.epaId);
+            }
+        });
+
+        document.getElementById('selectedEpaCount').textContent = selectedEpas;
+        document.getElementById('selectedQuestionCount').textContent = totalQuestions;
+        document.getElementById('barSelectedCount').textContent = selectedEpas;
+        document.getElementById('barQuestionCount').textContent = totalQuestions;
+
+        startBar.style.display = selectedEpas > 0 ? 'block' : 'none';
+
+        // Update specialty checkbox states
+        specialtyCheckboxes.forEach(scb => {
+            const sid = scb.dataset.specialtyId;
+            const epas = document.querySelectorAll(`.epa-checkbox[data-specialty-id="${sid}"]`);
+            const checked = document.querySelectorAll(`.epa-checkbox[data-specialty-id="${sid}"]:checked`);
+            scb.checked = epas.length > 0 && checked.length === epas.length;
+            scb.indeterminate = checked.length > 0 && checked.length < epas.length;
+        });
+    }
+
+    // Difficulty radio change - update badges and counts
+    difficultyRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            // Update difficulty option border highlight
+            document.querySelectorAll('.difficulty-option').forEach(opt => {
+                opt.style.borderColor = '#34495e';
+            });
+            this.closest('.difficulty-option').style.borderColor = '#3498db';
+
+            updateEpaCountBadges();
+            updateCounts();
+        });
+    });
+
+    // EPA checkbox change
+    epaCheckboxes.forEach(cb => {
+        cb.addEventListener('change', updateCounts);
+    });
+
+    // Specialty checkbox toggles all its EPAs
+    specialtyCheckboxes.forEach(scb => {
+        scb.addEventListener('change', function() {
+            const sid = this.dataset.specialtyId;
+            document.querySelectorAll(`.epa-checkbox[data-specialty-id="${sid}"]`).forEach(cb => {
+                cb.checked = scb.checked;
+            });
+            updateCounts();
+        });
+    });
+
+    // Select all / Clear all
+    document.getElementById('selectAll').addEventListener('click', function() {
+        epaCheckboxes.forEach(cb => cb.checked = true);
+        updateCounts();
+    });
+
+    document.getElementById('clearAll').addEventListener('click', function() {
+        epaCheckboxes.forEach(cb => cb.checked = false);
+        updateCounts();
+    });
+
+    updateEpaCountBadges();
+    updateCounts();
+})();
+</script>
+{% endblock %}

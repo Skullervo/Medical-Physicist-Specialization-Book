@@ -1,0 +1,88 @@
+{% extends "sisalto/base_summereditor.html" %}
+
+{% block title %}Saavutukset - Sairaalafyysikon erikoistumiskirja{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 30px;">
+    <h1 style="font-family: var(--font-display); font-size: 1.8em; color: var(--text-primary); margin-bottom: 8px;">
+        <i class="fas fa-trophy" style="color: var(--color-warning); margin-right: 10px;"></i>
+        Saavutukset
+    </h1>
+    <p style="color: var(--text-secondary); font-size: 1.05em;">
+        Ansaitse saavutuksia harjoittelemalla ja etenemalla EPA-korteissa.
+        <span style="color: var(--color-success); font-weight: 600;">{{ earned|length }}</span> / {{ all_achievements|length }} ansaittu.
+    </p>
+</div>
+
+<!-- Earned achievements -->
+{% if earned %}
+<div style="margin-bottom: 32px;">
+    <h2 style="color: var(--text-primary); font-size: 1.1em; font-weight: 600; margin-bottom: 16px; font-family: var(--font-display);">
+        <i class="fas fa-medal" style="color: var(--color-warning); margin-right: 8px;"></i>
+        Ansaitut
+    </h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px;">
+        {% for ua in earned %}
+        <div style="background: var(--bg-surface); border-radius: 12px; padding: 20px; border: 1px solid var(--color-success); position: relative; overflow: hidden;">
+            <div style="position: absolute; top: 0; right: 0; background: var(--color-success); color: var(--text-inverse); font-size: 0.7em; padding: 3px 10px; border-radius: 0 0 0 8px; font-weight: 600;">
+                +{{ ua.achievement.xp_reward }} XP
+            </div>
+            <div style="display: flex; align-items: center; gap: 14px;">
+                <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(52, 211, 153, 0.15); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i class="fas {{ ua.achievement.icon }}" style="font-size: 1.3em; color: var(--color-success);"></i>
+                </div>
+                <div>
+                    <div style="color: var(--text-primary); font-weight: 600; font-size: 0.95em;">{{ ua.achievement.name }}</div>
+                    <div style="color: var(--text-secondary); font-size: 0.85em; margin-top: 2px;">{{ ua.achievement.description }}</div>
+                    <div style="color: var(--text-tertiary); font-size: 0.75em; margin-top: 4px;">
+                        <i class="fas fa-check-circle" style="margin-right: 4px;"></i>
+                        {{ ua.earned_at|date:"j.n.Y H:i" }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<!-- Locked achievements -->
+{% if all_achievements %}
+<div>
+    <h2 style="color: var(--text-primary); font-size: 1.1em; font-weight: 600; margin-bottom: 16px; font-family: var(--font-display);">
+        <i class="fas fa-lock" style="color: var(--text-tertiary); margin-right: 8px;"></i>
+        Lukitsemattomat
+    </h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px;">
+        {% for a in all_achievements %}
+        {% if a.id not in earned_ids %}
+        <div style="background: var(--bg-surface); border-radius: 12px; padding: 20px; border: 1px solid var(--border-default); opacity: 0.7;">
+            <div style="display: flex; align-items: center; gap: 14px;">
+                <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--bg-raised); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i class="fas {{ a.icon }}" style="font-size: 1.3em; color: var(--text-tertiary);"></i>
+                </div>
+                <div>
+                    <div style="color: var(--text-secondary); font-weight: 600; font-size: 0.95em;">{{ a.name }}</div>
+                    <div style="color: var(--text-tertiary); font-size: 0.85em; margin-top: 2px;">{{ a.description }}</div>
+                    <div style="color: var(--text-disabled); font-size: 0.75em; margin-top: 4px;">
+                        <i class="fas fa-lock" style="margin-right: 4px;"></i>
+                        +{{ a.xp_reward }} XP
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<!-- Empty state when no achievements exist yet -->
+{% if not all_achievements %}
+<div style="text-align: center; padding: 60px 20px; color: var(--text-tertiary); background: var(--bg-surface); border-radius: 12px; border: 1px solid var(--border-default);">
+    <i class="fas fa-medal" style="font-size: 3em; margin-bottom: 20px; display: block; color: var(--color-warning);"></i>
+    <h3 style="color: var(--text-primary);">Saavutuksia ei ole viela lisatty</h3>
+    <p>Saavutukset ilmestyvat pian. Aloita harjoittelu <a href="/quiz/" style="color: var(--color-primary);">kysymyspankissa</a>!</p>
+</div>
+{% endif %}
+{% endblock %}

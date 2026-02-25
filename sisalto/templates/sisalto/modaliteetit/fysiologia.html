@@ -1,0 +1,426 @@
+{% extends "sisalto/base_summereditor.html" %}
+{% load static %}
+
+{% block title %}Kliinisen fysiologian teoria - Fyysikkoportti{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'sisalto/css/theory.css' %}?v=1">
+{% endblock %}
+
+{% block content %}
+
+<div class="theory-container">
+    <div class="theory-header">
+        <h1><i class="fas fa-heartbeat" style="color: #f87171; margin-right: 8px;"></i> Kliinisen fysiologian teoria</h1>
+        <p>Kattava teoriamateriaali kliinisen fysiologian mittausmenetelmistä, laitteista ja signaalinkäsittelystä. Valitse aihealue alla olevista välilehdistä.</p>
+    </div>
+
+    <!-- Tab navigation -->
+    <div class="theory-tabs" role="tablist">
+        <button class="theory-tab active" role="tab" data-tab="ekg" aria-selected="true">
+            <i class="fas fa-heartbeat"></i> EKG
+        </button>
+        <button class="theory-tab" role="tab" data-tab="verenkierto">
+            <i class="fas fa-tint"></i> Verenkierto
+        </button>
+        <button class="theory-tab" role="tab" data-tab="keuhkofunktio">
+            <i class="fas fa-lungs"></i> Keuhkofunktio
+        </button>
+        <button class="theory-tab" role="tab" data-tab="gi">
+            <i class="fas fa-stomach"></i> GI-kanava
+        </button>
+        <button class="theory-tab" role="tab" data-tab="dxa">
+            <i class="fas fa-bone"></i> DXA
+        </button>
+    </div>
+
+    <!-- ================================================================
+         VÄLILEHTI 1: EKG-TUTKIMUKSET
+         ================================================================ -->
+    <div class="theory-panel active" id="panel-ekg" role="tabpanel">
+        <div class="theory-content">
+
+            <!-- EKG_CONTENT_PLACEHOLDER -->
+
+            <div class="theory-quiz-section" data-tab="ekg">
+                <div class="theory-quiz-start">
+                    <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
+                    <p>Harjoittele EKG-tutkimusten teoriaa monivalintakysymyksillä.</p>
+                    <button class="theory-quiz-btn" onclick="startTheoryQuiz('ekg')">
+                        <i class="fas fa-play"></i> Aloita harjoittelu
+                    </button>
+                </div>
+                <div class="theory-quiz-active" style="display: none;"></div>
+            </div>
+
+            <div class="theory-references">
+                <h3>Viitekirjallisuus</h3>
+                <ol>
+                    <li>Malmivuo J, Plonsey R. <em>Bioelectromagnetism &ndash; Principles and Applications of Bioelectric and Biomagnetic Fields</em>, Oxford University Press, 1995.</li>
+                    <li>Kligfield P et al. <em>Recommendations for the Standardization and Interpretation of the Electrocardiogram</em>, Circulation, 2007.</li>
+                    <li>Mason RE, Likar I. <em>A New System of Multiple-Lead Exercise Electrocardiography</em>, Am Heart J, 1966.</li>
+                    <li>Postema PG, Wilde AAM. <em>The Measurement of the QT Interval</em>, Curr Cardiol Rev, 2014.</li>
+                    <li>IEC 60601-2-25: <em>Medical Electrical Equipment &ndash; Particular Requirements for the Basic Safety and Essential Performance of Electrocardiographs</em>.</li>
+                    <li>AHA/ACC/HRS. <em>Recommendations for the Standardization and Interpretation of the Electrocardiogram</em>, 2009.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+         VÄLILEHTI 2: VERENKIERTOTUTKIMUKSET
+         ================================================================ -->
+    <div class="theory-panel" id="panel-verenkierto" role="tabpanel">
+        <div class="theory-content">
+
+            <!-- VERENKIERTO_CONTENT_PLACEHOLDER -->
+
+            <div class="theory-quiz-section" data-tab="verenkierto">
+                <div class="theory-quiz-start">
+                    <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
+                    <p>Harjoittele verenkiertotutkimusten teoriaa monivalintakysymyksillä.</p>
+                    <button class="theory-quiz-btn" onclick="startTheoryQuiz('verenkierto')">
+                        <i class="fas fa-play"></i> Aloita harjoittelu
+                    </button>
+                </div>
+                <div class="theory-quiz-active" style="display: none;"></div>
+            </div>
+
+            <div class="theory-references">
+                <h3>Viitekirjallisuus</h3>
+                <ol>
+                    <li>O'Brien E et al. <em>European Society of Hypertension Practice Guidelines for Ambulatory Blood Pressure Monitoring</em>, J Hypertens, 2014.</li>
+                    <li>ISO 81060-2: <em>Non-invasive sphygmomanometers &ndash; Part 2: Clinical investigation of intermittent automated measurement type</em>.</li>
+                    <li>Pickering TG et al. <em>Recommendations for Blood Pressure Measurement in Humans: AHA Scientific Statement</em>, Hypertension, 2005.</li>
+                    <li>Stergiou GS et al. <em>2021 European Society of Hypertension Practice Guidelines for Office and Out-of-office Blood Pressure Measurement</em>, J Hypertens, 2021.</li>
+                    <li>Aboyans V et al. <em>Measurement and Interpretation of the Ankle-Brachial Index: AHA Scientific Statement</em>, Circulation, 2012.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+         VÄLILEHTI 3: KEUHKOFUNKTIOTUTKIMUKSET
+         ================================================================ -->
+    <div class="theory-panel" id="panel-keuhkofunktio" role="tabpanel">
+        <div class="theory-content">
+
+            <!-- KEUHKOFUNKTIO_CONTENT_PLACEHOLDER -->
+
+            <div class="theory-quiz-section" data-tab="keuhkofunktio">
+                <div class="theory-quiz-start">
+                    <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
+                    <p>Harjoittele keuhkofunktiotutkimusten teoriaa monivalintakysymyksillä.</p>
+                    <button class="theory-quiz-btn" onclick="startTheoryQuiz('keuhkofunktio')">
+                        <i class="fas fa-play"></i> Aloita harjoittelu
+                    </button>
+                </div>
+                <div class="theory-quiz-active" style="display: none;"></div>
+            </div>
+
+            <div class="theory-references">
+                <h3>Viitekirjallisuus</h3>
+                <ol>
+                    <li>Graham BL et al. <em>Standardization of Spirometry 2019 Update: ATS/ERS Technical Statement</em>, Am J Respir Crit Care Med, 2019.</li>
+                    <li>Quanjer PH et al. <em>Multi-ethnic Reference Values for Spirometry (GLI-2012)</em>, Eur Respir J, 2012.</li>
+                    <li>Graham BL et al. <em>ERS/ATS Standards for Single-breath Carbon Monoxide Uptake in the Lung</em>, Eur Respir J, 2017.</li>
+                    <li>Wanger J et al. <em>Standardisation of Body Plethysmography</em>, Eur Respir J, 2005.</li>
+                    <li>Coates AL et al. <em>ERS Technical Standard on Bronchial Challenge Testing</em>, Eur Respir J, 2017.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+         VÄLILEHTI 4: GI-KANAVAN TUTKIMUKSET
+         ================================================================ -->
+    <div class="theory-panel" id="panel-gi" role="tabpanel">
+        <div class="theory-content">
+
+            <!-- GI_CONTENT_PLACEHOLDER -->
+
+            <div class="theory-quiz-section" data-tab="gi">
+                <div class="theory-quiz-start">
+                    <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
+                    <p>Harjoittele GI-kanavan tutkimusten teoriaa monivalintakysymyksillä.</p>
+                    <button class="theory-quiz-btn" onclick="startTheoryQuiz('gi')">
+                        <i class="fas fa-play"></i> Aloita harjoittelu
+                    </button>
+                </div>
+                <div class="theory-quiz-active" style="display: none;"></div>
+            </div>
+
+            <div class="theory-references">
+                <h3>Viitekirjallisuus</h3>
+                <ol>
+                    <li>Kahrilas PJ et al. <em>The Chicago Classification of Esophageal Motility Disorders, v4.0</em>, Neurogastroenterol Motil, 2021.</li>
+                    <li>Gyawali CP et al. <em>Modern Diagnosis of GERD: The Lyon Consensus</em>, Gut, 2018.</li>
+                    <li>Rao SSC et al. <em>Anorectal Disorders: London Classification</em>, Gastroenterology, 2017.</li>
+                    <li>Roman S, Bhatt DL. <em>High-Resolution Manometry</em>, Gastroenterol Clin North Am, 2013.</li>
+                    <li>Webster JG (toim.). <em>Medical Instrumentation: Application and Design</em>, 4th ed., Wiley, 2010.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+         VÄLILEHTI 5: LUUSTON MINERAALITIHEYDEN MITTAUS (DXA)
+         ================================================================ -->
+    <div class="theory-panel" id="panel-dxa" role="tabpanel">
+        <div class="theory-content">
+
+            <!-- DXA_CONTENT_PLACEHOLDER -->
+
+            <div class="theory-quiz-section" data-tab="dxa">
+                <div class="theory-quiz-start">
+                    <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
+                    <p>Harjoittele luuston mineraalitiheyden mittauksen teoriaa monivalintakysymyksillä.</p>
+                    <button class="theory-quiz-btn" onclick="startTheoryQuiz('dxa')">
+                        <i class="fas fa-play"></i> Aloita harjoittelu
+                    </button>
+                </div>
+                <div class="theory-quiz-active" style="display: none;"></div>
+            </div>
+
+            <div class="theory-references">
+                <h3>Viitekirjallisuus</h3>
+                <ol>
+                    <li>ISCD. <em>Official Positions 2023</em>, International Society for Clinical Densitometry.</li>
+                    <li>WHO. <em>Assessment of Fracture Risk and its Application to Screening for Postmenopausal Osteoporosis</em>, WHO Technical Report Series 843, 1994.</li>
+                    <li>Kanis JA et al. <em>FRAX and the Assessment of Fracture Probability in Men and Women from the UK</em>, Osteoporos Int, 2008.</li>
+                    <li>Shepherd JA et al. <em>Cross-Calibration and Minimum Precision Standards for Dual-Energy X-ray Absorptiometry</em>, J Bone Miner Res, 2006.</li>
+                    <li>Blake GM, Fogelman I. <em>The Role of DXA Bone Density Scans in the Diagnosis and Treatment of Osteoporosis</em>, Postgrad Med J, 2007.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+</div> <!-- closes .theory-container -->
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function() {
+    // ========== TAB NAVIGATION ==========
+    const tabs = document.querySelectorAll('.theory-tab');
+    const panels = document.querySelectorAll('.theory-panel');
+
+    function activateTab(tabId) {
+        tabs.forEach(t => {
+            t.classList.toggle('active', t.dataset.tab === tabId);
+            t.setAttribute('aria-selected', t.dataset.tab === tabId);
+        });
+        panels.forEach(p => {
+            p.classList.toggle('active', p.id === 'panel-' + tabId);
+        });
+        history.replaceState(null, '', '#' + tabId);
+        document.querySelector('.theory-tabs').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (window.MathJax && MathJax.typesetPromise) {
+            var activePanel = document.getElementById('panel-' + tabId);
+            if (activePanel) {
+                MathJax.typesetPromise([activePanel]);
+            }
+        }
+    }
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            activateTab(this.dataset.tab);
+        });
+    });
+
+    var hash = window.location.hash.replace('#', '');
+    if (hash) {
+        var matchingTab = document.querySelector('.theory-tab[data-tab="' + hash + '"]');
+        if (matchingTab) {
+            activateTab(hash);
+        }
+    }
+
+    // ========== INLINE QUIZ ==========
+    var TAB_EPA_MAP = {{ tab_epa_map|safe }};
+    var quizState = {};
+
+    function getCSRF() {
+        var c = document.cookie.match(/csrftoken=([^;]+)/);
+        return c ? c[1] : '';
+    }
+
+    window.startTheoryQuiz = function(tabId) {
+        var section = document.querySelector('.theory-quiz-section[data-tab="' + tabId + '"]');
+        if (!section) return;
+        section.querySelector('.theory-quiz-start').style.display = 'none';
+        var active = section.querySelector('.theory-quiz-active');
+        active.style.display = 'block';
+        quizState[tabId] = { score: 0, total: 0 };
+        loadQuestion(tabId);
+    };
+
+    window.stopTheoryQuiz = function(tabId) {
+        var section = document.querySelector('.theory-quiz-section[data-tab="' + tabId + '"]');
+        if (!section) return;
+        section.querySelector('.theory-quiz-start').style.display = '';
+        section.querySelector('.theory-quiz-active').style.display = 'none';
+        section.querySelector('.theory-quiz-active').innerHTML = '';
+        delete quizState[tabId];
+    };
+
+    function loadQuestion(tabId) {
+        var epaId = TAB_EPA_MAP[tabId];
+        if (!epaId) return;
+        var active = document.querySelector('.theory-quiz-section[data-tab="' + tabId + '"] .theory-quiz-active');
+        var st = quizState[tabId];
+
+        active.innerHTML = '<div class="theory-quiz-loading"><i class="fas fa-spinner fa-spin"></i><p>Ladataan kysymystä...</p></div>';
+
+        fetch('/modaliteetit/api/question/' + epaId + '/')
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (data.error) {
+                    active.innerHTML = '<div class="theory-quiz-loading"><i class="fas fa-inbox"></i><p>' + data.error + '</p></div>';
+                    return;
+                }
+                st.currentQuestionId = data.question_id;
+                st.currentQuestionType = data.question_type;
+                var isMulti = data.question_type === 'multi_select';
+
+                var html = '';
+                html += '<div class="theory-quiz-scorebar">';
+                html += '<div class="theory-quiz-scorebar-left">Kysymys ' + (st.total + 1) + ' / ' + data.total_available + '</div>';
+                html += '<div class="theory-quiz-scorebar-right">';
+                html += '<div class="theory-quiz-score-item"><div class="theory-quiz-score-value" id="tq-score-' + tabId + '">' + st.score + '/' + st.total + '</div><div class="theory-quiz-score-label">Oikein</div></div>';
+                html += '<button class="theory-quiz-stop" onclick="stopTheoryQuiz(\'' + tabId + '\')"><i class="fas fa-stop"></i> Lopeta</button>';
+                html += '</div></div>';
+
+                if (isMulti) {
+                    html += '<div class="theory-quiz-type-hint"><i class="fas fa-check-double"></i> Valitse kaikki oikeat vastaukset</div>';
+                }
+
+                html += '<div class="theory-quiz-question">' + data.text + '</div>';
+
+                html += '<div class="theory-quiz-choices" id="tq-choices-' + tabId + '">';
+                data.choices.forEach(function(c) {
+                    var indicatorClass = isMulti ? 'checkbox' : '';
+                    var icon = isMulti ? 'fa-check' : 'fa-circle';
+                    html += '<div class="theory-quiz-choice" data-id="' + c.id + '" onclick="toggleChoice(\'' + tabId + '\', this, ' + isMulti + ')">';
+                    html += '<div class="theory-quiz-choice-indicator ' + indicatorClass + '"><i class="fas ' + icon + '"></i></div>';
+                    html += '<div>' + c.text + '</div>';
+                    html += '</div>';
+                });
+                html += '</div>';
+
+                html += '<button class="theory-quiz-submit" id="tq-submit-' + tabId + '" onclick="submitAnswer(\'' + tabId + '\')"><i class="fas fa-check"></i> Vastaa</button>';
+
+                html += '<div id="tq-result-' + tabId + '" style="display: none;"></div>';
+
+                active.innerHTML = html;
+
+                if (window.MathJax && MathJax.typesetPromise) {
+                    MathJax.typesetPromise([active]);
+                }
+            })
+            .catch(function() {
+                active.innerHTML = '<div class="theory-quiz-loading"><i class="fas fa-exclamation-triangle"></i><p>Virhe ladattaessa kysymystä.</p></div>';
+            });
+    }
+
+    window.toggleChoice = function(tabId, el, isMulti) {
+        if (el.classList.contains('disabled')) return;
+        if (!isMulti) {
+            el.parentElement.querySelectorAll('.theory-quiz-choice').forEach(function(c) { c.classList.remove('selected'); });
+        }
+        el.classList.toggle('selected');
+
+        var hasSelection = el.parentElement.querySelector('.theory-quiz-choice.selected');
+        var btn = document.getElementById('tq-submit-' + tabId);
+        if (hasSelection) {
+            btn.classList.add('enabled');
+        } else {
+            btn.classList.remove('enabled');
+        }
+    };
+
+    window.submitAnswer = function(tabId) {
+        var btn = document.getElementById('tq-submit-' + tabId);
+        if (!btn.classList.contains('enabled')) return;
+        btn.classList.remove('enabled');
+        btn.style.display = 'none';
+
+        var st = quizState[tabId];
+        var selected = [];
+        document.querySelectorAll('#tq-choices-' + tabId + ' .theory-quiz-choice.selected').forEach(function(c) {
+            selected.push(parseInt(c.dataset.id));
+        });
+
+        document.querySelectorAll('#tq-choices-' + tabId + ' .theory-quiz-choice').forEach(function(c) {
+            c.classList.add('disabled');
+        });
+
+        fetch('/modaliteetit/api/answer/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCSRF() },
+            body: JSON.stringify({ question_id: st.currentQuestionId, selected_ids: selected })
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            st.total++;
+            if (data.is_correct) st.score++;
+
+            var scoreEl = document.getElementById('tq-score-' + tabId);
+            if (scoreEl) scoreEl.textContent = st.score + '/' + st.total;
+
+            data.choices.forEach(function(c) {
+                var el = document.querySelector('#tq-choices-' + tabId + ' .theory-quiz-choice[data-id="' + c.id + '"]');
+                if (!el) return;
+                if (c.is_correct) {
+                    el.classList.add('correct');
+                    el.querySelector('.theory-quiz-choice-indicator i').className = 'fas fa-check';
+                } else if (c.was_selected) {
+                    el.classList.add('incorrect');
+                    el.querySelector('.theory-quiz-choice-indicator i').className = 'fas fa-times';
+                }
+                if (c.explanation) {
+                    var expDiv = document.createElement('div');
+                    expDiv.className = 'theory-quiz-choice-explanation';
+                    expDiv.textContent = c.explanation;
+                    el.querySelector('div:last-child').appendChild(expDiv);
+                }
+            });
+
+            var resultHtml = '';
+            if (data.is_correct) {
+                resultHtml += '<div class="theory-quiz-result-banner correct"><i class="fas fa-check-circle"></i> Oikein!</div>';
+            } else {
+                resultHtml += '<div class="theory-quiz-result-banner incorrect"><i class="fas fa-times-circle"></i> Väärin</div>';
+            }
+
+            if (data.explanation) {
+                resultHtml += '<div class="theory-quiz-explanation">';
+                resultHtml += '<div class="theory-quiz-explanation-label"><i class="fas fa-lightbulb"></i> Selitys</div>';
+                resultHtml += '<p>' + data.explanation + '</p>';
+                resultHtml += '</div>';
+            }
+
+            resultHtml += '<button class="theory-quiz-next" onclick="nextQuestion(\'' + tabId + '\')">Seuraava kysymys <i class="fas fa-arrow-right"></i></button>';
+
+            var resultEl = document.getElementById('tq-result-' + tabId);
+            resultEl.innerHTML = resultHtml;
+            resultEl.style.display = 'block';
+
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise([resultEl]);
+            }
+        })
+        .catch(function() {
+            btn.style.display = '';
+            btn.classList.add('enabled');
+            alert('Virhe tarkistettaessa vastausta.');
+        });
+    };
+
+    window.nextQuestion = function(tabId) {
+        loadQuestion(tabId);
+    };
+})();
+</script>
+{% endblock %}

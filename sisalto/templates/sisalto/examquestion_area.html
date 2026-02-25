@@ -1,0 +1,127 @@
+{% extends "sisalto/base_summereditor.html" %}
+
+{% block title %}{{ area_name }} - Tenttikysymykset{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div style="margin-bottom: 30px;">
+    <div style="margin-bottom: 16px;">
+        <a href="/examquestions/" style="color: #3498db; text-decoration: none; font-size: 0.95em;">
+            <i class="fas fa-arrow-left" style="margin-right: 6px;"></i>Takaisin kaikkiin aihealueisiin
+        </a>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 10px;">
+        <i class="fas {{ icon }}" style="font-size: 1.8em; color: {{ color }};"></i>
+        <h1 style="font-size: 1.8em; margin: 0; color: #ecf0f1;">{{ area_name }}</h1>
+    </div>
+    <p style="color: #95a5a6; font-size: 1.1em; margin: 0;">
+        {{ total_count }} tenttikysymysta ({{ years_range }})
+    </p>
+</div>
+
+<!-- Search -->
+<div style="margin-bottom: 24px;">
+    <div style="position: relative;">
+        <i class="fas fa-search" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #7f8c8d;"></i>
+        <input type="text" id="searchInput" placeholder="Hae kysymyksia..."
+               style="width: 100%; padding: 12px 14px 12px 40px; background: #2c3e50; border: 1px solid #34495e; border-radius: 8px; color: #ecf0f1; font-size: 0.95em; outline: none; box-sizing: border-box;"
+               onfocus="this.style.borderColor='#3498db'" onblur="this.style.borderColor='#34495e'">
+    </div>
+</div>
+
+<!-- Questions list -->
+{% if questions %}
+<div style="background: #2c3e50; border-radius: 12px; border: 1px solid #34495e; overflow: hidden;">
+    {% for q in questions %}
+    <div class="question-row" data-text="{{ q.question_text|lower }}"
+         style="padding: 16px 20px; border-bottom: 1px solid rgba(52,73,94,0.5); transition: background 0.15s; {% if forloop.last %}border-bottom: none;{% endif %}"
+         onmouseover="this.style.background='rgba(52,152,219,0.06)'"
+         onmouseout="this.style.background='transparent'">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;">
+            <div style="flex: 1;">
+                <div style="color: #ecf0f1; font-size: 1em; line-height: 1.6; margin-bottom: 8px;">{{ q.question_text }}</div>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    {% if q.year %}
+                    <span style="background: #34495e; color: #95a5a6; padding: 3px 10px; border-radius: 10px; font-size: 0.8em;">
+                        <i class="fas fa-calendar" style="margin-right: 4px;"></i>{{ q.year }}
+                    </span>
+                    {% endif %}
+                    {% if q.exam_date %}
+                    <span style="background: #34495e; color: #95a5a6; padding: 3px 10px; border-radius: 10px; font-size: 0.8em;">
+                        {{ q.exam_date }}
+                    </span>
+                    {% endif %}
+                    {% if q.semester %}
+                    <span style="background: #34495e; color: #95a5a6; padding: 3px 10px; border-radius: 10px; font-size: 0.8em;">
+                        {{ q.semester }}
+                    </span>
+                    {% endif %}
+                    <span style="background: rgba(52,152,219,0.15); color: #3498db; padding: 3px 10px; border-radius: 10px; font-size: 0.8em; font-weight: 600;">
+                        Q{{ q.question_number }}
+                    </span>
+                    {% if q.model_answer %}
+                    <span style="background: rgba(155,89,182,0.15); color: #9b59b6; padding: 3px 10px; border-radius: 10px; font-size: 0.8em; font-weight: 600;">
+                        <i class="fas fa-graduation-cap" style="margin-right: 4px;"></i>Mallivastaus
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+            <a href="/exam/practice/?question={{ q.id }}"
+               style="background: rgba(52,152,219,0.15); color: #3498db; padding: 8px 16px; border-radius: 6px; font-size: 0.85em; text-decoration: none; white-space: nowrap; flex-shrink: 0; transition: all 0.2s; font-weight: 600;"
+               onmouseover="this.style.background='rgba(52,152,219,0.3)'; this.style.color='#5dade2'"
+               onmouseout="this.style.background='rgba(52,152,219,0.15)'; this.style.color='#3498db'">
+                <i class="fas fa-pen" style="margin-right: 6px;"></i>Harjoittele
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- No results message (hidden by default, shown by search) -->
+<div id="noResults" style="display: none; text-align: center; padding: 60px 20px; color: #7f8c8d; background: #2c3e50; border-radius: 12px; border: 1px solid #34495e;">
+    <i class="fas fa-search" style="font-size: 2.5em; margin-bottom: 16px; display: block;"></i>
+    <h3 style="color: #ecf0f1;">Ei tuloksia</h3>
+    <p>Yrita eri hakusanaa</p>
+</div>
+{% else %}
+<div style="text-align: center; padding: 60px 20px; color: #7f8c8d; background: #2c3e50; border-radius: 12px; border: 1px solid #34495e;">
+    <i class="fas fa-inbox" style="font-size: 3em; margin-bottom: 20px; display: block;"></i>
+    <h3 style="color: #ecf0f1;">Ei kysymyksia</h3>
+    <p>Talle aihealueelle ei ole viela lisatty kysymyksia.</p>
+    <a href="/examquestions/" style="display: inline-block; margin-top: 16px; background: #3498db; color: white; padding: 10px 24px; border-radius: 8px; text-decoration: none;">
+        <i class="fas fa-arrow-left" style="margin-right: 8px;"></i>Takaisin
+    </a>
+</div>
+{% endif %}
+
+<script>
+// Search functionality
+document.getElementById('searchInput').addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const rows = document.querySelectorAll('.question-row');
+    const noResults = document.getElementById('noResults');
+    let visibleCount = 0;
+
+    if (!query) {
+        // Show all
+        rows.forEach(row => row.style.display = '');
+        noResults.style.display = 'none';
+        return;
+    }
+
+    rows.forEach(row => {
+        const text = row.dataset.text || '';
+        if (text.includes(query)) {
+            row.style.display = '';
+            visibleCount++;
+        } else {
+            row.style.display = 'none';
+        }
+    });
+
+    // Show no results message if nothing matches
+    noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+});
+</script>
+{% endblock %}

@@ -1,0 +1,166 @@
+{% extends "sisalto/base_summereditor.html" %}
+{% load static %}
+
+{% block title %}Radiologia: Säteilybiologia ja suojaus - Sairaalafyysikon erikoistumiskirja{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'sisalto/css/modality.css' %}?v=1">
+{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+
+<div class="report-container"
+     data-epa-id="{{ epa.id }}"
+     data-api-base="/radiologia/sateilybiologia_suojelu/">
+    {% for section in sections %}
+    <!-- {{ section.title }} osio -->
+    <div class="report-section" data-section-id="{{ section.id }}">
+        <div class="section-header">
+            <h2 class="section-title proficiency-{{ section.proficiency_level }}" id="section-title-{{ section.id }}">
+                <div class="section-icon proficiency-{{ section.proficiency_level }}" id="section-icon-{{ section.id }}">
+                    {% if forloop.first %}
+                        <i class="fas fa-info-circle"></i>
+                    {% elif forloop.counter == 2 %}
+                        <i class="fas fa-cogs"></i>
+                    {% elif forloop.counter == 3 %}
+                        <i class="fas fa-file-text"></i>
+                    {% elif forloop.counter == 4 %}
+                        <i class="fas fa-envelope"></i>
+                    {% else %}
+                        <i class="fas fa-file-text"></i>
+                    {% endif %}
+                </div>
+                {{ section.title }}
+            </h2>
+            <div class="section-actions">
+                <button type="button"
+                        class="editor-save-btn"
+                        onclick="editSection({{ section.id }})"
+                        title="Muokkaa osiota">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button type="button"
+                        class="editor-save-btn"
+                        onclick="deleteSection({{ section.id }})"
+                        title="Poista osio"
+                        style="background: rgba(244, 67, 54, 0.7);">
+                    <i class="fas fa-trash"></i>
+                </button>
+                <button type="button"
+                        class="editor-save-btn"
+                        onclick="showAddSectionModal({{ section.id }})"
+                        title="Lisää osio tämän jälkeen"
+                        style="background: rgba(76, 175, 80, 0.7);">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="proficiency-dropdown">
+            <label class="proficiency-label" for="proficiency-{{ section.id }}">
+                Osaamistaso:
+            </label>
+            <select class="proficiency-select proficiency-level-{{ section.proficiency_level }}"
+                    id="proficiency-{{ section.id }}"
+                    onchange="updateProficiencyLevel({{ section.id }}, this.value)">
+                <option value="1" {% if section.proficiency_level == 1 %}selected{% endif %}>
+                    Aihe on uusi erikoistuvalle
+                </option>
+                <option value="2" {% if section.proficiency_level == 2 %}selected{% endif %}>
+                    Erikoistuvalla on yleistason teoreettinen ymmärrys aiheesta
+                </option>
+                <option value="3" {% if section.proficiency_level == 3 %}selected{% endif %}>
+                    Erikoistuva ymmärtää aiheen ja osaa soveltaa sitä käytännössä
+                </option>
+            </select>
+        </div>
+
+        <div class="section-content" id="section-content-{{ section.id }}">
+            {{ section.content|safe }}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Modal for editing sections -->
+<div id="edit-section-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2><i class="fas fa-edit"></i> Muokkaa osiota</h2>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="edit-section-title" class="form-label">Osion otsikko:</label>
+                <input type="text"
+                       id="edit-section-title"
+                       class="form-input"
+                       placeholder="Kirjoita osion otsikko...">
+            </div>
+
+            <div class="form-group">
+                <label for="edit-section-editor" class="form-label">Osion sisältö:</label>
+                <div id="edit-section-editor"></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button"
+                    class="btn btn-secondary"
+                    onclick="closeEditSectionModal()">
+                <i class="fas fa-times"></i>
+                Peruuta
+            </button>
+            <button type="button"
+                    class="btn btn-primary"
+                    onclick="saveEditSection()">
+                <i class="fas fa-save"></i>
+                Tallenna muutokset
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for adding new sections -->
+<div id="add-section-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2><i class="fas fa-plus"></i> Lisää uusi osio</h2>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="add-section-title" class="form-label">Osion otsikko:</label>
+                <input type="text"
+                       id="add-section-title"
+                       class="form-input"
+                       placeholder="Kirjoita osion otsikko...">
+            </div>
+
+            <div class="form-group">
+                <label for="add-section-editor" class="form-label">Osion sisältö:</label>
+                <div id="add-section-editor"></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button"
+                    class="btn btn-secondary"
+                    onclick="closeAddSectionModal()">
+                <i class="fas fa-times"></i>
+                Peruuta
+            </button>
+            <button type="button"
+                    class="btn btn-primary"
+                    onclick="saveAddSection()">
+                <i class="fas fa-save"></i>
+                Lisää osio
+            </button>
+        </div>
+    </div>
+</div>
+
+{# HUOM: ei omaa <div id="save-status"> tässä, koska sellainen on jo base_summereditor.html:ssä #}
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'sisalto/js/modality.js' %}?v=1"></script>
+{% endblock %}

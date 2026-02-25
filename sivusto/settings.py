@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "sisalto",
+    "quiz",
+    "exams",
+    "progress",
 ]
 
 MIDDLEWARE = [
@@ -130,3 +133,17 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Authentication
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+# File upload settings for large content (Summernote editor)
+# Increase limits to handle large HTML content with images
+DATA_UPLOAD_MAX_MEMORY_SIZE = 50 * 1024 * 1024  # 50 MB (default is 2.5 MB)
+FILE_UPLOAD_MAX_MEMORY_SIZE = 50 * 1024 * 1024  # 50 MB (default is 2.5 MB)
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 5000  # Increase if needed (default is 1000)
+
+# Also set CSRF failure view for better error handling
+CSRF_FAILURE_VIEW = 'django.views.csrf.csrf_failure'

@@ -1,0 +1,1478 @@
+[
+  {
+    "id": 575,
+    "subject_area": "Anatomia",
+    "year": 1990,
+    "question_text": "Keuhkojet ja niiden verenkierto"
+  },
+  {
+    "id": 576,
+    "subject_area": "Anatomia",
+    "year": 1990,
+    "question_text": "Ionisoivan säteilyn biologiset vaikutukset"
+  },
+  {
+    "id": 577,
+    "subject_area": "Anatomia",
+    "year": 1990,
+    "question_text": "Iso ja pieni verenkierto"
+  },
+  {
+    "id": 578,
+    "subject_area": "Anatomia",
+    "year": 1990,
+    "question_text": "Johda avoimen kahden lokeron mallin differentiaaliyhtälöt kineettistä analyysia varten"
+  },
+  {
+    "id": 579,
+    "subject_area": "Anatomia",
+    "year": 1991,
+    "question_text": "Gamma- ja röntgensäteilyn vaikutus solussa"
+  },
+  {
+    "id": 580,
+    "subject_area": "Anatomia",
+    "year": 1991,
+    "question_text": "Ionisoivan säteily vaikutukset solussa"
+  },
+  {
+    "id": 581,
+    "subject_area": "Anatomia",
+    "year": 1991,
+    "question_text": "Munuaisten rakenne ja toiminta"
+  },
+  {
+    "id": 582,
+    "subject_area": "Anatomia",
+    "year": 1991,
+    "question_text": "Virtsateiden anatomia"
+  },
+  {
+    "id": 583,
+    "subject_area": "Anatomia",
+    "year": 1992,
+    "question_text": "Keuhkojet ja niiden verenkierto"
+  },
+  {
+    "id": 584,
+    "subject_area": "Anatomia",
+    "year": 1992,
+    "question_text": "Sairaalafyysikon asema sairaalaorganisaatiossa"
+  },
+  {
+    "id": 585,
+    "subject_area": "Anatomia",
+    "year": 1993,
+    "question_text": "Ionisoivan säteily vaikutukset soluun"
+  },
+  {
+    "id": 586,
+    "subject_area": "Anatomia",
+    "year": 1993,
+    "question_text": "Verenkiertoelimet"
+  },
+  {
+    "id": 587,
+    "subject_area": "Anatomia",
+    "year": 1994,
+    "question_text": "Maksan anatomia (erityisesti maksan verenkierto) ja toiminta"
+  },
+  {
+    "id": 588,
+    "subject_area": "Anatomia",
+    "year": 1994,
+    "question_text": "Maksan verenkierto"
+  },
+  {
+    "id": 589,
+    "subject_area": "Anatomia",
+    "year": 1995,
+    "question_text": "Pupillin koon säätelyjärjestelmä ja sen tutkiminen"
+  },
+  {
+    "id": 590,
+    "subject_area": "Anatomia",
+    "year": 1995,
+    "question_text": "Sydämen toiminta ja johtoratajärjestelmä"
+  },
+  {
+    "id": 591,
+    "subject_area": "Anatomia",
+    "year": 1995,
+    "question_text": "Aivojen verenkierto ja sen säteily"
+  },
+  {
+    "id": 592,
+    "subject_area": "Anatomia",
+    "year": 1995,
+    "question_text": "Munuaisten rakenne ja virtsan muodostus"
+  },
+  {
+    "id": 593,
+    "subject_area": "Anatomia",
+    "year": 1996,
+    "question_text": "Keuhkojen kaasujen vaihto"
+  },
+  {
+    "id": 594,
+    "subject_area": "Anatomia",
+    "year": 1996,
+    "question_text": "Veren hyytyminen"
+  },
+  {
+    "id": 595,
+    "subject_area": "Anatomia",
+    "year": 1996,
+    "question_text": "Munuaisten rakenne ja toiminta"
+  },
+  {
+    "id": 596,
+    "subject_area": "Anatomia",
+    "year": 1997,
+    "question_text": "Hakittu immuniteetti"
+  },
+  {
+    "id": 597,
+    "subject_area": "Anatomia",
+    "year": 1997,
+    "question_text": "Kilpirauhasen rakenne ja toiminta"
+  },
+  {
+    "id": 598,
+    "subject_area": "Anatomia",
+    "year": 1997,
+    "question_text": "Sähköisen signaalin eteneminen sydänlihaksessa. Paine- ja virtausmuutosten liittyminen signaalin etenemisen eri vaiheisiin."
+  },
+  {
+    "id": 599,
+    "subject_area": "Anatomia",
+    "year": 1997,
+    "question_text": "Ionisoivan säteily vaikutukset soluun"
+  },
+  {
+    "id": 600,
+    "subject_area": "Anatomia",
+    "year": 1997,
+    "question_text": "Verenpaine (säätely ja mittaus)"
+  },
+  {
+    "id": 601,
+    "subject_area": "Anatomia",
+    "year": 1998,
+    "question_text": "Hengityksen säätely"
+  },
+  {
+    "id": 602,
+    "subject_area": "Anatomia",
+    "year": 1998,
+    "question_text": "Veren hyytyminen"
+  },
+  {
+    "id": 603,
+    "subject_area": "Anatomia",
+    "year": 1998,
+    "question_text": "Sydämen toiminta ja johtoratajärjestelmä"
+  },
+  {
+    "id": 604,
+    "subject_area": "Anatomia",
+    "year": 1999,
+    "question_text": "Maksan anatomia"
+  },
+  {
+    "id": 605,
+    "subject_area": "Anatomia",
+    "year": 2000,
+    "question_text": "Maksan anatomia (erityisesti maksan verenkierto) ja fysiologia"
+  },
+  {
+    "id": 606,
+    "subject_area": "Anatomia",
+    "year": 2000,
+    "question_text": "Ihon rakenne ja toiminta"
+  },
+  {
+    "id": 607,
+    "subject_area": "Anatomia",
+    "year": 2001,
+    "question_text": "Keuhkojen ventilaatio (eli keuhkotuuletus)"
+  },
+  {
+    "id": 608,
+    "subject_area": "Anatomia",
+    "year": 2002,
+    "question_text": "Aivojen verenkierto ja sen säätely"
+  },
+  {
+    "id": 609,
+    "subject_area": "Anatomia",
+    "year": 2002,
+    "question_text": "Munuaisten rakenne ja virtsan muodostus"
+  },
+  {
+    "id": 610,
+    "subject_area": "Anatomia",
+    "year": 2003,
+    "question_text": "Kilpirauhasen rakenne ja toiminta"
+  },
+  {
+    "id": 611,
+    "subject_area": "Anatomia",
+    "year": 2004,
+    "question_text": "Munuaiset ja virtsatiet - anatomia ja fysiologia"
+  },
+  {
+    "id": 612,
+    "subject_area": "Anatomia",
+    "year": 2005,
+    "question_text": "Luuydin ja sen tehtävät"
+  },
+  {
+    "id": 613,
+    "subject_area": "Anatomia",
+    "year": 2005,
+    "question_text": "Punasolun elinkaari"
+  },
+  {
+    "id": 614,
+    "subject_area": "Anatomia",
+    "year": 2005,
+    "question_text": "Esitä autonomisen hermoston toiminta pääpiirtein"
+  },
+  {
+    "id": 615,
+    "subject_area": "Anatomia",
+    "year": 2005,
+    "question_text": "Putsaat korvaa (jonkun toisen) ja siitä aiheuttuu nopea impulssi korvaan ja toinen pyörtyy. Mitä tapahtui?"
+  },
+  {
+    "id": 616,
+    "subject_area": "Anatomia",
+    "year": 2006,
+    "question_text": "Peukalon heijastevaste tai jotain sinnepäin ...  liikutat peukaloasi niin miten vaste etenee aivoihin tms."
+  },
+  {
+    "id": 617,
+    "subject_area": "Anatomia",
+    "year": 2006,
+    "question_text": "Hengityslihasten toiminta"
+  },
+  {
+    "id": 618,
+    "subject_area": "Anatomia",
+    "year": 2006,
+    "question_text": "Miten O2 ja CO2 liikkuvat veren ja hengitysrakkuloiden välillä"
+  },
+  {
+    "id": 619,
+    "subject_area": "Anatomia",
+    "year": 2006,
+    "question_text": "Mediastinumin rakenne ja anatomiaa"
+  },
+  {
+    "id": 620,
+    "subject_area": "Anatomia",
+    "year": 2006,
+    "question_text": "Mistä aiheutuu että mediastinumin alueella olevat taudit voivat aiheuttaa alaraajojen turvotusta."
+  },
+  {
+    "id": 621,
+    "subject_area": "Anatomia",
+    "year": 2007,
+    "question_text": "Kilpirauhasen toiminta ja säätely"
+  },
+  {
+    "id": 622,
+    "subject_area": "Anatomia",
+    "year": 2007,
+    "question_text": "Kilpirauhanen poistetaan. Mitä seurauksia kehittyy?"
+  },
+  {
+    "id": 623,
+    "subject_area": "Anatomia",
+    "year": 2007,
+    "question_text": "Kilpirauhasleikkauksessa vioittuu ympäröiviäkin kudoksia. Mitä seurauksia kehittyy?"
+  },
+  {
+    "id": 624,
+    "subject_area": "Anatomia",
+    "year": 2007,
+    "question_text": "Selkäranka ja nikamien erityispiirteet eri alueilla"
+  },
+  {
+    "id": 625,
+    "subject_area": "Anatomia",
+    "year": 2007,
+    "question_text": "Mitä seuraamuksia on selkärankavammasta 3.-4. kaularankanikaman tai 3.-4. lannerankanikaman kohdalla"
+  },
+  {
+    "id": 626,
+    "subject_area": "Anatomia",
+    "year": 2008,
+    "question_text": "Sepelvaltimot ja niiden verenvirtaus. Kuvaile lyhyesti myös mitä ongelmia voi seurata, jos sepelvaltimovirtaus on riittämätön."
+  },
+  {
+    "id": 627,
+    "subject_area": "Anatomia",
+    "year": 2008,
+    "question_text": "Virtsan muodostuminen"
+  },
+  {
+    "id": 628,
+    "subject_area": "Anatomia",
+    "year": 2008,
+    "question_text": "Silman akkommodaatio ja taittovirheet"
+  },
+  {
+    "id": 629,
+    "subject_area": "Anatomia",
+    "year": 2009,
+    "question_text": "Aivojen valtimoverenkierto"
+  },
+  {
+    "id": 630,
+    "subject_area": "Anatomia",
+    "year": 2009,
+    "question_text": "Haiman toiminta: a) ruansulatuksen kannalta, b) sokeriaineenvaihdunnan kannalta"
+  },
+  {
+    "id": 631,
+    "subject_area": "Anatomia",
+    "year": 2009,
+    "question_text": "Keuhkorakkuloiden kaasujen vaihto. Millaisissa sairauksissa se voi häiriintyä."
+  },
+  {
+    "id": 632,
+    "subject_area": "Anatomia",
+    "year": 2010,
+    "question_text": "Polvinivelen rakenne"
+  },
+  {
+    "id": 633,
+    "subject_area": "Anatomia",
+    "year": 2010,
+    "question_text": "Selkäranka"
+  },
+  {
+    "id": 634,
+    "subject_area": "Anatomia",
+    "year": 2010,
+    "question_text": "Maksan rakenne ja toiminta. Kuvaile lyhyesti myös mitä ongelmia voi seurata, jos potilaalla on maksan toiminnanvajaus."
+  },
+  {
+    "id": 635,
+    "subject_area": "Anatomia",
+    "year": 2012,
+    "question_text": "Motorinen hermosto"
+  },
+  {
+    "id": 636,
+    "subject_area": "Anatomia",
+    "year": 2013,
+    "question_text": "Kuvaile sydämen toimintakiertoa vasemman kammion kannalta. Miten käyttäytyvät ajallisesti läpät, verenpaine, kammion veritilavuus, EKG ja sydänäänet?"
+  },
+  {
+    "id": 637,
+    "subject_area": "Anatomia",
+    "year": 2014,
+    "question_text": "Hapen kulkeutuminen ilmasta soluihin."
+  },
+  {
+    "id": 638,
+    "subject_area": "Anatomia",
+    "year": 2014,
+    "question_text": "Verenpaine ja veren virtaus elimistössä"
+  },
+  {
+    "id": 639,
+    "subject_area": "Anatomia",
+    "year": 2014,
+    "question_text": "Luiden väliset liitokset"
+  },
+  {
+    "id": 640,
+    "subject_area": "Anatomia",
+    "year": 2015,
+    "question_text": "Munuaisten rakenne ja toiminta"
+  },
+  {
+    "id": 641,
+    "subject_area": "Anatomia",
+    "year": 2015,
+    "question_text": "Sydämen toimintakierto"
+  },
+  {
+    "id": 642,
+    "subject_area": "Anatomia",
+    "year": 2015,
+    "question_text": "Luukudos"
+  },
+  {
+    "id": 643,
+    "subject_area": "Anatomia",
+    "year": 2016,
+    "question_text": "Silmän akkomodaatio ja taittovirheet"
+  },
+  {
+    "id": 644,
+    "subject_area": "Anatomia",
+    "year": 2016,
+    "question_text": "Pitkän luun rakenne"
+  },
+  {
+    "id": 645,
+    "subject_area": "Anatomia",
+    "year": 2017,
+    "question_text": "Aortan ja siitä lähtevien suurten suonten anatomia"
+  },
+  {
+    "id": 646,
+    "subject_area": "Anatomia",
+    "year": 2017,
+    "question_text": "Anatomia & fysiologia\nAivo- selkäydinnesteen muodostuminen, kierto ja merkitys."
+  },
+  {
+    "id": 647,
+    "subject_area": "Anatomia",
+    "year": 2017,
+    "question_text": "Näköradan rakenne ja kuvantaminen"
+  },
+  {
+    "id": 648,
+    "subject_area": "Anatomia",
+    "year": 2018,
+    "question_text": "Munuaisten rakenne"
+  },
+  {
+    "id": 649,
+    "subject_area": "Anatomia",
+    "year": 2018,
+    "question_text": "Kuuloaisti ja korvan rakenne"
+  },
+  {
+    "id": 650,
+    "subject_area": "Anatomia",
+    "year": 2018,
+    "question_text": "Veren muodostuminen ja verisolut"
+  },
+  {
+    "id": 651,
+    "subject_area": "Anatomia",
+    "year": 2019,
+    "question_text": "Haiman anatomia ja sen erittämät hormonit"
+  },
+  {
+    "id": 652,
+    "subject_area": "Anatomia",
+    "year": 2019,
+    "question_text": "Pyramidirata ja sen merkitys motoriikassa"
+  },
+  {
+    "id": 653,
+    "subject_area": "Anatomia",
+    "year": 2019,
+    "question_text": "Maksan rakenne ja toiminta"
+  },
+  {
+    "id": 654,
+    "subject_area": "Anatomia",
+    "year": 2020,
+    "question_text": "Potilaalla vasemmassa kyynärtaipeessa kanyyli, kuvaa varjoaineen kierto"
+  },
+  {
+    "id": 655,
+    "subject_area": "Anatomia",
+    "year": 2020,
+    "question_text": "Haiman ja sappiteiden rakenne ja toiminta"
+  },
+  {
+    "id": 656,
+    "subject_area": "Anatomia",
+    "year": 2020,
+    "question_text": "Sydämen rakenne ja toiminta"
+  },
+  {
+    "id": 657,
+    "subject_area": "Anatomia",
+    "year": 2021,
+    "question_text": "Virtsatiet"
+  },
+  {
+    "id": 658,
+    "subject_area": "Anatomia",
+    "year": 2021,
+    "question_text": "Maksa"
+  },
+  {
+    "id": 659,
+    "subject_area": "Anatomia",
+    "year": 2022,
+    "question_text": "Olka-, kyynär-ja polvinivelen rakenne ja liikeradata"
+  },
+  {
+    "id": 660,
+    "subject_area": "Anatomia",
+    "year": 2022,
+    "question_text": "Hengityselimet: rakenne ja toiminta"
+  },
+  {
+    "id": 661,
+    "subject_area": "Anatomia",
+    "year": 2022,
+    "question_text": "Naisen sukuelimet ja niiden toiminta"
+  },
+  {
+    "id": 871,
+    "subject_area": "Isotooppilääketiede",
+    "year": 1991,
+    "question_text": "EKG geitattu syrämen toiminnan gammakuvaus"
+  },
+  {
+    "id": 882,
+    "subject_area": "Isotooppilääketiede",
+    "year": 1998,
+    "question_text": "Henkilökunnan säteilysuojelu isotooppilaboratoriossa. Mitä suuruusluokkaa ovat kvuauksia suorittavan ja radiolääkeaineita valmistavan henkilöstön saamat vuosiannokset?"
+  },
+  {
+    "id": 883,
+    "subject_area": "Isotooppilääketiede",
+    "year": 1998,
+    "question_text": "SPET-kameran laadunvarmistusprosessi"
+  },
+  {
+    "id": 886,
+    "subject_area": "Isotooppilääketiede",
+    "year": 1998,
+    "question_text": "Henkilökunnan säteilysuojelu isotooppilaboratoriossa. Mitä suuruusluokkaa ovat kuvauksia suorittavan ja radiolääkeainetta valmistavan henkilöstön saamat vuosiannokset?"
+  },
+  {
+    "id": 887,
+    "subject_area": "Isotooppilääketiede",
+    "year": 1999,
+    "question_text": "Vertaile keskenän kaksipäisen gammakameran ja PET-kameran käyttämistä annihilaatiosäteilyn kuvantamisessa"
+  },
+  {
+    "id": 889,
+    "subject_area": "Isotooppilääketiede",
+    "year": 1999,
+    "question_text": "Vertaile keskenään kaksipäisen gammakameran ja PET:n käyttämistä annihilaatiosäteilyn kuvantamisessa"
+  },
+  {
+    "id": 890,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2000,
+    "question_text": "Kuvaa lyhyesti millaisia eri kuvantavia isotooppitutkimuksia voidaan käyttää ruoansulatuskanavan ja siihen liittyvien elinten tutkimisessa? \nArvioi niiden merkitystä ja yleisyyttä."
+  },
+  {
+    "id": 891,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2000,
+    "question_text": "Kuvaile sydämen sisäisen vasen-oikea oikovirtauksen määrittäminen Isotooppimenetelmällä. \nArvioi menetelmän tarkkuutta ja luotettavuutta. Käyttäisitkö taustanpoistoa?"
+  },
+  {
+    "id": 892,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2000,
+    "question_text": "Sydämen pumppufunktion tahdistettu yhdestä suunnasta tapahtuva (planaarinen) gammakuvaus. \nTarkastele taustanpoiston merkitystä. Tutkimuksen aikaisten rytmihäiriöiden eliminointi."
+  },
+  {
+    "id": 899,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2004,
+    "question_text": "Miten säteiluyä vastaan suojaudutaan isotooppitutkimuksissa?"
+  },
+  {
+    "id": 900,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2005,
+    "question_text": "Gammakameran laadunvarmistus. Mikä on välttämätöntä, mikä hyödyllistä ja mikä on mielestäsi liioittelua."
+  },
+  {
+    "id": 901,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2005,
+    "question_text": "Isotooppilaboratorion auditointi. Mihin vähintäänkin kiinnitetään huomiota."
+  },
+  {
+    "id": 903,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2006,
+    "question_text": "Kardiologinen tahdistettu SPECT kuvaus tai jotain sinnepäin ... tahdistuksesta kuitenkin haluttu tietää, keskiarvoistukisia ym."
+  },
+  {
+    "id": 904,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2006,
+    "question_text": "TT-PET tai TT-SPET laitteiston rutiini laadunvarmistusprosessi (vastaa vain toiseen)"
+  },
+  {
+    "id": 905,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2006,
+    "question_text": "Sydän geitattu SPET-tutkimus. Mitä sillä voidaan sydämestä tutkia?"
+  },
+  {
+    "id": 907,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2007,
+    "question_text": "Isotooppidiagnostiikassa ja -hoidossa potilaan annoslaskenta toteutetaan yleisesti ns. MIRD – formalismiin perustuen. Mitä parametrejä tulee tuntea, jotta annos voidaan laskea? Mitkä niistä voidaan mitata?  Mikä parametreista aiheuttaa suurimman virheen annoslaskentaan?"
+  },
+  {
+    "id": 908,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2007,
+    "question_text": "Sydänlihaksen tahdistettu SPET: Mitä asioita sydämen toiminnasta siinä tutkitaan? Arvoi transmissioon perustuvan vaimennuskorjauksen merkitustä \nem. tutkimuksen yhteydessä"
+  },
+  {
+    "id": 910,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2008,
+    "question_text": "Mitä tarkoitetaan radioaktiivisuuden mittaamiseen liittyvällä statistisella epävarmuudella? Mistä se on peräisin ja kuinka suuri se on? Miten ilmiö on otettava huomioon esimerkiksi gammakuvauksessa?"
+  },
+  {
+    "id": 911,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2008,
+    "question_text": "Sydämen tyhjentymisosuuden (ejektiofraktio) mittaaminen isotooppilääketieteen keinoin. Millaisia tutkimustapoja on olemassa? Millaisia merkkiaineita käytetään? Arvioi karkeasti saavutettavia tarkkuuksia. Mitä virhelähteitä niihin liittyy? Mainitse myös muita lääketieteellisiä keinoja saman asian mittaamiseen."
+  },
+  {
+    "id": 912,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2009,
+    "question_text": "Millainen laite on teknetiumgeneraattori tekniikan, ydinfysiikan, radiokemian ja säteilysuojelun kannalta. Piirrä äiti- ja tytärnuklidin aktiivisuuskäyrät generaattorin patruunassa toistuvia eluointeja käsittävän työviikon aikana. Millä ydinfysiikan keinolla äiti-aktiivisuus on valmistettu?"
+  },
+  {
+    "id": 913,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2009,
+    "question_text": "Luuston gammakuvaus. Käytettävät merkkiaineet, aktiivisuudet ja aikuiselle potilaalle aiheutuva tyypillinen säteilyaltistus."
+  },
+  {
+    "id": 914,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2009,
+    "question_text": "EEG-signaalin syntymekanismit. EEG:n normaalivaihtelu ja tavallisimmat patologiset muutokset. Signaalin rekisteröintimenetelmät."
+  },
+  {
+    "id": 915,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2010,
+    "question_text": "Gammasäteilyn ja biologisen kudoksen fysikaaliset vuorovaikutukset. Niiden vaikutus SPECT kuvan laatuun ja potilaan kokemaan sädeannokseen"
+  },
+  {
+    "id": 916,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2010,
+    "question_text": "Vartijaimusolmukkeen gammakuvaus. Käytettävät merkkiaineet, aktiivisuudet ja aikuiselle potilaalle aiheutuva tyypillinen säteilyaltistus?"
+  },
+  {
+    "id": 917,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2010,
+    "question_text": "Piirrä likimääräisesti gammakameran NaI(Tl)-tuikeilmaisimen energiaspektri, kun sillä mitataan 99mTc:n gammasäteilyä sirottavassa väliaineessa ja tavanomainen lyijykollimaattori on käytössä. Selitä mistä spektrin eri osat ovat koostuneet. Piirrä fotopiikille realistinen puoliarvoleveys ja ilmoita sen arvo."
+  },
+  {
+    "id": 918,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2012,
+    "question_text": "Mitä tarkoitetaan näytteen radioaktiivisuuteen mittaamiseen liittyvällä statistisella epävarmuudella? Mistä se johtuu ja kuinka suuri se on? Miten ilmiö on otettava huomioon esimerkiksi gammakuvauksessa"
+  },
+  {
+    "id": 919,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2013,
+    "question_text": "Munuaisten dynaaminen gammakuvaus (\"nefrografia\", \"renografia\"). Käytettävät merkkiaineet, aktiivisuudet ja aikuiselle potilaalle aiheutuva summittainen säteilyaltistus."
+  },
+  {
+    "id": 920,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2014,
+    "question_text": "Isotooppilääketieteessä käytettävien avolähteiden aktiivisuuden määrittäminen:\n-selosta käytettävän mittalaitteen (aktiivisuusmittari) toimintaperiaate\n-miten radionuklidi vaikuttaa mittaustulokseen?\n-miten mittausgeometria vaikuttaa mittaustulokseen esim. gammalähteellä (Tc-99m) ja puhtaalla beta-lähteellä (Y-90)?\n-miten aktiivisuusmittarin toimintakunto voidaan varmistaa?"
+  },
+  {
+    "id": 921,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2014,
+    "question_text": "Luuston gammakuvaus. Käytettävät merkkiaineet, aktiivisuudet ja aikuiselle aiheutuva säteilyaltistus"
+  },
+  {
+    "id": 922,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2014,
+    "question_text": "Luuston gammakuvaus. Käytettävät merkkiaineet, aktiivisuudet ja aikuiselle potilaalle aiheutuva säteilyaltistus."
+  },
+  {
+    "id": 923,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2014,
+    "question_text": "Vaimennuskorjaus isotooppitutkimuksissa. Miksi vaimennuskorjaus on tärkeä ja mitkä ovat vaimennuskorjausmenetelmät?"
+  },
+  {
+    "id": 924,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2015,
+    "question_text": "Kilpirauhasen radioisotooppihoidot: menetelmän perusteet ja säteilysuojelutoimet"
+  },
+  {
+    "id": 926,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2015,
+    "question_text": "Syövän luustopesäkkeiden radioisotooppihoidot: radiolääkkeet  ja säteilylajit, säteilysuojelutoimet hoidon jälkeen"
+  },
+  {
+    "id": 927,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2015,
+    "question_text": "Keuhkojen isotooppitutkimukset. Käytettävät merkkiaineet, aktiivisuudet ja potilaalle aiheutuva säteilyannos"
+  },
+  {
+    "id": 930,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2017,
+    "question_text": "SPET-tekniikan käyttö yleisimmissä tutkimuksissa. Miten, missä ja miksi?"
+  },
+  {
+    "id": 931,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2017,
+    "question_text": "Isotooppilääketiede\nVartijaimusolmukkeen gammakuvaus. Käytettävät merkkiaineet, aktiivisuudet\nja arvio aikuiselle potilaalle aiheutuvasta säteilyaltistuksesta."
+  },
+  {
+    "id": 932,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2017,
+    "question_text": "Vertaile keskenään nuklideja Tc-99m ha F-18 isotooppilääketieteen näkökulmasta a) laitetekniikka b) esimerkki yleisesta sovelluskohteesta molemmilla nuklideilla c) säteilusuojelukysymykset potilaan, kuvauslaitteiston ja henkilökunnan kannalta molemmilla nuklideilla"
+  },
+  {
+    "id": 934,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2018,
+    "question_text": "Kvantitaatio isotooppilääketieteessä (ei PET-tutkimuksissa). Mitkä viimeaikaiset tekijät ovat parantaneet tilannetta?"
+  },
+  {
+    "id": 935,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2018,
+    "question_text": "Tavanomaisten gammakameroiden yleisimmät kollimaattorityypit. Geometriset mittasuhteet, käyttötarkoitukset, erot."
+  },
+  {
+    "id": 936,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2019,
+    "question_text": "Kilpirauhasen radioisotooppihoidot: menetelmän perusteet ja säteilysuojelutoimet"
+  },
+  {
+    "id": 939,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2020,
+    "question_text": "Vertaile tc99m ja I-131"
+  },
+  {
+    "id": 940,
+    "subject_area": "Isotooppilääketiede",
+    "year": 2020,
+    "question_text": "Käyttöön otetaan uusi radiolääkeaine (SPECT), mitä kaikkea pitää huomioida kun arvioidaan potilaan saamaa annosta"
+  },
+  {
+    "id": 949,
+    "subject_area": "Kliininen fysiologia",
+    "year": 1990,
+    "question_text": "Selitä lyhyesti fysiologis-analogisten signaalien signaali-kohinasuhde, digitalisointi, näytteenottoteoreema, kvantisointi ja keskiarvoistaminen"
+  },
+  {
+    "id": 953,
+    "subject_area": "Kliininen fysiologia",
+    "year": 1992,
+    "question_text": "Utraäänilaitteiston yleiskaavio ja vastaanotetun signaalin käsittelu ja kuvanmuodotus"
+  },
+  {
+    "id": 956,
+    "subject_area": "Kliininen fysiologia",
+    "year": 1994,
+    "question_text": "Standardi 12-kytkentäinen EKG. Tee selkoa mittauskytkennöistä ja niitä kuvaavista kytkentävektoreista"
+  },
+  {
+    "id": 960,
+    "subject_area": "Kliininen fysiologia",
+    "year": 1995,
+    "question_text": "Transkutaanisen pulssoksimetrian periaate ja käyttösovellukset"
+  },
+  {
+    "id": 961,
+    "subject_area": "Kliininen fysiologia",
+    "year": 1996,
+    "question_text": "Sähköisen signaalin eteneminen sydänlihaksessa? Paine- ja virtausmuutosten liittyminen signaalin etenemisen eri vaiheisiin"
+  },
+  {
+    "id": 985,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2007,
+    "question_text": "Virtaus-tilavuusspirometria ja siinä mitattavat parametrit. Mittausten potentiaaliset virhelähteet?"
+  },
+  {
+    "id": 986,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2007,
+    "question_text": "Sydämen syketajuusvaihtelun kliininen mittaaminen, analyysi ja potentiaaliset virhelähteet"
+  },
+  {
+    "id": 987,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2008,
+    "question_text": "Kaksi-energiainen röntgenabsorptiometria (DXA): fysikaalinen ja fysiologinen perusta. Kerro tärkeimmistä sovellutuskohteista."
+  },
+  {
+    "id": 988,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2008,
+    "question_text": "Verenpaineen epäsuora mittaus. Mittausmenetelmät ja mittaustarkkuuteen vaikuttavat tekijät?"
+  },
+  {
+    "id": 989,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2008,
+    "question_text": "EKG-elektrodit. Rakeen ja tekniset ominaisuudet? Elektrodien valinnassa huomioitavat seikat?"
+  },
+  {
+    "id": 990,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2009,
+    "question_text": "Verenpaineen pitkäaikaisrekisteröinnit. Tyypilliset rekisteröinti- ja prosessointimenetelmät? Virhelähteet?"
+  },
+  {
+    "id": 996,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2012,
+    "question_text": "Verenpaineen mittausmenetelmien fysikaalinen perusta. Mitkä menetelmät soveltuvat pitkäaikaisrekisteröintiin? Mitkä ovat menetelmien tärkeimmät virhelähteet?"
+  },
+  {
+    "id": 997,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2015,
+    "question_text": "Transkraniaalinen magneettistimulaatio: toimintaperiaate, laitteisto ja sovellusalueet"
+  },
+  {
+    "id": 1000,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2015,
+    "question_text": "Jatkuvan verenpainemittauksen ei-invasiiviset mittausmenetelmät ja niiden käyttö kliinisen fysiologian laboratoriossa"
+  },
+  {
+    "id": 1001,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2016,
+    "question_text": "EKG:n pitkäaikaisrekisteröinnin (holter) laitteisto ja datan analyysi pääpiirteissään"
+  },
+  {
+    "id": 1005,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2018,
+    "question_text": "Hermojen johtumisnopeusmittaukset. Selosta laitteistojen rakenne ja mittausten suoritustavat."
+  },
+  {
+    "id": 1006,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2019,
+    "question_text": "Pitkäaikais pH- ja impedanssimittaus. Laitteisto, tutkimuksen suoritus ja tulkinta."
+  },
+  {
+    "id": 1008,
+    "subject_area": "Kliininen fysiologia",
+    "year": 2020,
+    "question_text": "Sydämen SPECT-kuvaus. Arvioi myös transmissiopohjaista vaimennuskorjausta."
+  },
+  {
+    "id": 1021,
+    "subject_area": "KNF",
+    "year": 1997,
+    "question_text": "Biomagneettiset mittaukset: signaalin synty ja mittaustekniikka"
+  },
+  {
+    "id": 1026,
+    "subject_area": "KNF",
+    "year": 1999,
+    "question_text": "Video-EEG -laitteisto, -laboratorio ja käyttöalueet- Tarkastele tietovälineiden kapasiteettikysymyksiä"
+  },
+  {
+    "id": 1033,
+    "subject_area": "KNF",
+    "year": 2005,
+    "question_text": "EEG kytkennät"
+  },
+  {
+    "id": 1034,
+    "subject_area": "KNF",
+    "year": 2006,
+    "question_text": "Epilepisiakirurgia KNF tutkimuksissa"
+  },
+  {
+    "id": 1037,
+    "subject_area": "KNF",
+    "year": 2007,
+    "question_text": "Grid-EEG – tutkimusten valmistelu ja toteutus laitteiston osalta."
+  },
+  {
+    "id": 1039,
+    "subject_area": "KNF",
+    "year": 2008,
+    "question_text": "Aivojen navigoitu magneettistimulaatio. Kuvaa menetelmän tekninen, fysikaalinen ja fysiologinen perusta. \nKerro tärkeimmistä sovellutuskohteista."
+  },
+  {
+    "id": 1040,
+    "subject_area": "KNF",
+    "year": 2008,
+    "question_text": "Suppea yöpolygrafiatutkimus. Mitä tehdään? Käytettävät laittet ja anturit? Mittausten toistettavuus ja tekninen luotettavuus? Kerro analyysimenetelmistä ja vertaile automaattisia menetelmiä ja manuaalista analyysiä? Mikä on sairaalafyysikon rooli suppeissa yöpolygrafiatutkimuksissa?"
+  },
+  {
+    "id": 1041,
+    "subject_area": "KNF",
+    "year": 2008,
+    "question_text": "Herätevastemittaukset. Tavallisimmat herätevastetutkimukset, niiden kliiniset indikaatiot, tyypilliset signaalinkäsittelytoiminpiteet ja nykyaikaisen tutkimuslaitteiston kokoonpano"
+  },
+  {
+    "id": 1042,
+    "subject_area": "KNF",
+    "year": 2009,
+    "question_text": "EEG-rekisteröinnin ja MR-kuvan yhdistäminen: Mihin tarvitaan ja mitä tavoitellaan? Millaisia mallinnustarpeita tavoitteet asettavat? Yhdistämisprosessin keskeiset vaiheet ja niihin liittyvät epävarmuudet?"
+  },
+  {
+    "id": 1043,
+    "subject_area": "KNF",
+    "year": 2009,
+    "question_text": "Leikkauksenaikainen neurofysiologinen monitorointi: Kerro yleisistä periaatteista, käyttöaiheista, turvallisuusnäkökohdista, tavallisimmista häiriöistä ja niiden minimoinnista sekä fyysikon roolista leikkaussalissa."
+  },
+  {
+    "id": 1044,
+    "subject_area": "KNF",
+    "year": 2009,
+    "question_text": "Mitä tulee ottaa huomioon röntgenkuvaustilaa suunniteltaessa."
+  },
+  {
+    "id": 1045,
+    "subject_area": "KNF",
+    "year": 2010,
+    "question_text": "Kallonsisäiset EEG-rekisteröinnit: Kerro laitteistoista, elektrodeista sekä mittaukseen liittyvistä artefaktoista. Kuvaa tutkimuksen kulku ja kerro fyysikon roolista tutkimuksen eri vaiheissa. Kerro tavallisimmista tutkimusindikaatioista ja tutkimukseen mahdollisesti liittyvistä riskeistä"
+  },
+  {
+    "id": 1046,
+    "subject_area": "KNF",
+    "year": 2010,
+    "question_text": "Laajan polygrafian käyttö unihäiriöiden diagnostiikassa: Kerro laitteiston kokoonpanosta ja tavallisista mitattavista parametreista, kerro tavallisimmista käyttöaiheista, mittaustulosten analysoinnista ja tavallisimmista häiriöistä sekä niiden eliminoinnista."
+  },
+  {
+    "id": 1048,
+    "subject_area": "KNF",
+    "year": 2012,
+    "question_text": "a) Ambulatoristen unitutkimusten laitteisto. B) millä indikaatioilla näitä tutkimuksia tehdään?"
+  },
+  {
+    "id": 1049,
+    "subject_area": "KNF",
+    "year": 2013,
+    "question_text": "Aivojen magneettistimulaatio. Kuvaa fysikaalinen perusta, laiteen sähköinen toimintaperiaate, vaikutusmekanismi, mitattavat parametrit sekä turvallisuusnäkökohdat."
+  },
+  {
+    "id": 1051,
+    "subject_area": "KNF",
+    "year": 2014,
+    "question_text": "Leikkauksenaikainen neurofysiologinen monitorointi:yleiset periaatteet, käyttöaiheet, turvallisuusnäkökohdat, tavallisimmat häiriöt ja niiden minimointi, fyysikon rooli leikkaussalissa"
+  },
+  {
+    "id": 1052,
+    "subject_area": "KNF",
+    "year": 2014,
+    "question_text": "Leikkauksenaikainen neurofysiologinen monitorointi:\n- yleiset periaatteet\n- käyttöaiheet\n- turvallisuusnäkökohdat\n- tavallisimmat häiriöt ja niiden minimointi\n- fyysikon rooli leikkaussalissa"
+  },
+  {
+    "id": 1053,
+    "subject_area": "KNF",
+    "year": 2014,
+    "question_text": "Ruokatorven korkearesoluutiomanometria: laitteisto ja tärkeimmän analyysiparametrit"
+  },
+  {
+    "id": 1054,
+    "subject_area": "KNF",
+    "year": 2016,
+    "question_text": "EEG-laitteen laadunvarmistusmittaukset. Mikä on tarpeellista, mikä turhaa ja miten kehittäisit sitä"
+  },
+  {
+    "id": 1055,
+    "subject_area": "KNF",
+    "year": 2017,
+    "question_text": "Kliininen fysiologia tai kliininen neurofysiologia\nLaajan polygrafian käyttö unihäiriöiden diagnostiikassa:\nKerro laitteiston kokoonpanosta ja tavallisista mitattavista parametreista, kerro\ntavallisimmista käyttöaiheista, mittaustulosten analysoinnista ja tavallisimmista\nhäiriöistä sekä niiden eliminoinnista."
+  },
+  {
+    "id": 1056,
+    "subject_area": "KNF",
+    "year": 2018,
+    "question_text": "Ruokatorven korkearesoluutiomanometria: laitteisto ja tärkeimmät analyysiparametrit"
+  },
+  {
+    "id": 1060,
+    "subject_area": "KNF",
+    "year": 2022,
+    "question_text": "Pinta-EEG vs Stereo-EEG tutkimusten erot fysikaalisesti tarkasteltuna"
+  },
+  {
+    "id": 666,
+    "subject_area": "Radiologia",
+    "year": 1991,
+    "question_text": "Selvitä, kuinka magneettikuvauksen kuvat tehdään T1 ja T2 painotteisiksi"
+  },
+  {
+    "id": 669,
+    "subject_area": "Radiologia",
+    "year": 1993,
+    "question_text": "T1-painotteisten kuvien käyttö protonitiheydeltään samanlaisten kudoslajien erottelussa MRI:ssä"
+  },
+  {
+    "id": 694,
+    "subject_area": "Radiologia",
+    "year": 1997,
+    "question_text": "Digitaalinen kuvalevy: periaate, käytännön edut ja rajoitukset"
+  },
+  {
+    "id": 697,
+    "subject_area": "Radiologia",
+    "year": 1998,
+    "question_text": "Miten moniviipale (multi slice) tekniikalla otetussa magneettikuvaryhmässä näkyy viipalepakan kattavalla alueella kulkevassa suonessa virtaava veri"
+  },
+  {
+    "id": 698,
+    "subject_area": "Radiologia",
+    "year": 1998,
+    "question_text": "Säteilyn sironnan merkitys röntgentutkimuksissa. Miten käytännön kuvaustilanteissa sironnan vaikutukset eri osatekijöihin/osapuoliin huomioidaan"
+  },
+  {
+    "id": 700,
+    "subject_area": "Radiologia",
+    "year": 1998,
+    "question_text": "Säteilyn sironnan merkitys röntgentutkimuksissa. Miten käytännön kuvauslaitteilla sidonna vaikutukset eir osatekijöihin/osapuoliin huomioidaan?"
+  },
+  {
+    "id": 701,
+    "subject_area": "Radiologia",
+    "year": 1999,
+    "question_text": "Pintakela parantaa magneettikuvauksen signaalikohinasuhdetta rahoitetulla alueella. Selosta syt tähän parannukseen."
+  },
+  {
+    "id": 702,
+    "subject_area": "Radiologia",
+    "year": 1999,
+    "question_text": "Vertaa digitaalikasettijärjestelmän etuja ja haittoja vahvistuslevy-filmi-tekniikan vastaaviin"
+  },
+  {
+    "id": 704,
+    "subject_area": "Radiologia",
+    "year": 2000,
+    "question_text": "Sironta röntgentutkimuksissa. Mihin erilaisiin asioihin se vaikuttaa? Mitä on tehtävissä sen vaikutusten välttämiseksi ja optimoimiseksi"
+  },
+  {
+    "id": 706,
+    "subject_area": "Radiologia",
+    "year": 2000,
+    "question_text": "Onko digitaalikasetti korvaamassa perinteisen vahvistuslevy-filmijärjestelmän? \nMihin ja minkälaisia seuraamiksia muutoksella on röntgentutkimuksessa?"
+  },
+  {
+    "id": 708,
+    "subject_area": "Radiologia",
+    "year": 2001,
+    "question_text": "Millaisten välivaiheiden kautta ionisoivasta säteilystä kudokseen absorboituca energia synnyttää vaikutuksen solutasolla?"
+  },
+  {
+    "id": 716,
+    "subject_area": "Radiologia",
+    "year": 2003,
+    "question_text": "Termoluminenssidosimetria - periaate ja käyttöalue"
+  },
+  {
+    "id": 719,
+    "subject_area": "Radiologia",
+    "year": 2004,
+    "question_text": "Thermoluminenssidosimetria - periaate ja käyttö"
+  },
+  {
+    "id": 722,
+    "subject_area": "Radiologia",
+    "year": 2004,
+    "question_text": "Miksi pieniäkin sätelyannoksia vastaan pitää suojautua?"
+  },
+  {
+    "id": 723,
+    "subject_area": "Radiologia",
+    "year": 2004,
+    "question_text": "Miten säteiluyä vastaan suojaudutaan röntgentutkimuksissa?"
+  },
+  {
+    "id": 725,
+    "subject_area": "Radiologia",
+    "year": 2005,
+    "question_text": "Kliinisen magneettikuvauslaitteen laadunvalvonta. Mikä on välttämätöntä, tarpeellista, liioittelua."
+  },
+  {
+    "id": 726,
+    "subject_area": "Radiologia",
+    "year": 2006,
+    "question_text": "Osastolle hankitaan uusi CT laite. Mitä mittauksia ja muita tehtäviä tulee tehdä ennen käyttöönottoa."
+  },
+  {
+    "id": 728,
+    "subject_area": "Radiologia",
+    "year": 2006,
+    "question_text": "Röntgenkuvauslaitteen säteilytuottomittauksen suoritus. Kuinka säteilytuottomittausta voidaan käyttää potilaan säteilyannoksen määritykseen? Mitä lisätietoa tarvitaan?"
+  },
+  {
+    "id": 729,
+    "subject_area": "Radiologia",
+    "year": 2007,
+    "question_text": "Magneettikuvauslaitteet laadunvarmistus. Mikä on välttämätöntä, mikä on hyödyllistä, mikä on mielestäsi liioittelua?"
+  },
+  {
+    "id": 731,
+    "subject_area": "Radiologia",
+    "year": 2008,
+    "question_text": "Vertaile spin- ja gradienttikaikusekvenssejä."
+  },
+  {
+    "id": 732,
+    "subject_area": "Radiologia",
+    "year": 2008,
+    "question_text": "Mitkä keskeisimmät tekijät aikuttavat läpivalaisututkimuksessa potilaan ja henkilökunnan annokseen? Miten annoksia voidaan pienentää?"
+  },
+  {
+    "id": 735,
+    "subject_area": "Radiologia",
+    "year": 2009,
+    "question_text": "Tietokonetomografialaitteen annosmittaus."
+  },
+  {
+    "id": 736,
+    "subject_area": "Radiologia",
+    "year": 2009,
+    "question_text": "Koinsidenssi-ilmiö. Miten koinsidenssigammakamera poikkeaa tavallisesta gammakamerasta."
+  },
+  {
+    "id": 737,
+    "subject_area": "Radiologia",
+    "year": 2010,
+    "question_text": "Kuinka röntgenkuvauslaitteen säteilyntuottomittaus tehdään ja miten sen tuloksia voidaan hyödyntää potilaan annoksen määrityksessä - mitä lisätietoja tarvitaan"
+  },
+  {
+    "id": 738,
+    "subject_area": "Radiologia",
+    "year": 2010,
+    "question_text": "Mitkä seuraavista lisäävät kohteen kontrastia mammografiakuvauksessa keskipaksua rintaa kuvattaessa? Perustele lyhyesti a 1,5 p). a) Hilasuhteen suurentaminen b) kV (peak) -arvon suurentaminen c) Fokuspisteen koon pienentäminen d) Suodatinmateriaalin vaihtaminen molybdeenistä (Mo) rodiumiin (Rh)"
+  },
+  {
+    "id": 742,
+    "subject_area": "Radiologia",
+    "year": 2014,
+    "question_text": "Magneettikuvauksen laadunvarmistus. Mikä on tarpeellista, mikä turhaa, miten kehittäisit sitä?"
+  },
+  {
+    "id": 746,
+    "subject_area": "Radiologia",
+    "year": 2015,
+    "question_text": "UÄ-laitteiden laadunvarmistus. Mikä on tarpeellista, mikä turhaa, miten kehittäisin sitä?"
+  },
+  {
+    "id": 750,
+    "subject_area": "Radiologia",
+    "year": 2015,
+    "question_text": "Tietokonetomografiatutkimuksen optimointi. Käytettävät menetelmät ja niiden vaikutus potilaan säteilyaltistukseen ja kuvanlaatuun"
+  },
+  {
+    "id": 755,
+    "subject_area": "Radiologia",
+    "year": 2017,
+    "question_text": "Iteratiivinen rekonstruktio. Fysikaaliset perusteet, edut ja mahdolliset haitat"
+  },
+  {
+    "id": 758,
+    "subject_area": "Radiologia",
+    "year": 2018,
+    "question_text": "Röntgentutkimushuoneen suunnittelu. Mitä tekijöitä tulee huomioida säteilysuojausta suunniteltaessa"
+  },
+  {
+    "id": 761,
+    "subject_area": "Radiologia",
+    "year": 2019,
+    "question_text": "Natiivikuvauksen säteilyntuottomittaus ja sen soveltaminen annosmääritykseen\n5a) Mitä teet, jos interlock-lukitus kytkeytyy ja ilmoittaa kentän epätasaisuudesta\n5b) Mitä teet, jos aamumittauksessa annostaso näyttää 5% eron annoksessa"
+  },
+  {
+    "id": 762,
+    "subject_area": "Radiologia",
+    "year": 2020,
+    "question_text": "MRI-vierasesine selvittely: a) kuvauksesta luopuminen, b) kuvauksen suorittaminen varotoimenpiteineen, c) kuvaus normaalisti"
+  },
+  {
+    "id": 765,
+    "subject_area": "Radiologia",
+    "year": 2021,
+    "question_text": "Protonispektroskopia. Fysikaalinen perusta, mittaus ja tulostus (mitä tarvitaan lausunnon tekemiseen)"
+  },
+  {
+    "id": 766,
+    "subject_area": "Radiologia",
+    "year": 2021,
+    "question_text": "4D-MRI:n käyttö sädehoidon annossuunnittelussa (haettu vissiin hengityksen kompensointia"
+  },
+  {
+    "id": 782,
+    "subject_area": "Sädehoito",
+    "year": 1996,
+    "question_text": "Fotonisäteilyn ja biologisen materian vuorovaikutus? Selitä vuorovaikutusten perusteella syväannoskäyrän muotoon vaikuttavat tekijät"
+  },
+  {
+    "id": 783,
+    "subject_area": "Sädehoito",
+    "year": 1998,
+    "question_text": "Alfa/beta-malli fyysikon apuna sädehoidon annossuunnittelussa. Anna esimerkkejä"
+  },
+  {
+    "id": 784,
+    "subject_area": "Sädehoito",
+    "year": 1998,
+    "question_text": "STUK on kalibroinut absoluuttiannoksen mittaamiseen tarkoitetun ionisaatiokammion. Kalibrointiraportissa on kalibrointikerroin N. Kerron se käytöstä ja siitä, mitä korjauskertoimia se sisältää"
+  },
+  {
+    "id": 786,
+    "subject_area": "Sädehoito",
+    "year": 1998,
+    "question_text": "Järkilatauslaitteiden dosimetria"
+  },
+  {
+    "id": 788,
+    "subject_area": "Sädehoito",
+    "year": 1998,
+    "question_text": "Kiihdyttimissä on a) avoin, b) suljettu läpäisykammio. Mittaat absoluuttista annosta absoluuttiannosmittauksiin tarkoitetulla ionisaatiokammiolla. Teet mittaustulokseen em. tapauksissa ns. paine- ja lämpötilakorjauksen. Selvitä, mitä korjaat kussakin tapauksessa."
+  },
+  {
+    "id": 789,
+    "subject_area": "Sädehoito",
+    "year": 1998,
+    "question_text": "Mihin fysikaalisiin tekijöihin perustuvat 60-luvulta nykyaikaan oleellisesti parantuneet sädehoidon tulokset"
+  },
+  {
+    "id": 790,
+    "subject_area": "Sädehoito",
+    "year": 1999,
+    "question_text": "Tarkastele Bragg-Grayn onteloteorian perusteita"
+  },
+  {
+    "id": 791,
+    "subject_area": "Sädehoito",
+    "year": 2000,
+    "question_text": "Fotonien kenttäkokotaulukon määrääminen. Tärkeimmät taulukon arvoihin vaikuttavat seikat."
+  },
+  {
+    "id": 792,
+    "subject_area": "Sädehoito",
+    "year": 2000,
+    "question_text": "Pohdi voimakkaasti epäsäännöllisen fotoni- ja elektronikentän annoksen oikeellisuutta tyypillisessä hoitosyvyydessä \nenergia-alueella 4-20 MV (fotonit) tai 4-20 MeV (eletronit), jos käytät annoslaskennassa avokentän MU-lukemia"
+  },
+  {
+    "id": 798,
+    "subject_area": "Sädehoito",
+    "year": 2005,
+    "question_text": "Mitä mittauksia tulee tehdä ennen uuden lineaarikiihdyttimen käyttöönottoa"
+  },
+  {
+    "id": 805,
+    "subject_area": "Sädehoito",
+    "year": 2008,
+    "question_text": "Mitä mittauksia on tehtävä ennen uuden sädehoidon lieaarikiihdyttimen ottamista hoitokäyttöön?"
+  },
+  {
+    "id": 806,
+    "subject_area": "Sädehoito",
+    "year": 2008,
+    "question_text": "Millaisia fysikaalisia kriteerejä voidaan asettaa optimaaliselle sädehoidon annossuunnitelmalle ja millä perusteilla?"
+  },
+  {
+    "id": 807,
+    "subject_area": "Sädehoito",
+    "year": 2009,
+    "question_text": "Gynekologisen tykösädehoidon (brakyterapia) suunnittelukuvaukset, annosmäärittely ja annossuunnittelu?"
+  },
+  {
+    "id": 809,
+    "subject_area": "Sädehoito",
+    "year": 2009,
+    "question_text": "Kuvantaohjatun sädehoidon eri menetelmät."
+  },
+  {
+    "id": 811,
+    "subject_area": "Sädehoito",
+    "year": 2010,
+    "question_text": "Valitse perustellen sopiva detektori säteilyannoksen mittaamiseen seuraavissa tilanteissa (a 2 p) a) Sädehoidon lineaarikiihdyttimen absoluuttiannosmittaus elektronikeilassa b) Sädehoidon annosmittaus potilaan silmäannoksen arvioimiseksi c) Tykösädehoidon korkea-annosnopeuksisen säteilylähteen voimakkuuden määritys ennen lähteen käyttöönottoa"
+  },
+  {
+    "id": 812,
+    "subject_area": "Sädehoito",
+    "year": 2010,
+    "question_text": "Miten hoitotauot vaikuttavat sädehoidon tulokseen ja miten taukojen vaikutus voidaan ottaa huomioon?"
+  },
+  {
+    "id": 813,
+    "subject_area": "Sädehoito",
+    "year": 2012,
+    "question_text": "Selosta korkeaenergisen (>10MV fotonienergia) sädehoidon lineaarikiihdytinhuoneen rakenteellisten säteilysuojeluratkaisujen sekä säteilyyn liittyvien turvajärjestelmien yleiset periaatteet."
+  },
+  {
+    "id": 814,
+    "subject_area": "Sädehoito",
+    "year": 2013,
+    "question_text": "Kerro sädehoiden suunnitteluun käytettyjen kuvantamislaitteiden laadunvalvonnasta. Valitse tarkasteluun seuraavasta listasta kaksi laitetta: TT-simulaattori, perinteinen simulaattori, magneettikuvauslaite, PET-TT, prostatan kudoksensisäisen sädehoidon UÄ-laite. Käsittele asiaa erityisesti niiden ominaisuuksien valossa, jotka ovat sädehoidon suunnittelun, annoslaskennan ja sädehoidon tarkan toteuttamisen kannalta tärkeitä."
+  },
+  {
+    "id": 815,
+    "subject_area": "Sädehoito",
+    "year": 2013,
+    "question_text": "Gynekologisen tykösädehoidon suunnittelukuvaukset, annosmäärittely ja annossuunnittelu."
+  },
+  {
+    "id": 816,
+    "subject_area": "Sädehoito",
+    "year": 2014,
+    "question_text": "Miten varmistetaan sädehoidon lineaarikiihdyttimen toimintakunto ennen potilashoitojen aloittamista dosimetriaan vaikuttaneen laitevian jälkeen?"
+  },
+  {
+    "id": 817,
+    "subject_area": "Sädehoito",
+    "year": 2014,
+    "question_text": "Selosta periaate, miten seuraavien radiologisten kuvausmenetelmien antamaa tietoa voidaan käyttää potilaan sädehoidon annoslaskennassa (à 2p)\na) tietokonetomografiakuvasarja ulkoisen sädehoidon suunnittelua varten\nb) ultraäänikuvasarja eturauhasen kudoksensisäistä sädehoitoa varten\nc) gammakuva / emissiotomografiakuvasarja radionuklidihoidon jälkeen eri ajanhetkinä"
+  },
+  {
+    "id": 819,
+    "subject_area": "Sädehoito",
+    "year": 2014,
+    "question_text": "Mitä menetelmiä käytetään ulkoisen sädehoidon kuvantamisohjauksessa ennen kutakin hoitokertaa ja hoitokerran aikana."
+  },
+  {
+    "id": 820,
+    "subject_area": "Sädehoito",
+    "year": 2014,
+    "question_text": "Selosta ionisaatiokammion käyttöperiaate absoluuttiannoksen mittauksessa sekä tarvittavat korjaustoimet oikein lopputuloksen (absorboitunut annos) saamiseksi sädehoidon lineearikiihdyttimen a) fotonikeilassa b) elektronikeilassa"
+  },
+  {
+    "id": 821,
+    "subject_area": "Sädehoito",
+    "year": 2014,
+    "question_text": "Mitä menetelmiä käytetään ulkoisen sädehoidon kuvantaohjauksessa (image guidance) ennen kutakin hoitokertaa ja hoitokerran aikana"
+  },
+  {
+    "id": 822,
+    "subject_area": "Sädehoito",
+    "year": 2014,
+    "question_text": "Millaisia fysikaalisia kriteerejä voidaan asettaa optimaaliselle sädehoidon annossuunnitelmalle ja millä perusteilla?"
+  },
+  {
+    "id": 824,
+    "subject_area": "Sädehoito",
+    "year": 2015,
+    "question_text": "Miten toimit seuraavissa tilanteissa a) Epäilen vikaa sädehoidon absoluuttidosimetrian mittausketjussa b) Sädehoidon lineaarikiihdytin antaa hoitotilanteessa turvalukiskeskeytyksen (interlock), joka varoittaa kentän epätasaisuudesta c) sädehoidon lineaarikiihdyttimen annostaso on aamumittauksessa 5% suurempi, kuin referenssitaso"
+  },
+  {
+    "id": 825,
+    "subject_area": "Sädehoito",
+    "year": 2015,
+    "question_text": "Metalliartefaktat sädehoidon suunnittelukuvauksissa: Vaikutus annokseen ja korjausmahdollisuudet"
+  },
+  {
+    "id": 827,
+    "subject_area": "Sädehoito",
+    "year": 2015,
+    "question_text": "Sädehoidonaikainen liike: millä menetelmillä liikettä voi havaita ja liikkeen vaikutusta pienentää"
+  },
+  {
+    "id": 829,
+    "subject_area": "Sädehoito",
+    "year": 2015,
+    "question_text": "Mitä voit kertoa sädehoidon nykyisten annoslaskentamenetelmien suorituskyvystä a) vesiekvivalentissa materiaalissa lähellä kentän keskiakselia b) kentän ulkopuolella c) keuhkokudoksessa d) metallisen lonkaaproteesin vieressä"
+  },
+  {
+    "id": 830,
+    "subject_area": "Sädehoito",
+    "year": 2015,
+    "question_text": "Sädehoitoon tulevalla potilaalla on sydämentahdistin. Miten asia huomioidaan annossuunnittelumagneettikuvauksessa ja rintakehän alueen sädehoidon suunnittelussa ja toteutuksessa?"
+  },
+  {
+    "id": 831,
+    "subject_area": "Sädehoito",
+    "year": 2016,
+    "question_text": "Vertaile tyypillisiä säästävästi ja radikaalisti (ablaatiolla) leikatun rintasyövän sädehoitotekniikoita: A) annosjakaumat kohdealueella ja terveissa kudoksissa, erityisesti keuhkot ja sydän B) hoitotekniikan tekninen yksinkertaisuus C) mahdolliset lisämenetelmän terveen kudoksen annoksen pienentämiseksi"
+  },
+  {
+    "id": 833,
+    "subject_area": "Sädehoito",
+    "year": 2016,
+    "question_text": "Millaisilla menetelmillä voidaan mitata sädehoitoannosta hoidon aikana (=in vivo). A) ihon pinnalta b) kudoksesta/kehon ontelonsta c) potilaan läpimennyttä annosta"
+  },
+  {
+    "id": 834,
+    "subject_area": "Sädehoito",
+    "year": 2016,
+    "question_text": "Millaisilla testeillä voit todeta tarkkuustason jolla sädehoitolaitteeseen integroitu röntgenkuvaukseen perustuva kuvanohjausjärjestelmä kohdistaa hoidettavan kohteen varsinaiset (hoito)säteilyisosentrin suhteen?"
+  },
+  {
+    "id": 836,
+    "subject_area": "Sädehoito",
+    "year": 2017,
+    "question_text": "Pään ja vartalon alueiden stereotaktisen sädehoidon suunnittelu ja toteutus.\nSelosta, miten seuraavien kuvantamismenetelmien tuottamaa tietoa voidaan\nhyödyntää sädehoitopotilaan hoidon suunnittelussa ja annoslaskennassa (2\npistettä/kohta):\na) tietokonetomografia,\nb) magneettikuvaus ja\nc) positroniemissiotomografia?"
+  },
+  {
+    "id": 837,
+    "subject_area": "Sädehoito",
+    "year": 2017,
+    "question_text": "Sädehoito\nLaadunvarmistus ulkoisessa sädehoidossa (yhteensä 6 pistettä):\na) Lineaarikiihdyttimen laadunvalvontaohjelman keskeiset asiat (4 pistettä).\nb) Annosmittauksiin käytettävän mittalaitteiston laadunvalvonta (2 pistettä)."
+  },
+  {
+    "id": 838,
+    "subject_area": "Sädehoito",
+    "year": 2017,
+    "question_text": "Sädehoito ja/tai kuvantaminen\na) Kuvanlaadun ja potilaalle aiheutuvan säteilyannoksen optimointi (4 pistettä).\nb) Millaisilla menetelmillä kohdistustarkkuus suhteessa hoitolaitteen\nsäteilyisosentriin voidaan määrittää (2 pistettä)?"
+  },
+  {
+    "id": 842,
+    "subject_area": "Sädehoito",
+    "year": 2018,
+    "question_text": "Selosta ionisaatiokammion käyttöperiaate absoluuttiannoksen mittauksessa sekä tarvittavat korjauskertoimet oikean lopputuloksen (absorboitunut annos) saamiseksi sädehoidon lineaarikiihdyttimen a) fotonikeilassa, b) elektronikeilassa."
+  },
+  {
+    "id": 843,
+    "subject_area": "Sädehoito",
+    "year": 2018,
+    "question_text": "Gynekologisen tykösädehoidon (brakyterapia) suunnittelukuvaukset, annosmäärittely ja annossuunnittelu."
+  },
+  {
+    "id": 844,
+    "subject_area": "Sädehoito",
+    "year": 2018,
+    "question_text": "Mitä voit kertoa nykyaikaisten sädehoiton annoslaskentajärjestelmien tarkkuudesta"
+  },
+  {
+    "id": 845,
+    "subject_area": "Sädehoito",
+    "year": 2018,
+    "question_text": "a) vesiekvivalentissa materiaalissa sädehoitokeilan keskiakselilla"
+  },
+  {
+    "id": 847,
+    "subject_area": "Sädehoito",
+    "year": 2019,
+    "question_text": "Selosta periaate, miten seuraavien radiologisten kuvausmenetelmien antamaa tietoa voidaan käyttää potilaan sädehoidon annoslaskelmassa\na) tietokonetomografiakuvasarja ulkoisen sädehoidon suunnittelua varten,\nb) magneettikuvasarjat ulkoisen sädehoidon suunnittelua varten, ja\nc) gammakuva- / emissiotomografiakuvasarja radionuklidihoidon jälkeen eri ajanhetkinä"
+  },
+  {
+    "id": 850,
+    "subject_area": "Sädehoito",
+    "year": 2019,
+    "question_text": "Miten varmistetaan sädehoitolaitteen ja siihen integoidun röntgenkuvauslaitteen isosentrin paikan vastaavuus"
+  },
+  {
+    "id": 851,
+    "subject_area": "Sädehoito",
+    "year": 2020,
+    "question_text": "Pienien kenttien dosimetria, toteutus ja haasteet"
+  }
+]

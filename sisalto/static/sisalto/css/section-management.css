@@ -1,0 +1,396 @@
+/* Section Management Styles - Updated for Nordic Observatory Design */
+.report-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--space-5);
+}
+
+.report-header {
+    text-align: center;
+    margin-bottom: var(--space-10);
+    padding: var(--space-8);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-isotooppi) 100%);
+    color: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+}
+
+.report-header h1 {
+    margin: 0 0 var(--space-3) 0;
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: white;
+}
+
+.report-header p {
+    margin: 0;
+    font-size: 1.1rem;
+    opacity: 0.9;
+    color: white;
+}
+
+.report-section {
+    background: var(--bg-surface);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+    margin-bottom: var(--space-8);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-subtle);
+    transition: all var(--transition-base);
+}
+
+.report-section:hover {
+    box-shadow: var(--shadow-lg);
+    border-color: var(--border-default);
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-5);
+    padding-bottom: var(--space-4);
+    border-bottom: 2px solid var(--border-subtle);
+    gap: var(--space-4);
+    min-height: 48px;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.section-icon {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-isotooppi));
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: var(--text-sm);
+}
+
+/* Section actions styling */
+.section-actions {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: nowrap;
+    align-items: center;
+    flex-shrink: 0;
+    min-width: 108px;
+}
+
+.section-actions .editor-save-btn {
+    margin: 0;
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-raised);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-size: var(--text-sm);
+}
+
+.section-actions .editor-save-btn:hover {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 12px rgba(96, 165, 250, 0.25);
+}
+
+.section-actions .editor-save-btn:active {
+    background: var(--color-primary-hover);
+}
+
+/* Delete button styling */
+.section-actions .editor-save-btn[onclick*="deleteSection"] {
+    background: rgba(248, 113, 113, 0.12);
+    color: var(--color-error);
+    border-color: var(--color-error);
+}
+
+.section-actions .editor-save-btn[onclick*="deleteSection"]:hover {
+    background: var(--color-error);
+    color: white;
+    box-shadow: 0 0 12px rgba(248, 113, 113, 0.25);
+}
+
+/* Section content styling */
+.section-content {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    font-size: var(--text-base);
+}
+
+.section-content h1,
+.section-content h2,
+.section-content h3,
+.section-content h4,
+.section-content h5,
+.section-content h6 {
+    color: var(--text-primary);
+    margin-top: var(--space-6);
+    margin-bottom: var(--space-4);
+}
+
+.section-content h1 {
+    font-size: var(--text-2xl);
+    border-bottom: 2px solid var(--border-subtle);
+    padding-bottom: var(--space-2);
+}
+
+.section-content h2 {
+    font-size: var(--text-xl);
+}
+
+.section-content h3 {
+    font-size: var(--text-lg);
+}
+
+.section-content p {
+    margin-bottom: var(--space-4);
+    color: var(--text-secondary);
+}
+
+.section-content ul,
+.section-content ol {
+    margin-bottom: var(--space-4);
+    padding-left: var(--space-6);
+    color: var(--text-secondary);
+}
+
+.section-content li {
+    margin-bottom: var(--space-2);
+}
+
+.section-content a {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.section-content a:hover {
+    color: var(--color-primary-hover);
+    text-decoration: underline;
+}
+
+.section-content strong,
+.section-content b {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.section-content code {
+    background: var(--bg-raised);
+    color: var(--color-primary);
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+}
+
+.section-content pre {
+    background: var(--bg-raised);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    overflow-x: auto;
+    margin-bottom: var(--space-4);
+}
+
+.section-content pre code {
+    background: transparent;
+    padding: 0;
+}
+
+.section-content blockquote {
+    border-left: 4px solid var(--color-info);
+    padding: var(--space-4);
+    margin: var(--space-6) 0;
+    background: var(--bg-raised);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+}
+
+.section-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    margin: var(--space-4) 0;
+}
+
+.section-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: var(--space-4);
+    background: var(--bg-raised);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.section-content th {
+    background: var(--bg-overlay);
+    color: var(--text-primary);
+    font-weight: 600;
+    padding: var(--space-4);
+    text-align: left;
+    border-bottom: 2px solid var(--border-subtle);
+}
+
+.section-content td {
+    padding: var(--space-4);
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+}
+
+.section-content tr:last-child td {
+    border-bottom: none;
+}
+
+.section-content tr:hover {
+    background: var(--bg-hover);
+}
+
+/* Add section button */
+.add-section-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-4) var(--space-6);
+    background: var(--color-success);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: var(--text-base);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    margin-top: var(--space-6);
+    box-shadow: var(--shadow-md);
+}
+
+.add-section-btn:hover {
+    background: #10b981;
+    box-shadow: 0 0 16px rgba(52, 211, 153, 0.25);
+}
+
+.add-section-btn i {
+    font-size: 1.125rem;
+}
+
+/* Proficiency dropdown */
+.proficiency-dropdown {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 6px var(--space-4);
+    background: var(--bg-raised);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.proficiency-dropdown:hover {
+    background: var(--bg-overlay);
+    border-color: var(--border-strong);
+}
+
+.proficiency-dropdown select {
+    background: transparent;
+    border: none;
+    color: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    outline: none;
+    padding: 0;
+}
+
+/* Proficiency level colors */
+.proficiency-1 {
+    color: var(--proficiency-1);
+}
+
+.proficiency-2 {
+    color: var(--proficiency-2);
+}
+
+.proficiency-3 {
+    color: var(--proficiency-3);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .report-container {
+        padding: var(--space-4);
+    }
+
+    .report-header {
+        padding: var(--space-6);
+    }
+
+    .report-header h1 {
+        font-size: 1.75rem;
+    }
+
+    .report-section {
+        padding: var(--space-6);
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-2);
+    }
+
+    .section-title {
+        font-size: 1.25rem;
+    }
+
+    .section-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 480px) {
+    .report-section {
+        padding: var(--space-4);
+    }
+
+    .section-title {
+        font-size: 1.125rem;
+        gap: var(--space-2);
+    }
+
+    .section-icon {
+        width: 28px;
+        height: 28px;
+        font-size: 0.75rem;
+    }
+
+    .section-actions .editor-save-btn {
+        width: 28px;
+        height: 28px;
+        min-width: 28px;
+        min-height: 28px;
+    }
+}

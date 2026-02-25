@@ -1,0 +1,3463 @@
+[
+  {
+    "section_id": 25,
+    "section_title": "A1. Tutustua kirjallisuuteen ja laitteistojen turvallisuusjärjestelyihin",
+    "epa_id": 4,
+    "epa_title": "Ultraääni",
+    "skipped": true,
+    "skip_reason": "Title matches skip pattern: kirjallisuut"
+  },
+  {
+    "section_id": 65,
+    "section_title": "A1. Tutustua kirjallisuuteen ja laitteistojen säteilyturvallisuusjärjestelyihin",
+    "epa_id": 19,
+    "epa_title": "Hammaskuvantaminen",
+    "skipped": true,
+    "skip_reason": "Title matches skip pattern: kirjallisuut"
+  },
+  {
+    "section_id": 64,
+    "section_title": "A1. Tutustua kirjallisuuteen sekä näyttöjen ja näytönohjainten ominaisuuksiin ja käyttöohjeisiin",
+    "epa_id": 22,
+    "epa_title": "Kuvankatselunäytöt",
+    "skipped": true,
+    "skip_reason": "Title matches skip pattern: kirjallisuut"
+  },
+  {
+    "section_id": 55,
+    "section_title": "A1. Tutustua kirjallisuuteen ja laitteistojen säteilyturvallisuusjärjestelyihin",
+    "epa_id": 3,
+    "epa_title": "Mammografia",
+    "skipped": true,
+    "skip_reason": "Title matches skip pattern: kirjallisuut"
+  },
+  {
+    "section_id": 58,
+    "section_title": "A1. Tutustua kirjallisuuteen ja laitteistojen säteilyturvallisuusjärjestelyihin",
+    "epa_id": 2,
+    "epa_title": "Magneettikuvaus",
+    "skipped": true,
+    "skip_reason": "Title matches skip pattern: kirjallisuut"
+  },
+  {
+    "section_id": 57,
+    "section_title": "A1. Tutustua kirjallisuuteen ja laitteistojen säteilyturvallisuusjärjestelyihin",
+    "epa_id": 20,
+    "epa_title": "Läpivalaisu ja angiografia (ml kardiologia)",
+    "skipped": true,
+    "skip_reason": "Title matches skip pattern: kirjallisuut"
+  },
+  {
+    "section_id": 66,
+    "section_title": "A1. Hallita säteilysuojelun keskeiset periaatteet ja lainsäädännön sekä toiminnan harjoittamispaikalla tarvittavat säteilysuojelu- ja turvajärjestelyt",
+    "epa_id": 18,
+    "epa_title": "Säteilybiologia ja säteilysuojelu radiologiassa",
+    "search_queries": [
+      "radiation protection shielding diagram",
+      "radiation protection diagram",
+      "radiation dose response curve",
+      "radiation shielding medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "radiation protection shielding diagram",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Hukseflux netradiation sectionview.png",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Hukseflux_netradiation_sectionview.png",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Hukseflux_netradiation_sectionview.png",
+    "score": 4,
+    "license": "Public domain",
+    "local_path": "editor/181527842e084d4b9353ef0b1e706573.png",
+    "inserted": true
+  },
+  {
+    "section_id": 61,
+    "section_title": "A1. Tutustua kirjallisuuteen ja laitteistojen säteilyturvallisuusjärjestelyihin",
+    "epa_id": 21,
+    "epa_title": "Tietokonetomografia",
+    "skipped": true,
+    "skip_reason": "Title matches skip pattern: kirjallisuut"
+  },
+  {
+    "section_id": 406,
+    "section_title": "A2. Osata kirjallisuuden hyödyntäminen",
+    "epa_id": 19,
+    "epa_title": "Hammaskuvantaminen",
+    "skipped": true,
+    "skip_reason": "Title matches skip pattern: kirjallisuuden hyödynt"
+  },
+  {
+    "section_id": 389,
+    "section_title": "A2. Osata kirjallisuuden hyödyntäminen",
+    "epa_id": 3,
+    "epa_title": "Mammografia",
+    "skipped": true,
+    "skip_reason": "Title matches skip pattern: kirjallisuuden hyödynt"
+  },
+  {
+    "section_id": 70,
+    "section_title": "A2. Osata kirjallisuuden hyödyntäminen",
+    "epa_id": 21,
+    "epa_title": "Tietokonetomografia",
+    "skipped": true,
+    "skip_reason": "Title matches skip pattern: kirjallisuuden hyödynt"
+  },
+  {
+    "section_id": 401,
+    "section_title": "A2. Osata kirjallisuuden hyödyntäminen",
+    "epa_id": 22,
+    "epa_title": "Kuvankatselunäytöt",
+    "skipped": true,
+    "skip_reason": "Title matches skip pattern: kirjallisuuden hyödynt"
+  },
+  {
+    "section_id": 175,
+    "section_title": "A2. Osata kirjallisuuden hyödyntäminen",
+    "epa_id": 2,
+    "epa_title": "Magneettikuvaus",
+    "skipped": true,
+    "skip_reason": "Title matches skip pattern: kirjallisuuden hyödynt"
+  },
+  {
+    "section_id": 191,
+    "section_title": "A2. Osata kirjallisuuden hyödyntäminen",
+    "epa_id": 20,
+    "epa_title": "Läpivalaisu ja angiografia (ml kardiologia)",
+    "skipped": true,
+    "skip_reason": "Title matches skip pattern: kirjallisuuden hyödynt"
+  },
+  {
+    "section_id": 417,
+    "section_title": "A2. Hallita lääketieteellisen fysiikan ja säteilybiologian ja osata soveltaa tietoja työskentelyalallaan pystyäkseen ohjaamaan muita säteilyaltistuksen laadusta ja suuruudesta päivittäisessä työssään",
+    "epa_id": 18,
+    "epa_title": "Säteilybiologia ja säteilysuojelu radiologiassa",
+    "search_queries": [
+      "radiation radiobiology cell survival diagram",
+      "radiation protection diagram",
+      "radiation dose response curve",
+      "radiation shielding medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "radiation radiobiology cell survival diagram",
+        "results": 3
+      },
+      {
+        "query": "radiation protection diagram",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Dose quantities and units mk.svg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/e/ef/Dose_quantities_and_units_mk.svg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Dose_quantities_and_units_mk.svg/960px-Dose_quantities_and_units_mk.svg.png",
+    "score": 8,
+    "license": "CC BY-SA 4.0",
+    "local_path": "editor/f092bf17955f45a5b15ddbfa404cf16e.png",
+    "inserted": true
+  },
+  {
+    "section_id": 390,
+    "section_title": "A3. Osata selittää mammografialaitteiston yleinen tekninen rakenne, toiminta ja komponentit, detektorimateriaalit ja rakenne",
+    "epa_id": 3,
+    "epa_title": "Mammografia",
+    "search_queries": [
+      "mammography X-ray detector flat panel diagram",
+      "mammography system diagram",
+      "mammography X-ray tube",
+      "breast imaging physics"
+    ],
+    "tried_queries": [
+      {
+        "query": "mammography X-ray detector flat panel diagram",
+        "results": 0
+      },
+      {
+        "query": "mammography system diagram",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:MammoLoRad.jpg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/8/80/MammoLoRad.jpg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/8/80/MammoLoRad.jpg",
+    "score": 3,
+    "license": "CC0",
+    "local_path": "editor/065a34108d8a478cac73aa893c57f625.jpg",
+    "inserted": true
+  },
+  {
+    "section_id": 402,
+    "section_title": "A3. Osata keskeisimmät kuvanlaatutekijät",
+    "epa_id": 22,
+    "epa_title": "Kuvankatselunäytöt",
+    "search_queries": [
+      "DICOM image quality SNR CNR diagram",
+      "DICOM medical display calibration",
+      "medical monitor grayscale",
+      "display quality assurance radiology"
+    ],
+    "tried_queries": [
+      {
+        "query": "DICOM image quality SNR CNR diagram",
+        "results": 0
+      },
+      {
+        "query": "DICOM medical display calibration",
+        "results": 1
+      },
+      {
+        "query": "medical monitor grayscale",
+        "results": 10
+      },
+      {
+        "query": "display quality assurance radiology",
+        "results": 10
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 407,
+    "section_title": "A3. Osata selittää laitteistojen yleinen tekninen rakenne, toiminta ja komponentit, detektorien rakenteet ja toimintaperiaatteet",
+    "epa_id": 19,
+    "epa_title": "Hammaskuvantaminen",
+    "search_queries": [
+      "dental X-ray detector flat panel diagram",
+      "dental X-ray CBCT diagram",
+      "panoramic radiography principle",
+      "cone beam computed tomography"
+    ],
+    "tried_queries": [
+      {
+        "query": "dental X-ray detector flat panel diagram",
+        "results": 4
+      },
+      {
+        "query": "dental X-ray CBCT diagram",
+        "results": 0
+      },
+      {
+        "query": "panoramic radiography principle",
+        "results": 7
+      },
+      {
+        "query": "cone beam computed tomography",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Cone Beam CT principle.png",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/b/bb/Cone_Beam_CT_principle.png",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Cone_Beam_CT_principle.png/960px-Cone_Beam_CT_principle.png",
+    "score": 8,
+    "license": "CC BY-SA 3.0",
+    "local_path": "editor/9f91721e06d0467ab41801d6cee560ec.png",
+    "inserted": true
+  },
+  {
+    "section_id": 7,
+    "section_title": "A1. Tutustua kirjallisuuteen",
+    "epa_id": 1,
+    "epa_title": "Natiivikuvantaminen",
+    "skipped": true,
+    "skip_reason": "Title matches skip pattern: kirjallisuut"
+  },
+  {
+    "section_id": 192,
+    "section_title": "A3. Osata selittää läpivalaisulaitteistojen yleisen teknisen rakenteen, toiminnan ja komponentit, detektorimateriaalit ja rakenteen",
+    "epa_id": 20,
+    "epa_title": "Läpivalaisu ja angiografia (ml kardiologia)",
+    "search_queries": [
+      "fluoroscopy X-ray detector flat panel diagram",
+      "fluoroscopy system diagram",
+      "angiography catheter X-ray",
+      "image intensifier diagram"
+    ],
+    "tried_queries": [
+      {
+        "query": "fluoroscopy X-ray detector flat panel diagram",
+        "results": 0
+      },
+      {
+        "query": "fluoroscopy system diagram",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:CArmDoseProfiles.jpg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/9/97/CArmDoseProfiles.jpg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/9/97/CArmDoseProfiles.jpg",
+    "score": 4,
+    "license": "Public domain",
+    "local_path": "editor/87a818624eda4993b223c1283d68d108.jpg",
+    "inserted": true
+  },
+  {
+    "section_id": 176,
+    "section_title": "A3. Osata turvallisuusohjeet",
+    "epa_id": 2,
+    "epa_title": "Magneettikuvaus",
+    "search_queries": [
+      "MRI scanner diagram",
+      "magnetic resonance imaging physics",
+      "MRI pulse sequence diagram",
+      "MRI MRI medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "MRI scanner diagram",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Mri scanner schematic labelled.svg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/6/62/Mri_scanner_schematic_labelled.svg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Mri_scanner_schematic_labelled.svg/960px-Mri_scanner_schematic_labelled.svg.png",
+    "score": 8,
+    "license": "CC BY-SA 3.0",
+    "local_path": "editor/6aa9da8b006c40799231469dcaefe784.png",
+    "inserted": true
+  },
+  {
+    "section_id": 369,
+    "section_title": "A3. Osata selittää laitteistojen yleinen tekninen rakenne, toiminta ja komponentit, detektorien rakenteet ja toimintaperiaatteet",
+    "epa_id": 21,
+    "epa_title": "Tietokonetomografia",
+    "search_queries": [
+      "X-ray detector flat panel diagram",
+      "CT scanner diagram",
+      "computed tomography principle",
+      "CT image reconstruction"
+    ],
+    "tried_queries": [
+      {
+        "query": "X-ray detector flat panel diagram",
+        "results": 10
+      },
+      {
+        "query": "CT scanner diagram",
+        "results": 10
+      },
+      {
+        "query": "computed tomography principle",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:TomographyPrinciple Illustration.png",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/2/25/TomographyPrinciple_Illustration.png",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/2/25/TomographyPrinciple_Illustration.png",
+    "score": 6,
+    "license": "CC BY-SA 3.0 de",
+    "local_path": "editor/9c5a7471142d4a3ca1e44505491c43aa.png",
+    "inserted": true
+  },
+  {
+    "section_id": 418,
+    "section_title": "A3. Osata arvioida ja tulkita säteilyriskejä",
+    "epa_id": 18,
+    "epa_title": "Säteilybiologia ja säteilysuojelu radiologiassa",
+    "search_queries": [
+      "radiation protection diagram",
+      "radiation dose response curve",
+      "radiation shielding medical",
+      "radiation mGy mSv medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "radiation protection diagram",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Radioactivity and radiation-ca.svg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/2/21/Radioactivity_and_radiation-ca.svg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Radioactivity_and_radiation-ca.svg/960px-Radioactivity_and_radiation-ca.svg.png",
+    "score": 6,
+    "license": "CC BY-SA 4.0",
+    "local_path": "editor/a214e9d5fed54b54b2f514f3c2e738d9.png",
+    "inserted": true
+  },
+  {
+    "section_id": 408,
+    "section_title": "A4. Osata varmistaa annossuureiden oikeellisuus, suorittaa laadunvarmistusmittaukset sekä analysoida ja tulkita tulokset",
+    "epa_id": 19,
+    "epa_title": "Hammaskuvantaminen",
+    "search_queries": [
+      "dental radiation dose quality assurance phantom diagram",
+      "dental X-ray CBCT diagram",
+      "panoramic radiography principle",
+      "cone beam computed tomography"
+    ],
+    "tried_queries": [
+      {
+        "query": "dental radiation dose quality assurance phantom diagram",
+        "results": 0
+      },
+      {
+        "query": "dental X-ray CBCT diagram",
+        "results": 0
+      },
+      {
+        "query": "panoramic radiography principle",
+        "results": 7
+      },
+      {
+        "query": "cone beam computed tomography",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Cone Beam CT Scanner.png",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/7/79/Cone_Beam_CT_Scanner.png",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/7/79/Cone_Beam_CT_Scanner.png",
+    "score": 7,
+    "license": "Public domain",
+    "local_path": "editor/e3e6b6ba05f440849d21abb845294a0e.png",
+    "inserted": true
+  },
+  {
+    "section_id": 403,
+    "section_title": "A4. Osata suorittaa laadunvarmistusmittaukset sekä analysoida ja tulkita tulokset",
+    "epa_id": 22,
+    "epa_title": "Kuvankatselunäytöt",
+    "search_queries": [
+      "DICOM quality assurance phantom diagram",
+      "DICOM medical display calibration",
+      "medical monitor grayscale",
+      "display quality assurance radiology"
+    ],
+    "tried_queries": [
+      {
+        "query": "DICOM quality assurance phantom diagram",
+        "results": 0
+      },
+      {
+        "query": "DICOM medical display calibration",
+        "results": 1
+      },
+      {
+        "query": "medical monitor grayscale",
+        "results": 10
+      },
+      {
+        "query": "display quality assurance radiology",
+        "results": 10
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 193,
+    "section_title": "A4. Osata kuvausasetusten vaikutus kuvanlaatuun ja potilasannokseen",
+    "epa_id": 20,
+    "epa_title": "Läpivalaisu ja angiografia (ml kardiologia)",
+    "search_queries": [
+      "fluoroscopy image quality SNR CNR diagram",
+      "fluoroscopy system diagram",
+      "angiography catheter X-ray",
+      "image intensifier diagram"
+    ],
+    "tried_queries": [
+      {
+        "query": "fluoroscopy image quality SNR CNR diagram",
+        "results": 0
+      },
+      {
+        "query": "fluoroscopy system diagram",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:ContrastDetailImage.jpg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/f/f8/ContrastDetailImage.jpg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/f/f8/ContrastDetailImage.jpg",
+    "score": 3,
+    "license": "Public domain",
+    "local_path": "editor/25fc8886747545b2b866699d69ef9e63.jpg",
+    "inserted": true
+  },
+  {
+    "section_id": 419,
+    "section_title": "A4. Osata opastaa laitteiden ja ohjelmistojen valinnassa ottaen huomioon kuvalaatuun ja säteilyaltistukseen liittyvät tekijät",
+    "epa_id": 18,
+    "epa_title": "Säteilybiologia ja säteilysuojelu radiologiassa",
+    "search_queries": [
+      "radiation protection diagram",
+      "radiation dose response curve",
+      "radiation shielding medical",
+      "radiation DICOM DQE medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "radiation protection diagram",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Alfa beta gamma radiation penetration DE.svg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/d/da/Alfa_beta_gamma_radiation_penetration_DE.svg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Alfa_beta_gamma_radiation_penetration_DE.svg/960px-Alfa_beta_gamma_radiation_penetration_DE.svg.png",
+    "score": 6,
+    "license": "CC BY 2.5",
+    "local_path": "editor/cab2e700fc8c424aa7b54d519eba2413.png",
+    "inserted": true
+  },
+  {
+    "section_id": 28,
+    "section_title": "A2. Tuntea ultraäänilaitteen yleinen tekninen rakenne, toiminta ja komponentit",
+    "epa_id": 4,
+    "epa_title": "Ultraääni",
+    "search_queries": [
+      "ultrasound transducer diagram",
+      "medical ultrasound physics",
+      "Doppler ultrasound principle",
+      "ultrasound DICOM medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "ultrasound transducer diagram",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Diagram showing liver lesioning using a HIFU transducer 2.png",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/5/5f/Diagram_showing_liver_lesioning_using_a_HIFU_transducer_2.png",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/5/5f/Diagram_showing_liver_lesioning_using_a_HIFU_transducer_2.png",
+    "score": 6,
+    "license": "CC BY-SA 4.0",
+    "error": "Download failed"
+  },
+  {
+    "section_id": 177,
+    "section_title": "A4. Osata selittää laitteistojen yleisen teknisen rakenteen, toiminnan ja komponentit sekä yleisimmät oheislaitteet (mm. tahdistusanturit, varjoaineruisku)",
+    "epa_id": 2,
+    "epa_title": "Magneettikuvaus",
+    "search_queries": [
+      "MRI contrast media iodine ultrasound transducer probe diagram",
+      "MRI scanner diagram",
+      "magnetic resonance imaging physics",
+      "MRI pulse sequence diagram"
+    ],
+    "tried_queries": [
+      {
+        "query": "MRI contrast media iodine ultrasound transducer probe diagram",
+        "results": 0
+      },
+      {
+        "query": "MRI scanner diagram",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Mri scanner schematic malayalam.png",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/b/b7/Mri_scanner_schematic_malayalam.png",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Mri_scanner_schematic_malayalam.png/960px-Mri_scanner_schematic_malayalam.png",
+    "score": 7,
+    "license": "CC BY-SA 4.0",
+    "local_path": "editor/1938b5306b9d4ed2928db5b7ace44c22.png",
+    "inserted": true
+  },
+  {
+    "section_id": 370,
+    "section_title": "A4. Osata varmistaa annossuureiden oikeellisuus, suorittaa laadunvarmistusmittaukset sekä analysoida ja tulkita tulokset",
+    "epa_id": 21,
+    "epa_title": "Tietokonetomografia",
+    "search_queries": [
+      "CT radiation dose quality assurance phantom diagram",
+      "CT scanner diagram",
+      "computed tomography principle",
+      "CT image reconstruction"
+    ],
+    "tried_queries": [
+      {
+        "query": "CT radiation dose quality assurance phantom diagram",
+        "results": 1
+      },
+      {
+        "query": "CT scanner diagram",
+        "results": 10
+      },
+      {
+        "query": "computed tomography principle",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:3D Computed Tomography PL.png",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/8/86/3D_Computed_Tomography_PL.png",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/8/86/3D_Computed_Tomography_PL.png",
+    "score": 5,
+    "license": "CC BY-SA 3.0",
+    "error": "Download failed"
+  },
+  {
+    "section_id": 391,
+    "section_title": "A4. Hallita kuvausasetusten- ja parametrien vaikutus kuvanlaatuun ja potilasannokseen",
+    "epa_id": 3,
+    "epa_title": "Mammografia",
+    "search_queries": [
+      "mammography image quality SNR CNR diagram",
+      "mammography system diagram",
+      "mammography X-ray tube",
+      "breast imaging physics"
+    ],
+    "tried_queries": [
+      {
+        "query": "mammography image quality SNR CNR diagram",
+        "results": 0
+      },
+      {
+        "query": "mammography system diagram",
+        "results": 10
+      },
+      {
+        "query": "mammography X-ray tube",
+        "results": 10
+      },
+      {
+        "query": "breast imaging physics",
+        "results": 10
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 392,
+    "section_title": "A5. Osata tunnistaa kuvausartefaktit ja niiden korjausmenetelmät",
+    "epa_id": 3,
+    "epa_title": "Mammografia",
+    "search_queries": [
+      "mammography imaging artifact diagram",
+      "mammography system diagram",
+      "mammography X-ray tube",
+      "breast imaging physics"
+    ],
+    "tried_queries": [
+      {
+        "query": "mammography imaging artifact diagram",
+        "results": 1
+      },
+      {
+        "query": "mammography system diagram",
+        "results": 10
+      },
+      {
+        "query": "mammography X-ray tube",
+        "results": 10
+      },
+      {
+        "query": "breast imaging physics",
+        "results": 10
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 404,
+    "section_title": "B1. Osata suorittaa laadunvarmistusmittaukset sekä analysoida ja tulkita tulokset",
+    "epa_id": 22,
+    "epa_title": "Kuvankatselunäytöt",
+    "search_queries": [
+      "DICOM quality assurance phantom diagram",
+      "DICOM medical display calibration",
+      "medical monitor grayscale",
+      "display quality assurance radiology"
+    ],
+    "tried_queries": [
+      {
+        "query": "DICOM quality assurance phantom diagram",
+        "results": 0
+      },
+      {
+        "query": "DICOM medical display calibration",
+        "results": 1
+      },
+      {
+        "query": "medical monitor grayscale",
+        "results": 10
+      },
+      {
+        "query": "display quality assurance radiology",
+        "results": 10
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 409,
+    "section_title": "A5. Tuntea intraoraali- ja panoraamatutkimusten suorittamisen",
+    "epa_id": 19,
+    "epa_title": "Hammaskuvantaminen",
+    "search_queries": [
+      "dental panoramic radiograph diagram",
+      "dental X-ray CBCT diagram",
+      "panoramic radiography principle",
+      "cone beam computed tomography"
+    ],
+    "tried_queries": [
+      {
+        "query": "dental panoramic radiograph diagram",
+        "results": 2
+      },
+      {
+        "query": "dental X-ray CBCT diagram",
+        "results": 0
+      },
+      {
+        "query": "panoramic radiography principle",
+        "results": 7
+      },
+      {
+        "query": "cone beam computed tomography",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Ct scan cone beam.png",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/6/68/Ct_scan_cone_beam.png",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/6/68/Ct_scan_cone_beam.png",
+    "score": 7,
+    "license": "Public domain",
+    "error": "Download failed"
+  },
+  {
+    "section_id": 29,
+    "section_title": "A3. Osata ultraäänimenetelmien periaate ja kontrastin syntyminen",
+    "epa_id": 4,
+    "epa_title": "Ultraääni",
+    "search_queries": [
+      "ultrasound transducer diagram",
+      "medical ultrasound physics",
+      "Doppler ultrasound principle"
+    ],
+    "tried_queries": [
+      {
+        "query": "ultrasound transducer diagram",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Diagram showing liver lesioning using a HIFU transducer.png",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/7/78/Diagram_showing_liver_lesioning_using_a_HIFU_transducer.png",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/7/78/Diagram_showing_liver_lesioning_using_a_HIFU_transducer.png",
+    "score": 6,
+    "license": "CC BY-SA 4.0",
+    "error": "Download failed"
+  },
+  {
+    "section_id": 178,
+    "section_title": "A5. Osata magneettikuvauksen signaalinmuodostuksen periaate ja tuntea kontrastin ja paikkakoodauksen käsitteet",
+    "epa_id": 2,
+    "epa_title": "Magneettikuvaus",
+    "search_queries": [
+      "MRI magnet superconducting diagram",
+      "MRI scanner diagram",
+      "magnetic resonance imaging physics",
+      "MRI pulse sequence diagram"
+    ],
+    "tried_queries": [
+      {
+        "query": "MRI magnet superconducting diagram",
+        "results": 5
+      },
+      {
+        "query": "MRI scanner diagram",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Schematic diagram of the expected three GABA peaks in MRI spectroscopy.png",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/6/64/Schematic_diagram_of_the_expected_three_GABA_peaks_in_MRI_spectroscopy.png",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Schematic_diagram_of_the_expected_three_GABA_peaks_in_MRI_spectroscopy.png/960px-Schematic_diagram_of_the_expected_three_GABA_peaks_in_MRI_spectroscopy.png",
+    "score": 5,
+    "license": "CC BY-SA 3.0",
+    "local_path": "editor/f4d94155de1644209144a787e8c10bca.png",
+    "inserted": true
+  },
+  {
+    "section_id": 194,
+    "section_title": "A5. Osata tunnistaa kuvausartefaktit ja niiden korjausmenetelmät",
+    "epa_id": 20,
+    "epa_title": "Läpivalaisu ja angiografia (ml kardiologia)",
+    "search_queries": [
+      "fluoroscopy imaging artifact diagram",
+      "fluoroscopy system diagram",
+      "angiography catheter X-ray",
+      "image intensifier diagram"
+    ],
+    "tried_queries": [
+      {
+        "query": "fluoroscopy imaging artifact diagram",
+        "results": 1
+      },
+      {
+        "query": "fluoroscopy system diagram",
+        "results": 10
+      },
+      {
+        "query": "angiography catheter X-ray",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Leriche-Syndrome in der Angiographie 75W - RF - 001.gif",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/f/f4/Leriche-Syndrome_in_der_Angiographie_75W_-_RF_-_001.gif",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Leriche-Syndrome_in_der_Angiographie_75W_-_RF_-_001.gif/960px-Leriche-Syndrome_in_der_Angiographie_75W_-_RF_-_001.gif",
+    "score": 4,
+    "license": "CC BY-SA 4.0",
+    "local_path": "editor/55aee43a8aaf4fc6842f132d2431edb3.gif",
+    "inserted": true
+  },
+  {
+    "section_id": 371,
+    "section_title": "A5. Hallita leikekuvauksen, kontrastin syntymisen ja rekonstruktiomenetelmien matemaattinen perusta",
+    "epa_id": 21,
+    "epa_title": "Tietokonetomografia",
+    "search_queries": [
+      "image reconstruction filtered back projection diagram",
+      "CT scanner diagram",
+      "computed tomography principle",
+      "CT image reconstruction"
+    ],
+    "tried_queries": [
+      {
+        "query": "image reconstruction filtered back projection diagram",
+        "results": 10
+      },
+      {
+        "query": "CT scanner diagram",
+        "results": 10
+      },
+      {
+        "query": "computed tomography principle",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:CT PRINCI PB.jpg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/6/63/CT_PRINCI_PB.jpg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/6/63/CT_PRINCI_PB.jpg",
+    "score": 3,
+    "license": "CC BY-SA 3.0",
+    "error": "Download failed"
+  },
+  {
+    "section_id": 420,
+    "section_title": "A5. Tietää annossuureet sekä osata efektiivisen ja elinkohtaisen annoksen määrittäminen radiologisissa tutkimuksissa ja toimenpideradiologiassa",
+    "epa_id": 18,
+    "epa_title": "Säteilybiologia ja säteilysuojelu radiologiassa",
+    "search_queries": [
+      "radiation dose dose quantities DLP DAP diagram",
+      "radiation protection diagram",
+      "radiation dose response curve",
+      "radiation shielding medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "radiation dose dose quantities DLP DAP diagram",
+        "results": 0
+      },
+      {
+        "query": "radiation protection diagram",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:RadiationPenetration2-pn.png",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/a/ae/RadiationPenetration2-pn.png",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/a/ae/RadiationPenetration2-pn.png",
+    "score": 5,
+    "license": "Public domain",
+    "error": "Download failed"
+  },
+  {
+    "section_id": 195,
+    "section_title": "A6. Tietää annossuureet sekä osata efektiivisen ja elinkohtaisen annoksen määrittäminen",
+    "epa_id": 20,
+    "epa_title": "Läpivalaisu ja angiografia (ml kardiologia)",
+    "search_queries": [
+      "fluoroscopy radiation dose dose quantities DLP DAP diagram",
+      "fluoroscopy system diagram",
+      "angiography catheter X-ray",
+      "image intensifier diagram"
+    ],
+    "tried_queries": [
+      {
+        "query": "fluoroscopy radiation dose dose quantities DLP DAP diagram",
+        "results": 0
+      },
+      {
+        "query": "fluoroscopy system diagram",
+        "results": 10
+      },
+      {
+        "query": "angiography catheter X-ray",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Leriche Syndrom mit kraeftiger Kollateralisierung 75W - RF - 001.jpg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/c/c6/Leriche_Syndrom_mit_kraeftiger_Kollateralisierung_75W_-_RF_-_001.jpg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Leriche_Syndrom_mit_kraeftiger_Kollateralisierung_75W_-_RF_-_001.jpg/960px-Leriche_Syndrom_mit_kraeftiger_Kollateralisierung_75W_-_RF_-_001.jpg",
+    "score": 3,
+    "license": "CC BY-SA 4.0",
+    "local_path": "editor/6d2d4c5a1ee446ffad1d1d30101a17ba.jpg",
+    "inserted": true
+  },
+  {
+    "section_id": 421,
+    "section_title": "A6. Osata optimoida säteilyn lääketieteellisestä käytöstä aiheutuvaa työperäistä altistusta",
+    "epa_id": 18,
+    "epa_title": "Säteilybiologia ja säteilysuojelu radiologiassa",
+    "search_queries": [
+      "radiation protection diagram",
+      "radiation dose response curve",
+      "radiation shielding medical",
+      "radiation TLD mSv medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "radiation protection diagram",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:NonIonizingRadiation.jpg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/7/7e/NonIonizingRadiation.jpg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/NonIonizingRadiation.jpg/960px-NonIonizingRadiation.jpg",
+    "score": 3,
+    "license": "Public domain",
+    "local_path": "editor/768effdf4ecb4318be8b5089d297c311.jpg",
+    "inserted": true
+  },
+  {
+    "section_id": 405,
+    "section_title": "B2. Tuntea DICOM-Standardissa käytetty harmaasävynäyttöfunktio",
+    "epa_id": 22,
+    "epa_title": "Kuvankatselunäytöt",
+    "search_queries": [
+      "DICOM medical display calibration",
+      "medical monitor grayscale",
+      "display quality assurance radiology",
+      "DICOM DICOM PACS medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "DICOM medical display calibration",
+        "results": 1
+      },
+      {
+        "query": "medical monitor grayscale",
+        "results": 10
+      },
+      {
+        "query": "display quality assurance radiology",
+        "results": 10
+      },
+      {
+        "query": "DICOM DICOM PACS medical",
+        "results": 2
+      }
+    ],
+    "wikimedia_title": "File:PACS-RIS Services.png",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/3/3c/PACS-RIS_Services.png",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/3/3c/PACS-RIS_Services.png",
+    "score": 5,
+    "license": "Public domain",
+    "error": "Download failed"
+  },
+  {
+    "section_id": 372,
+    "section_title": "A6. Hallita kuvausasetusten ja -parametrien vaikutus kuvanlaatuun ja potilasannokseen",
+    "epa_id": 21,
+    "epa_title": "Tietokonetomografia",
+    "search_queries": [
+      "CT image quality SNR CNR diagram",
+      "CT scanner diagram",
+      "computed tomography principle",
+      "CT image reconstruction"
+    ],
+    "tried_queries": [
+      {
+        "query": "CT image quality SNR CNR diagram",
+        "results": 7
+      },
+      {
+        "query": "CT scanner diagram",
+        "results": 10
+      },
+      {
+        "query": "computed tomography principle",
+        "results": 10
+      },
+      {
+        "query": "CT image reconstruction",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:CT 3D reconstruction image of cervical spine Posterior view.png",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/4/4f/CT_3D_reconstruction_image_of_cervical_spine_Posterior_view.png",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/CT_3D_reconstruction_image_of_cervical_spine_Posterior_view.png/960px-CT_3D_reconstruction_image_of_cervical_spine_Posterior_view.png",
+    "score": 4,
+    "license": "CC BY 4.0",
+    "local_path": "editor/bddff004d64e4c07b9bc882dcd49a02f.png",
+    "inserted": true
+  },
+  {
+    "section_id": 179,
+    "section_title": "A6. Osata suorittaa laadunvarmistusmittaukset sekä analysoida ja tulkita tulokset",
+    "epa_id": 2,
+    "epa_title": "Magneettikuvaus",
+    "search_queries": [
+      "MRI quality assurance phantom diagram",
+      "MRI scanner diagram",
+      "magnetic resonance imaging physics",
+      "MRI pulse sequence diagram"
+    ],
+    "tried_queries": [
+      {
+        "query": "MRI quality assurance phantom diagram",
+        "results": 2
+      },
+      {
+        "query": "MRI scanner diagram",
+        "results": 10
+      },
+      {
+        "query": "magnetic resonance imaging physics",
+        "results": 10
+      },
+      {
+        "query": "MRI pulse sequence diagram",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:MRI 2DFT SE PulseSequence.png",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/8/88/MRI_2DFT_SE_PulseSequence.png",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/MRI_2DFT_SE_PulseSequence.png/960px-MRI_2DFT_SE_PulseSequence.png",
+    "score": 5,
+    "license": "CC BY-SA 3.0",
+    "local_path": "editor/bfb67818280b49c3be9ebf0ce7512e57.png",
+    "inserted": true
+  },
+  {
+    "section_id": 410,
+    "section_title": "A6. Tuntea kartiokeilatutkimuksen suorittamisen",
+    "epa_id": 19,
+    "epa_title": "Hammaskuvantaminen",
+    "search_queries": [
+      "dental X-ray CBCT diagram",
+      "panoramic radiography principle",
+      "cone beam computed tomography",
+      "dental CBCT SPECT medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "dental X-ray CBCT diagram",
+        "results": 0
+      },
+      {
+        "query": "panoramic radiography principle",
+        "results": 7
+      },
+      {
+        "query": "cone beam computed tomography",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Cone-beam computed tomography system.jpg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/d/db/Cone-beam_computed_tomography_system.jpg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/d/db/Cone-beam_computed_tomography_system.jpg",
+    "score": 6,
+    "license": "Public domain",
+    "error": "Download failed"
+  },
+  {
+    "section_id": 393,
+    "section_title": "A6. Osata varmistaa annossuureiden oikeellisuus, suorittaa laadunvarmistusmittaukset sekä analysoida ja tulkita tulokset",
+    "epa_id": 3,
+    "epa_title": "Mammografia",
+    "search_queries": [
+      "mammography radiation dose quality assurance phantom diagram",
+      "mammography system diagram",
+      "mammography X-ray tube",
+      "breast imaging physics"
+    ],
+    "tried_queries": [
+      {
+        "query": "mammography radiation dose quality assurance phantom diagram",
+        "results": 0
+      },
+      {
+        "query": "mammography system diagram",
+        "results": 10
+      },
+      {
+        "query": "mammography X-ray tube",
+        "results": 10
+      },
+      {
+        "query": "breast imaging physics",
+        "results": 10
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 30,
+    "section_title": "A4. Tuntea erilaiset anturit ja niiden käyttöalueet",
+    "epa_id": 4,
+    "epa_title": "Ultraääni",
+    "search_queries": [
+      "ultrasound transducer probe diagram",
+      "ultrasound transducer diagram",
+      "medical ultrasound physics",
+      "Doppler ultrasound principle"
+    ],
+    "tried_queries": [
+      {
+        "query": "ultrasound transducer probe diagram",
+        "results": 10
+      },
+      {
+        "query": "ultrasound transducer diagram",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Phased array imaging animation.gif",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/9/97/Phased_array_imaging_animation.gif",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/9/97/Phased_array_imaging_animation.gif",
+    "score": 6,
+    "license": "CC0",
+    "error": "Download failed"
+  },
+  {
+    "section_id": 394,
+    "section_title": "A7. Osata potilasaltistuksen määrittäminen",
+    "epa_id": 3,
+    "epa_title": "Mammografia",
+    "search_queries": [
+      "mammography system diagram",
+      "mammography X-ray tube",
+      "breast imaging physics",
+      "mammography DICOM SNR medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "mammography system diagram",
+        "results": 10
+      },
+      {
+        "query": "mammography X-ray tube",
+        "results": 10
+      },
+      {
+        "query": "breast imaging physics",
+        "results": 10
+      },
+      {
+        "query": "mammography DICOM SNR medical",
+        "results": 0
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 411,
+    "section_title": "A7. Hallita KKTT-leikekuvauksen, kontrastin syntymisen ja rekonstruktiomenetelmien matemaattinen perusta",
+    "epa_id": 19,
+    "epa_title": "Hammaskuvantaminen",
+    "search_queries": [
+      "dental image reconstruction filtered back projection diagram",
+      "dental X-ray CBCT diagram",
+      "panoramic radiography principle",
+      "cone beam computed tomography"
+    ],
+    "tried_queries": [
+      {
+        "query": "dental image reconstruction filtered back projection diagram",
+        "results": 1
+      },
+      {
+        "query": "dental X-ray CBCT diagram",
+        "results": 0
+      },
+      {
+        "query": "panoramic radiography principle",
+        "results": 7
+      },
+      {
+        "query": "cone beam computed tomography",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Prima Immagine Cone-Beam-1994-07-01-3.jpg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/1/17/Prima_Immagine_Cone-Beam-1994-07-01-3.jpg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Prima_Immagine_Cone-Beam-1994-07-01-3.jpg/960px-Prima_Immagine_Cone-Beam-1994-07-01-3.jpg",
+    "score": 4,
+    "license": "CC BY 3.0",
+    "local_path": "editor/33a156e3f2ef4cbfbff123e7913fe2e8.jpg",
+    "inserted": true
+  },
+  {
+    "section_id": 422,
+    "section_title": "A7. Osata arvioida ja kehittää työskentelyalalle soveltuvia säteilysuojelumenettelyjä lääketieteellisen altistuksen optimoimiseksi sekä säteilyn lääketieteellisestä käytöstä aiheutuvan väestön ja työperäisen altistuksen optimoimiseksi",
+    "epa_id": 18,
+    "epa_title": "Säteilybiologia ja säteilysuojelu radiologiassa",
+    "search_queries": [
+      "radiation protection shielding diagram",
+      "radiation protection diagram",
+      "radiation dose response curve",
+      "radiation shielding medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "radiation protection shielding diagram",
+        "results": 10
+      },
+      {
+        "query": "radiation protection diagram",
+        "results": 10
+      },
+      {
+        "query": "radiation dose response curve",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Death by haematopoietic syndrome of radiation sickness- influence of medical care.png",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/8/83/Death_by_haematopoietic_syndrome_of_radiation_sickness-_influence_of_medical_care.png",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/8/83/Death_by_haematopoietic_syndrome_of_radiation_sickness-_influence_of_medical_care.png",
+    "score": 7,
+    "license": "Public domain",
+    "error": "Download failed"
+  },
+  {
+    "section_id": 373,
+    "section_title": "A7. Osata annosmodulaatiotekniikat",
+    "epa_id": 21,
+    "epa_title": "Tietokonetomografia",
+    "search_queries": [
+      "CT radiation dose diagram",
+      "CT scanner diagram",
+      "computed tomography principle",
+      "CT image reconstruction"
+    ],
+    "tried_queries": [
+      {
+        "query": "CT radiation dose diagram",
+        "results": 10
+      },
+      {
+        "query": "CT scanner diagram",
+        "results": 10
+      },
+      {
+        "query": "computed tomography principle",
+        "results": 10
+      },
+      {
+        "query": "CT image reconstruction",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:3D CT Reconstruction of Distal tibia fracture.gif",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/1/1f/3D_CT_Reconstruction_of_Distal_tibia_fracture.gif",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/3D_CT_Reconstruction_of_Distal_tibia_fracture.gif/960px-3D_CT_Reconstruction_of_Distal_tibia_fracture.gif",
+    "score": 4,
+    "license": "CC0",
+    "local_path": "editor/c748b3ff0508417d841b1ee9e068962d.gif",
+    "inserted": true
+  },
+  {
+    "section_id": 180,
+    "section_title": "A7. Tuntea yleisimmät kuvantamissekvenssit ja tietää kuvausparametrien ja kuvan ominaisuuksien keskinäiset riippuvuudet niissä",
+    "epa_id": 2,
+    "epa_title": "Magneettikuvaus",
+    "search_queries": [
+      "MRI pulse sequence diagram",
+      "MRI scanner diagram",
+      "magnetic resonance imaging physics",
+      "MRI MRI SNR medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "MRI pulse sequence diagram",
+        "results": 10
+      },
+      {
+        "query": "MRI scanner diagram",
+        "results": 10
+      },
+      {
+        "query": "magnetic resonance imaging physics",
+        "results": 10
+      },
+      {
+        "query": "MRI MRI SNR medical",
+        "results": 10
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 8,
+    "section_title": "A2. Osata kirjallisuuden hyödyntäminen",
+    "epa_id": 1,
+    "epa_title": "Natiivikuvantaminen",
+    "skipped": true,
+    "skip_reason": "Title matches skip pattern: kirjallisuuden hyödynt"
+  },
+  {
+    "section_id": 31,
+    "section_title": "A5. Hallita laitteen laadunvarmistustoimet",
+    "epa_id": 4,
+    "epa_title": "Ultraääni",
+    "search_queries": [
+      "ultrasound quality assurance phantom diagram",
+      "ultrasound transducer diagram",
+      "medical ultrasound physics",
+      "Doppler ultrasound principle"
+    ],
+    "tried_queries": [
+      {
+        "query": "ultrasound quality assurance phantom diagram",
+        "results": 1
+      },
+      {
+        "query": "ultrasound transducer diagram",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:BModeScanner.gif",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/5/5f/BModeScanner.gif",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/5/5f/BModeScanner.gif",
+    "score": 5,
+    "license": "Public domain",
+    "error": "Download failed"
+  },
+  {
+    "section_id": 196,
+    "section_title": "A7. Osata kuvankäsittelymenetelmien vaikutuksen kuvanlaatuun",
+    "epa_id": 20,
+    "epa_title": "Läpivalaisu ja angiografia (ml kardiologia)",
+    "search_queries": [
+      "fluoroscopy image quality SNR CNR diagram",
+      "fluoroscopy system diagram",
+      "angiography catheter X-ray",
+      "image intensifier diagram"
+    ],
+    "tried_queries": [
+      {
+        "query": "fluoroscopy image quality SNR CNR diagram",
+        "results": 0
+      },
+      {
+        "query": "fluoroscopy system diagram",
+        "results": 10
+      },
+      {
+        "query": "angiography catheter X-ray",
+        "results": 10
+      },
+      {
+        "query": "image intensifier diagram",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:XiiSchematic.jpg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/a/a2/XiiSchematic.jpg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/a/a2/XiiSchematic.jpg",
+    "score": 6,
+    "license": "Public domain",
+    "error": "Download failed"
+  },
+  {
+    "section_id": 412,
+    "section_title": "A8. Osata tunnistaa kuvausartefaktit ja niiden korjausmenetelmät",
+    "epa_id": 19,
+    "epa_title": "Hammaskuvantaminen",
+    "search_queries": [
+      "dental imaging artifact diagram",
+      "dental X-ray CBCT diagram",
+      "panoramic radiography principle",
+      "cone beam computed tomography"
+    ],
+    "tried_queries": [
+      {
+        "query": "dental imaging artifact diagram",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Lower mandibular third molar impaction pericoronitis diagram.jpg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/9/97/Lower_mandibular_third_molar_impaction_pericoronitis_diagram.jpg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Lower_mandibular_third_molar_impaction_pericoronitis_diagram.jpg/960px-Lower_mandibular_third_molar_impaction_pericoronitis_diagram.jpg",
+    "score": 5,
+    "license": "CC0",
+    "local_path": "editor/a5b13cd509ac425a8e045ceed86e549e.jpg",
+    "inserted": true
+  },
+  {
+    "section_id": 32,
+    "section_title": "A6. Tuntea yleisimmät kuvavääristymät",
+    "epa_id": 4,
+    "epa_title": "Ultraääni",
+    "search_queries": [
+      "ultrasound transducer diagram",
+      "medical ultrasound physics",
+      "Doppler ultrasound principle"
+    ],
+    "tried_queries": [
+      {
+        "query": "ultrasound transducer diagram",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Cardiotocography diagram.jpg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/5/50/Cardiotocography_diagram.jpg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Cardiotocography_diagram.jpg/960px-Cardiotocography_diagram.jpg",
+    "score": 4,
+    "license": "CC BY 3.0",
+    "local_path": "editor/8a96c1b2fdb94c72826b30e992dbda68.jpg",
+    "inserted": true
+  },
+  {
+    "section_id": 374,
+    "section_title": "A8. Osata potilasannoksen määrittäminen",
+    "epa_id": 21,
+    "epa_title": "Tietokonetomografia",
+    "search_queries": [
+      "CT scanner diagram",
+      "computed tomography principle",
+      "CT image reconstruction",
+      "CT DLP CTDIvol medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "CT scanner diagram",
+        "results": 10
+      },
+      {
+        "query": "computed tomography principle",
+        "results": 10
+      },
+      {
+        "query": "CT image reconstruction",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Parry Romberg syndrome CT reconstruction, bone.jpg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/0/09/Parry_Romberg_syndrome_CT_reconstruction%2C_bone.jpg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Parry_Romberg_syndrome_CT_reconstruction%2C_bone.jpg/960px-Parry_Romberg_syndrome_CT_reconstruction%2C_bone.jpg",
+    "score": 3,
+    "license": "CC BY-SA 3.0",
+    "local_path": "editor/c2c08413b09343f3b43f86dd9e478ebf.jpg",
+    "inserted": true
+  },
+  {
+    "section_id": 9,
+    "section_title": "A3. Osata selittää laitteistojen yleinen tekninen rakenne, toiminta ja komponentit, detektorien rakenteet ja toimintaperiaatteet",
+    "epa_id": 1,
+    "epa_title": "Natiivikuvantaminen",
+    "skipped": true,
+    "skip_reason": "Already has image"
+  },
+  {
+    "section_id": 395,
+    "section_title": "A8. Osata ohjata henkilökuntaa säteilyturvallisessa työskentelyssä ja kommunikoida potilaan kanssa säteilyaltistukseen liittyvissä asioissa",
+    "epa_id": 3,
+    "epa_title": "Mammografia",
+    "search_queries": [
+      "mammography system diagram",
+      "mammography X-ray tube",
+      "breast imaging physics",
+      "mammography DICOM AEC medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "mammography system diagram",
+        "results": 10
+      },
+      {
+        "query": "mammography X-ray tube",
+        "results": 10
+      },
+      {
+        "query": "breast imaging physics",
+        "results": 10
+      },
+      {
+        "query": "mammography DICOM AEC medical",
+        "results": 0
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 197,
+    "section_title": "A8. Osata varmistaa annossuureiden oikeellisuuden, suorittaa laadunvarmistusmittaukset sekä analysoida ja tulkita tulokset",
+    "epa_id": 20,
+    "epa_title": "Läpivalaisu ja angiografia (ml kardiologia)",
+    "search_queries": [
+      "fluoroscopy radiation dose quality assurance phantom diagram",
+      "fluoroscopy system diagram",
+      "angiography catheter X-ray",
+      "image intensifier diagram"
+    ],
+    "tried_queries": [
+      {
+        "query": "fluoroscopy radiation dose quality assurance phantom diagram",
+        "results": 0
+      },
+      {
+        "query": "fluoroscopy system diagram",
+        "results": 10
+      },
+      {
+        "query": "angiography catheter X-ray",
+        "results": 10
+      },
+      {
+        "query": "image intensifier diagram",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Spherical X-ray angulation and patient tilting system.svg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Spherical_X-ray_angulation_and_patient_tilting_system.svg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Spherical_X-ray_angulation_and_patient_tilting_system.svg/960px-Spherical_X-ray_angulation_and_patient_tilting_system.svg.png",
+    "score": 6,
+    "license": "Public domain",
+    "local_path": "editor/fa9aeeb0939041f084ecf0fab4951e18.png",
+    "inserted": true
+  },
+  {
+    "section_id": 423,
+    "section_title": "B1. Kyetä toimimaan osaamisalansa asiantuntijana, viestimään säteilysuojeluasioista ja opastamaan toiminnanharjoittajaa lakisääteisten vaatimusten noudattamisessa",
+    "epa_id": 18,
+    "epa_title": "Säteilybiologia ja säteilysuojelu radiologiassa",
+    "search_queries": [
+      "radiation protection shielding diagram",
+      "radiation protection diagram",
+      "radiation dose response curve",
+      "radiation shielding medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "radiation protection shielding diagram",
+        "results": 10
+      },
+      {
+        "query": "radiation protection diagram",
+        "results": 10
+      },
+      {
+        "query": "radiation dose response curve",
+        "results": 10
+      },
+      {
+        "query": "radiation shielding medical",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Logo iso radiation.svg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/3/35/Logo_iso_radiation.svg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Logo_iso_radiation.svg/960px-Logo_iso_radiation.svg.png",
+    "score": 2,
+    "license": "Public domain",
+    "local_path": "editor/1f046b696eec4964aeaf039143ec46cc.png",
+    "inserted": true
+  },
+  {
+    "section_id": 181,
+    "section_title": "A8. Osata tunnistaa yleisimmät kuvausartefaktit ja niiden korjausmenetelmät",
+    "epa_id": 2,
+    "epa_title": "Magneettikuvaus",
+    "search_queries": [
+      "MRI imaging artifact diagram",
+      "MRI scanner diagram",
+      "magnetic resonance imaging physics",
+      "MRI pulse sequence diagram"
+    ],
+    "tried_queries": [
+      {
+        "query": "MRI imaging artifact diagram",
+        "results": 7
+      },
+      {
+        "query": "MRI scanner diagram",
+        "results": 10
+      },
+      {
+        "query": "magnetic resonance imaging physics",
+        "results": 10
+      },
+      {
+        "query": "MRI pulse sequence diagram",
+        "results": 10
+      }
+    ],
+    "best_score": 1,
+    "no_match": true
+  },
+  {
+    "section_id": 198,
+    "section_title": "A9. Tuntea röntgenvarjoaineet (jodi, barium), niiden ominaisuudet ja vaikutuksen kuvan kontrastiin",
+    "epa_id": 20,
+    "epa_title": "Läpivalaisu ja angiografia (ml kardiologia)",
+    "search_queries": [
+      "fluoroscopy contrast media iodine diagram",
+      "fluoroscopy system diagram",
+      "angiography catheter X-ray",
+      "image intensifier diagram"
+    ],
+    "tried_queries": [
+      {
+        "query": "fluoroscopy contrast media iodine diagram",
+        "results": 0
+      },
+      {
+        "query": "fluoroscopy system diagram",
+        "results": 10
+      },
+      {
+        "query": "angiography catheter X-ray",
+        "results": 10
+      },
+      {
+        "query": "image intensifier diagram",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Image intensifier diagram.png",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/9/93/Image_intensifier_diagram.png",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/9/93/Image_intensifier_diagram.png",
+    "score": 5,
+    "license": "CC BY-SA 3.0",
+    "local_path": "editor/89841b6a1df64503bcaacd2d98cd5f56.png",
+    "inserted": true
+  },
+  {
+    "section_id": 10,
+    "section_title": "A4. Osata varmistaa annossuureiden oikeellisuus, suorittaa laadunvarmistusmittaukset sekä analysoida ja tulkita tulokset",
+    "epa_id": 1,
+    "epa_title": "Natiivikuvantaminen",
+    "skipped": true,
+    "skip_reason": "Already has image"
+  },
+  {
+    "section_id": 375,
+    "section_title": "A9. Osata tunnistaa kuvausartefaktit ja niiden korjausmenetelmät",
+    "epa_id": 21,
+    "epa_title": "Tietokonetomografia",
+    "search_queries": [
+      "imaging artifact diagram",
+      "CT scanner diagram",
+      "computed tomography principle",
+      "CT image reconstruction"
+    ],
+    "tried_queries": [
+      {
+        "query": "imaging artifact diagram",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Afm artifact crop.svg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/5/58/Afm_artifact_crop.svg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Afm_artifact_crop.svg/960px-Afm_artifact_crop.svg.png",
+    "score": 5,
+    "license": "CC BY-SA 3.0",
+    "local_path": "editor/d7e0e79ddb904805bd2e8282ddb55112.png",
+    "inserted": true
+  },
+  {
+    "section_id": 33,
+    "section_title": "A7. Osata kuvanlaadun perusmittaus fantomia ja ilmakuvausta käyttäen ja tulosten analyysi",
+    "epa_id": 4,
+    "epa_title": "Ultraääni",
+    "search_queries": [
+      "ultrasound transducer diagram",
+      "medical ultrasound physics",
+      "Doppler ultrasound principle"
+    ],
+    "tried_queries": [
+      {
+        "query": "ultrasound transducer diagram",
+        "results": 10
+      },
+      {
+        "query": "medical ultrasound physics",
+        "results": 10
+      },
+      {
+        "query": "Doppler ultrasound principle",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Doppler ultrasound of epididymitis.jpg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/7/77/Doppler_ultrasound_of_epididymitis.jpg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/7/77/Doppler_ultrasound_of_epididymitis.jpg",
+    "score": 2,
+    "license": "CC BY 2.5",
+    "error": "Download failed"
+  },
+  {
+    "section_id": 396,
+    "section_title": "A9. Tuntea tutkimusten sähköisen tallentamisen järjestelmät sekä DICOM-tiedoston rakenne ja siihen tallennettavat tiedot.",
+    "epa_id": 3,
+    "epa_title": "Mammografia",
+    "search_queries": [
+      "mammography system diagram",
+      "mammography X-ray tube",
+      "breast imaging physics",
+      "mammography DICOM PACS medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "mammography system diagram",
+        "results": 10
+      },
+      {
+        "query": "mammography X-ray tube",
+        "results": 10
+      },
+      {
+        "query": "breast imaging physics",
+        "results": 10
+      },
+      {
+        "query": "mammography DICOM PACS medical",
+        "results": 0
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 413,
+    "section_title": "A9. Hallita kuvausasetusten ja -parametrien vaikutus kuvanlaatuun ja potilasannokseen",
+    "epa_id": 19,
+    "epa_title": "Hammaskuvantaminen",
+    "search_queries": [
+      "dental image quality SNR CNR diagram",
+      "dental X-ray CBCT diagram",
+      "panoramic radiography principle",
+      "cone beam computed tomography"
+    ],
+    "tried_queries": [
+      {
+        "query": "dental image quality SNR CNR diagram",
+        "results": 0
+      },
+      {
+        "query": "dental X-ray CBCT diagram",
+        "results": 0
+      },
+      {
+        "query": "panoramic radiography principle",
+        "results": 7
+      },
+      {
+        "query": "cone beam computed tomography",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Cone beam computed tomography (CBCT).jpg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/8/81/Cone_beam_computed_tomography_%28CBCT%29.jpg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Cone_beam_computed_tomography_%28CBCT%29.jpg/960px-Cone_beam_computed_tomography_%28CBCT%29.jpg",
+    "score": 3,
+    "license": "CC BY-SA 4.0",
+    "local_path": "editor/d84cbc3524a942fd87227894df5c5401.jpg",
+    "inserted": true
+  },
+  {
+    "section_id": 182,
+    "section_title": "A9. Osata yleisimmät kuvauksen nopeutus- ja tahdistusmenetelmät",
+    "epa_id": 2,
+    "epa_title": "Magneettikuvaus",
+    "search_queries": [
+      "MRI scanner diagram",
+      "magnetic resonance imaging physics",
+      "MRI pulse sequence diagram",
+      "MRI SNR medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "MRI scanner diagram",
+        "results": 10
+      },
+      {
+        "query": "magnetic resonance imaging physics",
+        "results": 10
+      },
+      {
+        "query": "MRI pulse sequence diagram",
+        "results": 10
+      },
+      {
+        "query": "MRI SNR medical",
+        "results": 10
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 424,
+    "section_title": "B2. kyetä opastamaan toiminnanharjoittajaa toiminnasta aiheutuvan altistuksen arvioimisessa, suojelun optimoinnissa sekä ennaltaehkäisevässä suunnittelussa ja riskien kartoituksessa",
+    "epa_id": 18,
+    "epa_title": "Säteilybiologia ja säteilysuojelu radiologiassa",
+    "search_queries": [
+      "radiation protection diagram",
+      "radiation dose response curve",
+      "radiation shielding medical",
+      "radiation DICOM PACS medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "radiation protection diagram",
+        "results": 10
+      },
+      {
+        "query": "radiation dose response curve",
+        "results": 10
+      },
+      {
+        "query": "radiation shielding medical",
+        "results": 10
+      },
+      {
+        "query": "radiation DICOM PACS medical",
+        "results": 0
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 11,
+    "section_title": "A5. Tuntea natiivikuvien jälkikäsittelymenetelmät",
+    "epa_id": 1,
+    "epa_title": "Natiivikuvantaminen",
+    "skipped": true,
+    "skip_reason": "Already has image"
+  },
+  {
+    "section_id": 183,
+    "section_title": "A10. Tietää kontrastiaineiden toimintaperiaate ja yleisimmät käyttötavat",
+    "epa_id": 2,
+    "epa_title": "Magneettikuvaus",
+    "search_queries": [
+      "MRI contrast agent gadolinium diagram",
+      "MRI scanner diagram",
+      "magnetic resonance imaging physics",
+      "MRI pulse sequence diagram"
+    ],
+    "tried_queries": [
+      {
+        "query": "MRI contrast agent gadolinium diagram",
+        "results": 0
+      },
+      {
+        "query": "MRI scanner diagram",
+        "results": 10
+      },
+      {
+        "query": "magnetic resonance imaging physics",
+        "results": 10
+      },
+      {
+        "query": "MRI pulse sequence diagram",
+        "results": 10
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 34,
+    "section_title": "A8. Tutustua yleisimpiin kliinisiin ultraäänitutkimuksiin",
+    "epa_id": 4,
+    "epa_title": "Ultraääni",
+    "search_queries": [
+      "ultrasound transducer diagram",
+      "medical ultrasound physics",
+      "Doppler ultrasound principle"
+    ],
+    "tried_queries": [
+      {
+        "query": "ultrasound transducer diagram",
+        "results": 10
+      },
+      {
+        "query": "medical ultrasound physics",
+        "results": 10
+      },
+      {
+        "query": "Doppler ultrasound principle",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Doppler ultrasound in long-axis view of axillary and subclavian vein thrombosis.jpg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/5/52/Doppler_ultrasound_in_long-axis_view_of_axillary_and_subclavian_vein_thrombosis.jpg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/5/52/Doppler_ultrasound_in_long-axis_view_of_axillary_and_subclavian_vein_thrombosis.jpg",
+    "score": 2,
+    "license": "CC BY 2.0",
+    "local_path": "editor/41d7254a1495474db98f40cc971833b5.jpg",
+    "inserted": true
+  },
+  {
+    "section_id": 414,
+    "section_title": "B1. Osata laitteiden hyväksyttävyysvaatimusten mukaiset mittaukset",
+    "epa_id": 19,
+    "epa_title": "Hammaskuvantaminen",
+    "search_queries": [
+      "dental X-ray CBCT diagram",
+      "panoramic radiography principle",
+      "cone beam computed tomography",
+      "dental DICOM PACS medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "dental X-ray CBCT diagram",
+        "results": 0
+      },
+      {
+        "query": "panoramic radiography principle",
+        "results": 7
+      },
+      {
+        "query": "cone beam computed tomography",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Cone Beam CT.jpg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/1/16/Cone_Beam_CT.jpg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Cone_Beam_CT.jpg/960px-Cone_Beam_CT.jpg",
+    "score": 3,
+    "license": "CC BY-SA 4.0",
+    "local_path": "editor/b2079dc8e5ff41c78cc972d774bfa632.jpg",
+    "inserted": true
+  },
+  {
+    "section_id": 199,
+    "section_title": "A10. Osata menetelmät henkilökunnan annosseurantaan",
+    "epa_id": 20,
+    "epa_title": "Läpivalaisu ja angiografia (ml kardiologia)",
+    "search_queries": [
+      "fluoroscopy radiation dose diagram",
+      "fluoroscopy system diagram",
+      "angiography catheter X-ray",
+      "image intensifier diagram"
+    ],
+    "tried_queries": [
+      {
+        "query": "fluoroscopy radiation dose diagram",
+        "results": 2
+      },
+      {
+        "query": "fluoroscopy system diagram",
+        "results": 10
+      },
+      {
+        "query": "angiography catheter X-ray",
+        "results": 10
+      },
+      {
+        "query": "image intensifier diagram",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Image intensifier wiki.jpg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Image_intensifier_wiki.jpg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Image_intensifier_wiki.jpg",
+    "score": 2,
+    "license": "CC BY-SA 3.0",
+    "error": "Download failed"
+  },
+  {
+    "section_id": 425,
+    "section_title": "B3. Osata neuvoa toiminnanharjoittajaa koulutuksen ja opastuksen järjestämiseksi säteilytoimintaan osallistuvalle henkilöstölle säteilyturvalliseen työskentelyyn ja suunnitella tarvittavan säteilysuojelun täydennyskoulutuksen",
+    "epa_id": 18,
+    "epa_title": "Säteilybiologia ja säteilysuojelu radiologiassa",
+    "search_queries": [
+      "radiation protection shielding diagram",
+      "radiation protection diagram",
+      "radiation dose response curve",
+      "radiation shielding medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "radiation protection shielding diagram",
+        "results": 10
+      },
+      {
+        "query": "radiation protection diagram",
+        "results": 10
+      },
+      {
+        "query": "radiation dose response curve",
+        "results": 10
+      },
+      {
+        "query": "radiation shielding medical",
+        "results": 10
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 397,
+    "section_title": "B1. Osaa annokseen ja kuvanlaatuun liittyvän optimointiongelman itsenäisen ratkaisun",
+    "epa_id": 3,
+    "epa_title": "Mammografia",
+    "search_queries": [
+      "mammography image quality SNR CNR diagram",
+      "mammography system diagram",
+      "mammography X-ray tube",
+      "breast imaging physics"
+    ],
+    "tried_queries": [
+      {
+        "query": "mammography image quality SNR CNR diagram",
+        "results": 0
+      },
+      {
+        "query": "mammography system diagram",
+        "results": 10
+      },
+      {
+        "query": "mammography X-ray tube",
+        "results": 10
+      },
+      {
+        "query": "breast imaging physics",
+        "results": 10
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 376,
+    "section_title": "A10. Tuntea yleisimmät kuvausprotokollat ja tietää kuvausparametrien ja kuvanominaisuuksien keskinäiset riippuvuudet niissä",
+    "epa_id": 21,
+    "epa_title": "Tietokonetomografia",
+    "search_queries": [
+      "CT scanner diagram",
+      "computed tomography principle",
+      "CT image reconstruction",
+      "CT CTDIvol mAs medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "CT scanner diagram",
+        "results": 10
+      },
+      {
+        "query": "computed tomography principle",
+        "results": 10
+      },
+      {
+        "query": "CT image reconstruction",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Parry Romberg syndrome CT reconstruction, soft tissues.jpg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/a/a2/Parry_Romberg_syndrome_CT_reconstruction%2C_soft_tissues.jpg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Parry_Romberg_syndrome_CT_reconstruction%2C_soft_tissues.jpg/960px-Parry_Romberg_syndrome_CT_reconstruction%2C_soft_tissues.jpg",
+    "score": 3,
+    "license": "CC BY-SA 3.0",
+    "local_path": "editor/f384483c4e6d424ab82ef4a1032a8f95.jpg",
+    "inserted": true
+  },
+  {
+    "section_id": 200,
+    "section_title": "A11. Osata toimenpiteen aikainen toiminta ja potilaan sekä toimenpiteen tekijöiden säteilyturvallisuuteen vaikuttavat tekijät",
+    "epa_id": 20,
+    "epa_title": "Läpivalaisu ja angiografia (ml kardiologia)",
+    "search_queries": [
+      "fluoroscopy system diagram",
+      "angiography catheter X-ray",
+      "image intensifier diagram",
+      "fluoroscopy DAP medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "fluoroscopy system diagram",
+        "results": 10
+      },
+      {
+        "query": "angiography catheter X-ray",
+        "results": 10
+      },
+      {
+        "query": "image intensifier diagram",
+        "results": 10
+      },
+      {
+        "query": "fluoroscopy DAP medical",
+        "results": 0
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 398,
+    "section_title": "B2. Osata laitteiden hyväksyttävyysvaatimusten mukaiset mittaukset",
+    "epa_id": 3,
+    "epa_title": "Mammografia",
+    "search_queries": [
+      "mammography system diagram",
+      "mammography X-ray tube",
+      "breast imaging physics",
+      "mammography DICOM PACS medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "mammography system diagram",
+        "results": 10
+      },
+      {
+        "query": "mammography X-ray tube",
+        "results": 10
+      },
+      {
+        "query": "breast imaging physics",
+        "results": 10
+      },
+      {
+        "query": "mammography DICOM PACS medical",
+        "results": 0
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 377,
+    "section_title": "A11. Tuntea yleisimmät kuvausaikaan vaikuttavat menetelmät ja tahdistusmenetelmät",
+    "epa_id": 21,
+    "epa_title": "Tietokonetomografia",
+    "search_queries": [
+      "CT scanner diagram",
+      "computed tomography principle",
+      "CT image reconstruction",
+      "CT SPECT CTDIvol medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "CT scanner diagram",
+        "results": 10
+      },
+      {
+        "query": "computed tomography principle",
+        "results": 10
+      },
+      {
+        "query": "CT image reconstruction",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:CT scan Iterative reconstruction (left) versus filtered backprojection (right).jpg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/d/dc/CT_scan_Iterative_reconstruction_%28left%29_versus_filtered_backprojection_%28right%29.jpg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/CT_scan_Iterative_reconstruction_%28left%29_versus_filtered_backprojection_%28right%29.jpg/960px-CT_scan_Iterative_reconstruction_%28left%29_versus_filtered_backprojection_%28right%29.jpg",
+    "score": 3,
+    "license": "CC BY-SA 4.0",
+    "local_path": "editor/3ab7b2e96e464732b1dce7a1a3cab66a.jpg",
+    "inserted": true
+  },
+  {
+    "section_id": 184,
+    "section_title": "B1. Osaa kuvanlaatuun liittyvän optimointiongelman itsenäisen ratkaisun",
+    "epa_id": 2,
+    "epa_title": "Magneettikuvaus",
+    "search_queries": [
+      "MRI image quality SNR CNR diagram",
+      "MRI scanner diagram",
+      "magnetic resonance imaging physics",
+      "MRI pulse sequence diagram"
+    ],
+    "tried_queries": [
+      {
+        "query": "MRI image quality SNR CNR diagram",
+        "results": 0
+      },
+      {
+        "query": "MRI scanner diagram",
+        "results": 10
+      },
+      {
+        "query": "magnetic resonance imaging physics",
+        "results": 10
+      },
+      {
+        "query": "MRI pulse sequence diagram",
+        "results": 10
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 35,
+    "section_title": "A9. Tuntea tutkimusten sähköisen tallentamisen järjestelmät sekä DICOM-tiedoston rakenne ja siihen tallennettavat tiedot",
+    "epa_id": 4,
+    "epa_title": "Ultraääni",
+    "search_queries": [
+      "ultrasound transducer diagram",
+      "medical ultrasound physics",
+      "Doppler ultrasound principle",
+      "ultrasound DICOM PACS medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "ultrasound transducer diagram",
+        "results": 10
+      },
+      {
+        "query": "medical ultrasound physics",
+        "results": 10
+      },
+      {
+        "query": "Doppler ultrasound principle",
+        "results": 10
+      },
+      {
+        "query": "ultrasound DICOM PACS medical",
+        "results": 0
+      }
+    ],
+    "wikimedia_title": "File:Doppler ultrasound in long-axis view of axillary and subclavian vein thrombosis - annotated.jpg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/d/d2/Doppler_ultrasound_in_long-axis_view_of_axillary_and_subclavian_vein_thrombosis_-_annotated.jpg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/d/d2/Doppler_ultrasound_in_long-axis_view_of_axillary_and_subclavian_vein_thrombosis_-_annotated.jpg",
+    "score": 2,
+    "license": "CC BY 2.0",
+    "local_path": "editor/2c6601a20fa0409999141f23ca025e4d.jpg",
+    "inserted": true
+  },
+  {
+    "section_id": 415,
+    "section_title": "B2. Osata annokseen ja kuvanlaatuun liittyvän optimointiongelman itsenäisen ratkaisun",
+    "epa_id": 19,
+    "epa_title": "Hammaskuvantaminen",
+    "search_queries": [
+      "dental image quality SNR CNR diagram",
+      "dental X-ray CBCT diagram",
+      "panoramic radiography principle",
+      "cone beam computed tomography"
+    ],
+    "tried_queries": [
+      {
+        "query": "dental image quality SNR CNR diagram",
+        "results": 0
+      },
+      {
+        "query": "dental X-ray CBCT diagram",
+        "results": 0
+      },
+      {
+        "query": "panoramic radiography principle",
+        "results": 7
+      },
+      {
+        "query": "cone beam computed tomography",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Prima Immagine Cone-Beam-1994-07-02.jpg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/7/79/Prima_Immagine_Cone-Beam-1994-07-02.jpg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Prima_Immagine_Cone-Beam-1994-07-02.jpg/960px-Prima_Immagine_Cone-Beam-1994-07-02.jpg",
+    "score": 3,
+    "license": "CC BY 3.0",
+    "local_path": "editor/e992b0d91c354192b37f2c3042df5f3d.jpg",
+    "inserted": true
+  },
+  {
+    "section_id": 426,
+    "section_title": "B4. Osaa arvioida ja kehittää soveltuvia säteilysuojelumenettelyjä",
+    "epa_id": 18,
+    "epa_title": "Säteilybiologia ja säteilysuojelu radiologiassa",
+    "search_queries": [
+      "radiation protection shielding diagram",
+      "radiation protection diagram",
+      "radiation dose response curve",
+      "radiation shielding medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "radiation protection shielding diagram",
+        "results": 10
+      },
+      {
+        "query": "radiation protection diagram",
+        "results": 10
+      },
+      {
+        "query": "radiation dose response curve",
+        "results": 10
+      },
+      {
+        "query": "radiation shielding medical",
+        "results": 10
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 12,
+    "section_title": "A6. Osata tunnistaa kuvausartefaktit ja niiden korjausmenetelmät",
+    "epa_id": 1,
+    "epa_title": "Natiivikuvantaminen",
+    "skipped": true,
+    "skip_reason": "Already has image"
+  },
+  {
+    "section_id": 416,
+    "section_title": "B3. Osata hyvän kuvan kriteerit erilaisten kuvausindikaatioiden kohdalla",
+    "epa_id": 19,
+    "epa_title": "Hammaskuvantaminen",
+    "search_queries": [
+      "dental X-ray CBCT diagram",
+      "panoramic radiography principle",
+      "cone beam computed tomography",
+      "dental CBCT SPECT medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "dental X-ray CBCT diagram",
+        "results": 0
+      },
+      {
+        "query": "panoramic radiography principle",
+        "results": 7
+      },
+      {
+        "query": "cone beam computed tomography",
+        "results": 10
+      },
+      {
+        "query": "dental CBCT SPECT medical",
+        "results": 2
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 185,
+    "section_title": "B2. Osata vierasesineiden kuvattavuuteen liittyvät järjestelyt, käsitteet ja optimointi",
+    "epa_id": 2,
+    "epa_title": "Magneettikuvaus",
+    "search_queries": [
+      "MRI scanner diagram",
+      "magnetic resonance imaging physics",
+      "MRI pulse sequence diagram",
+      "MRI MRI GRE medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "MRI scanner diagram",
+        "results": 10
+      },
+      {
+        "query": "magnetic resonance imaging physics",
+        "results": 10
+      },
+      {
+        "query": "MRI pulse sequence diagram",
+        "results": 10
+      },
+      {
+        "query": "MRI MRI GRE medical",
+        "results": 10
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 378,
+    "section_title": "A12. Tuntea röntgenvarjoaineiden käyttö tietokonetomografiassa",
+    "epa_id": 21,
+    "epa_title": "Tietokonetomografia",
+    "search_queries": [
+      "contrast media iodine computed tomography CT diagram",
+      "CT scanner diagram",
+      "computed tomography principle",
+      "CT image reconstruction"
+    ],
+    "tried_queries": [
+      {
+        "query": "contrast media iodine computed tomography CT diagram",
+        "results": 0
+      },
+      {
+        "query": "CT scanner diagram",
+        "results": 10
+      },
+      {
+        "query": "computed tomography principle",
+        "results": 10
+      },
+      {
+        "query": "CT image reconstruction",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:3D-computed-tomography-CT-reconstruction-image-of-the-animal-model-before-surgery.jpg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/0/08/3D-computed-tomography-CT-reconstruction-image-of-the-animal-model-before-surgery.jpg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/0/08/3D-computed-tomography-CT-reconstruction-image-of-the-animal-model-before-surgery.jpg",
+    "score": 2,
+    "license": "CC BY 4.0",
+    "error": "Download failed"
+  },
+  {
+    "section_id": 399,
+    "section_title": "B3. Tutustua erikoistutkimuksiin",
+    "epa_id": 3,
+    "epa_title": "Mammografia",
+    "search_queries": [
+      "mammography system diagram",
+      "mammography X-ray tube",
+      "breast imaging physics",
+      "mammography MRI medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "mammography system diagram",
+        "results": 10
+      },
+      {
+        "query": "mammography X-ray tube",
+        "results": 10
+      },
+      {
+        "query": "breast imaging physics",
+        "results": 10
+      },
+      {
+        "query": "mammography MRI medical",
+        "results": 10
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 201,
+    "section_title": "B1. Osata annokseen ja kuvanlaatuun liittyvän optimointiongelman itsenäisen ratkaisun",
+    "epa_id": 20,
+    "epa_title": "Läpivalaisu ja angiografia (ml kardiologia)",
+    "search_queries": [
+      "fluoroscopy image quality SNR CNR diagram",
+      "fluoroscopy system diagram",
+      "angiography catheter X-ray",
+      "image intensifier diagram"
+    ],
+    "tried_queries": [
+      {
+        "query": "fluoroscopy image quality SNR CNR diagram",
+        "results": 0
+      },
+      {
+        "query": "fluoroscopy system diagram",
+        "results": 10
+      },
+      {
+        "query": "angiography catheter X-ray",
+        "results": 10
+      },
+      {
+        "query": "image intensifier diagram",
+        "results": 10
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 427,
+    "section_title": "B5. Osata arvioida ja kehittää soveltuvia sätelysuojelumenettelyjä",
+    "epa_id": 18,
+    "epa_title": "Säteilybiologia ja säteilysuojelu radiologiassa",
+    "search_queries": [
+      "radiation protection diagram",
+      "radiation dose response curve",
+      "radiation shielding medical",
+      "radiation MRI medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "radiation protection diagram",
+        "results": 10
+      },
+      {
+        "query": "radiation dose response curve",
+        "results": 10
+      },
+      {
+        "query": "radiation shielding medical",
+        "results": 10
+      },
+      {
+        "query": "radiation MRI medical",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Radiation Pneumonitis MRI.png",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Radiation_Pneumonitis_MRI.png",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Radiation_Pneumonitis_MRI.png",
+    "score": 5,
+    "license": "CC BY 4.0",
+    "error": "Download failed"
+  },
+  {
+    "section_id": 13,
+    "section_title": "A7. Hallita kuvausasetusten ja -parametrien vaikutus kuvanlaatuun ja potilasannokseen",
+    "epa_id": 1,
+    "epa_title": "Natiivikuvantaminen",
+    "skipped": true,
+    "skip_reason": "Already has image"
+  },
+  {
+    "section_id": 36,
+    "section_title": "B1. Tuntea ultraäänikontrastiaineiden käyttökohteet",
+    "epa_id": 4,
+    "epa_title": "Ultraääni",
+    "search_queries": [
+      "contrast agent gadolinium ultrasound transducer diagram",
+      "ultrasound transducer diagram",
+      "medical ultrasound physics",
+      "Doppler ultrasound principle"
+    ],
+    "tried_queries": [
+      {
+        "query": "contrast agent gadolinium ultrasound transducer diagram",
+        "results": 0
+      },
+      {
+        "query": "ultrasound transducer diagram",
+        "results": 10
+      },
+      {
+        "query": "medical ultrasound physics",
+        "results": 10
+      },
+      {
+        "query": "Doppler ultrasound principle",
+        "results": 10
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 202,
+    "section_title": "B2. Osata laitteiden hyväksyttävyysvaatimusten mukaiset mittaukset",
+    "epa_id": 20,
+    "epa_title": "Läpivalaisu ja angiografia (ml kardiologia)",
+    "search_queries": [
+      "fluoroscopy system diagram",
+      "angiography catheter X-ray",
+      "image intensifier diagram",
+      "fluoroscopy DAP AEC medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "fluoroscopy system diagram",
+        "results": 10
+      },
+      {
+        "query": "angiography catheter X-ray",
+        "results": 10
+      },
+      {
+        "query": "image intensifier diagram",
+        "results": 10
+      },
+      {
+        "query": "fluoroscopy DAP AEC medical",
+        "results": 0
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 14,
+    "section_title": "A8. Osata potilasaltistuksen määrittäminen",
+    "epa_id": 1,
+    "epa_title": "Natiivikuvantaminen",
+    "skipped": true,
+    "skip_reason": "Already has image"
+  },
+  {
+    "section_id": 428,
+    "section_title": "B6. Osata toteuttaa kuvantamishuoneen tilasuunnittelu säteilysuojauksen osalta",
+    "epa_id": 18,
+    "epa_title": "Säteilybiologia ja säteilysuojelu radiologiassa",
+    "search_queries": [
+      "radiation protection diagram",
+      "radiation dose response curve",
+      "radiation shielding medical",
+      "radiation MRI DAP medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "radiation protection diagram",
+        "results": 10
+      },
+      {
+        "query": "radiation dose response curve",
+        "results": 10
+      },
+      {
+        "query": "radiation shielding medical",
+        "results": 10
+      },
+      {
+        "query": "radiation MRI DAP medical",
+        "results": 0
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 186,
+    "section_title": "B3. Tutustua yleisimpiin kliinisiin tutkimuksiin (lannerangan MK, pään MK, vartalon alueen MK, nivelten MK, sydämen MK, magneettiangiografia)",
+    "epa_id": 2,
+    "epa_title": "Magneettikuvaus",
+    "search_queries": [
+      "MRI magnet superconducting angiography catheter diagram",
+      "MRI scanner diagram",
+      "magnetic resonance imaging physics",
+      "MRI pulse sequence diagram"
+    ],
+    "tried_queries": [
+      {
+        "query": "MRI magnet superconducting angiography catheter diagram",
+        "results": 0
+      },
+      {
+        "query": "MRI scanner diagram",
+        "results": 10
+      },
+      {
+        "query": "magnetic resonance imaging physics",
+        "results": 10
+      },
+      {
+        "query": "MRI pulse sequence diagram",
+        "results": 10
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 400,
+    "section_title": "B4. Osata hyvän kuvan kriteerit erilaisten kuvausindikaatioiden kohdalla",
+    "epa_id": 3,
+    "epa_title": "Mammografia",
+    "search_queries": [
+      "mammography system diagram",
+      "mammography X-ray tube",
+      "breast imaging physics",
+      "mammography SNR MTF medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "mammography system diagram",
+        "results": 10
+      },
+      {
+        "query": "mammography X-ray tube",
+        "results": 10
+      },
+      {
+        "query": "breast imaging physics",
+        "results": 10
+      },
+      {
+        "query": "mammography SNR MTF medical",
+        "results": 0
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 37,
+    "section_title": "B2. Tutustua erikoistutkimuksiin",
+    "epa_id": 4,
+    "epa_title": "Ultraääni",
+    "search_queries": [
+      "ultrasound transducer diagram",
+      "medical ultrasound physics",
+      "Doppler ultrasound principle"
+    ],
+    "tried_queries": [
+      {
+        "query": "ultrasound transducer diagram",
+        "results": 10
+      },
+      {
+        "query": "medical ultrasound physics",
+        "results": 10
+      },
+      {
+        "query": "Doppler ultrasound principle",
+        "results": 10
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 379,
+    "section_title": "A13. Tuntea digitaalisen kuvan peruskäsitteet",
+    "epa_id": 21,
+    "epa_title": "Tietokonetomografia",
+    "search_queries": [
+      "CT scanner diagram",
+      "computed tomography principle",
+      "CT image reconstruction",
+      "CT Hounsfield medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "CT scanner diagram",
+        "results": 10
+      },
+      {
+        "query": "computed tomography principle",
+        "results": 10
+      },
+      {
+        "query": "CT image reconstruction",
+        "results": 10
+      },
+      {
+        "query": "CT Hounsfield medical",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:CT throat - non-hodgkin-lymphoma - sagittal reconstruction - 04.jpg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/f/fc/CT_throat_-_non-hodgkin-lymphoma_-_sagittal_reconstruction_-_04.jpg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/CT_throat_-_non-hodgkin-lymphoma_-_sagittal_reconstruction_-_04.jpg/960px-CT_throat_-_non-hodgkin-lymphoma_-_sagittal_reconstruction_-_04.jpg",
+    "score": 2,
+    "license": "CC BY 2.5",
+    "local_path": "editor/f5c050be34e34e33a875d28eb0f20b83.jpg",
+    "inserted": true
+  },
+  {
+    "section_id": 380,
+    "section_title": "A14. Osata ohjata henkilökuntaa säteilyturvallisessa työskentelyssä ja kommunikoida potilaan kanssa säteilyaltistukseen liittyvissä asioissa",
+    "epa_id": 21,
+    "epa_title": "Tietokonetomografia",
+    "search_queries": [
+      "CT scanner diagram",
+      "computed tomography principle",
+      "CT image reconstruction",
+      "CT DLP CTDIvol medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "CT scanner diagram",
+        "results": 10
+      },
+      {
+        "query": "computed tomography principle",
+        "results": 10
+      },
+      {
+        "query": "CT image reconstruction",
+        "results": 10
+      },
+      {
+        "query": "CT DLP CTDIvol medical",
+        "results": 0
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 38,
+    "section_title": "B3. Tuntea ultraäänen erityistekniikat",
+    "epa_id": 4,
+    "epa_title": "Ultraääni",
+    "search_queries": [
+      "ultrasound transducer diagram",
+      "medical ultrasound physics",
+      "Doppler ultrasound principle",
+      "ultrasound MRI medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "ultrasound transducer diagram",
+        "results": 10
+      },
+      {
+        "query": "medical ultrasound physics",
+        "results": 10
+      },
+      {
+        "query": "Doppler ultrasound principle",
+        "results": 10
+      },
+      {
+        "query": "ultrasound MRI medical",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:50pman medical imaging.svg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/b/be/50pman_medical_imaging.svg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/50pman_medical_imaging.svg/960px-50pman_medical_imaging.svg.png",
+    "score": 8,
+    "license": "CC BY-SA 3.0",
+    "local_path": "editor/b0a31857ad4944a69b8e2acbbe300bc2.png",
+    "inserted": true
+  },
+  {
+    "section_id": 187,
+    "section_title": "B4. Tutustua erikoistutkimuksiin (aivojen perfuusiotutkimus, aivojen funktionaalinen magneettikuvaus, spektroskopia, traktografia, relaksaatioaika-analyysi, magneettikuvausohjetut toimenpiteet/biopsiat)",
+    "epa_id": 2,
+    "epa_title": "Magneettikuvaus",
+    "search_queries": [
+      "MRI magnet superconducting MRI relaxation T1 T2 diagram",
+      "MRI scanner diagram",
+      "magnetic resonance imaging physics",
+      "MRI pulse sequence diagram"
+    ],
+    "tried_queries": [
+      {
+        "query": "MRI magnet superconducting MRI relaxation T1 T2 diagram",
+        "results": 0
+      },
+      {
+        "query": "MRI scanner diagram",
+        "results": 10
+      },
+      {
+        "query": "magnetic resonance imaging physics",
+        "results": 10
+      },
+      {
+        "query": "MRI pulse sequence diagram",
+        "results": 10
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 429,
+    "section_title": "B7. Osata raportoida säteilyturvallisuuspoikkeamista asianomaiselle taholle ja tuntea menettelyjä poikkeamien syiden selvittelyyn ja niistä oppimiseen",
+    "epa_id": 18,
+    "epa_title": "Säteilybiologia ja säteilysuojelu radiologiassa",
+    "search_queries": [
+      "radiation safety diagram",
+      "radiation protection diagram",
+      "radiation dose response curve",
+      "radiation shielding medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "radiation safety diagram",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Stonehouse safety sign, Radiation 001a.svg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/a/ad/Stonehouse_safety_sign%2C_Radiation_001a.svg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Stonehouse_safety_sign%2C_Radiation_001a.svg/960px-Stonehouse_safety_sign%2C_Radiation_001a.svg.png",
+    "score": 8,
+    "license": "Public domain",
+    "local_path": "editor/1e99dd95275e40b6af64d7440d1dec60.png",
+    "inserted": true
+  },
+  {
+    "section_id": 203,
+    "section_title": "B3. tutustua yleisimpiin kliinisiin tutkimuksiin",
+    "epa_id": 20,
+    "epa_title": "Läpivalaisu ja angiografia (ml kardiologia)",
+    "search_queries": [
+      "fluoroscopy system diagram",
+      "angiography catheter X-ray",
+      "image intensifier diagram"
+    ],
+    "tried_queries": [
+      {
+        "query": "fluoroscopy system diagram",
+        "results": 10
+      },
+      {
+        "query": "angiography catheter X-ray",
+        "results": 10
+      },
+      {
+        "query": "image intensifier diagram",
+        "results": 10
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 15,
+    "section_title": "A9. Osata ohjata henkilökuntaa säteilyturvallisessa työskentelyssä ja kommunikoida potilaan kanssa säteilyaltistukseen liittyvissä asioissa",
+    "epa_id": 1,
+    "epa_title": "Natiivikuvantaminen",
+    "search_queries": [
+      "X-ray tube diagram",
+      "digital radiography detector",
+      "X-ray imaging physics"
+    ],
+    "tried_queries": [
+      {
+        "query": "X-ray tube diagram",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Illustration of Crookes X-ray tube.svg",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/8/80/Illustration_of_Crookes_X-ray_tube.svg",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Illustration_of_Crookes_X-ray_tube.svg/960px-Illustration_of_Crookes_X-ray_tube.svg.png",
+    "score": 8,
+    "license": "CC0",
+    "local_path": "editor/1e0c79c5e19e49eb9a54d14e656f9f09.png",
+    "inserted": true
+  },
+  {
+    "section_id": 16,
+    "section_title": "A10. Tuntea tutkimusten sähköisen tallentamisen järjestelmät sekä DICOM-tiedoston rakenne ja siihen tallennettavat tiedot",
+    "epa_id": 1,
+    "epa_title": "Natiivikuvantaminen",
+    "skipped": true,
+    "skip_reason": "Already has image"
+  },
+  {
+    "section_id": 204,
+    "section_title": "B4. erikoistutkimuksiin (mukaan lukien kardiologiset) tutustuminen",
+    "epa_id": 20,
+    "epa_title": "Läpivalaisu ja angiografia (ml kardiologia)",
+    "search_queries": [
+      "fluoroscopy system diagram",
+      "angiography catheter X-ray",
+      "image intensifier diagram",
+      "fluoroscopy DAP medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "fluoroscopy system diagram",
+        "results": 10
+      },
+      {
+        "query": "angiography catheter X-ray",
+        "results": 10
+      },
+      {
+        "query": "image intensifier diagram",
+        "results": 10
+      },
+      {
+        "query": "fluoroscopy DAP medical",
+        "results": 0
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 188,
+    "section_title": "B5. Erityistä valvontaa vaativien potilaiden tutkimuksiin tutustuminen (teho-osaston potilaat, anestesiassa tehtävät tutkimukset)",
+    "epa_id": 2,
+    "epa_title": "Magneettikuvaus",
+    "search_queries": [
+      "MRI scanner diagram",
+      "magnetic resonance imaging physics",
+      "MRI pulse sequence diagram",
+      "MRI MRI medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "MRI scanner diagram",
+        "results": 10
+      },
+      {
+        "query": "magnetic resonance imaging physics",
+        "results": 10
+      },
+      {
+        "query": "MRI pulse sequence diagram",
+        "results": 10
+      },
+      {
+        "query": "MRI MRI medical",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Xe Gas MRI of Healthy and Diseased Lungs.png",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/a/a9/Xe_Gas_MRI_of_Healthy_and_Diseased_Lungs.png",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Xe_Gas_MRI_of_Healthy_and_Diseased_Lungs.png/960px-Xe_Gas_MRI_of_Healthy_and_Diseased_Lungs.png",
+    "score": 5,
+    "license": "Public domain",
+    "local_path": "editor/a23c3ecffe6e417aa562bd2c6bf8bc11.png",
+    "inserted": true
+  },
+  {
+    "section_id": 381,
+    "section_title": "A15. Tuntea tutkimusten sähköisen tallentamisen järjestelmät sekä DICOM-tiedoston rakenne ja siihen tallennettavat tiedot.",
+    "epa_id": 21,
+    "epa_title": "Tietokonetomografia",
+    "search_queries": [
+      "CT scanner diagram",
+      "computed tomography principle",
+      "CT image reconstruction",
+      "CT MRI DICOM medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "CT scanner diagram",
+        "results": 10
+      },
+      {
+        "query": "computed tomography principle",
+        "results": 10
+      },
+      {
+        "query": "CT image reconstruction",
+        "results": 10
+      },
+      {
+        "query": "CT MRI DICOM medical",
+        "results": 7
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 430,
+    "section_title": "B7. Tutustua kliiniseen auditointiin vähintään edellisen kliinisen auditoinnin dokumentaation kauttta",
+    "epa_id": 18,
+    "epa_title": "Säteilybiologia ja säteilysuojelu radiologiassa",
+    "search_queries": [
+      "radiation protection diagram",
+      "radiation dose response curve",
+      "radiation shielding medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "radiation protection diagram",
+        "results": 10
+      },
+      {
+        "query": "radiation dose response curve",
+        "results": 10
+      },
+      {
+        "query": "radiation shielding medical",
+        "results": 10
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 39,
+    "section_title": "B4. Osata hyödyntää kirjallisuutta",
+    "epa_id": 4,
+    "epa_title": "Ultraääni",
+    "skipped": true,
+    "skip_reason": "Title matches skip pattern: kirjallisuut"
+  },
+  {
+    "section_id": 205,
+    "section_title": "B5. Osata hyvän kuvan kriteerit erilaisten kuvausindikaatioiden kohdalla",
+    "epa_id": 20,
+    "epa_title": "Läpivalaisu ja angiografia (ml kardiologia)",
+    "search_queries": [
+      "fluoroscopy system diagram",
+      "angiography catheter X-ray",
+      "image intensifier diagram",
+      "fluoroscopy DSA medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "fluoroscopy system diagram",
+        "results": 10
+      },
+      {
+        "query": "angiography catheter X-ray",
+        "results": 10
+      },
+      {
+        "query": "image intensifier diagram",
+        "results": 10
+      },
+      {
+        "query": "fluoroscopy DSA medical",
+        "results": 1
+      }
+    ],
+    "best_score": 1,
+    "no_match": true
+  },
+  {
+    "section_id": 382,
+    "section_title": "B1. Tutustua yleisimpiin kliinisiin tutkimuksiin",
+    "epa_id": 21,
+    "epa_title": "Tietokonetomografia",
+    "search_queries": [
+      "CT scanner diagram",
+      "computed tomography principle",
+      "CT image reconstruction",
+      "CT DLP CTDI medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "CT scanner diagram",
+        "results": 10
+      },
+      {
+        "query": "computed tomography principle",
+        "results": 10
+      },
+      {
+        "query": "CT image reconstruction",
+        "results": 10
+      },
+      {
+        "query": "CT DLP CTDI medical",
+        "results": 0
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 189,
+    "section_title": "B6. Tutustua magneettikuvien hyödyntämiseen muualla kuin diagnostiikassa (sädehoito, kirurgia)",
+    "epa_id": 2,
+    "epa_title": "Magneettikuvaus",
+    "search_queries": [
+      "MRI magnet superconducting diagram",
+      "MRI scanner diagram",
+      "magnetic resonance imaging physics",
+      "MRI pulse sequence diagram"
+    ],
+    "tried_queries": [
+      {
+        "query": "MRI magnet superconducting diagram",
+        "results": 5
+      },
+      {
+        "query": "MRI scanner diagram",
+        "results": 10
+      },
+      {
+        "query": "magnetic resonance imaging physics",
+        "results": 10
+      },
+      {
+        "query": "MRI pulse sequence diagram",
+        "results": 10
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 17,
+    "section_title": "B1. Osaa annokseen ja kuvanlaatuun liittyvän optimointiongelman itsenäisen ratkaisun",
+    "epa_id": 1,
+    "epa_title": "Natiivikuvantaminen",
+    "skipped": true,
+    "skip_reason": "Already has image"
+  },
+  {
+    "section_id": 190,
+    "section_title": "B7. Osata hyvän kuvan kriteerit eri kehonosien ja erilaisten kuvausindikaatioiden kohdalla",
+    "epa_id": 2,
+    "epa_title": "Magneettikuvaus",
+    "search_queries": [
+      "MRI scanner diagram",
+      "magnetic resonance imaging physics",
+      "MRI pulse sequence diagram",
+      "MRI MRI SNR medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "MRI scanner diagram",
+        "results": 10
+      },
+      {
+        "query": "magnetic resonance imaging physics",
+        "results": 10
+      },
+      {
+        "query": "MRI pulse sequence diagram",
+        "results": 10
+      },
+      {
+        "query": "MRI MRI SNR medical",
+        "results": 10
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 18,
+    "section_title": "B2. Osata hyvän kuvan kriteerit erilaisten kuvausindikaatioiden kohdalla",
+    "epa_id": 1,
+    "epa_title": "Natiivikuvantaminen",
+    "skipped": true,
+    "skip_reason": "Already has image"
+  },
+  {
+    "section_id": 383,
+    "section_title": "B2. Osata laitteiden hyväksyttävyysvaatimusten mukaiset mittaukset",
+    "epa_id": 21,
+    "epa_title": "Tietokonetomografia",
+    "search_queries": [
+      "CT scanner diagram",
+      "computed tomography principle",
+      "CT image reconstruction",
+      "CT DICOM PACS medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "CT scanner diagram",
+        "results": 10
+      },
+      {
+        "query": "computed tomography principle",
+        "results": 10
+      },
+      {
+        "query": "CT image reconstruction",
+        "results": 10
+      },
+      {
+        "query": "CT DICOM PACS medical",
+        "results": 1
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 384,
+    "section_title": "B3. Osata annokseen ja kuvanlaatuun liittyvän optimointiongelman itsenäisen ratkaisu",
+    "epa_id": 21,
+    "epa_title": "Tietokonetomografia",
+    "search_queries": [
+      "CT image quality SNR CNR diagram",
+      "CT scanner diagram",
+      "computed tomography principle",
+      "CT image reconstruction"
+    ],
+    "tried_queries": [
+      {
+        "query": "CT image quality SNR CNR diagram",
+        "results": 7
+      },
+      {
+        "query": "CT scanner diagram",
+        "results": 10
+      },
+      {
+        "query": "computed tomography principle",
+        "results": 10
+      },
+      {
+        "query": "CT image reconstruction",
+        "results": 10
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 19,
+    "section_title": "B3. Osata laitteiden hyväksyttävyysvaatimusten mukaiset mittaukset",
+    "epa_id": 1,
+    "epa_title": "Natiivikuvantaminen",
+    "skipped": true,
+    "skip_reason": "Already has image"
+  },
+  {
+    "section_id": 385,
+    "section_title": "B4. Tuntea antropomorfinen fantomi, toteuttaa sillä kuvanlaadun tarkastelu ja potilasannoksen määritys",
+    "epa_id": 21,
+    "epa_title": "Tietokonetomografia",
+    "search_queries": [
+      "CT scanner diagram",
+      "computed tomography principle",
+      "CT image reconstruction",
+      "CT MTF TLD medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "CT scanner diagram",
+        "results": 10
+      },
+      {
+        "query": "computed tomography principle",
+        "results": 10
+      },
+      {
+        "query": "CT image reconstruction",
+        "results": 10
+      },
+      {
+        "query": "CT MTF TLD medical",
+        "results": 10
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 20,
+    "section_title": "B4. Tutustua yleisimpiin kliinisiin tutkimuksiin",
+    "epa_id": 1,
+    "epa_title": "Natiivikuvantaminen",
+    "search_queries": [
+      "X-ray tube diagram",
+      "digital radiography detector",
+      "X-ray imaging physics",
+      "X-ray DAP AEC medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "X-ray tube diagram",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Crookes x-ray tube diagram.png",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/c/cd/Crookes_x-ray_tube_diagram.png",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/c/cd/Crookes_x-ray_tube_diagram.png",
+    "score": 7,
+    "license": "Public domain",
+    "local_path": "editor/9f900708d4954ad08897d6fdbd2cf093.png",
+    "inserted": true
+  },
+  {
+    "section_id": 386,
+    "section_title": "B5. Tutustua erikoistutkimuksiin",
+    "epa_id": 21,
+    "epa_title": "Tietokonetomografia",
+    "search_queries": [
+      "CT scanner diagram",
+      "computed tomography principle",
+      "CT image reconstruction",
+      "CT MRI mAs medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "CT scanner diagram",
+        "results": 10
+      },
+      {
+        "query": "computed tomography principle",
+        "results": 10
+      },
+      {
+        "query": "CT image reconstruction",
+        "results": 10
+      },
+      {
+        "query": "CT MRI mAs medical",
+        "results": 10
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 21,
+    "section_title": "B5. Tutustua erikoistutkimuksiin",
+    "epa_id": 1,
+    "epa_title": "Natiivikuvantaminen",
+    "search_queries": [
+      "X-ray tube diagram",
+      "digital radiography detector",
+      "X-ray imaging physics",
+      "X-ray AEC medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "X-ray tube diagram",
+        "results": 10
+      }
+    ],
+    "wikimedia_title": "File:Diagram of line-focus tube depicting formation of x-rays, extracted from Fundamentals of X-ray; physics and technique (1944).png",
+    "wikimedia_url": "https://upload.wikimedia.org/wikipedia/commons/8/89/Diagram_of_line-focus_tube_depicting_formation_of_x-rays%2C_extracted_from_Fundamentals_of_X-ray%3B_physics_and_technique_%281944%29.png",
+    "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Diagram_of_line-focus_tube_depicting_formation_of_x-rays%2C_extracted_from_Fundamentals_of_X-ray%3B_physics_and_technique_%281944%29.png/960px-Diagram_of_line-focus_tube_depicting_formation_of_x-rays%2C_extracted_from_Fundamentals_of_X-ray%3B_physics_and_technique_%281944%29.png",
+    "score": 7,
+    "license": "Public domain",
+    "local_path": "editor/8bc7cd6f17274e509643dd5f53fdb7cd.png",
+    "inserted": true
+  },
+  {
+    "section_id": 387,
+    "section_title": "B6. Osata hyvän kuvan kriteerit erilaisten kuvausindikaatioiden kohdalla",
+    "epa_id": 21,
+    "epa_title": "Tietokonetomografia",
+    "search_queries": [
+      "CT scanner diagram",
+      "computed tomography principle",
+      "CT image reconstruction",
+      "CT CTDIvol CNR medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "CT scanner diagram",
+        "results": 10
+      },
+      {
+        "query": "computed tomography principle",
+        "results": 10
+      },
+      {
+        "query": "CT image reconstruction",
+        "results": 10
+      },
+      {
+        "query": "CT CTDIvol CNR medical",
+        "results": 0
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  },
+  {
+    "section_id": 388,
+    "section_title": "B7. Osata kaksoisenergiatutkimusten tekniset toteutusvaihtoehdot ja datan prosessointi",
+    "epa_id": 21,
+    "epa_title": "Tietokonetomografia",
+    "search_queries": [
+      "CT scanner diagram",
+      "computed tomography principle",
+      "CT image reconstruction",
+      "CT SPECT Compton medical"
+    ],
+    "tried_queries": [
+      {
+        "query": "CT scanner diagram",
+        "results": 10
+      },
+      {
+        "query": "computed tomography principle",
+        "results": 10
+      },
+      {
+        "query": "CT image reconstruction",
+        "results": 10
+      },
+      {
+        "query": "CT SPECT Compton medical",
+        "results": 10
+      }
+    ],
+    "best_score": 0,
+    "no_match": true
+  }
+]

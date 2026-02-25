@@ -1,0 +1,41 @@
+{% extends "sisalto/base_summereditor.html" %}
+{% load static %}
+
+{% block title %}Modaliteetit - Sairaalafyysikon erikoistumiskirja{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'sisalto/css/theory.css' %}?v=1">
+{% endblock %}
+
+{% block content %}
+
+<div class="theory-container">
+    <div class="theory-header">
+        <h1><i class="fas fa-book-open" style="color: var(--color-primary); margin-right: 8px;"></i> Modaliteetit</h1>
+        <p>Kattavat teoriasivut sairaalafysiikan erikoisalojen modaliteeteista. Sivut laajentavat EPA-korttien sisältöä pedagogisemmalla ja syvällisemmällä käsittelyllä.</p>
+    </div>
+
+    <div class="modalities-grid">
+        {% for mod in modalities %}
+        <a href="{{ mod.url }}" class="modality-card {% if not mod.available %}unavailable{% endif %}">
+            <div class="modality-card-header">
+                <div class="modality-card-icon" style="background: {{ mod.color }}15; color: {{ mod.color }};">
+                    <i class="fas {{ mod.icon }}"></i>
+                </div>
+                <div>
+                    <div class="modality-card-title">{{ mod.name }}</div>
+                    <div class="modality-card-count">{{ mod.count }} alimodaliteettia</div>
+                </div>
+            </div>
+            <div class="modality-card-desc">{{ mod.description }}</div>
+            {% if mod.available %}
+            <span class="modality-card-badge available">Saatavilla</span>
+            {% else %}
+            <span class="modality-card-badge coming-soon">Tulossa</span>
+            {% endif %}
+        </a>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

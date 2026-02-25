@@ -1,0 +1,480 @@
+{% extends "sisalto/base_summereditor.html" %}
+
+{% block title %}Harjoittelu - Sairaalafyysikon erikoistumiskirja{% endblock %}
+
+{% block content %}
+<!-- Score bar -->
+<div id="scoreBar" style="display: flex; justify-content: space-between; align-items: center; background: #2c3e50; border-radius: 12px; padding: 16px 24px; margin-bottom: 24px; border: 1px solid #34495e;">
+    <div style="display: flex; align-items: center; gap: 16px;">
+        <a href="/quiz/" style="color: #3498db; text-decoration: none; font-size: 0.95em;">
+            <i class="fas fa-arrow-left" style="margin-right: 6px;"></i>Takaisin
+        </a>
+        {% if difficulty_label %}
+        <span style="background: rgba(241,196,15,0.15); color: #f1c40f; padding: 4px 12px; border-radius: 12px; font-size: 0.8em;">
+            <i class="fas fa-signal" style="margin-right: 4px;"></i>{{ difficulty_label }}
+        </span>
+        {% endif %}
+    </div>
+    <div style="display: flex; gap: 24px; align-items: center;">
+        <div style="text-align: center;">
+            <div style="font-size: 1.4em; font-weight: 700; color: #2ecc71;" id="scoreDisplay">0/0</div>
+            <div style="color: #7f8c8d; font-size: 0.8em;">Oikein</div>
+        </div>
+        <div style="text-align: center;">
+            <div style="font-size: 1.4em; font-weight: 700; color: #f1c40f;" id="percentDisplay">-</div>
+            <div style="color: #7f8c8d; font-size: 0.8em;">Prosentti</div>
+        </div>
+        <a id="stopBtn" href="#" style="background: rgba(231,76,60,0.15); color: #e74c3c; border: 1px solid rgba(231,76,60,0.3); padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 0.9em; font-weight: 600; transition: all 0.2s;" onmouseover="this.style.background='rgba(231,76,60,0.25)'" onmouseout="this.style.background='rgba(231,76,60,0.15)'">
+            <i class="fas fa-stop" style="margin-right: 6px;"></i>Lopeta
+        </a>
+    </div>
+</div>
+
+<!-- Question container -->
+<div id="questionContainer" style="background: #2c3e50; border-radius: 12px; padding: 32px; border: 1px solid #34495e; min-height: 300px;">
+    <!-- Loading state -->
+    <div id="loadingState" style="text-align: center; padding: 60px 20px;">
+        <i class="fas fa-spinner fa-spin" style="font-size: 2em; color: #3498db; margin-bottom: 16px; display: block;"></i>
+        <p style="color: #95a5a6;">Ladataan kysymysta...</p>
+    </div>
+
+    <!-- Question content (hidden initially) -->
+    <div id="questionContent" style="display: none;">
+        <!-- EPA badge -->
+        <div id="epaBadge" style="margin-bottom: 16px;">
+            <span style="background: rgba(52,152,219,0.15); color: #3498db; padding: 4px 12px; border-radius: 12px; font-size: 0.85em;"></span>
+        </div>
+
+        <!-- Difficulty -->
+        <div id="difficultyBadge" style="margin-bottom: 16px;">
+            <span style="padding: 4px 12px; border-radius: 12px; font-size: 0.8em;"></span>
+        </div>
+
+        <!-- Question type hint -->
+        <div id="typeHint" style="color: #9b59b6; font-size: 0.9em; margin-bottom: 12px; font-style: italic;"></div>
+
+        <!-- Question text -->
+        <h2 id="questionText" style="color: #ecf0f1; font-size: 1.2em; line-height: 1.6; margin-bottom: 24px; font-weight: 500;"></h2>
+
+        <!-- Choices -->
+        <div id="choicesContainer" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px;"></div>
+
+        <!-- Answer button -->
+        <div id="answerSection" style="text-align: center;">
+            <button id="submitAnswer" disabled
+                    style="background: #34495e; color: #7f8c8d; border: none; padding: 14px 40px; border-radius: 8px; font-size: 1.05em; font-weight: 600; cursor: not-allowed; transition: all 0.2s;">
+                <i class="fas fa-check" style="margin-right: 8px;"></i>Vastaa
+            </button>
+        </div>
+
+        <!-- Result section (hidden until answered) -->
+        <div id="resultSection" style="display: none; margin-top: 24px;">
+            <!-- Result banner -->
+            <div id="resultBanner" style="padding: 16px 20px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
+                <i id="resultIcon" style="font-size: 1.5em; margin-right: 8px;"></i>
+                <span id="resultText" style="font-size: 1.1em; font-weight: 600;"></span>
+            </div>
+
+            <!-- General explanation -->
+            <div id="generalExplanation" style="background: #1a252f; border-radius: 8px; padding: 16px 20px; margin-bottom: 20px; border-left: 3px solid #3498db;">
+                <div style="color: #3498db; font-weight: 600; margin-bottom: 8px;">
+                    <i class="fas fa-lightbulb" style="margin-right: 6px;"></i>Selitys
+                </div>
+                <p id="explanationText" style="color: #b0b8c1; line-height: 1.6; margin: 0;"></p>
+            </div>
+
+            <!-- Next question button -->
+            <div style="text-align: center;">
+                <button id="nextQuestion"
+                        style="background: #3498db; color: white; border: none; padding: 14px 40px; border-radius: 8px; font-size: 1.05em; font-weight: 600; cursor: pointer; transition: background 0.2s;"
+                        onmouseover="this.style.background='#2980b9'"
+                        onmouseout="this.style.background='#3498db'">
+                    Seuraava kysymys <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- No questions state -->
+    <div id="noQuestionsState" style="display: none; text-align: center; padding: 60px 20px;">
+        <i class="fas fa-inbox" style="font-size: 3em; color: #7f8c8d; margin-bottom: 16px; display: block;"></i>
+        <h3 style="color: #ecf0f1;">Ei kysymyksia valituille aiheille</h3>
+        <p style="color: #95a5a6;">Palaa takaisin ja valitse aihealueet joille on luotu kysymyksia.</p>
+        <a href="/quiz/" style="display: inline-block; margin-top: 16px; background: #3498db; color: white; padding: 10px 24px; border-radius: 8px; text-decoration: none;">
+            <i class="fas fa-arrow-left" style="margin-right: 8px;"></i>Takaisin
+        </a>
+    </div>
+
+    <!-- Summary state (shown when user clicks Lopeta) -->
+    <div id="summaryState" style="display: none; text-align: center; padding: 40px 20px;">
+        <i id="summaryIcon" class="fas fa-flag-checkered" style="font-size: 3em; margin-bottom: 20px; display: block; color: #2ecc71;"></i>
+        <h3 style="color: #ecf0f1; margin-bottom: 8px;">Harjoittelu paattyi!</h3>
+        <div style="display: flex; justify-content: center; gap: 32px; margin: 24px 0;">
+            <div>
+                <div style="font-size: 2em; font-weight: 700; color: #3498db;" id="summaryTotal">0</div>
+                <div style="color: #95a5a6; font-size: 0.85em;">Kysymyksia</div>
+            </div>
+            <div>
+                <div style="font-size: 2em; font-weight: 700; color: #2ecc71;" id="summaryCorrect">0</div>
+                <div style="color: #95a5a6; font-size: 0.85em;">Oikein</div>
+            </div>
+            <div>
+                <div style="font-size: 2em; font-weight: 700; color: #f1c40f;" id="summaryPercent">-</div>
+                <div style="color: #95a5a6; font-size: 0.85em;">Prosentti</div>
+            </div>
+        </div>
+        <div style="display: flex; gap: 12px; justify-content: center; margin-top: 24px;">
+            <a href="/quiz/" style="background: #34495e; color: #ecf0f1; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; border: 1px solid #4a6274;">
+                <i class="fas fa-arrow-left" style="margin-right: 6px;"></i>Kysymyspankki
+            </a>
+            <a href="/progress/" style="background: #2ecc71; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+                <i class="fas fa-chart-line" style="margin-right: 6px;"></i>Edistyminen
+            </a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function() {
+    const CSRF_TOKEN = getCookie('csrftoken');
+    let currentQuestion = null;
+    let answered = false;
+
+    const DIFFICULTY_LABELS = {
+        1: {text: 'Helppo', color: '#2ecc71', bg: 'rgba(46,204,113,0.15)'},
+        2: {text: 'Keskitaso', color: '#3498db', bg: 'rgba(52,152,219,0.15)'},
+        3: {text: 'Haastava', color: '#e67e22', bg: 'rgba(230,126,34,0.15)'},
+        4: {text: 'Vaikea', color: '#e74c3c', bg: 'rgba(231,76,60,0.15)'},
+        5: {text: 'Tenttitaso', color: '#9b59b6', bg: 'rgba(155,89,182,0.15)'},
+    };
+
+    function showLoading() {
+        document.getElementById('loadingState').style.display = 'block';
+        document.getElementById('questionContent').style.display = 'none';
+        document.getElementById('noQuestionsState').style.display = 'none';
+    }
+
+    function showNoQuestions() {
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('questionContent').style.display = 'none';
+        document.getElementById('noQuestionsState').style.display = 'block';
+    }
+
+    function showQuestion(data) {
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('questionContent').style.display = 'block';
+        document.getElementById('noQuestionsState').style.display = 'none';
+        document.getElementById('resultSection').style.display = 'none';
+        document.getElementById('answerSection').style.display = 'block';
+
+        currentQuestion = data;
+        answered = false;
+
+        // EPA badge
+        const epaBadge = document.querySelector('#epaBadge span');
+        epaBadge.textContent = data.epa_title;
+
+        // Difficulty badge
+        const diff = DIFFICULTY_LABELS[data.difficulty] || DIFFICULTY_LABELS[2];
+        const diffBadge = document.querySelector('#difficultyBadge span');
+        diffBadge.textContent = diff.text;
+        diffBadge.style.color = diff.color;
+        diffBadge.style.background = diff.bg;
+
+        // Question type hint
+        const typeHint = document.getElementById('typeHint');
+        if (data.question_type === 'multi_select') {
+            typeHint.textContent = 'Valitse kaikki oikeat vaihtoehdot (voi olla useampi)';
+            typeHint.style.display = 'block';
+        } else {
+            typeHint.textContent = 'Valitse yksi oikea vaihtoehto';
+            typeHint.style.display = 'block';
+        }
+
+        // Question text
+        document.getElementById('questionText').textContent = data.text;
+
+        // Choices
+        const container = document.getElementById('choicesContainer');
+        container.innerHTML = '';
+        const inputType = data.question_type === 'multi_select' ? 'checkbox' : 'radio';
+
+        data.choices.forEach((choice, index) => {
+            const label = document.createElement('label');
+            label.className = 'choice-option';
+            label.style.cssText = 'display: flex; align-items: flex-start; gap: 12px; padding: 14px 18px; background: #1a252f; border: 2px solid #34495e; border-radius: 8px; cursor: pointer; transition: all 0.15s;';
+            label.dataset.choiceId = choice.id;
+
+            label.onmouseover = function() {
+                if (!answered) this.style.borderColor = '#3498db';
+            };
+            label.onmouseout = function() {
+                if (!answered && !this.querySelector('input').checked) {
+                    this.style.borderColor = '#34495e';
+                }
+            };
+
+            const input = document.createElement('input');
+            input.type = inputType;
+            input.name = 'quiz_choice';
+            input.value = choice.id;
+            input.style.cssText = 'margin-top: 3px; accent-color: #3498db; width: 18px; height: 18px; flex-shrink: 0;';
+            input.addEventListener('change', onChoiceChange);
+
+            const letter = String.fromCharCode(65 + index);
+            const span = document.createElement('span');
+            span.style.cssText = 'color: #b0b8c1; font-size: 1em; line-height: 1.5;';
+            span.innerHTML = '<strong style="color: #7f8c8d; margin-right: 6px;">' + letter + '.</strong> ' + choice.text;
+
+            label.appendChild(input);
+            label.appendChild(span);
+            container.appendChild(label);
+        });
+
+        // Reset submit button
+        const submitBtn = document.getElementById('submitAnswer');
+        submitBtn.disabled = true;
+        submitBtn.style.background = '#34495e';
+        submitBtn.style.color = '#7f8c8d';
+        submitBtn.style.cursor = 'not-allowed';
+
+        // Update score display
+        updateScoreDisplay(data.score, data.total);
+    }
+
+    function onChoiceChange() {
+        if (answered) return;
+        const selected = document.querySelectorAll('#choicesContainer input:checked');
+        const submitBtn = document.getElementById('submitAnswer');
+
+        if (selected.length > 0) {
+            submitBtn.disabled = false;
+            submitBtn.style.background = '#3498db';
+            submitBtn.style.color = 'white';
+            submitBtn.style.cursor = 'pointer';
+        } else {
+            submitBtn.disabled = true;
+            submitBtn.style.background = '#34495e';
+            submitBtn.style.color = '#7f8c8d';
+            submitBtn.style.cursor = 'not-allowed';
+        }
+
+        // Highlight selected labels
+        document.querySelectorAll('.choice-option').forEach(label => {
+            const input = label.querySelector('input');
+            label.style.borderColor = input.checked ? '#3498db' : '#34495e';
+        });
+    }
+
+    function submitAnswer() {
+        if (answered || !currentQuestion) return;
+        answered = true;
+
+        const selected = Array.from(document.querySelectorAll('#choicesContainer input:checked'))
+            .map(input => parseInt(input.value));
+
+        // Disable all inputs
+        document.querySelectorAll('#choicesContainer input').forEach(input => {
+            input.disabled = true;
+        });
+        document.querySelectorAll('.choice-option').forEach(label => {
+            label.style.cursor = 'default';
+            label.onmouseover = null;
+            label.onmouseout = null;
+        });
+
+        document.getElementById('answerSection').style.display = 'none';
+
+        fetch('/quiz/api/answer/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': CSRF_TOKEN,
+            },
+            body: JSON.stringify({
+                question_id: currentQuestion.question_id,
+                selected_ids: selected,
+            }),
+        })
+        .then(res => res.json())
+        .then(data => {
+            showResult(data);
+        })
+        .catch(err => {
+            console.error('Error checking answer:', err);
+        });
+    }
+
+    function showResult(data) {
+        // Color the choices
+        data.choices.forEach(choice => {
+            const label = document.querySelector(`.choice-option[data-choice-id="${choice.id}"]`);
+            if (!label) return;
+
+            if (choice.is_correct) {
+                label.style.borderColor = '#2ecc71';
+                label.style.background = 'rgba(46,204,113,0.1)';
+            } else if (choice.was_selected && !choice.is_correct) {
+                label.style.borderColor = '#e74c3c';
+                label.style.background = 'rgba(231,76,60,0.1)';
+            }
+
+            // Add explanation under each choice
+            if (choice.explanation) {
+                const expDiv = document.createElement('div');
+                expDiv.style.cssText = 'margin-top: 8px; padding: 8px 12px; border-radius: 4px; font-size: 0.88em; line-height: 1.5;';
+                if (choice.is_correct) {
+                    expDiv.style.color = '#2ecc71';
+                } else {
+                    expDiv.style.color = '#e74c3c';
+                }
+                expDiv.innerHTML = '<i class="fas fa-' + (choice.is_correct ? 'check-circle' : 'times-circle') + '" style="margin-right: 6px;"></i>' + choice.explanation;
+                label.appendChild(expDiv);
+            }
+        });
+
+        // Result banner
+        const banner = document.getElementById('resultBanner');
+        const icon = document.getElementById('resultIcon');
+        const text = document.getElementById('resultText');
+
+        if (data.is_correct) {
+            banner.style.background = 'rgba(46,204,113,0.15)';
+            banner.style.border = '1px solid rgba(46,204,113,0.3)';
+            icon.className = 'fas fa-check-circle';
+            icon.style.color = '#2ecc71';
+            text.style.color = '#2ecc71';
+            text.textContent = 'Oikein!';
+        } else {
+            banner.style.background = 'rgba(231,76,60,0.15)';
+            banner.style.border = '1px solid rgba(231,76,60,0.3)';
+            icon.className = 'fas fa-times-circle';
+            icon.style.color = '#e74c3c';
+            text.style.color = '#e74c3c';
+            text.textContent = 'Väärin';
+        }
+
+        // General explanation
+        const expText = document.getElementById('explanationText');
+        if (data.explanation) {
+            expText.textContent = data.explanation;
+            document.getElementById('generalExplanation').style.display = 'block';
+        } else {
+            document.getElementById('generalExplanation').style.display = 'none';
+        }
+
+        document.getElementById('resultSection').style.display = 'block';
+
+        // Update score
+        updateScoreDisplay(data.score, data.total);
+
+        // Show achievement toasts
+        if (data.new_achievements) {
+            data.new_achievements.forEach(function(a, i) {
+                setTimeout(function() { showAchievementToast(a); }, i * 800);
+            });
+        }
+    }
+
+    function showAchievementToast(achievement) {
+        var toast = document.createElement('div');
+        toast.style.cssText = 'position: fixed; top: 20px; right: 20px; background: var(--bg-surface, #161b26); border: 1px solid var(--color-success, #34d399); border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; gap: 12px; z-index: 9999; box-shadow: 0 8px 24px rgba(0,0,0,0.4); animation: slideIn 0.4s ease-out; max-width: 340px;';
+        toast.innerHTML = '<div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(52,211,153,0.15); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">' +
+            '<i class="fas ' + achievement.icon + '" style="color: var(--color-success, #34d399); font-size: 1.1em;"></i></div>' +
+            '<div><div style="color: var(--color-success, #34d399); font-size: 0.8em; font-weight: 600; margin-bottom: 2px;">Saavutus ansaittu!</div>' +
+            '<div style="color: var(--text-primary, #e2e8f0); font-weight: 600; font-size: 0.95em;">' + achievement.name + '</div>' +
+            '<div style="color: var(--text-tertiary, #64748b); font-size: 0.8em;">+' + achievement.xp_reward + ' XP</div></div>';
+        document.body.appendChild(toast);
+        setTimeout(function() {
+            toast.style.transition = 'opacity 0.5s, transform 0.5s';
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateX(100px)';
+            setTimeout(function() { toast.remove(); }, 500);
+        }, 4000);
+    }
+
+    function updateScoreDisplay(score, total) {
+        document.getElementById('scoreDisplay').textContent = score + '/' + total;
+        if (total > 0) {
+            const pct = Math.round((score / total) * 100);
+            document.getElementById('percentDisplay').textContent = pct + '%';
+        }
+    }
+
+    function loadQuestion() {
+        showLoading();
+        fetch('/quiz/api/question/')
+            .then(res => {
+                if (res.status === 404) {
+                    showNoQuestions();
+                    return null;
+                }
+                if (res.status === 400) {
+                    window.location.href = '/quiz/';
+                    return null;
+                }
+                return res.json();
+            })
+            .then(data => {
+                if (data && !data.error) {
+                    showQuestion(data);
+                } else if (data && data.error) {
+                    showNoQuestions();
+                }
+            })
+            .catch(err => {
+                console.error('Error loading question:', err);
+                showNoQuestions();
+            });
+    }
+
+    function showSummary() {
+        // Hide all other states
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('questionContent').style.display = 'none';
+        document.getElementById('noQuestionsState').style.display = 'none';
+        document.getElementById('summaryState').style.display = 'block';
+
+        // Get current score from the display
+        const scoreParts = document.getElementById('scoreDisplay').textContent.split('/');
+        const correct = parseInt(scoreParts[0]) || 0;
+        const total = parseInt(scoreParts[1]) || 0;
+        const pct = total > 0 ? Math.round((correct / total) * 100) + '%' : '-';
+
+        document.getElementById('summaryTotal').textContent = total;
+        document.getElementById('summaryCorrect').textContent = correct;
+        document.getElementById('summaryPercent').textContent = pct;
+
+        // Hide the score bar stop button area (optional: keep bar visible for context)
+        document.getElementById('stopBtn').style.display = 'none';
+    }
+
+    // Event listeners
+    document.getElementById('submitAnswer').addEventListener('click', submitAnswer);
+    document.getElementById('nextQuestion').addEventListener('click', loadQuestion);
+    document.getElementById('stopBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        showSummary();
+    });
+
+    // Keyboard shortcut: Enter to submit/next
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            if (answered) {
+                loadQuestion();
+            } else {
+                const submitBtn = document.getElementById('submitAnswer');
+                if (!submitBtn.disabled) submitAnswer();
+            }
+        }
+    });
+
+    // Load first question
+    loadQuestion();
+})();
+</script>
+{% endblock %}

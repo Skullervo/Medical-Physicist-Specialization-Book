@@ -1,0 +1,437 @@
+{% extends "sisalto/base_summereditor.html" %}
+
+{% block title %}Kertaus - Sairaalafyysikon erikoistumiskirja{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface); border-radius: 12px; padding: 16px 24px; margin-bottom: 24px; border: 1px solid var(--border-default);">
+    <div style="display: flex; align-items: center; gap: 16px;">
+        <a href="/progress/" style="color: var(--color-primary); text-decoration: none; font-size: 0.95em;">
+            <i class="fas fa-arrow-left" style="margin-right: 6px;"></i>Edistyminen
+        </a>
+        <span style="background: rgba(167,139,250,0.15); color: var(--color-isotooppi); padding: 4px 12px; border-radius: 12px; font-size: 0.8em;">
+            <i class="fas fa-brain" style="margin-right: 4px;"></i>Kertaus
+        </span>
+    </div>
+    <div style="text-align: center;">
+        <div style="font-size: 1.4em; font-weight: 700; color: var(--color-isotooppi); font-family: var(--font-display);" id="remainingDisplay">{{ due_count }}</div>
+        <div style="color: var(--text-tertiary); font-size: 0.8em;">Jaljella</div>
+    </div>
+</div>
+
+<!-- Question container -->
+<div id="questionContainer" style="background: var(--bg-surface); border-radius: 12px; padding: 32px; border: 1px solid var(--border-default); min-height: 300px;">
+
+    <!-- Loading state -->
+    <div id="loadingState" style="text-align: center; padding: 60px 20px;">
+        <i class="fas fa-spinner fa-spin" style="font-size: 2em; color: var(--color-primary); margin-bottom: 16px; display: block;"></i>
+        <p style="color: var(--text-tertiary);">Ladataan kysymysta...</p>
+    </div>
+
+    <!-- Question content (hidden initially) -->
+    <div id="questionContent" style="display: none;">
+        <!-- EPA badge -->
+        <div id="epaBadge" style="margin-bottom: 12px;">
+            <span style="background: var(--color-primary-muted); color: var(--color-primary); padding: 4px 12px; border-radius: 12px; font-size: 0.85em;"></span>
+        </div>
+
+        <!-- Difficulty -->
+        <div id="difficultyBadge" style="margin-bottom: 12px;">
+            <span style="padding: 4px 12px; border-radius: 12px; font-size: 0.8em;"></span>
+        </div>
+
+        <!-- SR info -->
+        <div id="srInfo" style="color: var(--text-tertiary); font-size: 0.85em; margin-bottom: 16px;">
+            <i class="fas fa-sync-alt" style="margin-right: 4px;"></i>
+            <span id="srRepetitions"></span>
+        </div>
+
+        <!-- Question text -->
+        <h2 id="questionText" style="color: var(--text-primary); font-size: 1.2em; line-height: 1.6; margin-bottom: 24px; font-weight: 500;"></h2>
+
+        <!-- Choices -->
+        <div id="choicesContainer" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px;"></div>
+
+        <!-- Answer button -->
+        <div id="answerSection" style="text-align: center;">
+            <button id="submitAnswer" disabled
+                    style="background: var(--bg-overlay); color: var(--text-disabled); border: none; padding: 14px 40px; border-radius: 8px; font-size: 1.05em; font-weight: 600; cursor: not-allowed; transition: all 0.2s;">
+                <i class="fas fa-check" style="margin-right: 8px;"></i>Vastaa
+            </button>
+        </div>
+
+        <!-- Result section -->
+        <div id="resultSection" style="display: none; margin-top: 24px;">
+            <!-- Result banner -->
+            <div id="resultBanner" style="padding: 16px 20px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
+                <i id="resultIcon" style="font-size: 1.5em; margin-right: 8px;"></i>
+                <span id="resultText" style="font-size: 1.1em; font-weight: 600;"></span>
+            </div>
+
+            <!-- SR schedule info -->
+            <div id="srSchedule" style="background: var(--bg-raised); border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; text-align: center; border-left: 3px solid var(--color-isotooppi);">
+                <i class="fas fa-clock" style="color: var(--color-isotooppi); margin-right: 6px;"></i>
+                <span id="srScheduleText" style="color: var(--text-secondary); font-size: 0.9em;"></span>
+            </div>
+
+            <!-- General explanation -->
+            <div id="generalExplanation" style="background: var(--bg-raised); border-radius: 8px; padding: 16px 20px; margin-bottom: 20px; border-left: 3px solid var(--color-primary);">
+                <div style="color: var(--color-primary); font-weight: 600; margin-bottom: 8px;">
+                    <i class="fas fa-lightbulb" style="margin-right: 6px;"></i>Selitys
+                </div>
+                <p id="explanationText" style="color: var(--text-secondary); line-height: 1.6; margin: 0;"></p>
+            </div>
+
+            <!-- Next button -->
+            <div style="text-align: center;">
+                <button id="nextQuestion"
+                        style="background: var(--color-isotooppi); color: white; border: none; padding: 14px 40px; border-radius: 8px; font-size: 1.05em; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                    Seuraava <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- All done state -->
+    <div id="allDoneState" style="display: none; text-align: center; padding: 60px 20px;">
+        <i class="fas fa-check-circle" style="font-size: 3em; color: var(--color-success); margin-bottom: 16px; display: block;"></i>
+        <h3 style="color: var(--text-primary); margin-bottom: 8px;">Kaikki kerrattu!</h3>
+        <p style="color: var(--text-secondary); margin-bottom: 24px;">Seuraava kertaus odottaa huomenna. Jatka harjoittelua kysymyspankissa.</p>
+        <div style="display: flex; gap: 12px; justify-content: center;">
+            <a href="/progress/" style="background: var(--bg-raised); color: var(--text-primary); padding: 10px 24px; border-radius: 8px; text-decoration: none; border: 1px solid var(--border-default);">
+                <i class="fas fa-chart-line" style="margin-right: 6px;"></i>Edistyminen
+            </a>
+            <a href="/quiz/" style="background: var(--color-primary); color: white; padding: 10px 24px; border-radius: 8px; text-decoration: none;">
+                <i class="fas fa-book" style="margin-right: 6px;"></i>Kysymyspankki
+            </a>
+        </div>
+    </div>
+
+    <!-- No cards state -->
+    <div id="noCardsState" style="display: none; text-align: center; padding: 60px 20px;">
+        <i class="fas fa-clock" style="font-size: 3em; color: var(--color-isotooppi); margin-bottom: 16px; display: block;"></i>
+        <h3 style="color: var(--text-primary); margin-bottom: 8px;">Ei kerattavia kysymyksia</h3>
+        <p style="color: var(--text-secondary); margin-bottom: 24px;">Aloita harjoittelu kysymyspankista, niin kertausjarjestelma alkaa toimia automaattisesti.</p>
+        <a href="/quiz/" style="display: inline-block; background: var(--color-primary); color: white; padding: 10px 24px; border-radius: 8px; text-decoration: none;">
+            <i class="fas fa-book" style="margin-right: 6px;"></i>Kysymyspankki
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function() {
+    var CSRF_TOKEN = getCookie('csrftoken');
+    var currentQuestion = null;
+    var answered = false;
+    var initialDueCount = {{ due_count }};
+    var totalCards = {{ total_cards }};
+
+    var DIFFICULTY_LABELS = {
+        1: {text: 'Helppo', color: 'var(--color-success)', bg: 'rgba(52,211,153,0.15)'},
+        2: {text: 'Keskitaso', color: 'var(--color-primary)', bg: 'var(--color-primary-muted)'},
+        3: {text: 'Haastava', color: 'var(--color-warning)', bg: 'rgba(251,191,36,0.15)'},
+        4: {text: 'Vaikea', color: 'var(--color-error)', bg: 'rgba(248,113,113,0.15)'},
+        5: {text: 'Tenttitaso', color: 'var(--color-isotooppi)', bg: 'rgba(167,139,250,0.15)'},
+    };
+
+    function showLoading() {
+        document.getElementById('loadingState').style.display = 'block';
+        document.getElementById('questionContent').style.display = 'none';
+        document.getElementById('allDoneState').style.display = 'none';
+        document.getElementById('noCardsState').style.display = 'none';
+    }
+
+    function showAllDone() {
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('questionContent').style.display = 'none';
+        document.getElementById('allDoneState').style.display = 'block';
+        document.getElementById('noCardsState').style.display = 'none';
+    }
+
+    function showNoCards() {
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('questionContent').style.display = 'none';
+        document.getElementById('allDoneState').style.display = 'none';
+        document.getElementById('noCardsState').style.display = 'block';
+    }
+
+    function showQuestion(data) {
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('questionContent').style.display = 'block';
+        document.getElementById('allDoneState').style.display = 'none';
+        document.getElementById('noCardsState').style.display = 'none';
+        document.getElementById('resultSection').style.display = 'none';
+        document.getElementById('answerSection').style.display = 'block';
+
+        currentQuestion = data;
+        answered = false;
+
+        // Update remaining counter
+        document.getElementById('remainingDisplay').textContent = data.remaining;
+
+        // EPA badge
+        document.querySelector('#epaBadge span').textContent = data.epa_title;
+
+        // Difficulty
+        var diff = DIFFICULTY_LABELS[data.difficulty] || DIFFICULTY_LABELS[2];
+        var diffBadge = document.querySelector('#difficultyBadge span');
+        diffBadge.textContent = diff.text;
+        diffBadge.style.color = diff.color;
+        diffBadge.style.background = diff.bg;
+
+        // SR info
+        var reps = data.repetitions || 0;
+        var interval = data.interval_days || 0;
+        document.getElementById('srRepetitions').textContent =
+            'Kertaus #' + (reps + 1) + (interval > 0 ? ' (edellinen: ' + interval + ' pv sitten)' : ' (uusi)');
+
+        // Question text
+        document.getElementById('questionText').textContent = data.text;
+
+        // Choices
+        var container = document.getElementById('choicesContainer');
+        container.innerHTML = '';
+        var inputType = data.question_type === 'multi_select' ? 'checkbox' : 'radio';
+
+        data.choices.forEach(function(choice, index) {
+            var label = document.createElement('label');
+            label.className = 'choice-option';
+            label.style.cssText = 'display: flex; align-items: flex-start; gap: 12px; padding: 14px 18px; background: var(--bg-raised); border: 2px solid var(--border-default); border-radius: 8px; cursor: pointer; transition: all 0.15s;';
+            label.dataset.choiceId = choice.id;
+
+            label.onmouseover = function() {
+                if (!answered) this.style.borderColor = 'var(--color-primary)';
+            };
+            label.onmouseout = function() {
+                if (!answered && !this.querySelector('input').checked) {
+                    this.style.borderColor = 'var(--border-default)';
+                }
+            };
+
+            var input = document.createElement('input');
+            input.type = inputType;
+            input.name = 'review_choice';
+            input.value = choice.id;
+            input.style.cssText = 'margin-top: 3px; accent-color: var(--color-primary); width: 18px; height: 18px; flex-shrink: 0;';
+            input.addEventListener('change', onChoiceChange);
+
+            var letter = String.fromCharCode(65 + index);
+            var span = document.createElement('span');
+            span.style.cssText = 'color: var(--text-secondary); font-size: 1em; line-height: 1.5;';
+            span.innerHTML = '<strong style="color: var(--text-tertiary); margin-right: 6px;">' + letter + '.</strong> ' + choice.text;
+
+            label.appendChild(input);
+            label.appendChild(span);
+            container.appendChild(label);
+        });
+
+        // Reset submit button
+        var submitBtn = document.getElementById('submitAnswer');
+        submitBtn.disabled = true;
+        submitBtn.style.background = 'var(--bg-overlay)';
+        submitBtn.style.color = 'var(--text-disabled)';
+        submitBtn.style.cursor = 'not-allowed';
+    }
+
+    function onChoiceChange() {
+        if (answered) return;
+        var selected = document.querySelectorAll('#choicesContainer input:checked');
+        var submitBtn = document.getElementById('submitAnswer');
+
+        if (selected.length > 0) {
+            submitBtn.disabled = false;
+            submitBtn.style.background = 'var(--color-primary)';
+            submitBtn.style.color = 'white';
+            submitBtn.style.cursor = 'pointer';
+        } else {
+            submitBtn.disabled = true;
+            submitBtn.style.background = 'var(--bg-overlay)';
+            submitBtn.style.color = 'var(--text-disabled)';
+            submitBtn.style.cursor = 'not-allowed';
+        }
+
+        document.querySelectorAll('.choice-option').forEach(function(label) {
+            var input = label.querySelector('input');
+            label.style.borderColor = input.checked ? 'var(--color-primary)' : 'var(--border-default)';
+        });
+    }
+
+    function submitAnswer() {
+        if (answered || !currentQuestion) return;
+        answered = true;
+
+        var selected = Array.from(document.querySelectorAll('#choicesContainer input:checked'))
+            .map(function(input) { return parseInt(input.value); });
+
+        // Disable inputs
+        document.querySelectorAll('#choicesContainer input').forEach(function(input) {
+            input.disabled = true;
+        });
+        document.querySelectorAll('.choice-option').forEach(function(label) {
+            label.style.cursor = 'default';
+            label.onmouseover = null;
+            label.onmouseout = null;
+        });
+
+        document.getElementById('answerSection').style.display = 'none';
+
+        fetch('/quiz/api/review/answer/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': CSRF_TOKEN,
+            },
+            body: JSON.stringify({
+                question_id: currentQuestion.question_id,
+                selected_ids: selected,
+            }),
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(data) { showResult(data); })
+        .catch(function(err) { console.error('Error:', err); });
+    }
+
+    function showResult(data) {
+        // Color choices
+        data.choices.forEach(function(choice) {
+            var label = document.querySelector('.choice-option[data-choice-id="' + choice.id + '"]');
+            if (!label) return;
+
+            if (choice.is_correct) {
+                label.style.borderColor = 'var(--color-success)';
+                label.style.background = 'rgba(52,211,153,0.1)';
+            } else if (choice.was_selected && !choice.is_correct) {
+                label.style.borderColor = 'var(--color-error)';
+                label.style.background = 'rgba(248,113,113,0.1)';
+            }
+
+            if (choice.explanation) {
+                var expDiv = document.createElement('div');
+                expDiv.style.cssText = 'margin-top: 8px; padding: 8px 12px; border-radius: 4px; font-size: 0.88em; line-height: 1.5;';
+                expDiv.style.color = choice.is_correct ? 'var(--color-success)' : 'var(--color-error)';
+                expDiv.innerHTML = '<i class="fas fa-' + (choice.is_correct ? 'check-circle' : 'times-circle') + '" style="margin-right: 6px;"></i>' + choice.explanation;
+                label.appendChild(expDiv);
+            }
+        });
+
+        // Result banner
+        var banner = document.getElementById('resultBanner');
+        var icon = document.getElementById('resultIcon');
+        var text = document.getElementById('resultText');
+
+        if (data.is_correct) {
+            banner.style.background = 'rgba(52,211,153,0.15)';
+            banner.style.border = '1px solid rgba(52,211,153,0.3)';
+            icon.className = 'fas fa-check-circle';
+            icon.style.color = 'var(--color-success)';
+            text.style.color = 'var(--color-success)';
+            text.textContent = 'Oikein!';
+        } else {
+            banner.style.background = 'rgba(248,113,113,0.15)';
+            banner.style.border = '1px solid rgba(248,113,113,0.3)';
+            icon.className = 'fas fa-times-circle';
+            icon.style.color = 'var(--color-error)';
+            text.style.color = 'var(--color-error)';
+            text.textContent = 'Vaarin';
+        }
+
+        // SR schedule info
+        var days = data.next_review_days || 1;
+        var scheduleText;
+        if (data.is_correct) {
+            scheduleText = 'Seuraava kertaus: ' + days + ' paivan paasta';
+        } else {
+            scheduleText = 'Palautettu alkuun \u2014 seuraava kertaus huomenna';
+        }
+        document.getElementById('srScheduleText').textContent = scheduleText;
+
+        // Explanation
+        var expText = document.getElementById('explanationText');
+        if (data.explanation) {
+            expText.textContent = data.explanation;
+            document.getElementById('generalExplanation').style.display = 'block';
+        } else {
+            document.getElementById('generalExplanation').style.display = 'none';
+        }
+
+        document.getElementById('resultSection').style.display = 'block';
+
+        // Update remaining
+        document.getElementById('remainingDisplay').textContent = data.remaining;
+
+        // Show achievement toasts
+        if (data.new_achievements) {
+            data.new_achievements.forEach(function(a, i) {
+                setTimeout(function() { showAchievementToast(a); }, i * 800);
+            });
+        }
+    }
+
+    function showAchievementToast(achievement) {
+        var toast = document.createElement('div');
+        toast.style.cssText = 'position: fixed; top: 20px; right: 20px; background: var(--bg-surface, #161b26); border: 1px solid var(--color-success, #34d399); border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; gap: 12px; z-index: 9999; box-shadow: 0 8px 24px rgba(0,0,0,0.4); max-width: 340px;';
+        toast.innerHTML = '<div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(52,211,153,0.15); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">' +
+            '<i class="fas ' + achievement.icon + '" style="color: var(--color-success, #34d399); font-size: 1.1em;"></i></div>' +
+            '<div><div style="color: var(--color-success, #34d399); font-size: 0.8em; font-weight: 600; margin-bottom: 2px;">Saavutus ansaittu!</div>' +
+            '<div style="color: var(--text-primary, #e2e8f0); font-weight: 600; font-size: 0.95em;">' + achievement.name + '</div>' +
+            '<div style="color: var(--text-tertiary, #64748b); font-size: 0.8em;">+' + achievement.xp_reward + ' XP</div></div>';
+        document.body.appendChild(toast);
+        setTimeout(function() {
+            toast.style.transition = 'opacity 0.5s, transform 0.5s';
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateX(100px)';
+            setTimeout(function() { toast.remove(); }, 500);
+        }, 4000);
+    }
+
+    function loadQuestion() {
+        showLoading();
+        fetch('/quiz/api/review/question/')
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                if (data.done) {
+                    if (totalCards === 0) {
+                        showNoCards();
+                    } else {
+                        showAllDone();
+                    }
+                } else {
+                    showQuestion(data);
+                }
+            })
+            .catch(function(err) {
+                console.error('Error loading question:', err);
+                showNoCards();
+            });
+    }
+
+    // Event listeners
+    document.getElementById('submitAnswer').addEventListener('click', submitAnswer);
+    document.getElementById('nextQuestion').addEventListener('click', loadQuestion);
+
+    // Keyboard: Enter to submit/next
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            if (answered) {
+                loadQuestion();
+            } else {
+                var submitBtn = document.getElementById('submitAnswer');
+                if (!submitBtn.disabled) submitAnswer();
+            }
+        }
+    });
+
+    // Initial load
+    if (initialDueCount > 0) {
+        loadQuestion();
+    } else if (totalCards === 0) {
+        showNoCards();
+    } else {
+        showAllDone();
+    }
+})();
+</script>
+{% endblock %}

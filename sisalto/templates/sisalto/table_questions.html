@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tenttikysymykset - Moderni taulukko</title>
+    
+    <!-- Base CSS files from base.html -->
+    <link rel="stylesheet" href="{% static 'sisalto/css/site.css' %}?v=3">
+    <link rel="stylesheet" href="{% static 'sisalto/css/header.css' %}?v=3">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <style>
+:root {
+  --bg: #1a1a1a;
+  --text: #f0f0f0;
+  --border: rgba(255, 255, 255, 0.3);
+  --border-hover: rgba(255, 255, 255, 0.5);
+  --header-bg: #2d2d2d;
+  --row-even: rgba(255, 255, 255, 0.02);
+  --row-hover: rgba(255, 255, 255, 0.08);
+}
+
+/* Override base styles to maintain our dark theme */
+body {
+  background-color: var(--bg) !important;
+  color: var(--text) !important;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+.main {
+  background-color: var(--bg) !important;
+  padding: 0 !important;
+  flex: 1;
+}
+
+.content-area {
+  width: 100%;
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.page-title {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 3rem;
+  color: var(--text);
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.table-container {
+  background: rgba(45, 45, 45, 0.9);
+  border-radius: 12px;
+  padding: 0;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  width: 100%;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 1rem;
+}
+
+.modern-table {
+  width: 100%;
+  min-width: 900px;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: transparent;
+  border-radius: 8px;
+  margin: 0;
+  table-layout: fixed;
+}
+
+.modern-table thead {
+  background: var(--header-bg);
+}
+
+.modern-table thead th {
+  padding: 1rem 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.85rem;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-bottom: 2px solid var(--border);
+  text-align: left;
+}
+
+.modern-table thead th:first-child {
+  border-top-left-radius: 8px;
+}
+
+.modern-table thead th:last-child {
+  border-top-right-radius: 8px;
+}
+
+.modern-table tbody tr {
+  transition: all 0.2s ease;
+}
+
+.modern-table tbody tr:nth-child(even) {
+  background: var(--row-even);
+}
+
+.modern-table tbody tr:hover {
+  background: var(--row-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.modern-table tbody td {
+  padding: 0.875rem 0.75rem;
+  border: 1px solid var(--border);
+  vertical-align: middle;
+  color: var(--text);
+}
+
+.modern-table tbody tr:hover td {
+  border-color: var(--border-hover);
+}
+
+.modern-table tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 8px;
+}
+
+.modern-table tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 8px;
+}
+
+.modern-table thead th,
+.modern-table tbody td {
+  padding: 0.6rem 0.4rem;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.question-text {
+  font-weight: 500;
+  line-height: 1.3;
+  max-width: 100%;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-subject {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+}
+
+.badge-year {
+  background: linear-gradient(135deg, #f093fb, #f5576c);
+  color: white;
+}
+
+.badge-question {
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  color: white;
+}
+
+.btn-practice {
+  padding: 0.4rem 0.6rem;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  white-space: nowrap;
+}
+
+.btn-practice:hover {
+  background: linear-gradient(135deg, #5a67d8, #6b46c1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  color: white;
+  text-decoration: none;
+}
+
+.checkbox-col {
+  width: 50px;
+  text-align: center;
+}
+
+.question-col {
+  width: 40%;
+  min-width: 250px;
+}
+
+.subject-col {
+  width: 140px;
+}
+
+.date-col {
+  width: 90px;
+}
+
+.year-col {
+  width: 70px;
+}
+
+.number-col {
+  width: 50px;
+}
+
+.action-col {
+  width: 110px;
+  text-align: center;
+}
+
+.form-check-input {
+  width: 1.2rem;
+  height: 1.2rem;
+  border: 2px solid var(--border);
+  background-color: transparent;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.form-check-input:checked {
+  background-color: #667eea;
+  border-color: #667eea;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .content-area {
+    padding: 0.5rem;
+  }
+  
+  .page-title {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .table-container {
+    padding: 0;
+    overflow-x: auto;
+  }
+  
+  .table-wrapper {
+    padding: 0.5rem;
+  }
+  
+  .modern-table {
+    min-width: 750px;
+  }
+  
+  .modern-table thead th,
+  .modern-table tbody td {
+    padding: 0.4rem 0.2rem;
+    font-size: 0.75rem;
+  }
+  
+  .question-col {
+    min-width: 200px;
+  }
+  
+  .subject-col {
+    width: 100px;
+  }
+  
+  .date-col {
+    width: 70px;
+  }
+  
+  .action-col {
+    width: 90px;
+  }
+  
+  .btn-practice {
+    padding: 0.3rem 0.4rem;
+    font-size: 0.7rem;
+    gap: 0.2rem;
+  }
+}
+    </style>
+</head>
+<body>
+    <!-- Header from base.html -->
+    <div class="header">
+        <span class="header-logo">
+            <i class="fa-solid fa-radiation fa-lg" style="color:#90caf9;"></i>
+        </span>
+        <span class="header-title">Tenttikysymykset - Moderni taulukko</span>
+        <span class="header-search">
+            <input type="text" placeholder="Search">
+            <button><i class="fa fa-search"></i></button>
+        </span>
+    </div>
+
+    <!-- TOC toggle button for mobile -->
+    <button id="toc-toggle" class="toc-toggle" onclick="
+        const toc = document.getElementById('toc');
+        if (toc) {
+            toc.classList.toggle('toc-open');
+            const icon = this.querySelector('i');
+            if (icon) {
+                if (toc.classList.contains('toc-open')) {
+                    icon.className = 'fas fa-times';
+                } else {
+                    icon.className = 'fas fa-list';
+                }
+            }
+        }
+    ">
+        <i class="fas fa-list"></i>
+        <span>Sisältö</span>
+    </button>
+
+    <div class="container">
+        <!-- Sidebar from base.html -->
+        <nav class="sidebar" id="sidebar">
+            <ul>
+                <li><a href="/">Etusivu</a></li>
+                <li>
+                    <details>
+                        <summary><a href="/epas/">EPA:t</a></summary>
+                        <ul>
+                            <li>
+                                <details>
+                                    <summary><a href="/radiologia_epas/">Radiologia</a></summary>
+                                    <ul>
+                                        <li><a href="/radiologia/lapivalaisu-angiografia/">Läpivalaisu ja angiografia (ml kardiologia)</a></li>
+                                        <li><a href="/radiologia/magneettikuvaus/">Magneettikuvaus</a></li>
+                                        <li><a href="/radiologia/mammografia/">Mammografia</a></li>
+                                        <li><a href="/radiologia/natiivikuvantaminen/">Natiivikuvantaminen</a></li>
+                                        <li><a href="/radiologia/tietokonetomografia/">Tietokonetomografia</a></li>
+                                        <li><a href="/radiologia/ultraaani/">Ultraääni</a></li>
+                                        <li><a href="/radiologia/kuvankatselunaytot/">Kuvankatselunäytöt</a></li>
+                                        <li><a href="/radiologia/hammaskuvantaminen/">Hammas­kuvantaminen</a></li>
+                                        <li><a href="/radiologia/sateilybiologia-suojelu/">Säteilybiologia ja säteily­suojelu radiologiassa</a></li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details>
+                                    <summary><a href="/sadehoito_epas/">Sädehoito</a></summary>
+                                    <ul>
+                                        <li><a href="/sadehoito/peruskasitteet/">Sädehoidon peruskäsitteet</a></li>
+                                        <li><a href="/sadehoito/kuvantaminen_suunnittelu/">Kuvantaminen sädehoidon suunnittelua varten</a></li>
+                                        <li><a href="/sadehoito/ulkoinen/">Ulkoinen sädehoito</a></li>
+                                        <li><a href="/sadehoito/sisainen/">Sisäinen sädehoito</a></li>
+                                        <li><a href="/sadehoito/dosimetria/">Sädehoidon dosimetria</a></li>
+                                        <li><a href="/sadehoito/laitteet/">Säteilyä tuottavat laitteet sädehoidossa</a></li>
+                                        <li><a href="/sadehoito/sateilybiologia/">Säteilybiologia ja säteily­suojelu sädehoidossa</a></li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details>
+                                    <summary><a href="/isotooppi_epas/">Isotooppilääketiede</a></summary>
+                                    <ul>
+                                        <li><a href="/isotooppi/gammakamera/">Gammakamerateknologia</a></li>
+                                        <li><a href="/isotooppi/petkamera/">PET-kamerateknologia</a></li>
+                                        <li><a href="/isotooppi/annostelu_radiofarmasia/">Annostelu ja radiofarmasiatoiminta</a></li>
+                                        <li><a href="/isotooppi/gammakuvaus_spet/">Gammakuvaus ja SPET-tutkimukset</a></li>
+                                        <li><a href="/isotooppi/pet_tutkimukset/">PET-tutkimukset</a></li>
+                                        <li><a href="/isotooppi/radionuklidihoidot/">Radionuklidihoidot</a></li>
+                                        <li><a href="/isotooppi/sateilybiologia_suojelu/">Säteilybiologia ja säteily­suojelu isotooppitoiminnassa</a></li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details>
+                                    <summary><a href="/knf_epas/">KNF</a></summary>
+                                    <ul>
+                                        <li><a href="/knf/eeg/">EEG</a></li>
+                                        <li><a href="/knf/heratepotentiaali_enmg/">Herätepotentiaali ja ENMG-tutkimukset</a></li>
+                                        <li><a href="/knf/iom/">IOM</a></li>
+                                        <li><a href="/knf/laite_sahkoturvallisuus/">Laite- ja sähköturvallisuus</a></li>
+                                        <li><a href="/knf/sarja_tms_hoidot/">Sarja-TMS-hoidot ja navigoidut TMS-tutkimukset</a></li>
+                                        <li><a href="/knf/uni/">Uni</a></li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details>
+                                    <summary><a href="/fysiologia_epas/">Fysiologia</a></summary>
+                                    <ul>
+                                        <li><a href="/fysiologia/ekg/">EKG-tutkimukset</a></li>
+                                        <li><a href="/fysiologia/gi_kanava/">GI-kanavan tutkimukset</a></li>
+                                        <li><a href="/fysiologia/keuhkofunktio/">Keuhkofunktiotutkimukset</a></li>
+                                        <li><a href="/fysiologia/luuston_mineraali/">Luuston mineraalitiheyden mittaus</a></li>
+                                        <li><a href="/fysiologia/verenkierto/">Verenkiertotutkimukset</a></li>
+                                    </ul>
+                                </details>
+                            </li>
+                        </ul>
+                    </details>
+                </li>
+                <li><a href="/examquestions/">Tenttikysymykset</a></li>
+                <li><a href="/table-questions/" class="active">Taulukko</a></li>
+                <li><a href="/links/">Hyödyllisiä linkkejä</a></li>
+                <li><a href="/raportoi-ongelma/">Raportoi ongelmasta</a></li>
+                <li><a href="/sairaalafyysikot/">Sairaalafyysikot ry</a></li>
+            </ul>
+        </nav>
+        
+        <main class="main">
+            <div class="content-area">
+                <h1 class="page-title">Tenttikysymykset</h1>
+                
+                <div class="table-container">
+                    <div class="table-wrapper">
+                        <table class="modern-table">
+                        <thead>
+                            <tr>
+                                <th class="checkbox-col">
+                                    <input type="checkbox" class="form-check-input" id="selectAll">
+                                </th>
+                                <th class="question-col">Kysymys</th>
+                                <th class="subject-col">Aihe</th>
+                                <th class="date-col">Tenttipäivä</th>
+                                <th class="year-col">Vuosi</th>
+                                <th class="number-col">Q#</th>
+                                <th class="action-col">Toiminto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for question in questions %}
+                            <tr>
+                                <td class="checkbox-col">
+                                    <input type="checkbox" class="form-check-input question-checkbox" data-id="{{ question.id }}">
+                                </td>
+                                <td class="question-col">
+                                    <div class="question-text">
+                                        {{ question.question_text|truncatechars:120 }}
+                                    </div>
+                                </td>
+                                <td class="subject-col">
+                                    <span class="badge badge-subject">
+                                        {{ question.subject_area|default:"Ei määritelty" }}
+                                    </span>
+                                </td>
+                                <td class="date-col">
+                                    {{ question.exam_date|default:"Ei tiedossa" }}
+                                </td>
+                                <td class="year-col">
+                                    <span class="badge badge-year">
+                                        {{ question.year|default:"?" }}
+                                    </span>
+                                </td>
+                                <td class="number-col">
+                                    <span class="badge badge-question">
+                                        {{ question.question_number }}
+                                    </span>
+                                </td>
+                                <td class="action-col">
+                                    <a href="{% url 'exam_practice' %}?question={{ question.id }}" class="btn-practice">
+                                        📝 Harjoittele
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="7" style="text-align: center; padding: 3rem; color: #999;">
+                                    Ei kysymyksiä saatavilla
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <aside class="toc" id="toc">
+            <h3>Sisältö</h3>
+            <ul>
+                <li><a href="#table">Kysymystaulukko</a></li>
+            </ul>
+        </aside>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const selectAllCheckbox = document.getElementById('selectAll');
+        const questionCheckboxes = document.querySelectorAll('.question-checkbox');
+        
+        // Select/deselect all functionality
+        selectAllCheckbox.addEventListener('change', function() {
+            questionCheckboxes.forEach(checkbox => {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+        });
+        
+        // Update select all checkbox when individual checkboxes change
+        questionCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const checkedCount = document.querySelectorAll('.question-checkbox:checked').length;
+                const totalCount = questionCheckboxes.length;
+                
+                selectAllCheckbox.checked = checkedCount === totalCount;
+                selectAllCheckbox.indeterminate = checkedCount > 0 && checkedCount < totalCount;
+            });
+        });
+    });
+    </script>
+</body>
+</html>
