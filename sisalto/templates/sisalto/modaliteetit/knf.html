@@ -1,0 +1,1621 @@
+{% extends "sisalto/base_summereditor.html" %}
+{% load static %}
+
+{% block title %}Kliinisen neurofysiologian teoria - Fyysikkoportti{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'sisalto/css/theory.css' %}?v=1">
+{% endblock %}
+
+{% block content %}
+
+<div class="theory-container">
+    <div class="theory-header">
+        <h1><i class="fas fa-brain" style="color: #fb923c; margin-right: 8px;"></i> Kliinisen neurofysiologian teoria</h1>
+        <p>Kattava teoriamateriaali kliinisen neurofysiologian fysikaalisista perusteista, mittausmenetelmistä, signaalinkäsittelystä ja laiteturvallisuudesta. Valitse aihealue alla olevista välilehdistä.</p>
+        {% if is_superuser %}
+        <button class="theory-edit-toggle" id="editModeToggle" onclick="toggleEditMode()">
+            <i class="fas fa-images"></i> <span>Muokkaa kuvia</span>
+        </button>
+        {% endif %}
+    </div>
+
+    <!-- Upload modal (superuser only) -->
+    {% if is_superuser %}
+    <div class="theory-upload-modal" id="uploadModal">
+        <div class="theory-upload-modal-content">
+            <h3><i class="fas fa-image" style="color: var(--color-primary); margin-right: 8px;"></i> Lisää kuva</h3>
+            <div class="theory-upload-dropzone" id="uploadDropzone">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span>Vedä kuva tähän tai klikkaa valitaksesi</span>
+                <input type="file" id="uploadFileInput" accept="image/*" style="display: none;">
+            </div>
+            <div class="theory-upload-field">
+                <label for="uploadCaption">Kuvateksti</label>
+                <textarea id="uploadCaption" placeholder="Kuvan selitys suomeksi..."></textarea>
+            </div>
+            <div class="theory-upload-field">
+                <label for="uploadAlt">Alt-teksti (saavutettavuus)</label>
+                <input type="text" id="uploadAlt" placeholder="Kuvaileva teksti ruudunlukijalle...">
+            </div>
+            <div class="theory-upload-field">
+                <label>Kuvan koko</label>
+                <div class="theory-size-picker" id="uploadSizePicker">
+                    <label class="size-option"><input type="radio" name="uploadSize" value="small"> Pieni (40 %)</label>
+                    <label class="size-option"><input type="radio" name="uploadSize" value="medium" checked> Normaali (65 %)</label>
+                    <label class="size-option"><input type="radio" name="uploadSize" value="large"> Suuri (85 %)</label>
+                    <label class="size-option"><input type="radio" name="uploadSize" value="full"> Täysleveys</label>
+                </div>
+            </div>
+            <div class="theory-upload-actions">
+                <button class="btn-cancel" onclick="closeUploadModal()">Peruuta</button>
+                <button class="btn-save" id="uploadSaveBtn" onclick="saveUploadedImage()" disabled>Tallenna</button>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Tab navigation -->
+    <div class="theory-tabs" role="tablist">
+        <button class="theory-tab active" role="tab" data-tab="eeg" aria-selected="true">
+            <i class="fas fa-brain"></i> EEG
+        </button>
+        <button class="theory-tab" role="tab" data-tab="heratepotentiaali">
+            <i class="fas fa-bolt"></i> Herätepotentiaali ja ENMG
+        </button>
+        <button class="theory-tab" role="tab" data-tab="iom">
+            <i class="fas fa-hospital"></i> IOM ja DBS
+        </button>
+        <button class="theory-tab" role="tab" data-tab="uni">
+            <i class="fas fa-moon"></i> Unitutkimukset
+        </button>
+        <button class="theory-tab" role="tab" data-tab="tms">
+            <i class="fas fa-magnet"></i> TMS ja neuronavigaatio
+        </button>
+        <button class="theory-tab" role="tab" data-tab="laiteturvallisuus">
+            <i class="fas fa-shield-alt"></i> Laite- ja sähköturvallisuus
+        </button>
+    </div>
+
+    <!-- ================================================================
+         VÄLILEHTI 1: EEG
+         ================================================================ -->
+    <div class="theory-panel active" id="panel-eeg" role="tabpanel">
+        <div class="theory-content">
+
+            <h2>1. Johdanto</h2>
+            <p>Elektroenkefalografia (EEG) on aivokuoren sähköisen toiminnan rekisteröintimenetelmä, jossa pään pinnalle asetettavilla elektrodeilla mitataan aivokuoren hermosolujen postsynaptisten potentiaalien summaa. EEG on kliinisen neurofysiologian perustutkimus, ja sairaalafyysikon on hallittava signaalin syntymekanismit, mittaustekniikka, signaalinkäsittely, häiriöiden eliminointi sekä laadunvarmistus.</p>
+
+            <h2>2. EEG-signaalin syntymekanismi</h2>
+
+            <h3>2.1 Neuronien sähköinen toiminta</h3>
+            <p>EEG-signaalin pääasiallinen lähde ovat aivokuoren <strong>pyramidaalineuronien postsynaptiset potentiaalit</strong> (PSP). Aktiopotentiaalit ovat liian lyhytkestoisia (1&ndash;2 ms) summautuakseen mitattavaksi signaaliksi pään pinnalla, kun taas PSP:t kestävät 10&ndash;100 ms ja summautuvat tehokkaasti.</p>
+            <p>Mitattavassa signaalissa summautuminen vaatii:</p>
+            <ul>
+                <li><strong>Spatiaalinen kohdistuminen</strong>: Pyramidaalineuronit ovat järjestäytyneet kohtisuoraan aivokuoren pintaa vasten &rarr; niiden dipolikentät summautuvat</li>
+                <li><strong>Ajallinen synkronia</strong>: Tuhansia neuroneja aktivoituu samanaikaisesti talamokortikaalisissa silmukoissa</li>
+                <li><strong>Riittävä pinta-ala</strong>: Vähintään ~6 cm&sup2; synkronisesti aktiivista aivokuorta tarvitaan pinta-EEG:ssä havaittavaan signaaliin</li>
+            </ul>
+
+            <h3>2.2 Tilavuusjohde ja etenevä kenttä</h3>
+            <p>Neuronien sähköinen kenttä leviää tilavuusjohtumisena aivonesteen, kallon ja päänahkan läpi. Tämä aiheuttaa:</p>
+            <ul>
+                <li><strong>Spatiaalinen suodattuminen</strong>: Korkean taajuuden (pienialaisten) lähteiden signaali vaimenee voimakkaammin kuin laaja-alaisten &rarr; pinta-EEG:n spatiaalinen resoluutio on ~1&ndash;2 cm</li>
+                <li><strong>Amplitudin pieneneminen</strong>: Pinta-EEG:n amplitudi on 10&ndash;200 &micro;V (vrt. kortikaalinen EEG: 0,5&ndash;5 mV)</li>
+                <li><strong>Kallo toimii matalapassusuodattimena</strong>: Resistiivinen kallo vaimentaa korkeita taajuuksia suhteellisesti enemmän</li>
+            </ul>
+
+            <h3>2.3 MEG-signaalin synty</h3>
+            <p>Magnetoenkefalografia (MEG) mittaa neuronien magneettikenttiä. MEG ja EEG ovat komplementaarisia:</p>
+            <table>
+                <thead>
+                    <tr><th>Ominaisuus</th><th>EEG</th><th>MEG</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Mittaussuure</td><td>Sähköinen potentiaali (V)</td><td>Magneettivuon tiheys (T)</td></tr>
+                    <tr><td>Amplitudi</td><td>10&ndash;200 &micro;V</td><td>50&ndash;500 fT</td></tr>
+                    <tr><td>Herkkyys lähteen suunnalle</td><td>Sekä radiaaliset että tangentiaaliset</td><td>Pääasiassa tangentiaaliset dipoli</td></tr>
+                    <tr><td>Kallon vaikutus</td><td>Merkittävä (tilavuusjohde)</td><td>Minimaalinen (magneettikenttä ei vaimen)</td></tr>
+                    <tr><td>Referenssi</td><td>Tarvitsee referenssielektrodin</td><td>Referenssivapaa</td></tr>
+                    <tr><td>Lähteen paikannus</td><td>Syvät ja pinnalliset</td><td>Erityisesti fissuuran tangentiaaliset</td></tr>
+                </tbody>
+            </table>
+
+            <h2>3. Elektrodijärjestelmät ja kytkennät</h2>
+
+            <h3>3.1 Kansainvälinen 10-20-järjestelmä</h3>
+            <div class="theory-image-slot" data-slot="eeg-10-20-system" data-tab="eeg" data-default-caption="10-20-järjestelmän elektrodisijoittelu ja nimeämiskonventio"></div>
+            <p>10-20-järjestelmä on kansainvälinen standardi elektrodien sijoittelulle pään pinnalle. Elektrodit sijoitetaan suhteellisiin paikkoihin (10 % ja 20 % välit) anatomisten maamerkkien (nasion, inion, preaurikulaaripisteet) perusteella:</p>
+            <ul>
+                <li><strong>21 elektrodia</strong>: Fp1, Fp2, F3, F4, F7, F8, Fz, C3, C4, Cz, T3(T7), T4(T8), T5(P7), T6(P8), P3, P4, Pz, O1, O2, A1(M1), A2(M2)</li>
+                <li><strong>10-10-järjestelmä</strong>: 75 elektrodia, parempi spatiaalinen resoluutio &rarr; epilepsiakirurgia, lähdepaikannus</li>
+                <li><strong>10-5-järjestelmä</strong>: 345 elektrodia &rarr; HD-EEG-tutkimukset</li>
+                <li><strong>Nimeämiskonventio</strong>: Kirjain = alue (F = frontaalinen, C = sentraalinen, P = parietaalinen, T = temporaalinen, O = okkipitaalinen). Parittomat numerot = vasen, parilliset = oikea, z = keskilinja.</li>
+            </ul>
+
+            <h3>3.2 Elektrodityypit ja impedanssi</h3>
+            <table>
+                <thead>
+                    <tr><th>Elektrodityyppi</th><th>Materiaali</th><th>Käyttö</th><th>Impedanssitavoite</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Kuppi (cup)</td><td>Ag/AgCl, kullattu</td><td>Rutiini-EEG, video-EEG</td><td>&lt; 5 k&Omega;</td></tr>
+                    <tr><td>Nauha/myssy</td><td>Ag/AgCl, sintered</td><td>Rutiini-EEG, nopea asettelu</td><td>&lt; 10 k&Omega;</td></tr>
+                    <tr><td>Neulaneulatrodit</td><td>Ruostumaton teräs, platina</td><td>Leikkaussali (steriilit), teho-osasto</td><td>Vaihteleva</td></tr>
+                    <tr><td>Subduraalielektrodit (grid/strip)</td><td>Platina, ruostumaton teräs</td><td>Epilepsiakirurgian invasiivinen monitorointi</td><td>&lt; 1 k&Omega;</td></tr>
+                    <tr><td>Syvyyselektrodit (SEEG)</td><td>Platina-iridium</td><td>Stereo-EEG (syvien rakenteiden rekisteröinti)</td><td>&lt; 1 k&Omega;</td></tr>
+                </tbody>
+            </table>
+
+            <div class="theory-info">
+                <p><strong>Impedanssin merkitys:</strong> Elektrodin ja ihon välinen kontakti-impedanssi on pidettävä alhaisena (&lt; 5 k&Omega;) ja tasaisena kaikkien elektrodien välillä. Korkea impedanssi heikentää signaali-kohinasuhdetta ja lisää 50 Hz verkkohäiriön kytkeytymistä. Impedanssiero elektrodien välillä aiheuttaa yhteismuotoisen signaalin vaimenemiseroja &rarr; artefaktia.</p>
+            </div>
+
+            <h3>3.3 Kytkennät (montages)</h3>
+            <p>EEG-signaalin esitystapa riippuu valitusta kytkennästä. Jokainen esitetty kanava on kahden pisteen potentiaaliero:</p>
+            <ul>
+                <li><strong>Bipolaarinen kytkentä</strong>: Vierekkäisten elektrodien potentiaaliero. Pitkittäiset (longitudinal) ja poikittaiset (transverse) ketjut. Lokalisoi parhaiten: vaihekäännös osoittaa lähteen paikan.</li>
+                <li><strong>Referenssaalikytkentä</strong>: Kukin elektrodi vs. yhteinen referenssielektrodi (tyypillisesti korvat A1/A2, Cz, tai keskiarvoreferenssi). Näyttää todellisen amplitudin mutta referenssin kontaminaatio on mahdollinen.</li>
+                <li><strong>Keskiarvoreferenssi (common average)</strong>: Kukin elektrodi vs. kaikkien elektrodien keskiarvo. Hyvä kun lähteet ovat fokaalisia, mutta laaja-alaiset tapahtumat jakautuvat kaikille kanaville.</li>
+                <li><strong>Laplacian (CSD, current source density)</strong>: Pintalaplacian-operaattori parantaa spatiaalista resoluutiota eliminoimalla tilavuusjohteen leviämisen. Vaatii tiheän elektrodimatriisin.</li>
+            </ul>
+
+            <div class="theory-info">
+                <p><strong>Sairaalafyysikon osaaminen (B1):</strong> Fyysikon on osattava rakentaa yksilöllisiä kytkentöjä: valita sopivat sisäänmenot (elektrodiparit vahvistimeen) ja katselukytkennät (montage) eri kliinisiin tilanteisiin. Esim. epilepsiakirurgiapotilaan extraoperatiivisessa video-EEG-monitoroinnissa tarvitaan räätälöity kytkentä, joka kattaa epäillyn epileptogeenisen alueen tiheällä elektrodiverkoilla.</p>
+            </div>
+
+            <h2>4. Signaalin käsittely ja digitalisointi</h2>
+
+            <h3>4.1 AD-muunnos ja digitalisointi</h3>
+            <table>
+                <thead>
+                    <tr><th>Parametri</th><th>Tyypillinen arvo</th><th>Merkitys</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Näytteenottotaajuus</td><td>256&ndash;1024 Hz (rutiini), 2048&ndash;5120 Hz (epilepsiakirurgia)</td><td>Nyquistin teoreema: \( f_s \geq 2 f_{\text{max}} \). Antialiasing-suodatin ennen AD-muunnosta.</td></tr>
+                    <tr><td>Bittitarkkuus</td><td>16&ndash;24 bittiä</td><td>Kvantisointivirhe: LSB = mitta-alue / \( 2^n \). 24-bittinen &rarr; ~0,03 &micro;V resoluutio.</td></tr>
+                    <tr><td>Mitta-alue</td><td>&plusmn; 3,2 mV (tyypillinen)</td><td>Riittävä kattamaan EEG-signaali ja häiriöt ilman leikkautumista</td></tr>
+                    <tr><td>CMRR</td><td>&gt; 100 dB (110 dB nykyiset)</td><td>Common-mode rejection ratio: yhteismuotoisen häiriön (esim. 50 Hz) vaimennus</td></tr>
+                    <tr><td>Sisääntuloimp.</td><td>&gt; 100 M&Omega;</td><td>Korkea tuloimpedanssi minimoi signaalin vaimennuksen elektrodin impedanssin kanssa</td></tr>
+                </tbody>
+            </table>
+
+            <h3>4.2 Suodattimet</h3>
+            <ul>
+                <li><strong>Ylipäästösuodatin (high-pass / AC coupling)</strong>: Poistaa hitaat vaellukset ja DC-offsetin. Rutiini-EEG: 0,3&ndash;0,5 Hz (aikavakio 0,3&ndash;0,5 s). Hitaat aaltomuodot (delta) vaativat matalamman rajataajuuden (0,01&ndash;0,1 Hz).</li>
+                <li><strong>Alipäästösuodatin (low-pass)</strong>: Poistaa korkean taajuuden kohinan. Rutiini-EEG: 35&ndash;70 Hz. EMG-artefaktin poisto: 15&ndash;35 Hz (mutta menettää myös korkean taajuuden EEG-informaation).</li>
+                <li><strong>Notch-suodatin (50 Hz)</strong>: Poistaa verkkotaajuisen häiriön. Käytetään viime kädessä, kun häiriötä ei saada eliminoitua muutoin. Kapea kaistanpysäytyssuodatin (Q-arvo korkea).</li>
+            </ul>
+            <div class="formula">
+                <p>Aikavakio ja rajataajuus: \( \tau = \frac{1}{2\pi f_c} \), missä \( f_c \) = ylipäästösuodattimen rajataajuus. Esim. \( \tau = 0{,}3 \) s &rarr; \( f_c = 0{,}53 \) Hz.</p>
+            </div>
+
+            <h3>4.3 Digitaalinen signaalinkäsittely</h3>
+            <ul>
+                <li><strong>FFT (Fast Fourier Transform)</strong>: Taajuusspektrin laskeminen. Spektraalitehon tiheys (PSD) ja taajuuskaistojen tehon laskeminen (delta, theta, alpha, beta, gamma).</li>
+                <li><strong>Taajuuskaistat</strong>: Delta (&lt; 4 Hz), theta (4&ndash;8 Hz), alpha (8&ndash;13 Hz), beta (13&ndash;30 Hz), gamma (&gt; 30 Hz). Kliinisessä käytössä kunkin kaistan suhteellinen teho ja topografinen jakauma ovat diagnostisesti merkityksellisiä.</li>
+                <li><strong>Koherenssiaanalyysi</strong>: Kahden kanavan välisen taajuuskohtaisen korrelaation mittaus &rarr; konnektiviteettimittaukset</li>
+                <li><strong>Aika-taajuusanalyysi</strong>: Wavelet-muunnos tai STFT (short-time Fourier transform) &rarr; ajallisesti muuttuvien taajuussisältöjen analyysi</li>
+                <li><strong>ICA (Independent Component Analysis)</strong>: Riippumattomien komponenttien erottelu &rarr; artefaktien poisto (silmänliike, sydänlyönti, EMG)</li>
+            </ul>
+
+            <h2>5. Normaali aivotoiminta ja poikkeavat löydökset</h2>
+
+            <h3>5.1 Normaali aikuisen EEG</h3>
+            <div class="theory-image-slot" data-slot="eeg-normal-adult" data-tab="eeg" data-default-caption="Normaalin aikuisen EEG-rytmit: alfa, beeta, theta ja delta"></div>
+            <ul>
+                <li><strong>Alpha-rytmi</strong>: 8&ndash;13 Hz, okkipitaalinen, dominoiva levossa silmät kiinni. Vaimenee silmiä avattaessa (alpha-suppressio). Amplitudi tyypillisesti 20&ndash;100 &micro;V.</li>
+                <li><strong>Beta-rytmi</strong>: 13&ndash;30 Hz, frontosentralinen, yleistyy aktiivisuuden ja bentsodiatsepiinien vaikutuksesta</li>
+                <li><strong>Mu-rytmi</strong>: ~10 Hz, sensorimotorinen alue, vaimenee vastakkaisen puolen liikkeessä tai liikkeen ajattelussa</li>
+                <li><strong>Unen vaiheet</strong>: Unisukkulat (N2, 12&ndash;14 Hz), K-kompleksit (N2), delta-aaltojen lisääntyminen (N3)</li>
+            </ul>
+
+            <h3>5.2 Poikkeavat löydökset</h3>
+            <ul>
+                <li><strong>Epileptiformiset purkaukset</strong>: Piikit (spikes, &lt; 70 ms), terävät aallot (sharp waves, 70&ndash;200 ms), piikki-hidasaalto-kompleksit (3 Hz tyypillinen absenssi-epilepsiassa)</li>
+                <li><strong>Hidastuneisuus</strong>: Fokaalinen hidastuma viittaa rakenteelliseen leesioon. Yleistynyt hidastuma viittaa enkefalopatiaan (metabolinen, toksinen).</li>
+                <li><strong>Status epilepticus -kuviot</strong>: Jatkuvat rytmiset purkaukset &rarr; hätätilanne, vaatii välitöntä hoitoa</li>
+                <li><strong>Aivokuolema</strong>: ECI (electrocerebral inactivity) &mdash; ei havaittavaa aivokuoren sähköistä toimintaa &ge; 2 &micro;V amplitudilla. Vähintään 30 min rekisteröinti, etäisyys elektrodien välillä &ge; 10 cm, herkkyys 2 &micro;V/mm.</li>
+            </ul>
+
+            <h2>6. Provokaatiot</h2>
+
+            <h3>6.1 Vilkkuvalostimulaatio (IPS)</h3>
+            <ul>
+                <li><strong>Tekniikka</strong>: Stroboskooppilamppu 30 cm etäisyydellä, taajuudet 1&ndash;30 Hz nousevalla ja laskevalla sarjalla</li>
+                <li><strong>Normaali vaste</strong>: Photic driving (taajuusseurantavaste) okkipitaalialueella</li>
+                <li><strong>Poikkeava vaste</strong>: PPR (photoparoxysmal response) &mdash; epileptiformiset purkaukset stimulaation aikana. Luokittelu: I&ndash;IV (lokalisoitu okkipitaalinen &rarr; yleistynyt piikki-hidasaalto).</li>
+            </ul>
+
+            <h3>6.2 Hyperventilaatio (HV)</h3>
+            <ul>
+                <li><strong>Tekniikka</strong>: 3&ndash;5 min tehokas hyperventilaatio &rarr; hypokapnia &rarr; aivoverisuonten vasokonstriktio</li>
+                <li><strong>Normaali vaste</strong>: Symmetrinen hidastuma (erityisesti lapsilla ja nuorilla). Palautuu 1&ndash;2 min sisällä.</li>
+                <li><strong>Poikkeava vaste</strong>: Epileptiformiset purkaukset, erityisesti absenssi-epilepsiassa (3 Hz piikki-hidasaalto)</li>
+                <li><strong>Vasta-aiheet</strong>: Vaikea sydän- tai keuhkosairaus, tuore aivoverenvuoto, moyamoya-tauti</li>
+            </ul>
+
+            <h3>6.3 Unideprivaatio</h3>
+            <p>Osittainen tai täydellinen valvominen yöllä lisää epileptiformisten purkausten todennäköisyyttä EEG:ssä. Käytetään erityisesti, kun rutiini-EEG on normaali mutta epilepsiaepäily on vahva.</p>
+
+            <h2>7. Lähteen paikannus</h2>
+
+            <h3>7.1 EEG-lähdemallitus (source localization)</h3>
+            <p>EEG-lähdemallitus pyrkii ratkaisemaan inversiongelman: mitkä aivojen lähteet tuottavat mitatun pinta-EEG-signaalin. Ongelma on matemaattisesti huonosti määritelty (ill-posed) &mdash; ääretön määrä lähderatkaisuja voi tuottaa saman pintajakauman.</p>
+            <ul>
+                <li><strong>Dipoli-malli</strong>: Oletetaan yksi tai muutama ekvivalenttidipoli. Sopii fokaalisille lähteille (epileptiforminen piikki). Least-squares-sovitus.</li>
+                <li><strong>Distribuoitu lähdemalli</strong>: Aivokuori jaetaan tuhansiin lähdepisteisiin. LORETA (Low Resolution Electromagnetic Tomography), sLORETA, eLORETA, MNE (Minimum Norm Estimation).</li>
+                <li><strong>Beamformer</strong>: Spatiaalinen suodatus, joka optimoi herkkyyden tietylle pisteelle samalla minimoiden muiden lähteiden kontribuution.</li>
+            </ul>
+
+            <h3>7.2 Etenemismalli (forward model)</h3>
+            <p>Lähteen paikannus vaatii tarkan etenemismallin, joka kuvaa miten sähkökenttä leviää aivoista pään pinnalle:</p>
+            <ul>
+                <li><strong>Pallomalli</strong>: Yksinkertaisin, analyyttisesti ratkeava. Riittävä karkeaan lokalisointiin.</li>
+                <li><strong>BEM (Boundary Element Method)</strong>: Realistiset rajapinnat (aivojen, kallon, päänahkan pinta). Kolme kerrosta eri johtokykyisyydellä. Vaatii MRI-segmentoidut pinnat.</li>
+                <li><strong>FEM (Finite Element Method)</strong>: Täysin realistinen geometria, mahdollistaa anisotrooppisen johtavuuden (esim. valkoisen aineen johtavuus erisuuntainen).</li>
+            </ul>
+
+            <h3>7.3 Kuvafuusio ja DICOM</h3>
+            <p>Lähteen paikantamisen tulokset yhdistetään rakenteellisiin MRI- tai TT-kuviin:</p>
+            <ul>
+                <li><strong>DICOM-standardi</strong>: Kuvantamisdatan tallentamisen ja siirron kansainvälinen standardi. EEG-elektrodien paikat ja lähdemallituksen tulokset voidaan tallentaa DICOM-muotoon.</li>
+                <li><strong>Korekisteröinti</strong>: Elektrodipaikkojen liittäminen potilaan MRI:hin. Menetelmiä: digitointi (Polhemus), valokuvaoptiset menetelmät, MRI-näkyvät markerit.</li>
+                <li><strong>Segmentointi</strong>: MRI-kuvien segmentointi aivokudokseen, CSF:ään, kalloon ja päänahkaan BEM/FEM-mallia varten. Ohjelmistot: FreeSurfer, BrainSuite, SPM.</li>
+            </ul>
+
+            <h2>8. Artefaktit ja niiden eliminointi</h2>
+
+            <h3>8.1 Fysiologiset artefaktit</h3>
+            <div class="theory-image-slot" data-slot="eeg-artifact-types" data-tab="eeg" data-default-caption="Tyypilliset EEG-artefaktit: silmänliike, EMG, EKG ja liikeartefakti"></div>
+            <table>
+                <thead>
+                    <tr><th>Artefakti</th><th>Alkuperä</th><th>Tyypilliset piirteet</th><th>Eliminointi</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Silmänräpäytys</td><td>Korneoretinaali-dipoli, silmäluomen liike</td><td>Frontaalinen, 100&ndash;400 ms, korkea amplitudi</td><td>ICA, EOG-regressio</td></tr>
+                    <tr><td>Silmänliike</td><td>Korneoretinaali-dipoli</td><td>Hidas aalto frontaalielektrodeissa</td><td>EOG-kanavat + regressio/ICA</td></tr>
+                    <tr><td>EMG (lihasjännitys)</td><td>Pää- ja kasvolihasten EMG</td><td>Korkea taajuus (&gt; 20 Hz), puremalihas erityisesti temporaalialueella</td><td>Relaksaatio-ohjaus, suodatus, ICA</td></tr>
+                    <tr><td>EKG-artefakti</td><td>Sydämen sähköinen aktiviteetti</td><td>QRS-kompleksin muotoinen, säännöllinen</td><td>ICA, template-substraction</td></tr>
+                    <tr><td>Pulsaatioartefakti</td><td>Valtimopulsaatio elektrodin alla</td><td>Rytminen, sydämen sykkeen taajuudella, yksittäinen kanava</td><td>Elektrodin siirto</td></tr>
+                    <tr><td>Hikoilu</td><td>Ihon galvaaninen vaste</td><td>Hyvin hitaat vaellukset (&lt; 0,5 Hz)</td><td>Ylipäästösuodatin, AC coupling</td></tr>
+                </tbody>
+            </table>
+
+            <h3>8.2 Tekniset artefaktit</h3>
+            <ul>
+                <li><strong>50 Hz verkkohäiriö</strong>: Sähköverkosta kytkeytyvä häiriö. Syyt: korkea tai epätasainen impedanssi, huono maadoitus, lähellä olevat sähkölaitteet. Eliminointi: impedanssin korjaus, maadoituksen tarkistus, häiriölähteiden poisto, viime kädessä notch-suodatin.</li>
+                <li><strong>Elektrodiartefakti</strong>: Huono kontakti, kuiva pasta &rarr; kohinaa, satunnaisia piikkejä. Korjaus: elektrodin uudelleenasettelu, pastan lisääminen.</li>
+                <li><strong>Liikkeen artefakti</strong>: Johtojen liike, potilaan liikkuminen &rarr; hitaat vaellukset, satunnaiset transientit</li>
+                <li><strong>Aliasing</strong>: Riittämätön näytteenottotaajuus tai antialiasing-suodatin puuttuu &rarr; korkean taajuuden signaalit taittuvat matalan taajuuden alueelle</li>
+            </ul>
+
+            <h2>9. Pinta-EEG vs. invasiivinen EEG</h2>
+
+            <h3>9.1 Pinta-EEG (scalp EEG)</h3>
+            <ul>
+                <li>Signaalin kulku tilavuusjohteen läpi &rarr; spatiaalinen suodattuminen</li>
+                <li>Amplitudi: 10&ndash;200 &micro;V</li>
+                <li>Spatiaalinen resoluutio: ~1&ndash;2 cm</li>
+                <li>Ei-invasiivinen, kliinisen rutiinin perus</li>
+            </ul>
+
+            <h3>9.2 Elektrokortikografia (ECoG) ja stereo-EEG (SEEG)</h3>
+            <ul>
+                <li><strong>ECoG</strong>: Subduraalielektrodit (grid/strip) suoraan aivokuoren pinnalla. Amplitudi 0,5&ndash;5 mV, spatiaalinen resoluutio ~5 mm. Käytetään epilepsiakirurgian invasiivisessa monitoroinnissa ja intraoperatiivisessa kortikaalikartotuksessa.</li>
+                <li><strong>SEEG</strong>: Syvyyselektrodit (depth electrodes) asetetaan stereotaktisesti aivojen syviin rakenteisiin (hippokampus, amygdala, insulaari). Mahdollistaa 3D-epileptogeenisen verkoston kartoituksen. Robottiohjattu asettelu (ROSA).</li>
+                <li><strong>Fyysikon rooli</strong>: Kytkentäsuunnittelu, signaalinlaadun monitorointi, lähdemallinnus, sähköturvallisuuden varmistaminen</li>
+            </ul>
+
+            <h2>10. Leikkaussaliympäristön erityisvaatimukset</h2>
+            <ul>
+                <li><strong>Diatermia (sähkökirurgia)</strong>: RF-häiriö (300 kHz&ndash;3 MHz) saturoittaa EEG-vahvistimen. Käytännössä EEG-signaali menetetään diatermian käytön ajaksi. Vahvistimen palautumisaika on kriittinen parametri.</li>
+                <li><strong>Anestesialaitteet</strong>: Infuusiopumput, hengityskone ja monitorit voivat aiheuttaa EMI-häiriötä</li>
+                <li><strong>Maadoitus</strong>: Leikkaussalin maadoitusjärjestelmä (TN-S tai IT) on tunnettava. Potilaan maadoituspiste ja EEG-laitteen maadoitus eivät saa luoda maadoitussilmukkaa.</li>
+                <li><strong>Steriiliys</strong>: Steriilien elektrodien ja johtojen käyttö, steriilit peittelyt</li>
+                <li><strong>Kommunikaatio</strong>: Reaaliaikainen raportointi kirurgille EEG-muutoksista</li>
+            </ul>
+
+            <h2>11. Arkistointi ja dataformaatit</h2>
+            <table>
+                <thead>
+                    <tr><th>Formaatti</th><th>Kuvaus</th><th>Käyttö</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>EDF</strong> (European Data Format)</td><td>Avoin standardi biosignaalien tallennukseen (1992). 16-bittinen.</td><td>Perusformaatti, laajasti tuettu</td></tr>
+                    <tr><td><strong>EDF+</strong></td><td>Laajennettu EDF: annotaatiot, epäsäännöllinen tallennus</td><td>Video-EEG, tapahtumamerkinnät</td></tr>
+                    <tr><td><strong>BDF</strong></td><td>BioSemi Data Format: 24-bittinen, EDF:n laajennus</td><td>Korkea resoluutio, tutkimuskäyttö</td></tr>
+                    <tr><td><strong>GDF</strong></td><td>General Data Format: monipuolinen metadata-tuki</td><td>BCI-tutkimus</td></tr>
+                    <tr><td><strong>DICOM-EEG</strong></td><td>Uusin DICOM-laajennus biosignaaleille</td><td>Sairaalajärjestelmien integraatio (PACS)</td></tr>
+                </tbody>
+            </table>
+            <ul>
+                <li><strong>Arkistointivaatimukset</strong>: Potilasdata säilytettävä vähintään 10 vuotta (terveydenhuoltolaki). Kliinisesti merkittävät löydökset pidempään.</li>
+                <li><strong>Tietoturva</strong>: GDPR-vaatimusten noudattaminen, pseudonymisaatio, salattu tallennus ja siirto</li>
+            </ul>
+
+            <h2>12. Laadunvarmistus ja laitteiden ylläpito</h2>
+
+            <h3>12.1 Päivittäinen/viikoittainen QA</h3>
+            <ul>
+                <li>Impedanssien tarkistus ennen jokaista rekisteröintiä (&lt; 5 k&Omega;)</li>
+                <li>Kalibrointisignaalin (esim. 50 &micro;V, 10 Hz siniaalto) tarkistus: amplitudi, taajuus, suodatinvaste</li>
+                <li>Visuaalinen laitetarkistus: johtojen kunto, liittimet</li>
+            </ul>
+
+            <h3>12.2 Vuosittainen QA ja kalibrointi</h3>
+            <ul>
+                <li>Vahvistimen vahvistuksen tarkkuus (&plusmn; 5 %)</li>
+                <li>Suodatinvasteen todentaminen (rajataajuudet, jyrkkyys)</li>
+                <li>CMRR-mittaus</li>
+                <li>Näytteenottotaajuuden todentaminen</li>
+                <li>Kohinatason mittaus (sisääntulon oikosulku)</li>
+                <li>Sähköturvallisuustarkastus (IEC 60601 mukaisesti)</li>
+            </ul>
+
+            <h2>13. Henkilökunnan ohjaus ja potilaskommunikaatio</h2>
+            <ul>
+                <li><strong>Laitteiden käyttökoulutus</strong>: EEG-laitteiston käynnistys, elektrodien asettelu, parametrien valinta, tallennuksen aloitus/lopetus</li>
+                <li><strong>Analysointiohjelmisto</strong>: Kytkentöjen valinta, suodatinasetusten muuttaminen, tapahtumamerkintöjen lisääminen</li>
+                <li><strong>Ongelmatilanteet</strong>: Häiriöiden tunnistaminen ja korjaaminen, laiteviat, varaprotokollat</li>
+                <li><strong>Potilaskommunikaatio</strong>: Tutkimuksen kulun selostaminen, ohjaus provokaatioiden aikana, rauhoittava kommunikaatio</li>
+            </ul>
+
+            <div class="theory-references">
+                <h3>Viitekirjallisuus</h3>
+                <ol>
+                    <li>Mervaala E. ym. <em>Kliininen neurofysiologia</em>, Duodecim, 2018.</li>
+                    <li>Malmivuo J. &amp; Plonsey R. <em>Bioelectromagnetism &mdash; Principles and Applications of Bioelectric and Biomagnetic Fields</em>, Oxford University Press, 1995. Vapaasti verkossa: <a href="http://www.bem.fi/book/" target="_blank">www.bem.fi/book</a></li>
+                    <li>Niedermeyer E., da Silva FL. <em>Electroencephalography: Basic Principles, Clinical Applications, and Related Fields</em>, 6th ed., Lippincott Williams &amp; Wilkins, 2010.</li>
+                    <li>ACNS: <em>Guideline 1: Minimum Technical Requirements for Performing Clinical EEG</em>.</li>
+                    <li>IEC 60601-2-26: <em>Particular requirements for the basic safety and essential performance of electroencephalographs</em>.</li>
+                    <li>Klem GH et al. <em>The ten-twenty electrode system of the International Federation</em>, Electroencephalogr Clin Neurophysiol, 1999.</li>
+                </ol>
+            </div>
+
+            <div class="theory-quiz-section" data-tab="eeg">
+                <div class="theory-quiz-start">
+                    <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-eeg">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
+                    <button class="theory-quiz-btn" onclick="startTheoryQuiz('eeg')">
+                        <i class="fas fa-play"></i> Aloita harjoittelu
+                    </button>
+                </div>
+                <div class="theory-quiz-active" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+         VÄLILEHTI 2: HERÄTEPOTENTIAALI JA ENMG
+         ================================================================ -->
+    <div class="theory-panel" id="panel-heratepotentiaali" role="tabpanel">
+        <div class="theory-content">
+
+            <h2>1. Johdanto</h2>
+            <p>Herätepotentiaalitutkimukset (evoked potentials, EP) ja elektroneuromyografia (ENMG) ovat kliinisen neurofysiologian menetelmiä, joilla tutkitaan hermoston ja lihaksiston sähköistä toimintaa. Sairaalafyysikon on tunnettava signaalin syntymekanismit, stimulaatiomenetelmät, signaalin käsittely, tekniset vaatimukset ja laadunvarmistus.</p>
+
+            <h2>2. Herätepotentiaalien synty ja perusteet</h2>
+
+            <h3>2.1 Hermoston sähköinen aktiviteetti</h3>
+            <p>Herätepotentiaali on hermoston sähköinen vaste ulkoiselle stimulaatiolle. Stimulaatio aktivoi sensorisen radan, ja vaste mitataan pään pinnalta tai kehon eri pisteistä. Vasteet ovat pieniamplitudisia (0,1&ndash;20 &micro;V) ja hukkuvat taustakohinaan &rarr; vaatii keskiarvoistamista (averaging).</p>
+            <div class="formula">
+                <p>Keskiarvoistaminen parantaa signaali-kohinasuhdetta:</p>
+                \[ SNR_N = SNR_1 \cdot \sqrt{N} \]
+                <p>missä \( N \) = toistojen lukumäärä. 100 toistoa parantaa SNR:ää 10-kertaisesti.</p>
+            </div>
+
+            <h3>2.2 Herätepotentiaalityypit</h3>
+            <div class="theory-image-slot" data-slot="ep-types-comparison" data-tab="heratepotentiaali" data-default-caption="Herätepotentiaalityypit: SSEP, VEP, BAEP ja MEP — signaalit ja latenssit"></div>
+            <table>
+                <thead>
+                    <tr><th>Tyyppi</th><th>Stimulaatio</th><th>Mitattava vaste</th><th>Rekisteröintipaikka</th><th>Latenssit</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>SSEP</strong> (somatosensorinen)</td><td>Sähköinen (medianus, tibialis)</td><td>Somatosensorinen rata</td><td>Erb, C7, korteksi (C3'/C4')</td><td>N9, N13, N20 (medianus)</td></tr>
+                    <tr><td><strong>VEP</strong> (visuaalinen)</td><td>Kuviokäänteinen (pattern reversal)</td><td>Visuaalinen rata</td><td>Oz</td><td>P100 (~100 ms)</td></tr>
+                    <tr><td><strong>BAEP</strong> (aivorunko-auditorinen)</td><td>Click/tone burst (kuulokkeet)</td><td>Auditiivinen rata (aivorunko)</td><td>Cz&ndash;A1/A2</td><td>I&ndash;V (1&ndash;6 ms)</td></tr>
+                    <tr><td><strong>MEP</strong> (motorinen, TMS)</td><td>Magneettinen (TMS-kela)</td><td>Motorinen rata</td><td>Kohdelihas (EMG)</td><td>20&ndash;25 ms (käsi)</td></tr>
+                </tbody>
+            </table>
+
+            <h3>2.3 Signaalin käsittely herätepotentiaaleissa</h3>
+            <ul>
+                <li><strong>Kaistanleveys</strong>: SSEP: 10&ndash;3000 Hz (kortikaalinen) tai 150&ndash;3000 Hz (subkortikaalinen). BAEP: 100&ndash;3000 Hz. VEP: 1&ndash;100 Hz.</li>
+                <li><strong>Keskiarvoistaminen</strong>: SSEP: 200&ndash;2000 toistoa. BAEP: 1000&ndash;4000 toistoa. VEP: 100&ndash;200 toistoa. Enemmän toistoja pienemmille vasteille.</li>
+                <li><strong>Artefaktien hylkäys</strong>: Ylisuuret amplitudit (esim. silmänräpäytys, EMG-burstit) hylätään keskiarvoisesta. Automaattinen hylkäysraja (rejection level).</li>
+                <li><strong>Näytteenottotaajuus</strong>: Riittävä vasteen taajuussisällölle. BAEP: &ge; 10 kHz. SSEP: &ge; 5 kHz. VEP: &ge; 500 Hz.</li>
+            </ul>
+
+            <h2>3. ENMG-tutkimukset</h2>
+
+            <h3>3.1 Hermon johtumisnopeustutkimus (NCS)</h3>
+            <div class="theory-image-slot" data-slot="ncs-measurement" data-tab="heratepotentiaali" data-default-caption="NCS-mittauksen periaate: CMAP ja SNAP-vasteet, johtamisnopeuslaskenta"></div>
+            <p>Hermon johtumisnopeustutkimuksessa ääreishermoa stimuloidaan sähköisesti ja vaste rekisteröidään:</p>
+            <ul>
+                <li><strong>Motorinen NCS</strong>: Stimuloidaan hermoa, rekisteröidään lihasvaste (CMAP, compound muscle action potential). Mitataan: amplitudi, distaalilatenssi, johtamisnopeus.</li>
+                <li><strong>Sensorinen NCS</strong>: Stimuloidaan hermoa, rekisteröidään sensorinen vaste (SNAP, sensory nerve action potential). Amplitudi tyypillisesti 5&ndash;50 &micro;V.</li>
+                <li><strong>F-aalto</strong>: Antidrominen impulssi motoneuronien soomaan ja takaisin &rarr; pitkän reitin latenssi &rarr; proksimaalisen hermon arviointi</li>
+                <li><strong>H-refleksi</strong>: Vastaa kliinistä jännerefleksiä sähköisesti mitattuna</li>
+            </ul>
+            <div class="formula">
+                \[ v = \frac{d_{\text{prox}} - d_{\text{dist}}}{\Delta t} \]
+                <p>missä \( v \) = johtamisnopeus (m/s), \( d \) = stimulaatiopisteiden välinen etäisyys ja \( \Delta t \) = latenssiero.</p>
+            </div>
+
+            <h3>3.2 EMG-tutkimus (neula-EMG)</h3>
+            <div class="theory-image-slot" data-slot="emg-needle-technique" data-tab="heratepotentiaali" data-default-caption="Neula-EMG: MUAP-morfologia, denervaatiomuutokset ja rekrytointimalli"></div>
+            <ul>
+                <li><strong>Konsentrinen neula-elektrodi</strong>: Mittaa motoristen yksikköjen aktiopotentiaaleja (MUAP) suoraan lihaskudoksesta</li>
+                <li><strong>Analysoitavat parametrit</strong>: MUAP:n kesto, amplitudi, polyfasia-aste, firing rate, rekrytointimalli</li>
+                <li><strong>Spontaani aktiivisuus</strong>: Fibrillatio, positiivinen terävä aalto (viittaavat denervaatioon), fassikulaatio</li>
+            </ul>
+
+            <h2>4. Stimulaatiomenetelmät ja turvallisuus</h2>
+
+            <h3>4.1 Sähköinen stimulaatio</h3>
+            <ul>
+                <li><strong>Vakiovirta vs. vakiojännite</strong>: Vakiovirtastimulaattori on suositeltava &mdash; tuottaa saman virran riippumatta impedanssista</li>
+                <li><strong>Pulssiparametrit</strong>: Tyypillinen: 0,1&ndash;0,5 ms kesto, 10&ndash;100 mA amplitudi (NCS). Supratemaksimaalinen stimulaatio: ~20 % yli tason, joka tuottaa maksimaalisen vasteen.</li>
+                <li><strong>Turvallisuusrajat</strong>: Varausmäärä (&lt; 50 &micro;C/faasi), virtatiheys, stimulaatiotaajuus. IEC 60601-2-40 määrittelee turvallisuusvaatimukset.</li>
+            </ul>
+
+            <h3>4.2 Magneettinen stimulaatio (TMS)</h3>
+            <ul>
+                <li>TMS-kela tuottaa lyhyen magneettipulssin (&lt; 1 ms, 1&ndash;2,5 T) &rarr; indusoi sähkövirran aivokuoressa (Faradayn laki)</li>
+                <li><strong>MEP (motor evoked potential)</strong>: TMS primaariselle motoriselle alueelle &rarr; motorinen herätepotentiaali kohdelihaksessa. Latenssi: ~20 ms (käsi), ~40 ms (jalka). Sentraalinen johtumisaika (CMCT) = kortikaalilatenssi &minus; spinaalilatenssi.</li>
+            </ul>
+
+            <h3>4.3 Muut stimulaatiomuodot</h3>
+            <ul>
+                <li><strong>Visuaalinen</strong>: Pattern reversal (shakkikenttä), flash, LED-goggles</li>
+                <li><strong>Auditiivinen</strong>: Click (0,1 ms laajakaista), tone burst (taajuusspesifinen)</li>
+                <li><strong>Lämpöstimulaatio</strong>: Kvantitatiivinen tuntokynnystesti (QST): kylmä- ja kuuma-aistimukset, kipukynnys. Peltier-elementti tai termodit.</li>
+            </ul>
+
+            <h2>5. Tekniset vaatimukset vahvistimilta</h2>
+            <table>
+                <thead>
+                    <tr><th>Parametri</th><th>SSEP</th><th>BAEP</th><th>VEP</th><th>ENMG</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Kaistanleveys</td><td>10&ndash;3000 Hz</td><td>100&ndash;3000 Hz</td><td>1&ndash;100 Hz</td><td>2&ndash;10 000 Hz</td></tr>
+                    <tr><td>Näytteenottotaajuus</td><td>&ge; 5 kHz</td><td>&ge; 10 kHz</td><td>&ge; 500 Hz</td><td>&ge; 20 kHz</td></tr>
+                    <tr><td>Herkkyys</td><td>0,5&ndash;20 &micro;V/div</td><td>0,1&ndash;0,5 &micro;V/div</td><td>2&ndash;10 &micro;V/div</td><td>50 &micro;V&ndash;10 mV/div</td></tr>
+                    <tr><td>Toistot (keskiarvoistus)</td><td>200&ndash;2000</td><td>1000&ndash;4000</td><td>100&ndash;200</td><td>Ei (online-signaali)</td></tr>
+                    <tr><td>CMRR</td><td>&gt; 100 dB</td><td>&gt; 100 dB</td><td>&gt; 100 dB</td><td>&gt; 100 dB</td></tr>
+                </tbody>
+            </table>
+
+            <h2>6. Elektrodit ja anturit</h2>
+            <ul>
+                <li><strong>Pintaelektrodit (EP/NCS)</strong>: Ag/AgCl-kuppi tai kertalähettiset. Kontaktipasta tai geeli. Impedanssitavoite &lt; 5 k&Omega;.</li>
+                <li><strong>Neula-elektrodit (EMG)</strong>: Konsentrinen neula (20&ndash;30 mm, 25&ndash;30 G). Kertakäyttöiset nykyisin standardi. Ei autoklaavoida tartuntariskin vuoksi.</li>
+                <li><strong>Stimulaatioelektrodit</strong>: Pintastimulaattori (felt pad, bar electrode). Neulastimulaattori (monopolaari, bipolaari).</li>
+                <li><strong>Lämpöanturit (QST)</strong>: Peltier-elementti (termodit), 9&ndash;12,5 cm&sup2; kontaktipinta</li>
+            </ul>
+
+            <h2>7. Häiriöt ja artefaktit</h2>
+            <ul>
+                <li><strong>Stimulusartefakti</strong>: Suora kytkentä stimulaatiovirrasta rekisteröintikanavaan. Minimointi: stimulointi- ja rekisteröintijohtojen erottelu, common-mode-vaimennus, artefaktin suppression -algoritmit.</li>
+                <li><strong>50 Hz häiriö</strong>: Verkkotaajuinen häiriö. Eliminointi: impedanssien tarkistus, maadoitus, johtojen erottelu, notch-suodatin viime kädessä.</li>
+                <li><strong>EMG-kontaminaatio</strong>: Lihaksen taustaaktiivisuus heikentää signaali-kohinasuhdetta. Erityisesti SSEP:ssä, kun vaste on pieniamplitudinen.</li>
+                <li><strong>Liikeartefakti</strong>: Elektrodin tai johdon liike potilaan liikkeistä. Minimointi: elektrodien kiinnitys, johtojen kiinnittäminen.</li>
+            </ul>
+
+            <h2>8. Raportointi ja viitearvot</h2>
+            <ul>
+                <li><strong>Raportointistandardi</strong>: ACNS tai kansallisten suositusten mukainen. Sisältää: stimulaatioparametrit, rekisteröintiasetukset, mitatut latenssit ja amplitudit, viitearvot, tulkinta.</li>
+                <li><strong>Viitearvot</strong>: Laboratoriokohtaiset viitearvot (oma kontrollimateriaalista) ovat suositeltavimpia. Julkaistuja viitearvoja voidaan käyttää, mutta ne on validoitava omilla laitteilla.</li>
+                <li><strong>Laadunvarmistus</strong>: Toistettavuus (vähintään kaksi toistokeskiarvoa jokaiselle vasteelle), artefaktien hylkäysosuuden dokumentointi</li>
+            </ul>
+
+            <h2>9. Henkilökunnan ohjaus</h2>
+            <ul>
+                <li>Laitteiden käyttökoulutus: stimulaattorit, vahvistimet, ohjelmistot</li>
+                <li>Elektrodien asettelu: anatomisten maamerkkien tunnistaminen, oikea sijoittelu</li>
+                <li>Turvallisuus: stimulaation vasta-aiheet, maksimivaraukset, neulan käsittely</li>
+                <li>Potilaskommunikaatio: tutkimuksen kulku, mahdollinen epämukavuus (erityisesti NCS:n sähköstimulaatio)</li>
+            </ul>
+
+            <div class="theory-references">
+                <h3>Viitekirjallisuus</h3>
+                <ol>
+                    <li>Mervaala E. ym. <em>Kliininen neurofysiologia</em>, Duodecim, 2018.</li>
+                    <li>Malmivuo J. &amp; Plonsey R. <em>Bioelectromagnetism</em>, Oxford University Press, 1995.</li>
+                    <li>Kimura J. <em>Electrodiagnosis in Diseases of Nerve and Muscle</em>, 4th ed., Oxford University Press, 2013.</li>
+                    <li>IEC 60601-2-40: <em>Particular requirements for the safety and essential performance of electromyographs and evoked response equipment</em>.</li>
+                    <li>ACNS guidelines for evoked potentials.</li>
+                    <li>Cruccu G. et al. <em>EFNS guidelines on neuropathic pain assessment</em>, Eur J Neurol, 2010.</li>
+                </ol>
+            </div>
+
+            <div class="theory-quiz-section" data-tab="heratepotentiaali">
+                <div class="theory-quiz-start">
+                    <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-heratepotentiaali">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
+                    <button class="theory-quiz-btn" onclick="startTheoryQuiz('heratepotentiaali')">
+                        <i class="fas fa-play"></i> Aloita harjoittelu
+                    </button>
+                </div>
+                <div class="theory-quiz-active" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+         VÄLILEHTI 3: IOM JA DBS
+         ================================================================ -->
+    <div class="theory-panel" id="panel-iom" role="tabpanel">
+        <div class="theory-content">
+
+            <h2>1. Johdanto</h2>
+            <p>Intraoperatiivinen neuromonitorointi (IOM) ja aivojen syvästimulaatio (DBS, deep brain stimulation) ovat neurofysiologian sovelluksia, joissa toimitaan leikkaussaliympäristössä. IOM:n tarkoituksena on valvoa hermoston toimintaa leikkauksen aikana hermovaurioiden ehkäisemiseksi. DBS:ssä kohdistetaan stimulaatioelektrodi syviin aivotumakkeisiin liikehäiriöiden hoitamiseksi. Sairaalafyysikko vastaa mittausteknologiasta, signaalin laadusta ja sähköturvallisuudesta.</p>
+
+            <h2>2. IOM-menetelmät</h2>
+
+            <h3>2.1 SSEP (somatosensoriset herätepotentiaalit)</h3>
+            <div class="theory-image-slot" data-slot="ssep-waveforms" data-tab="iom" data-default-caption="SSEP-aaltoprofiilit: N9, N13, N20 (medianus) ja hälytysrajat IOM:ssa"></div>
+            <ul>
+                <li><strong>Käyttö</strong>: Selkäydinkirurgia (skolioosi, tuumorit), aorttakirurgia, selkärankakirurgia</li>
+                <li><strong>Monitoroitavat parametrit</strong>: N20-latenssi ja amplitudi (medianus), P37-latenssi ja amplitudi (tibialis)</li>
+                <li><strong>Hälytysrajakriteerit</strong>: Amplitudin lasku &gt; 50 % tai latenssin pidentyminen &gt; 10 % lähtötasosta viittaa hermoston vaurioriskiin &rarr; kirurgin informointi välittömästi</li>
+            </ul>
+
+            <h3>2.2 MEP (motoriset herätepotentiaalit)</h3>
+            <div class="theory-image-slot" data-slot="mep-tcemep" data-tab="iom" data-default-caption="Transkraniaalinen sähköstimulaatio MEP-monitoroinnissa — multipulssitekniikka ja TIVA-vaatimukset"></div>
+            <ul>
+                <li><strong>Stimulaatio</strong>: Transkraniaalinen sähköstimulaatio (TCES) C3-C4 tai C1-C2. Multipulssitekniikka (3&ndash;7 pulssia, ISI 2&ndash;4 ms) &rarr; temporaalinen summautuminen motoneuroneissa.</li>
+                <li><strong>Rekisteröinti</strong>: Kohdelihaksen EMG (m. abductor pollicis brevis, m. tibialis anterior, m. abductor hallucis)</li>
+                <li><strong>Hälytysrajat</strong>: Vasteen katoaminen (&ldquo;all or nothing&rdquo;), merkittävä amplitudin lasku &gt; 50&ndash;80 %, tai kynnystason nousu</li>
+                <li><strong>Anestesiavaatimukset</strong>: TIVA (total intravenous anesthesia, propofoli + opioidi). Inhalaatioanesteetit (sevofluraani, desfluraani) vaimentavat MEP-vasteita merkittävästi.</li>
+            </ul>
+
+            <h3>2.3 EMG-monitorointi (vapaasti juokseva EMG ja triggeroitu EMG)</h3>
+            <ul>
+                <li><strong>Vapaasti juokseva EMG</strong>: Jatkuva EMG-rekisteröinti kohdelihaksista. Mekaaninen hermostimulaatio aiheuttaa neurotonic discharge &rarr; varoitus kirurgille. Käytetään mm. kasvohermon monitoroinnissa (akustiikusneurinooma).</li>
+                <li><strong>Triggeroitu EMG</strong>: Kirurgi stimuloi suoraan hermorakennetta sähköisellä koettimella. Lihasvaste varmistaa hermon paikan. Esim. pedikkeliruuvien asettelu: stimulaatiokynnys &lt; 6&ndash;10 mA viittaa ruuvin väärinsijoittumiseen.</li>
+            </ul>
+
+            <h3>2.4 D-aalto (direct wave)</h3>
+            <ul>
+                <li>Suora epiduraali/subduraalinen mittaus selkäytimestä TCES-stimulaation jälkeen</li>
+                <li>Mittaa kortikospinaalisen radan eheyden suoraan &rarr; luotettavin yksittäinen motorisen radan indikaattori</li>
+                <li>Amplitudin lasku &gt; 50 % on hälytysraja</li>
+            </ul>
+
+            <h3>2.5 BAEP ja visuaaliset herätepotentiaalit leikkaussalissa</h3>
+            <ul>
+                <li><strong>BAEP</strong>: Takakuopan leikkauksissa (esim. vestibulaarischwannooma). Aalto V:n latenssi ja amplitudi. Latenssin pidentyminen &gt; 1,0 ms tai amplitudin häviäminen on kriittistä.</li>
+                <li><strong>VEP (flash)</strong>: Optikusalueen leikkauksissa, mutta huomattavan epäluotettava anestesian vaikutuksen vuoksi. Käyttö harvinaista.</li>
+            </ul>
+
+            <h2>3. DBS (aivojen syvästimulaatio)</h2>
+
+            <h3>3.1 Periaate</h3>
+            <div class="theory-image-slot" data-slot="dbs-setup" data-tab="iom" data-default-caption="DBS-elektrodi ja kohdentaminen: STN vs GPi indikaatioittain"></div>
+            <p>DBS-elektrodi asetetaan stereotaktisesti kohdetumakkeeseen. Krooninen sähköstimulaatio moduloi tumakkeen toimintaa liikehäiriöiden lievittämiseksi.</p>
+            <table>
+                <thead>
+                    <tr><th>Indikaatio</th><th>Kohdetumake</th><th>Tyypilliset signaalit</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Parkinsonin tauti</td><td>STN (subthalamic nucleus), GPi</td><td>Beta-oskillaatiot (13&ndash;30 Hz) STN:ssä</td></tr>
+                    <tr><td>Essentiaalinen vapina</td><td>VIM (ventral intermediate nucleus)</td><td>Vapinasynkroniset purkaukset</td></tr>
+                    <tr><td>Dystonia</td><td>GPi (globus pallidus internus)</td><td>Epäsäännölliset burst-purkaukset</td></tr>
+                </tbody>
+            </table>
+
+            <h3>3.2 Neurofysiologinen kohdistaminen (microelectrode recording, MER)</h3>
+            <ul>
+                <li><strong>Mikroelektrodirekisteröinti</strong>: Ohuella volframielektrodilla (halkaisija 10&ndash;25 &micro;m) rekisteröidään yksittäisten neuronien aktiopotentiaaleja stereotaktisen reitin varrella.</li>
+                <li><strong>Tumakkeiden tunnistaminen</strong>: Eri aivoalueiden neuronit tuottavat tunnusomaisia firing pattern -kuvioita. STN:ssä tyypillistä on korkea firing rate (25&ndash;45 Hz) ja beta-oskillaatiot.</li>
+                <li><strong>Fyysikon rooli</strong>: Signaalin laadun monitorointi, häiriöiden eliminointi (50 Hz, diatermia), signaalin tallentaminen ja analyysi, stimulaatioparametrien testaus (macro-stimulation test).</li>
+            </ul>
+
+            <h2>4. Leikkaussaliympäristön erityisvaatimukset</h2>
+            <ul>
+                <li><strong>EMI-häiriöt</strong>: Diatermia, leikkausrobotit, navigaatiolaitteistot, UPS-laitteet, LED-valaistus. Suodatus ja johtojen eristäminen välttämätöntä.</li>
+                <li><strong>Sähköturvallisuus</strong>: IEC 60601-1 ja -2-40. CF-tyypin liitäntäosa potilaan sydämen läheisyydessä olevien elektrodien kanssa. Vuotovirtojen minimointi.</li>
+                <li><strong>Maadoitus</strong>: Stimulaattorin ja rekisteröintilaitteen yhteinen maadoituspiste &rarr; ei maadoitussilmukkaa</li>
+                <li><strong>Steriiliys</strong>: Steriilien elektrodien, johtojen ja stimulaattoreiden käyttö</li>
+                <li><strong>Kommunikaatio</strong>: Selkeä, jäsennelty kommunikaatio kirurgin ja anestesiologin kanssa. Vakava muutos = välitön ilmoitus, dokumentointi.</li>
+            </ul>
+
+            <h2>5. Laadunvarmistus ja kalibrointi</h2>
+            <ul>
+                <li><strong>Ennen leikkausta</strong>: Vahvistinten kalibrointisignaalin tarkistus, stimulaattorin ulostulotason verifiointi, impedanssimittaus, baseline-vasteiden tallennus</li>
+                <li><strong>Leikkauksen aikana</strong>: Jatkuva impedanssien monitorointi, baseline-vertailu, toistettavuuden arviointi (vähintään 2 toistoa)</li>
+                <li><strong>Stimulaattorin kalibrointi</strong>: Virta- ja jännitetason mittaus oskilloskoopilla, pulssin muodon verifiointi, varausmäärän laskenta</li>
+            </ul>
+
+            <div class="theory-references">
+                <h3>Viitekirjallisuus</h3>
+                <ol>
+                    <li>Mervaala E. ym. <em>Kliininen neurofysiologia</em>, Duodecim, 2018.</li>
+                    <li>Deletis V., Shils JL. <em>Neurophysiology in Neurosurgery: A Modern Intraoperative Approach</em>, Academic Press, 2002.</li>
+                    <li>ISIN (International Society of Intraoperative Neurophysiology) Guidelines.</li>
+                    <li>IEC 60601-2-40: <em>Safety of electromyographs and evoked response equipment</em>.</li>
+                    <li>Gross RE et al. <em>Electrophysiological mapping for the implantation of deep brain stimulators</em>, Mov Disord, 2006.</li>
+                </ol>
+            </div>
+
+            <div class="theory-quiz-section" data-tab="iom">
+                <div class="theory-quiz-start">
+                    <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-iom">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
+                    <button class="theory-quiz-btn" onclick="startTheoryQuiz('iom')">
+                        <i class="fas fa-play"></i> Aloita harjoittelu
+                    </button>
+                </div>
+                <div class="theory-quiz-active" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+         VÄLILEHTI 4: UNITUTKIMUKSET
+         ================================================================ -->
+    <div class="theory-panel" id="panel-uni" role="tabpanel">
+        <div class="theory-content">
+
+            <h2>1. Johdanto</h2>
+            <p>Unitutkimukset ovat kliinisen neurofysiologian keskeinen osa-alue, jossa tutkitaan unen rakennetta ja siihen liittyviä häiriöitä. Polysomnografia (PSG) on unitutkimusten kultastandardi, jossa rekisteröidään samanaikaisesti useita fysiologisia signaaleja. Sairaalafyysikon on hallittava signaalien synty, mittausmenetelmät, anturit, analysointi ja laadunvarmistus.</p>
+
+            <h2>2. Rekisteröitävät signaalit</h2>
+
+            <h3>2.1 Neurofysiologiset signaalit</h3>
+            <div class="theory-image-slot" data-slot="sleep-signals-psg" data-tab="uni" data-default-caption="PSG-rekisteröinti: EEG, EOG, EMG, SpO₂ ja hengityssignaalit univaiheiden tunnistukseen"></div>
+            <ul>
+                <li><strong>EEG</strong>: Aivosähkötoiminta. Tyypillisesti 6 kanavaa (F3, F4, C3, C4, O1, O2 + referenssit). Mahdollistaa univaiheiden pisteytyksen.</li>
+                <li><strong>EOG</strong> (elektro-okulografia): Silmänliikkeiden rekisteröinti. Kaksi kanavaa: E1 (vasen silmä) ja E2 (oikea silmä) vs. referenssi. REM-unen tunnistaminen.</li>
+                <li><strong>EMG</strong> (mentalis/submentalis): Leuanalustan lihasjännitys. Lihasjännityksen lasku REM-unessa (atonia). Kolme elektrodia (yksi referenssi).</li>
+            </ul>
+
+            <h3>2.2 Hengityssignaalit</h3>
+            <table>
+                <thead>
+                    <tr><th>Signaali</th><th>Anturi</th><th>Mitattava suure</th><th>Kliininen merkitys</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Nenä-suuvirtaus</td><td>Termistori, nasaalinen paineanturi</td><td>Ilmavirtaus</td><td>Apnean ja hypopnean tunnistaminen</td></tr>
+                    <tr><td>Rintakehän liike</td><td>Venytysvyö (RIP, piezo)</td><td>Rintakehän hengitysliike</td><td>Obstruktiivisen vs. sentraalisen apnean erottelu</td></tr>
+                    <tr><td>Vatsan liike</td><td>Venytysvyö (RIP, piezo)</td><td>Vatsan hengitysliike</td><td>Paradoksaalinen hengitys (obstruktiivinen)</td></tr>
+                    <tr><td>SpO<sub>2</sub></td><td>Pulssioksimetri</td><td>Happisaturaatio</td><td>Desaturaatioiden tunnistaminen</td></tr>
+                    <tr><td>Kuorsausääni</td><td>Mikrofoni, vibration sensor</td><td>Kuorsauksen voimakkuus</td><td>Obstruktion indikaattori</td></tr>
+                    <tr><td>Transkutaaninen CO<sub>2</sub></td><td>tcpCO<sub>2</sub>-anturi</td><td>Hiilidioksiditaso</td><td>Hypoventilatio (erityisesti lapset)</td></tr>
+                </tbody>
+            </table>
+
+            <h3>2.3 Muut signaalit</h3>
+            <ul>
+                <li><strong>Jalkojen EMG</strong> (m. tibialis anterior): Raajojen liikehäiriöiden (PLM, periodic limb movements) tunnistaminen</li>
+                <li><strong>EKG</strong>: Sydämen rytmin monitorointi unen aikana, yhteys apneoihin</li>
+                <li><strong>Kehon asento</strong>: Asento-anturi (asentoriippuvainen uniapnea)</li>
+                <li><strong>Video</strong>: Infraredvideo potilaan käyttäytymisen dokumentointiin</li>
+            </ul>
+
+            <h2>3. Tutkimustyypit</h2>
+
+            <h3>3.1 Polysomnografia (PSG)</h3>
+            <p>Täysi yöpolygrafia laboratoriossa. Sisältää kaikki yllä mainitut signaalit + video. Kultastandardi uniapnean, parasomnioidien ja narkolepsian diagnostiikassa.</p>
+
+            <h3>3.2 Suppea yöpolygrafia (kotitutkimus)</h3>
+            <p>Kotona suoritettava tutkimus rajoitetulla kanavalukumäärällä. Tyypillisesti: hengitysanturit (nasaalipainesensori, venytysvyöt), SpO<sub>2</sub>, asentoanturi, kuorsausanturi. Ei EEG:tä &rarr; ei voida pisteyttää univaiheita. Sopii epäiltyyn obstruktiivisen uniapnean diagnostiikkaan, kun muut unihäiriöt on suljettu pois.</p>
+
+            <h3>3.3 MSLT (multiple sleep latency test)</h3>
+            <p>Narkolepsian diagnostiikka: 4&ndash;5 unilatenssitestiä päivällä 2 tunnin välein. Mitataan nukahtamislatenssi ja REM-unen esiintyminen. Narkolepsia: keskimääräinen latenssi &lt; 8 min ja &ge; 2 SOREMP (sleep onset REM period).</p>
+
+            <h3>3.4 MWT (maintenance of wakefulness test)</h3>
+            <p>Mittaa kykyä pysyä hereillä. Käytetään erityisesti ammatillisen ajokyvyn arvioinnissa.</p>
+
+            <h2>4. Univaiheiden pisteytys (AASM Manual)</h2>
+            <div class="theory-image-slot" data-slot="sleep-stage-chart" data-tab="uni" data-default-caption="Uniarkkitehtuuri (hypnogrammi): univaiheiden vaihtelu yön aikana — N1, N2, N3, REM"></div>
+            <table>
+                <thead>
+                    <tr><th>Univaihe</th><th>EEG</th><th>EOG</th><th>EMG</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>W</strong> (hereillä)</td><td>Alpha (&gt; 50 % ajasta), beta</td><td>Silmänliikkeet, räpäytykset</td><td>Normaali tai kohonnut tonus</td></tr>
+                    <tr><td><strong>N1</strong></td><td>Theta (4&ndash;7 Hz), alpha katoaa</td><td>Hitaat pyörivät liikkeet</td><td>Laskeva tonus</td></tr>
+                    <tr><td><strong>N2</strong></td><td>Unisukkulat (12&ndash;14 Hz, &ge; 0,5 s), K-kompleksit</td><td>Ei merkittäviä</td><td>Alentunut</td></tr>
+                    <tr><td><strong>N3</strong></td><td>Delta (&le; 2 Hz, &ge; 75 &micro;V) &ge; 20 % ajasta</td><td>Ei merkittäviä</td><td>Matala</td></tr>
+                    <tr><td><strong>R</strong> (REM)</td><td>Matala-amplitudinen, sekatajuuksinen</td><td>Nopeat silmänliikkeet</td><td>Atonia (minimaalinen tonus)</td></tr>
+                </tbody>
+            </table>
+
+            <h2>5. Diagnostiset kriteerit (AASM)</h2>
+            <div class="theory-image-slot" data-slot="sleep-disorders" data-tab="uni" data-default-caption="Unihäiriöiden diagnostiset kriteerit: AHI-raja-arvot, narkolepsia ja PLM"></div>
+            <ul>
+                <li><strong>Apnea</strong>: Ilmavirtauksen loppuminen &ge; 10 s. Obstruktiivinen (hengitysyritys jatkuu) vs. sentraalinen (ei hengitysyritystä) vs. sekamuotoinen.</li>
+                <li><strong>Hypopnea</strong>: Ilmavirtauksen lasku &ge; 30 % &ge; 10 s + SpO<sub>2</sub>-lasku &ge; 3 % tai arousal. (AASM 2012 suositeltu sääntö.)</li>
+                <li><strong>AHI (apnea-hypopnea index)</strong>: Apneoiden ja hypopneoiden kokonaismäärä jaettuna uniajalla. Normaali &lt; 5/h, lievä 5&ndash;15, kohtalainen 15&ndash;30, vaikea &gt; 30.</li>
+                <li><strong>RERA (respiratory effort-related arousal)</strong>: Hengitysyritys, joka ei täytä apnean tai hypopnean kriteereitä mutta aiheuttaa heräämisvastetta. RDI (respiratory disturbance index) = AHI + RERA.</li>
+                <li><strong>PLM (periodic limb movement)</strong>: Säännölliset raajan liikkeet (tyypillisesti jalkaterä/nilkka), väli 5&ndash;90 s, vähintään 4 peräkkäistä. PLMS-indeksi: liikkeenrykäysindeksi tuntia kohti.</li>
+                <li><strong>Narkolepsia</strong>: EDS (excessive daytime sleepiness) + katapleksia. MSLT: latenssi &lt; 8 min, &ge; 2 SOREMP.</li>
+            </ul>
+
+            <h2>6. Tekniset vaatimukset ja signaalinkäsittely</h2>
+            <table>
+                <thead>
+                    <tr><th>Signaali</th><th>Näytteenotto</th><th>Kaistanleveys</th><th>Elektrodi/anturi</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>EEG</td><td>&ge; 200 Hz</td><td>0,3&ndash;35 Hz</td><td>Ag/AgCl, kuppi tai liimapatchit</td></tr>
+                    <tr><td>EOG</td><td>&ge; 200 Hz</td><td>0,3&ndash;35 Hz</td><td>2 kanavaa (LOC, ROC)</td></tr>
+                    <tr><td>EMG (leuka)</td><td>&ge; 200 Hz</td><td>10&ndash;100 Hz</td><td>Submentaalinen, 2&ndash;3 elektrodia</td></tr>
+                    <tr><td>EKG</td><td>&ge; 200 Hz</td><td>0,3&ndash;70 Hz</td><td>Rintakytkentä (modifioitu)</td></tr>
+                    <tr><td>SpO<sub>2</sub></td><td>&ge; 1 Hz</td><td>DC</td><td>Pulssioksimetri (sormi tai korva)</td></tr>
+                    <tr><td>Hengitysvyöt</td><td>&ge; 10 Hz</td><td>DC&ndash;15 Hz</td><td>Pletysmografia (rintakehä, vatsa)</td></tr>
+                    <tr><td>Ilmavirtaus</td><td>&ge; 10 Hz</td><td>DC&ndash;15 Hz</td><td>Nasaalipainesensori (suositeltava), termistori</td></tr>
+                </tbody>
+            </table>
+
+            <h2>7. Artefaktit unitutkimuksissa</h2>
+            <ul>
+                <li><strong>Elektrodiartefakti</strong>: Huono kontakti &rarr; kohinaa, piikkejä. Korjaus ennen rekisteröintiä tai annotaatio.</li>
+                <li><strong>Kuorsausartefakti EEG:ssä</strong>: Rytminen artefakti frontaali- ja temporaalielektrodeissa. Kuorsauskanava auttaa tunnistamisessa.</li>
+                <li><strong>Liikeartefakti</strong>: Potilaan asennon muutos, liikkuminen &rarr; hitaat vaellukset useissa kanavissa samanaikaisesti.</li>
+                <li><strong>SpO<sub>2</sub>-artefakti</strong>: Huono pulssioksimetrikontakti, potilaan liikkuminen &rarr; virheellinen lukema tai signaalikatko.</li>
+                <li><strong>EKG-artefakti EEG:ssä</strong>: QRS-kompleksi näkyy erityisesti suurissa impedansseissa tai huonossa maadoituksessa.</li>
+            </ul>
+
+            <h2>8. Laadunvarmistus unitutkimuslaitteille</h2>
+            <ul>
+                <li><strong>Ennen jokaista tutkimusta</strong>: Kaikkien signaalien kalibrointi (EEG: 50 &micro;V, SpO<sub>2</sub>: tarkistus valmistajan ohjeen mukaan), impedanssitarkistus (&lt; 5 k&Omega;)</li>
+                <li><strong>Hengitysanturien kalibrointi</strong>: Nasaalipainesensori: tarkistus puhumalla/hengittämällä. Venytysvyöt: kalibrointi tunnetulla hengitystilavuudella.</li>
+                <li><strong>Vuosihuolto</strong>: Vahvistimen kalibrointi, suodatinvasteiden todentaminen, kanavien CMRR-mittaus, sähköturvallisuustarkastus.</li>
+            </ul>
+
+            <div class="theory-references">
+                <h3>Viitekirjallisuus</h3>
+                <ol>
+                    <li>Mervaala E. ym. <em>Kliininen neurofysiologia</em>, Duodecim, 2018.</li>
+                    <li>Berry RB et al. <em>AASM Manual for the Scoring of Sleep and Associated Events</em>, Version 2.6, American Academy of Sleep Medicine, 2020.</li>
+                    <li>AASM. <em>Clinical Guidelines for the Manual Titration of Positive Airway Pressure in Patients with Obstructive Sleep Apnea</em>, J Clin Sleep Med, 2008.</li>
+                    <li>Rechtschaffen A, Kales A. <em>A Manual of Standardized Terminology, Techniques and Scoring System for Sleep Stages of Human Subjects</em>, UCLA, 1968.</li>
+                    <li>Iber C et al. <em>The AASM Manual for the Scoring of Sleep and Associated Events</em>, 1st ed., AASM, 2007.</li>
+                </ol>
+            </div>
+
+            <div class="theory-quiz-section" data-tab="uni">
+                <div class="theory-quiz-start">
+                    <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-uni">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
+                    <button class="theory-quiz-btn" onclick="startTheoryQuiz('uni')">
+                        <i class="fas fa-play"></i> Aloita harjoittelu
+                    </button>
+                </div>
+                <div class="theory-quiz-active" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+         VÄLILEHTI 5: TMS JA NEURONAVIGAATIO
+         ================================================================ -->
+    <div class="theory-panel" id="panel-tms" role="tabpanel">
+        <div class="theory-content">
+
+            <h2>1. TMS:n fysikaaliset perusteet</h2>
+            <div class="theory-image-slot" data-slot="tms-coil-types" data-tab="tms" data-default-caption="TMS-kelatyypit: ympyräkela vs. kahdeksikkokela — stimulaatioalue ja fokusaatio"></div>
+            <p>Transkraniaalinen magneettistimulaatio (TMS) on ei-invasiivinen menetelmä aivokuoren sähköiseen stimulointiin. Magneettipulssi indusoi sähkövirran aivokudoksessa Faradayn induktiolain mukaisesti:</p>
+            <div class="formula">
+                \[ \mathcal{E} = -\frac{d\Phi_B}{dt} \]
+                <p>Kelassa virtamuutos synnyttää magneettipulssin (tyypillisesti 1&ndash;2 T), joka indusoi aivokuoressa sähkökentän (&sim;100&ndash;150 V/m), aiheuttaen hermosolujen depolarisaation.</p>
+            </div>
+            <ul>
+                <li><strong>Kelatyypit</strong>: Ympyräkela (laaja stimulaatioalue, &sim;5 cm&sup2;) vs. kahdeksikkokela (figure-of-eight coil, fokaalisempi, &sim;1 cm&sup2; fokaalialue). Syvän TMS:n H-kela penetroi syvemmälle.</li>
+                <li><strong>Pulssityypit</strong>: Monofaasinen pulssi (yksinkertaisempi, suurempi energiantarve) vs. bifaasinen (tehokkaampi induktio, käytetään erityisesti sarja-TMS:ssä).</li>
+                <li><strong>Motorinen kynnys (MT)</strong>: Pienin intensiteetti, joka aiheuttaa MEP:n (motorinen herätepotentiaali) &ge; 5/10 stimulaatiosta vähintään 50 &micro;V amplitudilla. Käytetään yksilöllisen stimulaatiointensiteetin viitearvona.</li>
+            </ul>
+
+            <h2>2. Kliiniset sovellukset</h2>
+
+            <h3>2.1 Diagnostinen TMS</h3>
+            <table>
+                <thead>
+                    <tr><th>Tutkimus</th><th>Indikaatio</th><th>Mittaussuure</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>MEP (motorinen herätepotentiaali)</td><td>Motorisen radan toiminnan arviointi (MS, ALS, myelopatia)</td><td>Amplitudi, latenssit, sentraalinen johtumisnopeus (CMCT)</td></tr>
+                    <tr><td>Kortikaalinen kartoitus</td><td>Epilepsiakirurgian suunnittelu, toiminnallisten alueiden paikantaminen</td><td>MEP-kenttä, puhekatokset (Broca, Wernicke)</td></tr>
+                    <tr><td>Kortikaalinen eksitaatio/inhibitio</td><td>Epilepsia, Parkinson, masennus &mdash; patofysiologian tutkimus</td><td>Kortikaalinen hiljaisuusperiodi (CSP), SICI, ICF</td></tr>
+                </tbody>
+            </table>
+
+            <h3>2.2 Terapeuttinen sarja-TMS (rTMS)</h3>
+            <div class="theory-image-slot" data-slot="rtms-protocol" data-tab="tms" data-default-caption="rTMS-protokollat masennukseen: hf-rTMS, iTBS ja cTBS — parametrit ja indikaatiot"></div>
+            <ul>
+                <li><strong>Matala taajuus (lf-rTMS, &le; 1 Hz)</strong>: Inhibitorinen vaikutus &rarr; käytetään esim. yksipuolisessa tinneksessä, kuuloharhoissa, migreeniprofilaksissa</li>
+                <li><strong>Korkea taajuus (hf-rTMS, 5&ndash;20 Hz)</strong>: Eksitatorinen vaikutus &rarr; hoitoresistentti masennus (vasemman prefrontaalikorteksin stimulaatio), OCD</li>
+                <li><strong>iTBS (intermittent theta burst stimulation)</strong>: 3 pulssia 50 Hz, 5 Hz välein, 2 s päälle / 8 s pois &rarr; nopea eksitatorinen vaikutus. Voidaan antaa 3 min aikana (vs. perinteinen 37 min rTMS). FDA-hyväksytty masennukseen.</li>
+                <li><strong>cTBS (continuous theta burst)</strong>: Inhibitorinen protokolla &rarr; tutkimuskäyttö, parafunktiot</li>
+            </ul>
+
+            <h2>3. Neuronavigaatio</h2>
+            <div class="theory-image-slot" data-slot="tms-navigation" data-tab="tms" data-default-caption="TMS-neuronavigaatio: MRI-rekisteröinti, kelan kohdentaminen ja E-kentän mallintaminen"></div>
+            <p>Neuronavigaatio mahdollistaa TMS-kelan kohdentamisen tarkasti potilaan yksilölliseen MRI-anatomiaan. Järjestelmä koostuu:</p>
+            <ul>
+                <li><strong>Seurantajärjestelmä</strong>: Optinen (infrapuna-kamera + reflektorimarkerit) tai magneettinen seuranta. Tarkkuus: &sim;2&ndash;5 mm.</li>
+                <li><strong>Korekisteröinti</strong>: Potilaan pää rekisteröidään MRI-koordinaatistoon anatomisten maamerkkien (nasion, tragukset) ja lisäpisteiden avulla.</li>
+                <li><strong>Kohderakenne</strong>: MRI:stä valitaan stimulaatiokohde (esim. M1 sormirepresentaatio, DLPFC). Kelan suunta optimoidaan kudosvirtaa maksimoidakseen.</li>
+                <li><strong>E-kenttämallintaminen</strong>: Henkilökohtainen päägeometria mahdollistaa indusoituneen sähkökentän laskemisen BEM/FEM-mallilla &rarr; tarkempi annossuunnittelu</li>
+            </ul>
+
+            <h2>4. Hoitoparametrit ja vasteet</h2>
+            <ul>
+                <li><strong>Intensiteetti</strong>: Tyypillisesti 80&ndash;120 % MT. Maksimointensiteetti rajoitettava turvallisuussyistä (lämmöntuotto, indusoitu virrantiheys).</li>
+                <li><strong>Taajuus</strong>: 1 Hz, 5 Hz, 10 Hz, 20 Hz, iTBS (50 Hz bursteissa), cTBS.</li>
+                <li><strong>Jaksoja</strong>: Masennus: tyypillisesti 20&ndash;30 hoitokertaa (4&ndash;6 viikkoa). Jokainen kerta 3&ndash;40 min.</li>
+                <li><strong>MEP-amplitudi</strong>: Mitataan EMG:llä kohdelihaksesta. Osoittaa motorisen korteksin eksitaatiotason.</li>
+                <li><strong>Liikeherätepotentiaali</strong>: Vastaa kortikaalisesta stimulaatiosta moottorikorteksilla syntyneestä vasteesta.</li>
+            </ul>
+
+            <h2>5. Vasta-aiheet</h2>
+            <table>
+                <thead>
+                    <tr><th>Ehdoton vasta-aihe</th><th>Suhteellinen vasta-aihe</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Metallisia vierasesineitä kallossa (kokleataviin implantit pään alueella, neuromodulaattorit)</td><td>Kardiovaskulaariset implantit (sydämentahdistin: tarkista kelan etäisyys)</td></tr>
+                    <tr><td>Kokleataimplantti</td><td>Epilepsia tai matala kouristuskynnys &mdash; rTMS-protokollan huolellinen valinta</td></tr>
+                    <tr><td>Aktiivinen sisäkorvaistute</td><td>Raskaus (MEP-tutkimus suhteellisesti vasta-aiheinen, diagnostinen yksittäinen pulssi yleensä hyväksytty)</td></tr>
+                    <tr><td>Implantoidut lääkeannostelupumput kallonsisäisesti</td><td>Lääkkeet, jotka laskevat kouristuskynnystä (klooropromatsiini, trisykliset masennuslääkkeet)</td></tr>
+                </tbody>
+            </table>
+
+            <h2>6. Vaihtoehtoiset neuromodulaatiomenetelmät</h2>
+            <table>
+                <thead>
+                    <tr><th>Menetelmä</th><th>Periaate</th><th>Ominaisuudet</th><th>Käyttö</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>tDCS</strong> (transkraniaalinen tasavirtastimulaatio)</td><td>1&ndash;2 mA DC-virta suurten elektrodien kautta</td><td>Anodinen = eksitatorinen, katodinen = inhibitorinen. Ei aiheuta aktiopotentiaaleja, moduloi depolarisaatiokynnystä.</td><td>Tutkimus: kuntoutus, kognitiiviset toiminnot</td></tr>
+                    <tr><td><strong>tACS</strong> (transkraniaalinen vaihtovirtastimulaatio)</td><td>Siniaaltovirta valitulla taajuudella</td><td>Synkronoi tai häiritsee hermoverkon oskillointia. Taajuuskohtainen vaikutus.</td><td>Tutkimus: muisti, tarkkaavaisuus</td></tr>
+                    <tr><td><strong>ECT</strong> (sähkökonvulsiivinen hoito)</td><td>Kouristus sähköisesti indusoituna</td><td>Tehokkain biologinen hoito vaikeaan masennukseen. Vaatii anestesian.</td><td>Hoitoresistentti masennus, psykoosi</td></tr>
+                    <tr><td><strong>DBS</strong> (syvä aivostimulaatio)</td><td>Invasiivinen elektrodistimulointio tarkassa kohdetumakkeessa</td><td>Parkinson (STN, GPi), essentiaali tremor, OCD, epilepsia</td><td>Kirurginen, pysyvä</td></tr>
+                </tbody>
+            </table>
+
+            <h2>7. IEC 60601 ja turvallisuus TMS:ssä</h2>
+            <ul>
+                <li><strong>Lämpövaikutus</strong>: TMS-kela lämpenee käytössä &rarr; lämpötilan monitorointi, kela- ja jäähdytysspesifikaatiot. Maksimilämpötila potilaan ihon kosketuspinnassa: 41 &deg;C (IEC 60601-2-10).</li>
+                <li><strong>Äänikuormitus</strong>: TMS-pulssi tuottaa naksahduksen (&sim;110 dBA paikallisesti). Kuulosuojaimet potilaille ja henkilökunnalle pitkissä sarjoissa.</li>
+                <li><strong>Kohtausriski</strong>: Kouristuskynnys on yksilöllinen. Kouristuksen hoitovalmius (bentsodiatsepiini, ensiapuvälineet).</li>
+                <li><strong>Stimuloitunut sydän</strong>: Rinnan alueella ei käytetä TMS:ää. Sähköinen häiriö sydämentahdistimeen on tarkistettava etäisyyden perusteella.</li>
+                <li><strong>IEC 60601-2-10</strong>: Erityisvaatimukset hermostimulaattoreille (stimulus isolator, virrantiheyden rajoittaminen).</li>
+            </ul>
+
+            <h2>8. EMG TMS-tutkimuksissa</h2>
+            <ul>
+                <li><strong>Pintaelektrodit</strong>: Ag/AgCl bipolar-elektrodit kohdelihaksen (m. abductor pollicis brevis, m. tibialis anterior) pinnalla. Impedanssi &lt; 5 k&Omega;.</li>
+                <li><strong>Vahvistimen vaatimukset</strong>: Kaistanleveys 10&ndash;5000 Hz. TMS-pulssin aiheuttama suuri artefakti saturoituu vahvistimeen 1&ndash;10 ms &rarr; palautumisaika kriittinen. Erityiset TMS-yhteensopivat vahvistimet kestävät pulssin ilman pitkää toipumisaikaa.</li>
+                <li><strong>Artefaktit</strong>: TMS-artefakti (suora induktio EMG-johdoissa), lihaskramppi (ylistimulaatio), silmänliikeartefakti.</li>
+            </ul>
+
+            <div class="theory-references">
+                <h3>Viitekirjallisuus</h3>
+                <ol>
+                    <li>Rossi S et al. <em>Safety and recommendations for TMS use in healthy subjects and patient populations, with updates on training, ethical and regulatory issues</em>, Clin Neurophysiol, 2021.</li>
+                    <li>Rossini PM et al. <em>Non-invasive electrical and magnetic stimulation of the brain, spinal cord, roots and peripheral nerves: Basic principles and procedures for routine clinical and research application</em>, Clin Neurophysiol, 2015.</li>
+                    <li>Lefaucheur JP et al. <em>Evidence-based guidelines on the therapeutic use of repetitive transcranial magnetic stimulation (rTMS): An update</em>, Clin Neurophysiol, 2020.</li>
+                    <li>Mervaala E. ym. <em>Kliininen neurofysiologia</em>, Duodecim, 2018.</li>
+                    <li>IEC 60601-2-10: <em>Particular requirements for the basic safety and essential performance of nerve and muscle stimulators</em>.</li>
+                </ol>
+            </div>
+
+            <div class="theory-quiz-section" data-tab="tms">
+                <div class="theory-quiz-start">
+                    <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-tms">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
+                    <button class="theory-quiz-btn" onclick="startTheoryQuiz('tms')">
+                        <i class="fas fa-play"></i> Aloita harjoittelu
+                    </button>
+                </div>
+                <div class="theory-quiz-active" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+         VÄLILEHTI 6: LAITE- JA SÄHKÖTURVALLISUUS
+         ================================================================ -->
+    <div class="theory-panel" id="panel-laiteturvallisuus" role="tabpanel">
+        <div class="theory-content">
+
+            <h2>1. Lääkinnällisten laitteiden lainsäädäntö</h2>
+
+            <h3>1.1 EU:n lääkinnällisten laitteiden asetus (MDR 2017/745)</h3>
+            <p>Lääkinnällisiä laitteita koskeva EU-asetus (MDR) tuli täysimääräisesti voimaan vuonna 2021. Se korvasi vanhemman MDD 93/42/EEC -direktiivin ja tiukentaa vaatimuksia merkittävästi:</p>
+            <ul>
+                <li><strong>Riskipohjainen luokittelu</strong>: Luokat I, IIa, IIb, III riskitason mukaan. EEG-laitteet tyypillisesti IIa (sähköinen kontakti ihoon, mutta ei invasiivinen). TMS-laitteet IIb tai III.</li>
+                <li><strong>CE-merkintä</strong>: Pakollinen EU-markkinoille. Edellyttää ilmoitetun laitoksen (notified body) arviointia luokissa IIa&ndash;III.</li>
+                <li><strong>Kliininen evaluaatio</strong>: Tiukentunut vaatimus kliiniselle näytölle laitteen turvallisuudesta ja suorituskyvystä.</li>
+                <li><strong>UDI-järjestelmä</strong>: Unique Device Identifier &mdash; pakollinen yksilöllinen tunniste jäljitettävyyttä varten.</li>
+            </ul>
+            <div class="theory-info">
+                <p><strong>Kansallinen lainsäädäntö:</strong> Laki lääkinnällisistä laitteista (719/2021) toteuttaa MDR:n kansallisesti. Valvova viranomainen Suomessa on Fimea.</p>
+            </div>
+
+            <h3>1.2 Ammattimaista käyttäjää koskevat vaatimukset</h3>
+            <ul>
+                <li><strong>Vaaratilanneilmoitus</strong>: Ammattimaisella käyttäjällä on velvollisuus ilmoittaa vakavista vaaratilanteista Fimealle (MDR Art. 87). Ilmoitus tehdään EUDAMED-järjestelmään tai kansalliseen rekisteriin.</li>
+                <li><strong>Laiterekisteri</strong>: Organisaation on ylläpidettävä rekisteriä käytössä olevista lääkinnällisistä laitteista (tunnistetiedot, hankinta, huollot, käytöstäpoisto).</li>
+                <li><strong>Käyttäjäkoulutus</strong>: Laitteen valmistajan on tarjottava riittävä koulutus. Käyttäjäorganisaation on varmistettava henkilöstön pätevyys.</li>
+                <li><strong>Käyttöohjeiden noudattaminen</strong>: Laitetta on käytettävä valmistajan käyttöohjeen mukaisesti (IFU, instructions for use).</li>
+            </ul>
+
+            <h2>2. Sähköturvallisuusstandardit</h2>
+
+            <h3>2.1 IEC 60601 -standardiperhe</h3>
+            <div class="theory-image-slot" data-slot="iec-60601-structure" data-tab="laiteturvallisuus" data-default-caption="IEC 60601 -standardiperhe: päästandardi ja neurofysiologian erityisstandardit"></div>
+            <p>IEC 60601 on kansainvälinen standardiperhe lääkinnällisten sähkölaitteiden turvallisuudelle:</p>
+            <table>
+                <thead>
+                    <tr><th>Standardi</th><th>Soveltamisala</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>IEC 60601-1</td><td>Yleiset turvallisuus- ja suorituskykyvaatimukset (päästandardi)</td></tr>
+                    <tr><td>IEC 60601-1-2</td><td>Sähkömagneettinen yhteensopivuus (EMC)</td></tr>
+                    <tr><td>IEC 60601-1-6</td><td>Käytettävyys (usability engineering)</td></tr>
+                    <tr><td>IEC 60601-2-26</td><td>EEG-laitteiden erityisvaatimukset</td></tr>
+                    <tr><td>IEC 60601-2-10</td><td>Hermostimulaattorit (ENMG, EP, TMS)</td></tr>
+                    <tr><td>IEC 60601-2-65</td><td>Kuulo-herätepotentiaalien mittauslaitteet</td></tr>
+                    <tr><td>SFS-EN 60601-1</td><td>Suomalainen harmonisoitu standardi</td></tr>
+                </tbody>
+            </table>
+
+            <h3>2.2 Laitteiden sähköturvallisuusluokitus</h3>
+            <table>
+                <thead>
+                    <tr><th>Luokka</th><th>Kuvaus</th><th>Esimerkki</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>Luokka I</strong></td><td>Suojamaadoitettu. Vikavirtasuoja jännitteisiin osiin.</td><td>EEG-vahvistin (verkkolaiteosa)</td></tr>
+                    <tr><td><strong>Luokka II</strong></td><td>Kaksoiseristys. Ei maadoitusta.</td><td>Jotkut kannettavat laitteet</td></tr>
+                    <tr><td><strong>Luokka III</strong></td><td>Turvapienjännite (SELV, &le; 24 V AC tai &le; 60 V DC)</td><td>Akkukäyttöiset potilaslaitteet</td></tr>
+                </tbody>
+            </table>
+
+            <h3>2.3 Potilasvirtapiirirajoitukset</h3>
+            <p>Laitteet luokitellaan sen mukaan, millaiseen kontaktiin potilas joutuu:</p>
+            <table>
+                <thead>
+                    <tr><th>Tyyppi</th><th>Kuvaus</th><th>Max vuotovirta (normaali / yksittäinen vika)</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>Tyyppi B</strong></td><td>Kehoa koskettava (ei sydänkontakti)</td><td>100 &micro;A / 500 &micro;A</td></tr>
+                    <tr><td><strong>Tyyppi BF</strong></td><td>Kelluva potilasliitäntä (F = floating), ihokontakti</td><td>100 &micro;A / 500 &micro;A</td></tr>
+                    <tr><td><strong>Tyyppi CF</strong></td><td>Kelluva potilasliitäntä, sydänkontakti sallittu</td><td>10 &micro;A / 50 &micro;A</td></tr>
+                </tbody>
+            </table>
+            <div class="theory-info">
+                <p><strong>KNF-laitteet:</strong> EEG-vahvistimet ovat tyypillisesti BF-tyypin laitteita (kelluva ihopotilasliitäntä, ei sydänkontaktia). IOM-laitteet, joita käytetään invasiivisesti leikkaussalissa, voivat vaatia CF-tyyppiä.</p>
+            </div>
+
+            <h2>3. Vuotovirtamittaukset</h2>
+            <div class="theory-image-slot" data-slot="leakage-current-test" data-tab="laiteturvallisuus" data-default-caption="Vuotovirtamittauksen mittapiiri ja raja-arvot eri laiteluokille (BF, CF, B)"></div>
+            <p>Vuotovirta on tahaton sähkövirta, joka kulkee potilaaseen tai maahan. Mittaus tehdään standardin IEC 60601-1 mukaisesti:</p>
+            <ul>
+                <li><strong>Suojamaadoitusvuotovirta</strong>: Virta suojajohtimessa normaalitilassa. Max 500 &micro;A.</li>
+                <li><strong>Kosketusvuotovirta</strong>: Virta potilaan laitteen kotelo-maahan. Eri raja-arvot normaalitilassa ja yksittäisvian tilanteessa.</li>
+                <li><strong>Potilaan vuotovirta</strong>: Virta potilasliitännästä maahan. Tyypillinen mittausväli: BF-laite normaalitilassa &le; 100 &micro;A.</li>
+                <li><strong>Potilasapuvuotovirta</strong>: Virta, joka kulkee potilaaseen yhden potilasliitännän kautta toiseen, kun ulkoinen jännite kytketään.</li>
+            </ul>
+            <p>Mittaukset tehdään erityisellä mittapiirillä (mA-mittari + 1 k&Omega; sarjavastus + 0,015 &micro;F kondensaattori = standardin mukainen ihmiskehon impedanssimalli).</p>
+
+            <h2>4. Sähköturvallisuus leikkaussalissa ja tehoympäristössä</h2>
+            <div class="theory-image-slot" data-slot="or-electrical-safety" data-tab="laiteturvallisuus" data-default-caption="Leikkaussalin IT-verkko, potentiaalintasaus ja mikroshokkirajat CF-laitteille"></div>
+            <ul>
+                <li><strong>IT-verkko</strong>: Leikkaussaleissa käytetään IT-verkkoa (isoloitu maa), joka estää yksittäisen maavikatapauksen aiheuttamasta välittömästä vaarasta. Eristyksenvalvontalaite (IMD) valvoo eristystasoa jatkuvasti.</li>
+                <li><strong>Potentiaalintasaus</strong>: Kaikki laitteet ja metallirakenteet on yhdistettävä potentiaalintasauspistokkeeseen &rarr; maadoitussilmukoiden välttäminen.</li>
+                <li><strong>Mikroshokki</strong>: Sydänkontaktitilassa (katetri, johdin) jo 10&ndash;50 &micro;A voi aiheuttaa kammiovärinän &rarr; CF-tyypin potilasvirtapiiri pakollinen.</li>
+                <li><strong>Diatermia-häiriö</strong>: Diatermia voi indusoida jopa satoja milliampeereita EEG-/EP-johdoissa. Laitteet on suunniteltava kestämään tämä ilman vaaraa tai johtojen on oltava varustettu ylipäästösuodattimilla.</li>
+            </ul>
+
+            <h2>5. Tietoturvallinen käsittely (GDPR ja kuvantamisdata)</h2>
+            <ul>
+                <li><strong>Henkilötietojen käsittely</strong>: EEG-data on terveysdataa (GDPR Art. 9 erityinen henkilötieto). Käsittely vain terveydenhuollon ammattihenkilöiden toimesta.</li>
+                <li><strong>Pseudonymisaatio</strong>: Tutkimusdatan tunnistetiedot poistetaan/koodataan ennen anonymisointia.</li>
+                <li><strong>Salattu tallennus ja siirto</strong>: AES-256 tai vastaava salaus lepotilassa; TLS 1.2/1.3 siirrossa.</li>
+                <li><strong>DICOM-tietoturva</strong>: DICOM-kuvat sisältävät potilastietoja header-kentissä. De-identifiointi ennen julkaisua tai tutkimuskäyttöä (DICOM PS 3.15, lisäys E).</li>
+                <li><strong>Tietojen säilytysaika</strong>: Terveydenhuoltolaki: potilasasiakirjat 12 vuotta potilaan kuolemasta tai 120 vuotta syntymästä. EEG-rekisteröinnit osa potilaskertomusta.</li>
+            </ul>
+
+            <h2>6. Laitehankintaprosessi</h2>
+            <ul>
+                <li><strong>Tarpeen määrittely</strong>: Kliiniset vaatimukset, käyttömäärät, tilavaatimukset, integraatio olemassa oleviin järjestelmiin (HIS, PACS).</li>
+                <li><strong>Tekninen vaatimusmäärittely</strong>: Kanavamäärä, näytteenottotaajuus, CMRR, impedanssitarkistus, yhteensopivat elektrodityypit, ohjelmiston ominaisuudet.</li>
+                <li><strong>Hankintailmoitus (HILMA)</strong>: EU-kynnysarvot ylittävät hankinnat julkistettava. Terveydenhuollon laitehankinnat tyypillisesti 400 000 &euro; EU-kynnys.</li>
+                <li><strong>Vastaanottotarkistus</strong>: IQ (installation qualification) &mdash; asennus oikein. OQ (operational qualification) &mdash; toimii spesifikaation mukaisesti. PQ (performance qualification) &mdash; toimii kliinisessä käyttöympäristössä.</li>
+                <li><strong>Käyttöönotto</strong>: Käyttäjäkoulutus, menetelmäohjeiden päivitys, laiterekisteriin kirjaus.</li>
+            </ul>
+
+            <div class="theory-references">
+                <h3>Viitekirjallisuus</h3>
+                <ol>
+                    <li>IEC 60601-1: <em>Medical electrical equipment &mdash; Part 1: General requirements for basic safety and essential performance</em>, 3rd ed., 2005+A1:2012+A2:2020.</li>
+                    <li>IEC 60601-2-26: <em>Particular requirements for the basic safety and essential performance of electroencephalographs</em>, 3rd ed., 2012.</li>
+                    <li>EU-asetus 2017/745: <em>Lääkinnällisistä laitteista (MDR)</em>.</li>
+                    <li>Laki lääkinnällisistä laitteista 719/2021.</li>
+                    <li>Fimea: <em>Lääkinnällisten laitteiden ammattimainen käyttö</em> &mdash; <a href="https://www.fimea.fi" target="_blank">www.fimea.fi</a>.</li>
+                    <li>Bernstein AD, Bhargava V. <em>Electrical safety in hospitals</em>, J Electrocardiol, 1995.</li>
+                </ol>
+            </div>
+
+            <div class="theory-quiz-section" data-tab="laiteturvallisuus">
+                <div class="theory-quiz-start">
+                    <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-laiteturvallisuus">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
+                    <button class="theory-quiz-btn" onclick="startTheoryQuiz('laiteturvallisuus')">
+                        <i class="fas fa-play"></i> Aloita harjoittelu
+                    </button>
+                </div>
+                <div class="theory-quiz-active" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+</div> <!-- closes .theory-container -->
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'sisalto/js/tts-player.js' %}"></script>
+<script>
+(function() {
+    // ==========================================
+    // THEORY IMAGE SLOTS
+    // ==========================================
+
+    var MODALITY = '{{ modality_id }}';
+    var IS_SUPERUSER = {{ is_superuser|yesno:"true,false" }};
+    var imageData = {};
+    var currentUploadSlot = null;
+    var currentUploadTab = null;
+    var pendingFile = null;
+
+    function loadTheoryImages() {
+        if (!MODALITY) return;
+        fetch('/modaliteetit/api/theory-images/' + MODALITY + '/')
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                imageData = data;
+                renderAllSlots();
+            })
+            .catch(function() {});
+    }
+
+    function renderAllSlots() {
+        document.querySelectorAll('.theory-image-slot').forEach(function(slot) {
+            var slotId = slot.dataset.slot;
+            var info = imageData[slotId];
+            if (info && info.url) {
+                slot.className = 'theory-image-slot has-image size-' + (info.display_size || 'medium');
+                slot.innerHTML =
+                    '<figure>' +
+                        '<div class="theory-image-actions">' +
+                            '<button class="btn-replace" onclick="openUploadModal(\'' + slotId + '\', \'' + slot.dataset.tab + '\')"><i class="fas fa-exchange-alt"></i> Vaihda</button>' +
+                            '<button class="btn-delete" onclick="deleteSlotImage(\'' + slotId + '\', \'' + slot.dataset.tab + '\')"><i class="fas fa-trash"></i> Poista</button>' +
+                        '</div>' +
+                        '<img src="' + info.url + '" alt="' + (info.alt_text || '') + '">' +
+                        '<figcaption>' + (info.caption || '') + '</figcaption>' +
+                    '</figure>';
+            } else {
+                slot.classList.remove('has-image');
+                var defaultCaption = slot.dataset.defaultCaption || '';
+                slot.innerHTML =
+                    '<div class="theory-image-placeholder" onclick="openUploadModal(\'' + slotId + '\', \'' + slot.dataset.tab + '\')">' +
+                        '<i class="fas fa-camera"></i>' +
+                        '<span>Lisää kuva</span>' +
+                        '<span class="slot-label">' + slotId + '</span>' +
+                        '<span style="font-size:0.75rem;max-width:400px;text-align:center;">' + defaultCaption + '</span>' +
+                    '</div>';
+            }
+        });
+    }
+
+    window.toggleEditMode = function() {
+        var btn = document.getElementById('editModeToggle');
+        document.body.classList.toggle('theory-edit-mode');
+        btn.classList.toggle('active');
+        var isActive = document.body.classList.contains('theory-edit-mode');
+        btn.querySelector('span').textContent = isActive ? 'Lopeta muokkaus' : 'Muokkaa kuvia';
+    };
+
+    window.openUploadModal = function(slotId, tabId) {
+        if (!IS_SUPERUSER || !document.body.classList.contains('theory-edit-mode')) return;
+        currentUploadSlot = slotId;
+        currentUploadTab = tabId;
+        pendingFile = null;
+        var modal = document.getElementById('uploadModal');
+        if (!modal) return;
+        var existing = imageData[slotId];
+        document.getElementById('uploadCaption').value = existing ? (existing.caption || '') : (document.querySelector('[data-slot="' + slotId + '"]').dataset.defaultCaption || '');
+        document.getElementById('uploadAlt').value = existing ? (existing.alt_text || '') : '';
+        var sizeVal = existing ? (existing.display_size || 'medium') : 'medium';
+        var sizeRadio = document.querySelector('input[name="uploadSize"][value="' + sizeVal + '"]');
+        if (sizeRadio) sizeRadio.checked = true;
+        var dz = document.getElementById('uploadDropzone');
+        dz.innerHTML = '<i class="fas fa-cloud-upload-alt"></i><span>Vedä kuva tähän, klikkaa valitaksesi tai liitä <kbd>Ctrl+V</kbd></span><input type="file" id="uploadFileInput" accept="image/*" style="display:none;">';
+        document.getElementById('uploadSaveBtn').disabled = !existing;
+        bindDropzone();
+        modal.classList.add('visible');
+        modal.setAttribute('tabindex', '-1');
+        modal.focus();
+    };
+
+    window.closeUploadModal = function() {
+        document.getElementById('uploadModal').classList.remove('visible');
+        currentUploadSlot = null;
+        currentUploadTab = null;
+        pendingFile = null;
+    };
+
+    function bindDropzone() {
+        var dz = document.getElementById('uploadDropzone');
+        var fi = document.getElementById('uploadFileInput');
+        dz.onclick = function() { fi.click(); };
+        fi.onchange = function() { if (fi.files.length) handleFile(fi.files[0]); };
+        dz.ondragover = function(e) { e.preventDefault(); dz.classList.add('dragover'); };
+        dz.ondragleave = function() { dz.classList.remove('dragover'); };
+        dz.ondrop = function(e) {
+            e.preventDefault();
+            dz.classList.remove('dragover');
+            if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+        };
+    }
+
+    function onModalPaste(e) {
+        var modal = document.getElementById('uploadModal');
+        if (!modal || !modal.classList.contains('visible')) return;
+        var items = (e.clipboardData || e.originalEvent && e.originalEvent.clipboardData || {}).items;
+        if (!items) return;
+        for (var i = 0; i < items.length; i++) {
+            if (items[i].type.indexOf('image') !== -1) {
+                e.preventDefault();
+                var file = items[i].getAsFile();
+                var ext = items[i].type === 'image/png' ? '.png' : '.jpg';
+                var renamed = new File([file], 'kuvakaappaus' + ext, { type: items[i].type });
+                handleFile(renamed);
+                return;
+            }
+        }
+    }
+    document.addEventListener('paste', onModalPaste);
+
+    function handleFile(file) {
+        if (!file.type.startsWith('image/')) return;
+        pendingFile = file;
+        document.getElementById('uploadSaveBtn').disabled = false;
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var dz = document.getElementById('uploadDropzone');
+            dz.innerHTML = '<img class="preview" src="' + e.target.result + '"><input type="file" id="uploadFileInput" accept="image/*" style="display:none;">';
+            bindDropzone();
+        };
+        reader.readAsDataURL(file);
+    }
+
+    window.saveUploadedImage = function() {
+        if (!currentUploadSlot || !currentUploadTab) return;
+        var btn = document.getElementById('uploadSaveBtn');
+        btn.disabled = true;
+        btn.textContent = 'Tallennetaan...';
+        var fd = new FormData();
+        fd.append('modality', MODALITY);
+        fd.append('tab_id', currentUploadTab);
+        fd.append('slot_id', currentUploadSlot);
+        fd.append('caption', document.getElementById('uploadCaption').value);
+        fd.append('alt_text', document.getElementById('uploadAlt').value);
+        var sizeEl = document.querySelector('input[name="uploadSize"]:checked');
+        fd.append('display_size', sizeEl ? sizeEl.value : 'medium');
+        if (pendingFile) fd.append('image', pendingFile);
+        fetch('/modaliteetit/api/theory-images/upload/', {
+            method: 'POST',
+            headers: { 'X-CSRFToken': getCookie('csrftoken') },
+            body: fd
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (data.ok) {
+                var sizeEl = document.querySelector('input[name="uploadSize"]:checked');
+                imageData[currentUploadSlot] = {
+                    url: data.url, caption: data.caption, alt_text: data.alt_text,
+                    display_size: sizeEl ? sizeEl.value : 'medium', tab_id: currentUploadTab
+                };
+                renderAllSlots();
+                closeUploadModal();
+            } else {
+                alert(data.error || 'Virhe tallennettaessa.');
+                btn.disabled = false;
+                btn.textContent = 'Tallenna';
+            }
+        })
+        .catch(function() {
+            alert('Verkkovirhe.');
+            btn.disabled = false;
+            btn.textContent = 'Tallenna';
+        });
+    };
+
+    window.deleteSlotImage = function(slotId, tabId) {
+        if (!confirm('Poistetaanko kuva paikasta "' + slotId + '"?')) return;
+        fetch('/modaliteetit/api/theory-images/delete/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+            body: JSON.stringify({ modality: MODALITY, tab_id: tabId, slot_id: slotId })
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (data.ok) { delete imageData[slotId]; renderAllSlots(); }
+            else { alert(data.error || 'Virhe poistettaessa.'); }
+        })
+        .catch(function() { alert('Verkkovirhe.'); });
+    };
+
+    loadTheoryImages();
+
+    // ==========================================
+    // TAB NAVIGATION
+    // ==========================================
+    const tabs = document.querySelectorAll('.theory-tab');
+    const panels = document.querySelectorAll('.theory-panel');
+
+    function activateTab(tabId) {
+        tabs.forEach(t => {
+            t.classList.toggle('active', t.dataset.tab === tabId);
+            t.setAttribute('aria-selected', t.dataset.tab === tabId);
+        });
+        panels.forEach(p => {
+            p.classList.toggle('active', p.id === 'panel-' + tabId);
+        });
+        history.replaceState(null, '', '#' + tabId);
+        document.querySelector('.theory-tabs').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (window.MathJax && MathJax.typesetPromise) {
+            var activePanel = document.getElementById('panel-' + tabId);
+            if (activePanel) {
+                MathJax.typesetPromise([activePanel]);
+            }
+        }
+    }
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            activateTab(this.dataset.tab);
+        });
+    });
+
+    var hash = window.location.hash.replace('#', '');
+    if (hash) {
+        var matchingTab = document.querySelector('.theory-tab[data-tab="' + hash + '"]');
+        if (matchingTab) {
+            activateTab(hash);
+        }
+    }
+
+    // ========== INLINE QUIZ ==========
+    var TAB_EPA_MAP = {{ tab_epa_map|safe }};
+    var quizState = {};
+
+    function getCSRF() {
+        var c = document.cookie.match(/csrftoken=([^;]+)/);
+        return c ? c[1] : '';
+    }
+
+    // Type selector chip toggle
+    document.querySelectorAll('.tq-type-chip').forEach(function(chip) {
+        chip.addEventListener('click', function(e) {
+            e.preventDefault();
+            var cb = this.querySelector('input[type="checkbox"]');
+            cb.checked = !cb.checked;
+            this.classList.toggle('selected', cb.checked);
+        });
+    });
+
+    function getSelectedTypes(tabId) {
+        var selector = document.getElementById('tq-types-' + tabId);
+        if (!selector) return 'multiple_choice,multi_select,true_false,calculation,matching';
+        var types = [];
+        selector.querySelectorAll('input[type="checkbox"]:checked').forEach(function(cb) {
+            types.push(cb.value);
+            if (cb.value === 'multiple_choice') types.push('multi_select');
+        });
+        return types.length > 0 ? types.join(',') : 'multiple_choice';
+    }
+
+    window.startTheoryQuiz = function(tabId) {
+        var section = document.querySelector('.theory-quiz-section[data-tab="' + tabId + '"]');
+        if (!section) return;
+        section.querySelector('.theory-quiz-start').style.display = 'none';
+        var active = section.querySelector('.theory-quiz-active');
+        active.style.display = 'block';
+        quizState[tabId] = { score: 0, total: 0, types: getSelectedTypes(tabId) };
+        loadQuestion(tabId);
+    };
+
+    window.stopTheoryQuiz = function(tabId) {
+        var section = document.querySelector('.theory-quiz-section[data-tab="' + tabId + '"]');
+        if (!section) return;
+        section.querySelector('.theory-quiz-start').style.display = '';
+        section.querySelector('.theory-quiz-active').style.display = 'none';
+        section.querySelector('.theory-quiz-active').innerHTML = '';
+        delete quizState[tabId];
+    };
+
+    function loadQuestion(tabId) {
+        var epaId = TAB_EPA_MAP[tabId];
+        if (!epaId) return;
+        var active = document.querySelector('.theory-quiz-section[data-tab="' + tabId + '"] .theory-quiz-active');
+        var st = quizState[tabId];
+
+        active.innerHTML = '<div class="theory-quiz-loading"><i class="fas fa-spinner fa-spin"></i><p>Ladataan kysymystä...</p></div>';
+
+        fetch('/modaliteetit/api/question/' + epaId + '/?types=' + encodeURIComponent(st.types))
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (data.error) {
+                    active.innerHTML = '<div class="theory-quiz-loading"><i class="fas fa-inbox"></i><p>' + data.error + '</p></div>';
+                    return;
+                }
+                st.currentQuestionId = data.question_id;
+                st.currentQuestionType = data.question_type;
+
+                var html = '';
+                html += '<div class="theory-quiz-scorebar">';
+                html += '<div class="theory-quiz-scorebar-left">Kysymys ' + (st.total + 1) + ' / ' + data.total_available + '</div>';
+                html += '<div class="theory-quiz-scorebar-right">';
+                html += '<div class="theory-quiz-score-item"><div class="theory-quiz-score-value" id="tq-score-' + tabId + '">' + st.score + '/' + st.total + '</div><div class="theory-quiz-score-label">Oikein</div></div>';
+                html += '<button class="theory-quiz-stop" onclick="stopTheoryQuiz(\'' + tabId + '\')"><i class="fas fa-stop"></i> Lopeta</button>';
+                html += '</div></div>';
+
+                var typeHints = {
+                    'multi_select': '<i class="fas fa-check-double"></i> Valitse kaikki oikeat vastaukset',
+                    'true_false': '<i class="fas fa-balance-scale"></i> Oikein vai väärin?',
+                    'calculation': '<i class="fas fa-calculator"></i> Laske oikea arvo',
+                    'matching': '<i class="fas fa-arrows-alt-h"></i> Yhdistä parit'
+                };
+                if (typeHints[data.question_type]) {
+                    html += '<div class="theory-quiz-type-hint">' + typeHints[data.question_type] + '</div>';
+                }
+
+                html += '<div class="theory-quiz-question">' + data.text + '</div>';
+
+                if (data.question_type === 'calculation') {
+                    html += '<div class="theory-quiz-calc-wrapper" id="tq-calc-' + tabId + '">';
+                    html += '<input type="number" step="any" class="theory-quiz-calc-input" id="tq-calc-input-' + tabId + '" placeholder="Vastaus...">';
+                    if (data.calculation_unit) html += '<span class="theory-quiz-calc-unit">' + data.calculation_unit + '</span>';
+                    html += '<span class="theory-quiz-calc-hint">toleranssi &plusmn;' + (data.calculation_tolerance || 5) + '%</span>';
+                    html += '</div>';
+                } else if (data.question_type === 'matching' && data.matching_pairs) {
+                    html += '<div class="theory-quiz-matching" id="tq-matching-' + tabId + '">';
+                    data.matching_pairs.forEach(function(pair, idx) {
+                        html += '<div class="theory-quiz-matching-row">';
+                        html += '<span class="theory-quiz-matching-left">' + pair.left + '</span>';
+                        html += '<span class="theory-quiz-matching-arrow">&rarr;</span>';
+                        html += '<select class="theory-quiz-matching-select" data-left="' + pair.left + '">';
+                        html += '<option value="">Valitse...</option>';
+                        data.matching_rights.forEach(function(right) {
+                            html += '<option value="' + right + '">' + right + '</option>';
+                        });
+                        html += '</select>';
+                        html += '</div>';
+                    });
+                    html += '</div>';
+                } else {
+                    var isMulti = data.question_type === 'multi_select';
+                    html += '<div class="theory-quiz-choices" id="tq-choices-' + tabId + '">';
+                    data.choices.forEach(function(c) {
+                        var indicatorClass = isMulti ? 'checkbox' : '';
+                        var icon = isMulti ? 'fa-check' : 'fa-circle';
+                        html += '<div class="theory-quiz-choice" data-id="' + c.id + '" onclick="toggleChoice(\'' + tabId + '\', this, ' + isMulti + ')">';
+                        html += '<div class="theory-quiz-choice-indicator ' + indicatorClass + '"><i class="fas ' + icon + '"></i></div>';
+                        html += '<div>' + c.text + '</div>';
+                        html += '</div>';
+                    });
+                    html += '</div>';
+                }
+
+                html += '<button class="theory-quiz-submit" id="tq-submit-' + tabId + '" onclick="submitAnswer(\'' + tabId + '\')"><i class="fas fa-check"></i> Vastaa</button>';
+                html += '<div id="tq-result-' + tabId + '" style="display: none;"></div>';
+
+                active.innerHTML = html;
+
+                if (data.question_type === 'calculation') {
+                    var calcInput = document.getElementById('tq-calc-input-' + tabId);
+                    calcInput.addEventListener('input', function() {
+                        document.getElementById('tq-submit-' + tabId).classList.toggle('enabled', this.value.trim() !== '');
+                    });
+                    calcInput.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter' && this.value.trim()) submitAnswer(tabId);
+                    });
+                } else if (data.question_type === 'matching') {
+                    document.querySelectorAll('#tq-matching-' + tabId + ' select').forEach(function(sel) {
+                        sel.addEventListener('change', function() {
+                            var allFilled = true;
+                            document.querySelectorAll('#tq-matching-' + tabId + ' select').forEach(function(s) {
+                                if (!s.value) allFilled = false;
+                            });
+                            document.getElementById('tq-submit-' + tabId).classList.toggle('enabled', allFilled);
+                        });
+                    });
+                }
+
+                if (window.MathJax && MathJax.typesetPromise) {
+                    MathJax.typesetPromise([active]);
+                }
+            })
+            .catch(function() {
+                active.innerHTML = '<div class="theory-quiz-loading"><i class="fas fa-exclamation-triangle"></i><p>Virhe ladattaessa kysymystä.</p></div>';
+            });
+    }
+
+    window.toggleChoice = function(tabId, el, isMulti) {
+        if (el.classList.contains('disabled')) return;
+        if (!isMulti) {
+            el.parentElement.querySelectorAll('.theory-quiz-choice').forEach(function(c) { c.classList.remove('selected'); });
+        }
+        el.classList.toggle('selected');
+        var hasSelection = el.parentElement.querySelector('.theory-quiz-choice.selected');
+        document.getElementById('tq-submit-' + tabId).classList.toggle('enabled', !!hasSelection);
+    };
+
+    window.submitAnswer = function(tabId) {
+        var btn = document.getElementById('tq-submit-' + tabId);
+        if (!btn.classList.contains('enabled')) return;
+        btn.classList.remove('enabled');
+        btn.style.display = 'none';
+
+        var st = quizState[tabId];
+        var body = { question_id: st.currentQuestionId };
+
+        if (st.currentQuestionType === 'calculation') {
+            body.calculation_input = parseFloat(document.getElementById('tq-calc-input-' + tabId).value);
+            document.getElementById('tq-calc-input-' + tabId).disabled = true;
+        } else if (st.currentQuestionType === 'matching') {
+            var answers = {};
+            document.querySelectorAll('#tq-matching-' + tabId + ' select').forEach(function(sel) {
+                answers[sel.dataset.left] = sel.value;
+                sel.disabled = true;
+            });
+            body.matching_answers = answers;
+        } else {
+            var selected = [];
+            document.querySelectorAll('#tq-choices-' + tabId + ' .theory-quiz-choice.selected').forEach(function(c) {
+                selected.push(parseInt(c.dataset.id));
+            });
+            document.querySelectorAll('#tq-choices-' + tabId + ' .theory-quiz-choice').forEach(function(c) {
+                c.classList.add('disabled');
+            });
+            body.selected_ids = selected;
+        }
+
+        fetch('/modaliteetit/api/answer/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCSRF() },
+            body: JSON.stringify(body)
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            st.total++;
+            if (data.is_correct) st.score++;
+
+            var scoreEl = document.getElementById('tq-score-' + tabId);
+            if (scoreEl) scoreEl.textContent = st.score + '/' + st.total;
+
+            if (st.currentQuestionType === 'calculation') {
+                var c = data.choices[0];
+                var calcEl = document.getElementById('tq-calc-' + tabId);
+                var feedback = document.createElement('div');
+                feedback.className = 'theory-quiz-calc-feedback ' + (data.is_correct ? 'correct' : 'incorrect');
+                feedback.innerHTML = data.is_correct
+                    ? '<i class="fas fa-check-circle"></i> Oikein!'
+                    : '<i class="fas fa-times-circle"></i> Oikea vastaus: ' + c.correct_answer + ' ' + c.unit;
+                calcEl.appendChild(feedback);
+            } else if (st.currentQuestionType === 'matching') {
+                data.choices.forEach(function(c) {
+                    document.querySelectorAll('#tq-matching-' + tabId + ' select').forEach(function(sel) {
+                        if (sel.dataset.left === c.left) {
+                            var row = sel.closest('.theory-quiz-matching-row');
+                            row.classList.add(c.pair_correct ? 'correct' : 'incorrect');
+                            if (!c.pair_correct) {
+                                var fix = document.createElement('span');
+                                fix.className = 'theory-quiz-matching-correct';
+                                fix.textContent = ' \u2192 ' + c.right;
+                                row.appendChild(fix);
+                            }
+                        }
+                    });
+                });
+            } else {
+                data.choices.forEach(function(c) {
+                    var el = document.querySelector('#tq-choices-' + tabId + ' .theory-quiz-choice[data-id="' + c.id + '"]');
+                    if (!el) return;
+                    if (c.is_correct) {
+                        el.classList.add('correct');
+                        el.querySelector('.theory-quiz-choice-indicator i').className = 'fas fa-check';
+                    } else if (c.was_selected) {
+                        el.classList.add('incorrect');
+                        el.querySelector('.theory-quiz-choice-indicator i').className = 'fas fa-times';
+                    }
+                    if (c.explanation) {
+                        var expDiv = document.createElement('div');
+                        expDiv.className = 'theory-quiz-choice-explanation';
+                        expDiv.textContent = c.explanation;
+                        el.querySelector('div:last-child').appendChild(expDiv);
+                    }
+                });
+            }
+
+            var resultHtml = '';
+            if (data.is_correct) {
+                resultHtml += '<div class="theory-quiz-result-banner correct"><i class="fas fa-check-circle"></i> Oikein!</div>';
+            } else {
+                resultHtml += '<div class="theory-quiz-result-banner incorrect"><i class="fas fa-times-circle"></i> Väärin</div>';
+            }
+            if (data.explanation) {
+                resultHtml += '<div class="theory-quiz-explanation">';
+                resultHtml += '<div class="theory-quiz-explanation-label"><i class="fas fa-lightbulb"></i> Selitys</div>';
+                resultHtml += '<p>' + data.explanation + '</p>';
+                resultHtml += '</div>';
+            }
+            resultHtml += '<button class="theory-quiz-next" onclick="nextQuestion(\'' + tabId + '\')">Seuraava kysymys <i class="fas fa-arrow-right"></i></button>';
+
+            var resultEl = document.getElementById('tq-result-' + tabId);
+            resultEl.innerHTML = resultHtml;
+            resultEl.style.display = 'block';
+
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise([resultEl]);
+            }
+        })
+        .catch(function() {
+            btn.style.display = '';
+            btn.classList.add('enabled');
+            alert('Virhe tarkistettaessa vastausta.');
+        });
+    };
+
+    window.nextQuestion = function(tabId) {
+        loadQuestion(tabId);
+    };
+})();
+</script>
+{% endblock %}
+                <li><strong

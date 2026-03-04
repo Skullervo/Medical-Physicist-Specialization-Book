@@ -4,7 +4,7 @@
 {% block title %}Radiologian teoria - Sairaalafyysikon erikoistumiskirja{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'sisalto/css/theory.css' %}?v=1">
+<link rel="stylesheet" href="{% static 'sisalto/css/theory.css' %}?v=7">
 {% endblock %}
 
 {% block content %}
@@ -13,7 +13,47 @@
     <div class="theory-header">
         <h1><i class="fas fa-x-ray" style="color: #60a5fa; margin-right: 8px;"></i> Radiologian teoria</h1>
         <p>Kattava teoriamateriaali radiologisen kuvantamisen fysikaalisista perusteista, laitteista, kuvausparametreista, annossuurista ja laadunvarmistuksesta. Valitse alimodaliteetti alla olevista välilehdistä.</p>
+        {% if is_superuser %}
+        <button class="theory-edit-toggle" id="editModeToggle" onclick="toggleEditMode()">
+            <i class="fas fa-images"></i> <span>Muokkaa kuvia</span>
+        </button>
+        {% endif %}
     </div>
+
+    <!-- Upload modal (superuser only) -->
+    {% if is_superuser %}
+    <div class="theory-upload-modal" id="uploadModal">
+        <div class="theory-upload-modal-content">
+            <h3><i class="fas fa-image" style="color: var(--color-primary); margin-right: 8px;"></i> Lisää kuva</h3>
+            <div class="theory-upload-dropzone" id="uploadDropzone">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span>Vedä kuva tähän tai klikkaa valitaksesi</span>
+                <input type="file" id="uploadFileInput" accept="image/*" style="display: none;">
+            </div>
+            <div class="theory-upload-field">
+                <label for="uploadCaption">Kuvateksti</label>
+                <textarea id="uploadCaption" placeholder="Kuvan selitys suomeksi..."></textarea>
+            </div>
+            <div class="theory-upload-field">
+                <label for="uploadAlt">Alt-teksti (saavutettavuus)</label>
+                <input type="text" id="uploadAlt" placeholder="Kuvaileva teksti ruudunlukijalle...">
+            </div>
+            <div class="theory-upload-field">
+                <label>Kuvan koko</label>
+                <div class="theory-size-picker" id="uploadSizePicker">
+                    <label class="size-option"><input type="radio" name="uploadSize" value="small"> Pieni (40 %)</label>
+                    <label class="size-option"><input type="radio" name="uploadSize" value="medium" checked> Normaali (65 %)</label>
+                    <label class="size-option"><input type="radio" name="uploadSize" value="large"> Suuri (85 %)</label>
+                    <label class="size-option"><input type="radio" name="uploadSize" value="full"> Täysleveys</label>
+                </div>
+            </div>
+            <div class="theory-upload-actions">
+                <button class="btn-cancel" onclick="closeUploadModal()">Peruuta</button>
+                <button class="btn-save" id="uploadSaveBtn" onclick="saveUploadedImage()" disabled>Tallenna</button>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 
     <!-- Tab navigation -->
     <div class="theory-tabs" role="tablist">
@@ -69,6 +109,8 @@
                 <p><strong>Käytännön merkitys:</strong> Diagnostiikassa käytettävän röntgensäteilyn energia on tyypillisesti 20–150 keV. Jarrutussäteily muodostaa pääosan säteilyspektristä, kun taas karakteristinen säteily on merkittävä erityisesti mammografiassa (Mo K-viivat ~17,5 ja 19,6 keV).</p>
             </div>
 
+            <div class="theory-image-slot" data-slot="natiivi-xray-spectrum" data-tab="natiivi" data-default-caption="Röntgensäteilyn spektri: jarrutussäteily (jatkuva) ja karakteristinen säteily (piikkejä) eri putkijännitteillä."></div>
+
             <h3>2.2 Röntgensäteilyn vuorovaikutukset kudoksessa</h3>
             <p>Diagnostisella energia-alueella röntgensäteily vuorovaikuttaa kudoksen kanssa kolmella päätavalla:</p>
             <ul>
@@ -110,6 +152,8 @@
                 <li><strong>Kotelo (housing)</strong>: Lyijyvuorattu metallikotelo, joka suojaa hajaasäteilyltä ja sisältää öljyn jäähdytystä varten.</li>
             </ul>
 
+            <div class="theory-image-slot" data-slot="natiivi-xray-tube" data-tab="natiivi" data-default-caption="Röntgenputken rakenne: katodi, pyörivä anodi, tyhjiökotelo ja säteilykeilan suodatus."></div>
+
             <h3>3.2 Suodatus</h3>
             <p>Röntgenputken säteilykeila suodatetaan matalaenergisten fotonien poistamiseksi, mikä vähentää potilasannosta parantamatta diagnostista informaatiota:</p>
             <ul>
@@ -126,6 +170,8 @@
                 <li><strong>Epäsuora konversio (indirect DR)</strong>: Röntgensäteily muunnetaan ensin valoksi tuikeaineella (esim. CsI:Tl, Gd₂O₂S), jonka jälkeen valo muunnetaan sähköiseksi signaaliksi amorfisella piillä (a-Si) varustetuilla fotodiodeilla. Tämä on yleisin DR-detektorityyppi.</li>
                 <li><strong>Suora konversio (direct DR)</strong>: Röntgensäteily muunnetaan suoraan sähköiseksi signaaliksi puolijohdedetektorilla (esim. amorfinen seleeni, a-Se). Etuna parempi paikkaresoluutio, koska valon sironnan aiheuttamaa terävyyden menetystä ei tapahdu.</li>
             </ul>
+
+            <div class="theory-image-slot" data-slot="natiivi-dr-detector" data-tab="natiivi" data-default-caption="DR-detektorin toimintaperiaate: epäsuora konversio (CsI + a-Si) vs. suora konversio (a-Se)."></div>
 
             <h3>4.2 Taulukuvalevy (CR, computed radiography)</h3>
             <p>CR-järjestelmä käyttää fosforikuvalevyä (imaging plate, IP), johon röntgenkuva tallentuu piilevänä kuvana (latent image). Kuvalevy luetaan laservalolla (stimulated luminescence), jolloin varastoitunut energia vapautuu valona, joka kerätään valomonistinputkella. CR on suurelta osin korvautumassa DR-tekniikalla, mutta sitä käytetään vielä erityisesti liikkuvissa laitteissa.</p>
@@ -258,6 +304,8 @@
                 </tbody>
             </table>
 
+            <div class="theory-image-slot" data-slot="natiivi-image-artifacts" data-tab="natiivi" data-default-caption="Tyypillisiä natiivikuvantamisen artefakteja: liikeartefakti, hila-artefakti (Moiré), vierasesineartefakti ja kuolleen pikselin artefakti."></div>
+
             <h2>11. Potilasaltistuksen määrittäminen</h2>
             <p>Sairaalafyysikon on osattava määrittää potilaan säteilyaltistus natiivikuvantamisessa:</p>
 
@@ -362,7 +410,13 @@
             <div class="theory-quiz-section" data-tab="natiivi">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
-                    <p>Harjoittele natiivikuvantamisen teoriaa monivalintakysymyksillä.</p>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-natiivi">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
                     <button class="theory-quiz-btn" onclick="startTheoryQuiz('natiivi')">
                         <i class="fas fa-play"></i> Aloita harjoittelu
                     </button>
@@ -417,6 +471,8 @@
                 </tbody>
             </table>
 
+            <div class="theory-image-slot" data-slot="tt-hounsfield" data-tab="tt" data-default-caption="Hounsfield-asteikko ja ikkunointiesimerkki: eri kudostyyppien HU-arvot ja tyypilliset ikkuna-asetukset (keuhkoikkuna, pehmytkudosikkuna, luuikkuna)."></div>
+
             <h3>2.3 Rekonstruktiomenetelmät</h3>
             <ul>
                 <li><strong>Suodatettu takaisinprojektio (FBP, filtered back projection)</strong>: Klassinen analyyttinen menetelmä. Projektiot suodatetaan (ramp-suodatin + tasoitussuodatin) ja projisoidaan takaisin kuvatasolle. Nopea ja matemaattisesti tarkka, mutta herkkä kohinalle.</li>
@@ -424,10 +480,14 @@
                 <li><strong>Syvien neuroverkkojen rekonstruktio (DLR, deep learning reconstruction)</strong>: Uusin menetelmä, joka käyttää koulutettuja neuroverkkoja kohinan poistoon ja kuvanlaadun parantamiseen. Esimerkkejä: TrueFidelity (GE), AiCE (Canon), DLIR (Philips). Mahdollistaa merkittävän annossäästön.</li>
             </ul>
 
+            <div class="theory-image-slot" data-slot="tt-reconstruction" data-tab="tt" data-default-caption="Rekonstruktiomenetelmien vertailu: FBP vs. iteratiivinen (IR) vs. deep learning (DLR) — kuvanlaadun ja kohinan erot samalla annoksella."></div>
+
             <h2>3. Laitteen rakenne</h2>
 
             <h3>3.1 Gantry</h3>
             <p>Gantry sisältää pyörivän renkaan, johon on kiinnitetty röntgenputki ja vastakkainen detektorikaari. Nykyaikaiset laitteet käyttävät slip ring -tekniikkaa, joka mahdollistaa jatkuvan pyörimisen ja siten helikaalisen kuvauksen.</p>
+
+            <div class="theory-image-slot" data-slot="tt-geometry" data-tab="tt" data-default-caption="TT-laitteen geometria: röntgenputki ja detektorikaari pyörivät gantryssä potilaan ympäri. Helikaalinen kuvaus (spiraaliliike)."></div>
 
             <h3>3.2 Röntgenputki</h3>
             <p>TT:n röntgenputki on huomattavasti tehokkaampi kuin natiivikuvantamisessa. Anodin lämpökapasiteetti on tyypillisesti 5–8 MHU (mega heat unit). Pyörimisnopeus jopa 200 Hz. Putkijännite tyypillisesti 70–150 kV, putkivirta 100–800 mA.</p>
@@ -631,7 +691,13 @@
             <div class="theory-quiz-section" data-tab="tt">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
-                    <p>Harjoittele tietokonetomografian teoriaa monivalintakysymyksillä.</p>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-tt">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
                     <button class="theory-quiz-btn" onclick="startTheoryQuiz('tt')">
                         <i class="fas fa-play"></i> Aloita harjoittelu
                     </button>
@@ -673,6 +739,8 @@
             </div>
             <p>1,5 T:n magneetissa Larmor-taajuus on noin 63,9 MHz ja 3 T:n magneetissa 127,7 MHz.</p>
 
+            <div class="theory-image-slot" data-slot="mri-spin-physics" data-tab="mri" data-default-caption="Ydinmagneettinen resonanssi: protonien precessio ulkoisessa magneettikentässä B₀, RF-viritys ja signaalin synty."></div>
+
             <h3>2.2 Relaksaatio</h3>
             <p>Kun protoneja viritetään RF-pulssilla Larmor-taajuudella, ne poikkeutetaan tasapainosta. Palautumista kutsutaan relaksaatioksi:</p>
             <ul>
@@ -680,6 +748,8 @@
                 <li><strong>T2-relaksaatio (spin-spin, transversaalinen)</strong>: Poikittaismagnetoituman vaimeneminen spinin välisten vuorovaikutusten vuoksi. Kuva: \( M_{xy}(t) = M_{xy,0} \cdot e^{-t/T_2} \). T2-ajat tyypillisesti 20–300 ms.</li>
                 <li><strong>T2*-relaksaatio</strong>: Havaittu transversaalinen vaimeneminen, johon vaikuttavat myös magneettikenttäinhomogeniteetit. \( 1/T_2^* = 1/T_2 + 1/T_2' \), missä T2' kuvaa kenttäinhomogeniteetin vaikutusta.</li>
             </ul>
+
+            <div class="theory-image-slot" data-slot="mri-t1-t2-weighting" data-tab="mri" data-default-caption="T1- ja T2-relaksaatiokäyrät eri kudoksille: rasva, harmaa aine, valkoinen aine, vesi. T1- ja T2-painotettujen kuvien kontrasti."></div>
 
             <h3>2.3 Kuvan muodostus</h3>
             <p>Paikkakoodaus toteutetaan kolmella gradienttikentällä (x, y, z):</p>
@@ -728,6 +798,8 @@
                 <li><strong>T2-painotettu</strong>: Pitkä TR (>2000 ms), pitkä TE (80–120 ms). Vesi vaalea, lihaskudos tumma.</li>
                 <li><strong>PD-painotettu</strong>: Pitkä TR, lyhyt TE. Kontrasti riippuu protontiheydestä.</li>
             </ul>
+
+            <div class="theory-image-slot" data-slot="mri-pulse-sequences" data-tab="mri" data-default-caption="MRI-perussekvenssikaaviot: Spin-echo (SE) ja Gradient-echo (GRE) — RF-pulssit, gradientit ja signaalin keräys."></div>
 
             <h3>4.2 Gradient-echo (GRE)</h3>
             <p>Nopeampi kuin SE: pienempi kulma (&lt;90°), ei 180° refokusointia. Herkkä T2*-vaikutuksille. Sovelluksia: angiografia (TOF-MRA), dynaaminen kuvantaminen, sydänkuvaus.</p>
@@ -1309,7 +1381,13 @@
             <div class="theory-quiz-section" data-tab="mri">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
-                    <p>Harjoittele magneettikuvauksen teoriaa monivalintakysymyksillä.</p>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-mri">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
                     <button class="theory-quiz-btn" onclick="startTheoryQuiz('mri')">
                         <i class="fas fa-play"></i> Aloita harjoittelu
                     </button>
@@ -1383,6 +1461,8 @@
                 </tbody>
             </table>
 
+            <div class="theory-image-slot" data-slot="lapivalaisu-image-chain" data-tab="lapivalaisu" data-default-caption="Läpivalaisuketju: röntgenputki → potilas → kuvanvahvistin/flat panel → digitaalinen kuvankäsittely → näyttö. C-kaaren rakenne."></div>
+
             <h2>4. Annossuureet ja -hallinta</h2>
             <table>
                 <thead>
@@ -1399,6 +1479,8 @@
             <div class="theory-warning">
                 <p><strong>Ihovauriot:</strong> Pitkissä interventiotoimenpiteissä ihon pinta-annos voi ylittää determinististen vaikutusten kynnysarvot: 2 Gy (punoitus), 5 Gy (karvanlähtö), 15 Gy (haava). Annosrekisteröinti ja seuranta ovat välttämättömiä.</p>
             </div>
+
+            <div class="theory-image-slot" data-slot="lapivalaisu-dap-measurement" data-tab="lapivalaisu" data-default-caption="DAP-mittarin (dose-area product) sijainti röntgenputken kollimaattorissa ja annossuureiden rekisteröinti."></div>
 
             <h2>5. Annosten optimointi</h2>
             <ul>
@@ -1863,7 +1945,13 @@
             <div class="theory-quiz-section" data-tab="lapivalaisu">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
-                    <p>Harjoittele läpivalaisun ja angiografian teoriaa monivalintakysymyksillä.</p>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-lapivalaisu">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
                     <button class="theory-quiz-btn" onclick="startTheoryQuiz('lapivalaisu')">
                         <i class="fas fa-play"></i> Aloita harjoittelu
                     </button>
@@ -1915,6 +2003,8 @@
             </table>
             <p>Nykyisin volframianodi (W) yhdistettynä rodium- tai hopeasuodatukseen on yleistynut digitaalisen mammografian myötä, koska se mahdollistaa optimoidun spektrin laajalla rintapaksuusalueella.</p>
 
+            <div class="theory-image-slot" data-slot="mammografia-target-filter" data-tab="mammografia" data-default-caption="Mammografian anodi/suodatinyhdistelmien röntgenspektrit: Mo/Mo, Mo/Rh, W/Rh ja W/Ag eri rintapaksuuksille."></div>
+
             <h3>2.3 Puristus</h3>
             <p>Rinnan puristaminen on olennaista mammografiassa:</p>
             <ul>
@@ -1924,6 +2014,8 @@
                 <li>Vähentää potilaan liikettä → terävämpi kuva</li>
                 <li>Tyypillinen puristusvoima: 80–200 N</li>
             </ul>
+
+            <div class="theory-image-slot" data-slot="mammografia-geometry" data-tab="mammografia" data-default-caption="Mammografialaitteen geometria: röntgenputki, puristuslevyt, detektori ja säteilykeilan rajaus. CC- ja MLO-projektiot."></div>
 
             <h2>3. Annossuureet</h2>
             <p>Mammografian pääannos suure on <strong>keskimääräinen rauhasannos (AGD, average glandular dose)</strong>:</p>
@@ -3445,7 +3537,13 @@
             <div class="theory-quiz-section" data-tab="mammografia">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
-                    <p>Harjoittele mammografian teoriaa monivalintakysymyksillä.</p>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-mammografia">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
                     <button class="theory-quiz-btn" onclick="startTheoryQuiz('mammografia')">
                         <i class="fas fa-play"></i> Aloita harjoittelu
                     </button>
@@ -3518,6 +3616,8 @@
                 <li><strong>Endokavitaarinen</strong>: Transvaginaalinen, transrektaalinen, endoskooppinen. 5–12 MHz. Syvien rakenteiden lähikuvaus.</li>
             </ul>
 
+            <div class="theory-image-slot" data-slot="ultraaani-transducer" data-tab="ultraaani" data-default-caption="Ultraäänianturin rakenne: pietsosähköinen elementti, sovituskerros, vaimennusmateriaali ja akustinen linssi. Eri anturityypit (lineaarinen, konveksinen, sektori)."></div>
+
             <h2>4. Kuvamuodot</h2>
             <ul>
                 <li><strong>B-mode (brightness mode)</strong>: 2D-harmaasävykuva. Yleisin muoto. Reaaliaikainen (>30 fps).</li>
@@ -3535,6 +3635,8 @@
                 <p>Doppler-yhtälö: \[ f_D = \frac{2 \cdot f_0 \cdot v \cdot \cos\theta}{c} \]</p>
                 <p>missä \( f_D \) on Doppler-siirtymä, \( v \) virtausnopeus, \( \theta \) keilan ja virtauksen välinen kulma.</p>
             </div>
+
+            <div class="theory-image-slot" data-slot="ultraaani-doppler" data-tab="ultraaani" data-default-caption="Doppler-ultraäänen periaate: CW-, PW- ja väri-Doppler-moodit sekä tyypillinen virtausspektri."></div>
 
             <h2>5. Artefaktit</h2>
             <ul>
@@ -3710,7 +3812,13 @@
             <div class="theory-quiz-section" data-tab="ultraaani">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
-                    <p>Harjoittele ultraäänen teoriaa monivalintakysymyksillä.</p>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-ultraaani">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
                     <button class="theory-quiz-btn" onclick="startTheoryQuiz('ultraaani')">
                         <i class="fas fa-play"></i> Aloita harjoittelu
                     </button>
@@ -3769,6 +3877,8 @@
             </ul>
             <p>Käytännössä kalibrointi tapahtuu fotometrillä ja näytön sisäisellä kalibrointijärjestelmällä (backlight + LUT). Luminanssivaste sovitetaan GSDF-käyrään.</p>
 
+            <div class="theory-image-slot" data-slot="naytot-gsdf" data-tab="naytot" data-default-caption="DICOM GSDF -kalibrointikäyrä: luminanssivaste ennen ja jälkeen kalibroinnin. JND-indeksi (just noticeable difference) tasaisesti koko harmaa-asteikolla."></div>
+
             <h2>4. Katseluympäristö</h2>
             <ul>
                 <li><strong>Huonevalaistus</strong>: Diagnostisessa tulkintahuoneessa ≤50 lux (mammografia ≤25 lux). Liian kirkas ympäristö heikentää tummien sävyjen erottumista.</li>
@@ -3780,6 +3890,8 @@
 
             <h3>5.1 Päivittäinen tarkistus (radiologi)</h3>
             <p>SMPTE- tai TG18-QC-testikuva: tarkistetaan visuaalisesti, että tummat ja kirkkaat harmaasvyt erottuvat, kontrasti on riittävä, ja artefakteja ei esiinny.</p>
+
+            <div class="theory-image-slot" data-slot="naytot-qa-patterns" data-tab="naytot" data-default-caption="TG18-testikuvat näytön laadunvarmistuksessa: TG18-QC (yleistarkistus), TG18-LN (luminanssivaste), TG18-CX (resoluutio)."></div>
 
             <h3>5.2 Fyysikon mittaukset (vuosittain/puolivuosittain)</h3>
             <ul>
@@ -3920,7 +4032,13 @@
             <div class="theory-quiz-section" data-tab="naytot">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
-                    <p>Harjoittele kuvankatselunäyttöjen teoriaa monivalintakysymyksillä.</p>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-naytot">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
                     <button class="theory-quiz-btn" onclick="startTheoryQuiz('naytot')">
                         <i class="fas fa-play"></i> Aloita harjoittelu
                     </button>
@@ -3973,6 +4091,8 @@
                 <li><strong>Artefaktit</strong>: Metallisten proteesien varjostusvaikutukset, potilaan asennon virheistä johtuvat geometriset vääristymät.</li>
             </ul>
 
+            <div class="theory-image-slot" data-slot="hammas-panoramic" data-tab="hammas" data-default-caption="Panoraamatomografian (OPG) kuvausgeometria: röntgenputken ja detektorin kiertyminen potilaan pään ympäri ja focal trough -kerroksen muodostuminen."></div>
+
             <h2>4. Kartiokeilatietokonetomografia (KKTT/CBCT)</h2>
             <p>KKTT on 3D-kuvausmenetelmä, jossa kartiomaisella röntgenkeilalla ja flat panel -detektorilla kuvataan kohde eri kulmista (180°–360° pyörähdys). Rekonstruoidaan 3D-volyymi.</p>
 
@@ -3982,6 +4102,8 @@
                 <li><strong>Vokselikoko</strong>: 75–400 µm (isotropinen). Korkea spatiaalinen resoluutio verrattuna lääketieteelliseen TT:hen.</li>
                 <li><strong>Kuvausparametrit</strong>: 70–120 kV, 1–15 mA, pyörähdysaika 10–40 s.</li>
             </ul>
+
+            <div class="theory-image-slot" data-slot="hammas-cbct" data-tab="hammas" data-default-caption="CBCT-kuvauksen periaate vs. lääketieteellinen TT: kartiokeilainen säteily, flat panel -detektori ja 3D-rekonstruktio."></div>
 
             <h3>4.2 Annokset</h3>
             <table>
@@ -4299,7 +4421,13 @@
             <div class="theory-quiz-section" data-tab="hammas">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
-                    <p>Harjoittele hammaskuvantamisen teoriaa monivalintakysymyksillä.</p>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-hammas">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
                     <button class="theory-quiz-btn" onclick="startTheoryQuiz('hammas')">
                         <i class="fas fa-play"></i> Aloita harjoittelu
                     </button>
@@ -4372,6 +4500,8 @@
                 </tbody>
             </table>
 
+            <div class="theory-image-slot" data-slot="sateilysuojelu-dose-response" data-tab="sateilysuojelu" data-default-caption="Annos-vastekäyrät: deterministinen (kynnysarvo) vs. stokastinen (lineaarinen, ei kynnystä). LNT-malli ja vaihtoehtoiset mallit."></div>
+
             <h2>4. Annossuureet ja -yksiköt</h2>
             <table>
                 <thead>
@@ -4433,6 +4563,8 @@
             <div class="theory-info">
                 <p><strong>Huom:</strong> Potilaiden säteilyaltistukselle ei ole annosrajoja — sen sijaan sovelletaan oikeutus- ja optimointiperiaatteita. Diagnostiset vertailutasot (DRL) ohjaavat tyypillisiä annostasoja.</p>
             </div>
+
+            <div class="theory-image-slot" data-slot="sateilysuojelu-dose-limits" data-tab="sateilysuojelu" data-default-caption="Säteilysuojelun kolme periaatetta (oikeutus, optimointi, annosrajoitus) ja annosrajojen hierarkia."></div>
 
             <h2>7. Säteilysuojelun periaatteet</h2>
             <ol>
@@ -4920,7 +5052,13 @@
             <div class="theory-quiz-section" data-tab="sateilysuojelu">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
-                    <p>Harjoittele säteilybiologian ja -suojelun teoriaa monivalintakysymyksillä.</p>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-sateilysuojelu">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
                     <button class="theory-quiz-btn" onclick="startTheoryQuiz('sateilysuojelu')">
                         <i class="fas fa-play"></i> Aloita harjoittelu
                     </button>
@@ -4952,6 +5090,7 @@
 {% endblock %}
 
 {% block extra_js %}
+<script src="{% static 'sisalto/js/tts-player.js' %}"></script>
 <script>
 (function() {
     // ==========================================
@@ -4986,15 +5125,34 @@
         if (matchingTab) activateTab(hash);
     }
 
-    // ==========================================
-    // THEORY QUIZ
-    // ==========================================
+    // ========== INLINE QUIZ ==========
     var TAB_EPA_MAP = {{ tab_epa_map|safe }};
-    var quizState = {}; // per-tab state: { score, total, currentQuestionId, currentQuestionType }
+    var quizState = {};
 
     function getCSRF() {
         var c = document.cookie.match(/csrftoken=([^;]+)/);
         return c ? c[1] : '';
+    }
+
+    // Type selector chip toggle
+    document.querySelectorAll('.tq-type-chip').forEach(function(chip) {
+        chip.addEventListener('click', function(e) {
+            e.preventDefault();
+            var cb = this.querySelector('input[type="checkbox"]');
+            cb.checked = !cb.checked;
+            this.classList.toggle('selected', cb.checked);
+        });
+    });
+
+    function getSelectedTypes(tabId) {
+        var selector = document.getElementById('tq-types-' + tabId);
+        if (!selector) return 'multiple_choice,multi_select,true_false,calculation,matching';
+        var types = [];
+        selector.querySelectorAll('input[type="checkbox"]:checked').forEach(function(cb) {
+            types.push(cb.value);
+            if (cb.value === 'multiple_choice') types.push('multi_select');
+        });
+        return types.length > 0 ? types.join(',') : 'multiple_choice';
     }
 
     window.startTheoryQuiz = function(tabId) {
@@ -5003,7 +5161,7 @@
         section.querySelector('.theory-quiz-start').style.display = 'none';
         var active = section.querySelector('.theory-quiz-active');
         active.style.display = 'block';
-        quizState[tabId] = { score: 0, total: 0 };
+        quizState[tabId] = { score: 0, total: 0, types: getSelectedTypes(tabId) };
         loadQuestion(tabId);
     };
 
@@ -5024,7 +5182,7 @@
 
         active.innerHTML = '<div class="theory-quiz-loading"><i class="fas fa-spinner fa-spin"></i><p>Ladataan kysymystä...</p></div>';
 
-        fetch('/modaliteetit/api/question/' + epaId + '/')
+        fetch('/modaliteetit/api/question/' + epaId + '/?types=' + encodeURIComponent(st.types))
             .then(function(r) { return r.json(); })
             .then(function(data) {
                 if (data.error) {
@@ -5033,10 +5191,8 @@
                 }
                 st.currentQuestionId = data.question_id;
                 st.currentQuestionType = data.question_type;
-                var isMulti = data.question_type === 'multi_select';
 
                 var html = '';
-                // Score bar
                 html += '<div class="theory-quiz-scorebar">';
                 html += '<div class="theory-quiz-scorebar-left">Kysymys ' + (st.total + 1) + ' / ' + data.total_available + '</div>';
                 html += '<div class="theory-quiz-scorebar-right">';
@@ -5044,35 +5200,78 @@
                 html += '<button class="theory-quiz-stop" onclick="stopTheoryQuiz(\'' + tabId + '\')"><i class="fas fa-stop"></i> Lopeta</button>';
                 html += '</div></div>';
 
-                // Type hint
-                if (isMulti) {
-                    html += '<div class="theory-quiz-type-hint"><i class="fas fa-check-double"></i> Valitse kaikki oikeat vastaukset</div>';
+                var typeHints = {
+                    'multi_select': '<i class="fas fa-check-double"></i> Valitse kaikki oikeat vastaukset',
+                    'true_false': '<i class="fas fa-balance-scale"></i> Oikein vai väärin?',
+                    'calculation': '<i class="fas fa-calculator"></i> Laske oikea arvo',
+                    'matching': '<i class="fas fa-arrows-alt-h"></i> Yhdistä parit'
+                };
+                if (typeHints[data.question_type]) {
+                    html += '<div class="theory-quiz-type-hint">' + typeHints[data.question_type] + '</div>';
                 }
 
-                // Question text
                 html += '<div class="theory-quiz-question">' + data.text + '</div>';
 
-                // Choices
-                html += '<div class="theory-quiz-choices" id="tq-choices-' + tabId + '">';
-                data.choices.forEach(function(c) {
-                    var indicatorClass = isMulti ? 'checkbox' : '';
-                    var icon = isMulti ? 'fa-check' : 'fa-circle';
-                    html += '<div class="theory-quiz-choice" data-id="' + c.id + '" onclick="toggleChoice(\'' + tabId + '\', this, ' + isMulti + ')">';
-                    html += '<div class="theory-quiz-choice-indicator ' + indicatorClass + '"><i class="fas ' + icon + '"></i></div>';
-                    html += '<div>' + c.text + '</div>';
+                if (data.question_type === 'calculation') {
+                    html += '<div class="theory-quiz-calc-wrapper" id="tq-calc-' + tabId + '">';
+                    html += '<input type="number" step="any" class="theory-quiz-calc-input" id="tq-calc-input-' + tabId + '" placeholder="Vastaus...">';
+                    if (data.calculation_unit) html += '<span class="theory-quiz-calc-unit">' + data.calculation_unit + '</span>';
+                    html += '<span class="theory-quiz-calc-hint">toleranssi &plusmn;' + (data.calculation_tolerance || 5) + '%</span>';
                     html += '</div>';
-                });
-                html += '</div>';
+                } else if (data.question_type === 'matching' && data.matching_pairs) {
+                    html += '<div class="theory-quiz-matching" id="tq-matching-' + tabId + '">';
+                    data.matching_pairs.forEach(function(pair, idx) {
+                        html += '<div class="theory-quiz-matching-row">';
+                        html += '<span class="theory-quiz-matching-left">' + pair.left + '</span>';
+                        html += '<span class="theory-quiz-matching-arrow">&rarr;</span>';
+                        html += '<select class="theory-quiz-matching-select" data-left="' + pair.left + '">';
+                        html += '<option value="">Valitse...</option>';
+                        data.matching_rights.forEach(function(right) {
+                            html += '<option value="' + right + '">' + right + '</option>';
+                        });
+                        html += '</select>';
+                        html += '</div>';
+                    });
+                    html += '</div>';
+                } else {
+                    var isMulti = data.question_type === 'multi_select';
+                    html += '<div class="theory-quiz-choices" id="tq-choices-' + tabId + '">';
+                    data.choices.forEach(function(c) {
+                        var indicatorClass = isMulti ? 'checkbox' : '';
+                        var icon = isMulti ? 'fa-check' : 'fa-circle';
+                        html += '<div class="theory-quiz-choice" data-id="' + c.id + '" onclick="toggleChoice(\'' + tabId + '\', this, ' + isMulti + ')">';
+                        html += '<div class="theory-quiz-choice-indicator ' + indicatorClass + '"><i class="fas ' + icon + '"></i></div>';
+                        html += '<div>' + c.text + '</div>';
+                        html += '</div>';
+                    });
+                    html += '</div>';
+                }
 
-                // Submit button
                 html += '<button class="theory-quiz-submit" id="tq-submit-' + tabId + '" onclick="submitAnswer(\'' + tabId + '\')"><i class="fas fa-check"></i> Vastaa</button>';
-
-                // Result area (hidden)
                 html += '<div id="tq-result-' + tabId + '" style="display: none;"></div>';
 
                 active.innerHTML = html;
 
-                // Re-render MathJax in the quiz
+                if (data.question_type === 'calculation') {
+                    var calcInput = document.getElementById('tq-calc-input-' + tabId);
+                    calcInput.addEventListener('input', function() {
+                        document.getElementById('tq-submit-' + tabId).classList.toggle('enabled', this.value.trim() !== '');
+                    });
+                    calcInput.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter' && this.value.trim()) submitAnswer(tabId);
+                    });
+                } else if (data.question_type === 'matching') {
+                    document.querySelectorAll('#tq-matching-' + tabId + ' select').forEach(function(sel) {
+                        sel.addEventListener('change', function() {
+                            var allFilled = true;
+                            document.querySelectorAll('#tq-matching-' + tabId + ' select').forEach(function(s) {
+                                if (!s.value) allFilled = false;
+                            });
+                            document.getElementById('tq-submit-' + tabId).classList.toggle('enabled', allFilled);
+                        });
+                    });
+                }
+
                 if (window.MathJax && MathJax.typesetPromise) {
                     MathJax.typesetPromise([active]);
                 }
@@ -5085,19 +5284,11 @@
     window.toggleChoice = function(tabId, el, isMulti) {
         if (el.classList.contains('disabled')) return;
         if (!isMulti) {
-            // Radio: deselect others
             el.parentElement.querySelectorAll('.theory-quiz-choice').forEach(function(c) { c.classList.remove('selected'); });
         }
         el.classList.toggle('selected');
-
-        // Enable/disable submit
         var hasSelection = el.parentElement.querySelector('.theory-quiz-choice.selected');
-        var btn = document.getElementById('tq-submit-' + tabId);
-        if (hasSelection) {
-            btn.classList.add('enabled');
-        } else {
-            btn.classList.remove('enabled');
-        }
+        document.getElementById('tq-submit-' + tabId).classList.toggle('enabled', !!hasSelection);
     };
 
     window.submitAnswer = function(tabId) {
@@ -5107,72 +5298,104 @@
         btn.style.display = 'none';
 
         var st = quizState[tabId];
-        var selected = [];
-        document.querySelectorAll('#tq-choices-' + tabId + ' .theory-quiz-choice.selected').forEach(function(c) {
-            selected.push(parseInt(c.dataset.id));
-        });
+        var body = { question_id: st.currentQuestionId };
 
-        // Disable all choices
-        document.querySelectorAll('#tq-choices-' + tabId + ' .theory-quiz-choice').forEach(function(c) {
-            c.classList.add('disabled');
-        });
+        if (st.currentQuestionType === 'calculation') {
+            body.calculation_input = parseFloat(document.getElementById('tq-calc-input-' + tabId).value);
+            document.getElementById('tq-calc-input-' + tabId).disabled = true;
+        } else if (st.currentQuestionType === 'matching') {
+            var answers = {};
+            document.querySelectorAll('#tq-matching-' + tabId + ' select').forEach(function(sel) {
+                answers[sel.dataset.left] = sel.value;
+                sel.disabled = true;
+            });
+            body.matching_answers = answers;
+        } else {
+            var selected = [];
+            document.querySelectorAll('#tq-choices-' + tabId + ' .theory-quiz-choice.selected').forEach(function(c) {
+                selected.push(parseInt(c.dataset.id));
+            });
+            document.querySelectorAll('#tq-choices-' + tabId + ' .theory-quiz-choice').forEach(function(c) {
+                c.classList.add('disabled');
+            });
+            body.selected_ids = selected;
+        }
 
         fetch('/modaliteetit/api/answer/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCSRF() },
-            body: JSON.stringify({ question_id: st.currentQuestionId, selected_ids: selected })
+            body: JSON.stringify(body)
         })
         .then(function(r) { return r.json(); })
         .then(function(data) {
             st.total++;
             if (data.is_correct) st.score++;
 
-            // Update score display
             var scoreEl = document.getElementById('tq-score-' + tabId);
             if (scoreEl) scoreEl.textContent = st.score + '/' + st.total;
 
-            // Color choices
-            data.choices.forEach(function(c) {
-                var el = document.querySelector('#tq-choices-' + tabId + ' .theory-quiz-choice[data-id="' + c.id + '"]');
-                if (!el) return;
-                if (c.is_correct) {
-                    el.classList.add('correct');
-                    el.querySelector('.theory-quiz-choice-indicator i').className = 'fas fa-check';
-                } else if (c.was_selected) {
-                    el.classList.add('incorrect');
-                    el.querySelector('.theory-quiz-choice-indicator i').className = 'fas fa-times';
-                }
-                // Add per-choice explanation
-                if (c.explanation) {
-                    var expDiv = document.createElement('div');
-                    expDiv.className = 'theory-quiz-choice-explanation';
-                    expDiv.textContent = c.explanation;
-                    el.querySelector('div:last-child').appendChild(expDiv);
-                }
-            });
+            if (st.currentQuestionType === 'calculation') {
+                var c = data.choices[0];
+                var calcEl = document.getElementById('tq-calc-' + tabId);
+                var feedback = document.createElement('div');
+                feedback.className = 'theory-quiz-calc-feedback ' + (data.is_correct ? 'correct' : 'incorrect');
+                feedback.innerHTML = data.is_correct
+                    ? '<i class="fas fa-check-circle"></i> Oikein!'
+                    : '<i class="fas fa-times-circle"></i> Oikea vastaus: ' + c.correct_answer + ' ' + c.unit;
+                calcEl.appendChild(feedback);
+            } else if (st.currentQuestionType === 'matching') {
+                data.choices.forEach(function(c) {
+                    document.querySelectorAll('#tq-matching-' + tabId + ' select').forEach(function(sel) {
+                        if (sel.dataset.left === c.left) {
+                            var row = sel.closest('.theory-quiz-matching-row');
+                            row.classList.add(c.pair_correct ? 'correct' : 'incorrect');
+                            if (!c.pair_correct) {
+                                var fix = document.createElement('span');
+                                fix.className = 'theory-quiz-matching-correct';
+                                fix.textContent = ' \u2192 ' + c.right;
+                                row.appendChild(fix);
+                            }
+                        }
+                    });
+                });
+            } else {
+                data.choices.forEach(function(c) {
+                    var el = document.querySelector('#tq-choices-' + tabId + ' .theory-quiz-choice[data-id="' + c.id + '"]');
+                    if (!el) return;
+                    if (c.is_correct) {
+                        el.classList.add('correct');
+                        el.querySelector('.theory-quiz-choice-indicator i').className = 'fas fa-check';
+                    } else if (c.was_selected) {
+                        el.classList.add('incorrect');
+                        el.querySelector('.theory-quiz-choice-indicator i').className = 'fas fa-times';
+                    }
+                    if (c.explanation) {
+                        var expDiv = document.createElement('div');
+                        expDiv.className = 'theory-quiz-choice-explanation';
+                        expDiv.textContent = c.explanation;
+                        el.querySelector('div:last-child').appendChild(expDiv);
+                    }
+                });
+            }
 
-            // Show result
             var resultHtml = '';
             if (data.is_correct) {
                 resultHtml += '<div class="theory-quiz-result-banner correct"><i class="fas fa-check-circle"></i> Oikein!</div>';
             } else {
                 resultHtml += '<div class="theory-quiz-result-banner incorrect"><i class="fas fa-times-circle"></i> Väärin</div>';
             }
-
             if (data.explanation) {
                 resultHtml += '<div class="theory-quiz-explanation">';
                 resultHtml += '<div class="theory-quiz-explanation-label"><i class="fas fa-lightbulb"></i> Selitys</div>';
                 resultHtml += '<p>' + data.explanation + '</p>';
                 resultHtml += '</div>';
             }
-
             resultHtml += '<button class="theory-quiz-next" onclick="nextQuestion(\'' + tabId + '\')">Seuraava kysymys <i class="fas fa-arrow-right"></i></button>';
 
             var resultEl = document.getElementById('tq-result-' + tabId);
             resultEl.innerHTML = resultHtml;
             resultEl.style.display = 'block';
 
-            // Re-render MathJax for explanations
             if (window.MathJax && MathJax.typesetPromise) {
                 MathJax.typesetPromise([resultEl]);
             }
@@ -5187,6 +5410,240 @@
     window.nextQuestion = function(tabId) {
         loadQuestion(tabId);
     };
+
+    // ==========================================
+    // THEORY IMAGE SLOTS
+    // ==========================================
+
+    var MODALITY = '{{ modality_id }}';
+    var IS_SUPERUSER = {{ is_superuser|yesno:"true,false" }};
+    var imageData = {};        // slot_id → {url, caption, alt_text}
+    var currentUploadSlot = null;
+    var currentUploadTab = null;
+    var pendingFile = null;
+
+    // Load images from API and populate slots
+    function loadTheoryImages() {
+        if (!MODALITY) return;
+        fetch('/modaliteetit/api/theory-images/' + MODALITY + '/')
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                imageData = data;
+                renderAllSlots();
+            })
+            .catch(function() {});
+    }
+
+    function renderAllSlots() {
+        document.querySelectorAll('.theory-image-slot').forEach(function(slot) {
+            var slotId = slot.dataset.slot;
+            var info = imageData[slotId];
+
+            if (info && info.url) {
+                // Has image — render figure
+                slot.className = 'theory-image-slot has-image size-' + (info.display_size || 'medium');
+                slot.innerHTML =
+                    '<figure>' +
+                        '<div class="theory-image-actions">' +
+                            '<button class="btn-replace" onclick="openUploadModal(\'' + slotId + '\', \'' + slot.dataset.tab + '\')"><i class="fas fa-exchange-alt"></i> Vaihda</button>' +
+                            '<button class="btn-delete" onclick="deleteSlotImage(\'' + slotId + '\', \'' + slot.dataset.tab + '\')"><i class="fas fa-trash"></i> Poista</button>' +
+                        '</div>' +
+                        '<img src="' + info.url + '" alt="' + (info.alt_text || '') + '">' +
+                        '<figcaption>' + (info.caption || '') + '</figcaption>' +
+                    '</figure>';
+            } else {
+                // Empty slot — show placeholder in edit mode only
+                slot.classList.remove('has-image');
+                var defaultCaption = slot.dataset.defaultCaption || '';
+                slot.innerHTML =
+                    '<div class="theory-image-placeholder" onclick="openUploadModal(\'' + slotId + '\', \'' + slot.dataset.tab + '\')">' +
+                        '<i class="fas fa-camera"></i>' +
+                        '<span>Lisää kuva</span>' +
+                        '<span class="slot-label">' + slotId + '</span>' +
+                        '<span style="font-size:0.75rem;max-width:400px;text-align:center;">' + defaultCaption + '</span>' +
+                    '</div>';
+            }
+        });
+    }
+
+    // Toggle edit mode
+    window.toggleEditMode = function() {
+        var btn = document.getElementById('editModeToggle');
+        document.body.classList.toggle('theory-edit-mode');
+        btn.classList.toggle('active');
+        var isActive = document.body.classList.contains('theory-edit-mode');
+        btn.querySelector('span').textContent = isActive ? 'Lopeta muokkaus' : 'Muokkaa kuvia';
+    };
+
+    // Upload modal
+    window.openUploadModal = function(slotId, tabId) {
+        if (!IS_SUPERUSER || !document.body.classList.contains('theory-edit-mode')) return;
+        currentUploadSlot = slotId;
+        currentUploadTab = tabId;
+        pendingFile = null;
+
+        var modal = document.getElementById('uploadModal');
+        if (!modal) return;
+
+        // Pre-fill with existing data if replacing
+        var existing = imageData[slotId];
+        document.getElementById('uploadCaption').value = existing ? (existing.caption || '') : (document.querySelector('[data-slot="' + slotId + '"]').dataset.defaultCaption || '');
+        document.getElementById('uploadAlt').value = existing ? (existing.alt_text || '') : '';
+
+        // Pre-select size radio for existing image
+        var sizeVal = existing ? (existing.display_size || 'medium') : 'medium';
+        var sizeRadio = document.querySelector('input[name="uploadSize"][value="' + sizeVal + '"]');
+        if (sizeRadio) sizeRadio.checked = true;
+
+        // Reset dropzone
+        var dz = document.getElementById('uploadDropzone');
+        dz.innerHTML = '<i class="fas fa-cloud-upload-alt"></i><span>Vedä kuva tähän, klikkaa valitaksesi tai liitä <kbd>Ctrl+V</kbd></span><input type="file" id="uploadFileInput" accept="image/*" style="display:none;">';
+        document.getElementById('uploadSaveBtn').disabled = !existing;
+        bindDropzone();
+
+        modal.classList.add('visible');
+        // Focus modal so paste event fires without extra click
+        modal.setAttribute('tabindex', '-1');
+        modal.focus();
+    };
+
+    window.closeUploadModal = function() {
+        document.getElementById('uploadModal').classList.remove('visible');
+        currentUploadSlot = null;
+        currentUploadTab = null;
+        pendingFile = null;
+    };
+
+    function bindDropzone() {
+        var dz = document.getElementById('uploadDropzone');
+        var fi = document.getElementById('uploadFileInput');
+
+        dz.onclick = function() { fi.click(); };
+
+        fi.onchange = function() {
+            if (fi.files.length) handleFile(fi.files[0]);
+        };
+
+        dz.ondragover = function(e) {
+            e.preventDefault();
+            dz.classList.add('dragover');
+        };
+        dz.ondragleave = function() {
+            dz.classList.remove('dragover');
+        };
+        dz.ondrop = function(e) {
+            e.preventDefault();
+            dz.classList.remove('dragover');
+            if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+        };
+    }
+
+    // Ctrl+V paste from clipboard (screenshots etc.)
+    function onModalPaste(e) {
+        var modal = document.getElementById('uploadModal');
+        if (!modal || !modal.classList.contains('visible')) return;
+        var items = (e.clipboardData || e.originalEvent && e.originalEvent.clipboardData || {}).items;
+        if (!items) return;
+        for (var i = 0; i < items.length; i++) {
+            if (items[i].type.indexOf('image') !== -1) {
+                e.preventDefault();
+                var file = items[i].getAsFile();
+                // Give it a sensible name
+                var ext = items[i].type === 'image/png' ? '.png' : '.jpg';
+                var renamed = new File([file], 'kuvakaappaus' + ext, { type: items[i].type });
+                handleFile(renamed);
+                return;
+            }
+        }
+    }
+    document.addEventListener('paste', onModalPaste);
+
+    function handleFile(file) {
+        if (!file.type.startsWith('image/')) return;
+        pendingFile = file;
+        document.getElementById('uploadSaveBtn').disabled = false;
+
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var dz = document.getElementById('uploadDropzone');
+            dz.innerHTML = '<img class="preview" src="' + e.target.result + '"><input type="file" id="uploadFileInput" accept="image/*" style="display:none;">';
+            bindDropzone();
+        };
+        reader.readAsDataURL(file);
+    }
+
+    window.saveUploadedImage = function() {
+        if (!currentUploadSlot || !currentUploadTab) return;
+        var btn = document.getElementById('uploadSaveBtn');
+        btn.disabled = true;
+        btn.textContent = 'Tallennetaan...';
+
+        var fd = new FormData();
+        fd.append('modality', MODALITY);
+        fd.append('tab_id', currentUploadTab);
+        fd.append('slot_id', currentUploadSlot);
+        fd.append('caption', document.getElementById('uploadCaption').value);
+        fd.append('alt_text', document.getElementById('uploadAlt').value);
+        var sizeEl = document.querySelector('input[name="uploadSize"]:checked');
+        fd.append('display_size', sizeEl ? sizeEl.value : 'medium');
+        if (pendingFile) fd.append('image', pendingFile);
+
+        fetch('/modaliteetit/api/theory-images/upload/', {
+            method: 'POST',
+            headers: { 'X-CSRFToken': getCookie('csrftoken') },
+            body: fd
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (data.ok) {
+                var sizeEl = document.querySelector('input[name="uploadSize"]:checked');
+                imageData[currentUploadSlot] = {
+                    url: data.url,
+                    caption: data.caption,
+                    alt_text: data.alt_text,
+                    display_size: sizeEl ? sizeEl.value : 'medium',
+                    tab_id: currentUploadTab
+                };
+                renderAllSlots();
+                closeUploadModal();
+            } else {
+                alert(data.error || 'Virhe tallennettaessa.');
+                btn.disabled = false;
+                btn.textContent = 'Tallenna';
+            }
+        })
+        .catch(function() {
+            alert('Verkkovirhe.');
+            btn.disabled = false;
+            btn.textContent = 'Tallenna';
+        });
+    };
+
+    window.deleteSlotImage = function(slotId, tabId) {
+        if (!confirm('Poistetaanko kuva paikasta "' + slotId + '"?')) return;
+
+        fetch('/modaliteetit/api/theory-images/delete/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({ modality: MODALITY, tab_id: tabId, slot_id: slotId })
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (data.ok) {
+                delete imageData[slotId];
+                renderAllSlots();
+            } else {
+                alert(data.error || 'Virhe poistettaessa.');
+            }
+        })
+        .catch(function() { alert('Verkkovirhe.'); });
+    };
+
+    // Init: load images on page load
+    loadTheoryImages();
 
 })();
 </script>

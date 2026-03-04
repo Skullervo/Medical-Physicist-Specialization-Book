@@ -152,3 +152,33 @@ class Section(models.Model):
 
     def __str__(self):
         return f"{self.title} ({self.epa.title}) - {self.proficiency_level}"
+
+
+class TheoryImage(models.Model):
+    """Image slot for theory pages (modaliteetit). Each slot is a predefined
+    placeholder in a theory template that a superuser can fill with an image."""
+
+    modality = models.CharField(max_length=50, db_index=True)
+    tab_id = models.CharField(max_length=50)
+    slot_id = models.CharField(max_length=100)
+    SIZE_CHOICES = [
+        ('small',  'Pieni (40 %)'),
+        ('medium', 'Normaali (65 %)'),
+        ('large',  'Suuri (85 %)'),
+        ('full',   'Täysleveys (100 %)'),
+    ]
+
+    image = models.ImageField(upload_to='theory/', blank=True, null=True)
+    caption = models.CharField(max_length=500, blank=True)
+    alt_text = models.CharField(max_length=300, blank=True)
+    display_size = models.CharField(max_length=10, choices=SIZE_CHOICES, default='medium')
+    order = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('modality', 'tab_id', 'slot_id')
+        ordering = ['modality', 'tab_id', 'order']
+
+    def __str__(self):
+        return f"{self.modality}/{self.tab_id}/{self.slot_id}"

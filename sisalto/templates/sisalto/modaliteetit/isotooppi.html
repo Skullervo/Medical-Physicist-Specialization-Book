@@ -13,7 +13,47 @@
     <div class="theory-header">
         <h1><i class="fas fa-atom" style="color: #a78bfa; margin-right: 8px;"></i> Isotooppilääketieteen teoria</h1>
         <p>Kattava teoriamateriaali isotooppilääketieteen fysikaalisista perusteista, kuvantamislaitteista, radiofarmasiasta, tutkimuksista, hoidoista ja säteilysuojelusta. Valitse aihealue alla olevista välilehdistä.</p>
+        {% if is_superuser %}
+        <button class="theory-edit-toggle" id="editModeToggle" onclick="toggleEditMode()">
+            <i class="fas fa-images"></i> <span>Muokkaa kuvia</span>
+        </button>
+        {% endif %}
     </div>
+
+    <!-- Upload modal (superuser only) -->
+    {% if is_superuser %}
+    <div class="theory-upload-modal" id="uploadModal">
+        <div class="theory-upload-modal-content">
+            <h3><i class="fas fa-image" style="color: var(--color-primary); margin-right: 8px;"></i> Lisää kuva</h3>
+            <div class="theory-upload-dropzone" id="uploadDropzone">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span>Vedä kuva tähän tai klikkaa valitaksesi</span>
+                <input type="file" id="uploadFileInput" accept="image/*" style="display: none;">
+            </div>
+            <div class="theory-upload-field">
+                <label for="uploadCaption">Kuvateksti</label>
+                <textarea id="uploadCaption" placeholder="Kuvan selitys suomeksi..."></textarea>
+            </div>
+            <div class="theory-upload-field">
+                <label for="uploadAlt">Alt-teksti (saavutettavuus)</label>
+                <input type="text" id="uploadAlt" placeholder="Kuvaileva teksti ruudunlukijalle...">
+            </div>
+            <div class="theory-upload-field">
+                <label>Kuvan koko</label>
+                <div class="theory-size-picker" id="uploadSizePicker">
+                    <label class="size-option"><input type="radio" name="uploadSize" value="small"> Pieni (40 %)</label>
+                    <label class="size-option"><input type="radio" name="uploadSize" value="medium" checked> Normaali (65 %)</label>
+                    <label class="size-option"><input type="radio" name="uploadSize" value="large"> Suuri (85 %)</label>
+                    <label class="size-option"><input type="radio" name="uploadSize" value="full"> Täysleveys</label>
+                </div>
+            </div>
+            <div class="theory-upload-actions">
+                <button class="btn-cancel" onclick="closeUploadModal()">Peruuta</button>
+                <button class="btn-save" id="uploadSaveBtn" onclick="saveUploadedImage()" disabled>Tallenna</button>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 
     <!-- Tab navigation -->
     <div class="theory-tabs" role="tablist">
@@ -51,6 +91,8 @@
 
             <h2>2. Gammakameran rakenne</h2>
 
+            <div class="theory-image-slot" data-slot="gammakamera-anatomy" data-tab="gammakamera" data-default-caption="Gammakameran rakenne: kollimaattori, NaI(Tl)-tuikekide, valomonistinputkisto (PMT), Anger-logiikka ja digitaalinen elektroniikka."></div>
+
             <h3>2.1 Kollimaattori</h3>
             <p>Kollimaattori on gammakameran ensimmäinen komponentti, joka määrittää kuvantamisgeometrian. Se koostuu lyijyseinämistä (septa), jotka päästävät läpi vain tietyistä suunnista tulevat fotonit.</p>
             <table>
@@ -71,6 +113,8 @@
             <div class="theory-info">
                 <p><strong>Suunnittelun kompromissi:</strong> Kollimaattorin suunnittelussa herkkyys ja resoluutio ovat vastakkaisia: suuremmat reiät lisäävät herkkyyttä mutta heikentävät resoluutiota. Septan paksuus on mitoitettava energian mukaan niin, että septapenetraatio on &lt; 5 %.</p>
             </div>
+
+            <div class="theory-image-slot" data-slot="gammakamera-collimator-types" data-tab="gammakamera" data-default-caption="Kollimaattorit: LEHR, LEHS, MEGP, HEGP ja pinhole-kollimaattori — reikägeometrian ja herkkyys–resoluutio-kompromissin vertailu."></div>
 
             <h3>2.2 Tuikekide (scintillation crystal)</h3>
             <p>Gammakameran tuikekide on tyypillisesti NaI(Tl) (natriumjodidi, tallium-aktivoitu). Sen ominaisuudet:</p>
@@ -112,6 +156,8 @@
                     <tr><td>Kliiniset laitteet</td><td>Yleisin (Siemens, GE, Canon)</td><td>GE Discovery NM 530c/570c, Spectrum Dynamics VERITON</td></tr>
                 </tbody>
             </table>
+
+            <div class="theory-image-slot" data-slot="gammakamera-nai-vs-czt" data-tab="gammakamera" data-default-caption="NaI(Tl)- vs. CZT-ilmaisin: energiaspektrivertailu Tc-99m:llä (140 keV). CZT-ilmaisimen kapeampi fotopiikki ja parempi hajasäteilyn erottelu."></div>
 
             <div class="theory-info">
                 <p><strong>Kliininen merkitys:</strong> CZT-sydänkamerat (esim. GE Discovery NM 530c) mahdollistavat sydänperfuusio-SPET:n merkittävästi pienemmällä aktiivisuudella (jopa 50 % vähennys) tai lyhyemmällä kuvausajalla (2&ndash;5 min vs. 15&ndash;20 min perinteisellä kameralla) säilyttäen diagnostisen kuvanlaadun. Tämä hyödyttää erityisesti potilaan säteilyannoksen optimointia.</p>
@@ -226,6 +272,8 @@
                 <li><strong>Parametrit</strong>: Iteraatioiden lukumäärä (tyypillisesti 3&ndash;8) ja osajoukkoerien lukumäärä (subsets, tyypillisesti 8&ndash;16). Liikaa iteraatioita &rarr; kohinan vahvistuminen.</li>
                 <li><strong>Post-suodatus</strong>: Gaussinen suodatus (FWHM 5&ndash;10 mm) kohinan tasoittamiseksi</li>
             </ul>
+
+            <div class="theory-image-slot" data-slot="gammakamera-reconstruction" data-tab="gammakamera" data-default-caption="Rekonstruktiomenetelmien vertailu: FBP vs. OSEM — takaisinprojektio, iterointi ja kohinan hallinta samalla datasetillä."></div>
 
             <h3>7.3 Kuvan prosessointi</h3>
             <ul>
@@ -367,6 +415,23 @@
                     <li>IAEA Human Health Series No. 6: <em>Quality Assurance for SPECT Systems</em>, 2009.</li>
                 </ol>
             </div>
+
+            <div class="theory-quiz-section" data-tab="gammakamera">
+                <div class="theory-quiz-start">
+                    <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-gammakamera">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
+                    <button class="theory-quiz-btn" onclick="startTheoryQuiz('gammakamera')">
+                        <i class="fas fa-play"></i> Aloita harjoittelu
+                    </button>
+                </div>
+                <div class="theory-quiz-active" style="display: none;"></div>
+            </div>
         </div>
     </div>
 
@@ -395,6 +460,8 @@
                 </tbody>
             </table>
 
+            <div class="theory-image-slot" data-slot="pet-detector-ring" data-tab="pet" data-default-caption="PET-ilmaisinrengas: LYSO-kiteiden järjestys renkaissa, koinsidenssitunnistuksen geometria ja LOR (line of response) -periaate."></div>
+
             <h3>2.2 Fotodetektorit</h3>
             <ul>
                 <li><strong>PMT (valomonistinputki)</strong>: Perinteinen vaihtoehto. Hyvä vahvistus, mutta suuri koko ja magneettikenttäherkkyys &rarr; ei sovellu PET/MRI:hin.</li>
@@ -421,6 +488,7 @@
             <h2>3. Kuvausmoodit</h2>
 
             <h3>3.1 2D- ja 3D-moodi</h3>
+            <div class="theory-image-slot" data-slot="pet-coincidence-detection" data-tab="pet" data-default-caption="Koinsidenssityypit PET:ssä: true-, scatter- ja random-koinsidenssi. NEC-käyrä aktiivisuuden funktiona."></div>
             <p>Varhaisissa PET-kameroissa käytettiin septoja ilmaisinrenkaiden välillä (2D-moodi) hajasäteilyn ja randomi-koinsidenssien vähentämiseksi. Modernit kamerat toimivat aina 3D-moodissa (ilman septoja), mikä lisää herkkyyttä 5&ndash;10-kertaisesti. Hajasäteilyn korjaus tehdään algoritmisesti.</p>
 
             <h3>3.2 TOF-PET (time-of-flight)</h3>
@@ -430,6 +498,8 @@
                 <p>missä \( \Delta t \) on aikaresoluutio (nykyisin 200&ndash;400 ps) ja \( \Delta x \) on paikan epävarmuus. 200 ps:n resoluutiolla \( \Delta x \approx 3 \) cm.</p>
             </div>
             <p>TOF-PET parantaa signaali-kohinasuhdetta erityisesti suurilla potilailla (missä vaimennus on voimakasta). SNR-parannus verrattuna ei-TOF:iin on \( \sqrt{D / \Delta x} \), missä \( D \) on potilaan halkaisija.</p>
+
+            <div class="theory-image-slot" data-slot="pet-tof-principle" data-tab="pet" data-default-caption="TOF-PET-periaate: aikaresoluution (\u0394t) vaikutus annihilaatiopisteen paikannukseen LOR:lla. Vertailu ilman TOF:ia vs. 400 ps ja 200 ps resoluutio."></div>
 
             <h3>3.3 Dynaamiset ja gated-kuvaukset</h3>
             <p>Dynaaminen PET kerää dataa useissa aikapisteissä merkkiaineen injektion jälkeen. Mahdollistaa farmakokineettisen mallinnuksen (Patlak, Logan, compartment models) ja kvantitatiivisten parametrien laskemisen (K<sub>i</sub>, V<sub>d</sub>). Cardiac-gated PET mahdollistaa sydänperfuusion ja viabiliteetin arvioinnin.</p>
@@ -608,6 +678,23 @@
                     <li>IEC 60601-2-44: <em>Medical electrical equipment &mdash; Particular requirements for X-ray equipment for computed tomography</em>.</li>
                 </ol>
             </div>
+
+            <div class="theory-quiz-section" data-tab="pet">
+                <div class="theory-quiz-start">
+                    <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-pet">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
+                    <button class="theory-quiz-btn" onclick="startTheoryQuiz('pet')">
+                        <i class="fas fa-play"></i> Aloita harjoittelu
+                    </button>
+                </div>
+                <div class="theory-quiz-active" style="display: none;"></div>
+            </div>
         </div>
     </div>
 
@@ -665,6 +752,8 @@
 
             <h2>4. Generaattorit</h2>
 
+            <div class="theory-image-slot" data-slot="radiofarmasia-tc-generator" data-tab="radiofarmasia" data-default-caption="Mo-99/Tc-99m-generaattorin rakenne: Al₂O₃-kolonni, Mo-99 adsorptiosta Tc-99m-eluointiin. Ingrowth-käyrä (kasvukäyrä) 24 h optimieluointiaikana."></div>
+
             <h3>4.1 Mo-99/Tc-99m-generaattori</h3>
             <p>Yleisin isotooppilääketieteen generaattori. Mo-99 (T&frac12; = 66 h) hajoaa Tc-99m:ksi (T&frac12; = 6,01 h), joka eluoidaan fysiologisella keittosuolaliuoksella (NaCl 0,9 %).</p>
             <ul>
@@ -716,6 +805,8 @@
                 <li><strong>Henkilökunnan koulutus</strong>: GMP-koulutus, hygieniakoulutus, aseptisen työskentelyn validointi (media fill -testi)</li>
                 <li><strong>Fimean valvonta</strong>: Radiolääkkeiden valmistus edellyttää Fimean (Lääkealan turvallisuus- ja kehittämiskeskus) lupaa</li>
             </ul>
+
+            <div class="theory-image-slot" data-slot="radiofarmasia-tc99m-labeling" data-tab="radiofarmasia" data-default-caption="Tc-99m-leimauksen vaiheet: eluointi generaattorista → pelkistys SnCl₂:lla → kompleksinmuodostus ligandin kanssa → laadunvalvonta TLC:llä."></div>
 
             <div class="theory-info">
                 <p><strong>Kliininen merkitys:</strong> Sairaalafyysikko osallistuu GMP-prosessiin erityisesti laadun&shy;valvontamittausten osalta: radionuklidipuhtauden mittaus, aktiivisuus&shy;mittauksen kalibrointi, ja prosessin säteilyturvallisuuden arviointi.</p>
@@ -782,6 +873,7 @@
             <h2>7. Aktiivisuusmittaus</h2>
 
             <h3>7.1 Annoskalibraattori (dose calibrator)</h3>
+            <div class="theory-image-slot" data-slot="radiofarmasia-dose-calibrator" data-tab="radiofarmasia" data-default-caption="Annoskalibraattori: ionisaatiokammion rakenne, geometriavaikutuksen mittaus eri astia-tilavuuksilla ja kalibrointitestit (accuracy, linearity, constancy)."></div>
             <p>Annoskalibraattori on kaivotyyppinen ionisaatiokammio, joka mittaa radioaktiivisen lähteen aktiivisuuden. Se on isotooppilääketieteen perusmittauslaite.</p>
             <ul>
                 <li><strong>Mittausperiaate</strong>: Kaasutäytteinen (argon) ionisaatiokammio tuottaa virran, joka on verrannollinen aktiivisuuteen</li>
@@ -836,21 +928,64 @@
                     <li>PIC/S: <em>Guide to Good Manufacturing Practice for Medicinal Products Annexes</em>, Annex 3 (Radiopharmaceuticals).</li>
                 </ol>
             </div>
+
+            <div class="theory-quiz-section" data-tab="radiofarmasia">
+                <div class="theory-quiz-start">
+                    <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-radiofarmasia">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
+                    <button class="theory-quiz-btn" onclick="startTheoryQuiz('radiofarmasia')">
+                        <i class="fas fa-play"></i> Aloita harjoittelu
+                    </button>
+                </div>
+                <div class="theory-quiz-active" style="display: none;"></div>
+            </div>
         </div>
     </div>
 
     <!-- ================================================================
-         VÄLILEHTI 4: GAMMAKUVAUS JA SPET
+         VÄLILEHTI 4: GAMMAKUVAUS/SPET-tutkimukset
          ================================================================ -->
     <div class="theory-panel" id="panel-spet" role="tabpanel">
         <div class="theory-content">
 
             <h2>1. Johdanto</h2>
-            <p>Gammakuvaus ja SPET (single photon emission computed tomography) muodostavat isotooppilääketieteen kliinisen tutkimuskäytännön ytimen. Tässä osassa käsitellään tärkeimmät kliiniset tutkimukset, niiden fysikaaliset perusteet, protokollat ja tulkinnan periaatteet.</p>
+            <p>Gammakuvaus ja SPET muodostavat isotooppilääketieteen kliinisen tutkimuskäytännön ytimen. Tässä osassa käsitellään tärkeimmät kliiniset tutkimukset, niiden fysikaaliset perusteet, protokollat ja tulkinnan periaatteet.</p>
+
+            <h4>A-taso (perusosaamisen tutkimukset)</h4>
+            <ul>
+                <li>Luuston gammakuvaus (bone scan)</li>
+                <li>Sydänlihasperfuusion SPET-tutkimus (MPI)</li>
+                <li>Kilpirauhaskuvaus (<sup>99m</sup>Tc-perteknetaatti / <sup>123</sup>I)</li>
+                <li>Munuaistoiminnan gammakuvaus (MAG3/DTPA/EC)</li>
+                <li>Glomerulusten suodatusnopeus (GFR, <sup>99m</sup>Tc-DTPA / <sup>51</sup>Cr-EDTA)</li>
+                <li>Keuhkoperfuusion ja -ventilaation tutkimus (V/Q-SPET)</li>
+                <li>Dopamiinitransporttereiden SPET-kuvaus (DAT-SPET, [<sup>123</sup>I]FP-CIT)</li>
+                <li>Vartijaimusolmukkeen gammakuvaus (sentinel node)</li>
+                <li>Lisäkilpirauhasen SPET-TT (kaksoisisotooppimenetelmä)</li>
+            </ul>
+
+            <h4>B-taso (täydentävän osaamisen tutkimukset)</h4>
+            <ul>
+                <li>Virtsan refluksin gammakuvaus (VUR)</li>
+                <li>Munuaiskuorikerroksen gammakuvaus (DMSA)</li>
+                <li>Tulehduspesäkkeen gammakuvaus (leukosyyttikuvaus, Ga-67)</li>
+                <li>Sappihappojen imeytymiskoe (SeHCAT, <sup>75</sup>Se-HCAT)</li>
+                <li>Kilpirauhasmetastaasin gammakuvaus ablaatioannoksen jälkeen (<sup>131</sup>I-jälkikuvaus)</li>
+                <li>Aivoperfuusio-SPET (<sup>99m</sup>Tc-HMPAO)</li>
+                <li>MIBG-kuvaus (<sup>123</sup>I/<sup>131</sup>I, feokromosytooma, neuroblastooma)</li>
+                <li>Lisämunuaiskuoren tutkimukset</li>
+                <li>Mahasuolikanavan tutkimukset (mahalaukun tyhjennys, Meckel, GI-vuoto, HIDA)</li>
+            </ul>
 
             <h2>2. Perusosaamisen tutkimukset (A-taso)</h2>
 
-            <h3>2.1 Luustokuvaus (bone scan)</h3>
+            <h3>2.1 Luuston gammakuvaus</h3>
             <ul>
                 <li><strong>Merkkiaine</strong>: Tc-99m-MDP tai Tc-99m-HDP. Kertyy aktiiviseen luun muodostukseen (osteoblastiseen aktiivisuuteen).</li>
                 <li><strong>Protokolla</strong>: Injektio (500&ndash;740 MBq) &rarr; 2&ndash;3 h odotus &rarr; koko kehon kuvaus (anteriorinen + posteriorinen)</li>
@@ -858,50 +993,452 @@
                 <li><strong>Kolmivaiheinen luustokuvaus</strong>: Perfuusio (1. vaihe, 1&ndash;5 s/kuva), blood pool (2. vaihe, 5 min), viivästetty (3. vaihe, 2&ndash;3 h). Erottelee infektiota ja tulehdusta.</li>
             </ul>
 
-            <h3>2.2 Sydänperfuusio-SPET (MPI)</h3>
+            <h3>2.2 Sydänlihasperfuusion SPET-tutkimus (MPI)</h3>
+            <p>Sydänlihaksen perfuusiokuvaus (myocardial perfusion imaging, MPI) on isotooppilääketieteen yleisin kliininen tutkimus. Se arvioi sydänlihaksen verenkiertoa levossa ja rasituksessa, osoittaa iskemian ja infarktiarpien laajuuden sekä vasemman kammion ejektiofraktion.</p>
+
+            <h4>Merkkiaineet</h4>
+            <p>Kaikki perfuusiomerkkiaineet ovat kationeja, jotka jakautuvat sydänlihakseen verenkierron suhteessa.</p>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr><th>Merkkiaine</th><th>Luonne</th><th>Annos (rasitus/lepo)</th><th>Erityispiirteet</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><sup>99m</sup>Tc-MIBI (Cardiolite&reg;)</td><td>Lipofiilinen kationi, mitokondrioihin</td><td>250&ndash;350 / 750&ndash;1 200 MBq</td><td>Erillinen rasitus- ja lepoinjektio, EKG-tahdistus mahdollinen (LVEF)</td></tr>
+                        <tr><td><sup>99m</sup>Tc-tetrofosmiini (Myoview&reg;)</td><td>Kuten MIBI; ominaisuudet lähes samat</td><td>250&ndash;350 / 750&ndash;1 200 MBq</td><td>Kuten MIBI, nopeampi maksan puhdistuma</td></tr>
+                        <tr><td><sup>201</sup>Tl-kloridi</td><td>K<sup>+</sup>-analogi, redistribuutio mahdollista</td><td>80&ndash;120 MBq (kertainjektio)</td><td>Ei erillistä lepoinjektiota; suurempi sädeannos, harvemmin käytetty</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4>Protokolla</h4>
             <ul>
-                <li><strong>Merkkiaineet</strong>: Tc-99m-MIBI (sestamibi) tai Tc-99m-tetrofosmiini. Vanhempi: Tl-201 (harvemmin käytetty).</li>
-                <li><strong>Protokolla</strong>: Rasitus (ergometria/farmakologinen) + lepokuva. 1 pv (rasitus &rarr; lepo, 300+900 MBq) tai 2 pv (300+300 MBq) protokolla. Gated-SPET ejektiofraktiolle.</li>
-                <li><strong>Kuvantaminen</strong>: 180&deg; tai 360&deg; SPET, 64 projektiota, 25&ndash;40 s/projektio</li>
-                <li><strong>Tulkinta</strong>: Polar map (bull's eye), 17-segmenttimalli, SRS/SSS/SDS-pisteet, LVEF gated-datasta</li>
+                <li><strong>Valmistautuminen</strong>:
+                    <ul>
+                        <li>Anti-iskeeminen lääkitys tauolle (kuten rasituskokeessa)</li>
+                        <li>Kofeiinipitoiset juomat tauolle vähintään 12 h (mieluiten 24 h), koska fyysinen rasitus voidaan joutua korvaamaan lääkerasituksella</li>
+                    </ul>
+                </li>
+                <li><strong>1 päivän ohjelma (<sup>99m</sup>Tc)</strong>:
+                    <ul>
+                        <li>Rasituskuvaus ensin (pienempi annos 250&ndash;350 MBq) &rarr; 3&ndash;4 h odotus &rarr; lepokuvaus (3&times; suurempi annos 750&ndash;1 200 MBq)</li>
+                        <li>Rasituskuvauksen ollessa normaali lepokuvaus jää tekemättä</li>
+                    </ul>
+                </li>
+                <li><strong>2 päivän ohjelma</strong>:
+                    <ul>
+                        <li>Molemmat kuvaukset 300&ndash;350 MBq</li>
+                        <li>Parempi kuvanlaatu; valitaan ylipainoisille ja isorintaisille</li>
+                    </ul>
+                </li>
+                <li><strong>Fyysinen rasitus</strong>:
+                    <ul>
+                        <li>Ergometria submaksimaaliseen tai maksimaaliseen syketasoon</li>
+                        <li>Merkkiaine injisoidaan 1&ndash;2 min ennen rasituksen lopettamista</li>
+                    </ul>
+                </li>
+                <li><strong>Farmakologinen rasitus</strong>:
+                    <ul>
+                        <li>Adenosiini, dipiridamoli tai regadenosiini, kun fyysinen rasitus ei sovi (liikuntarajoite, LBBB)</li>
+                        <li>Dobutamiini vaihtoehtona adenosiinikontraindikaatiossa</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h4>Tulkinta</h4>
+            <ul>
+                <li><strong>Leikesuunnat</strong>:
+                    <ul>
+                        <li>Vertikaali pitkäakseli (VLA), horisontaali pitkäakseli (HLA) ja poikkileikkeet (SA = short axis)</li>
+                        <li>Esitetään standardoidusti</li>
+                    </ul>
+                </li>
+                <li><strong>Polar map (bull's eye)</strong>:
+                    <ul>
+                        <li>Koko vasemman kammion kolmiulotteinen tieto esitetään kaksiulotteisesti</li>
+                        <li>17-segmenttimalli</li>
+                        <li>SRS (summed rest score), SSS (summed stress score), SDS (difference score)</li>
+                    </ul>
+                </li>
+                <li><strong>Iskemia vs. infarkti</strong>:
+                    <ul>
+                        <li>Rasituksessa näkyvä puutosalue, joka tasoittuu levossa = iskemia</li>
+                        <li>Pysyvä puutosalue molemmissa kuvauksissa = infarktiarpikudos</li>
+                    </ul>
+                </li>
+                <li><strong>TID (Transient Ischemic Dilatation)</strong>:
+                    <ul>
+                        <li>Vasen kammio on rasituskuvissa suurempi kuin lepokuvissa</li>
+                        <li>Merkki laaja-alaisesta vaikea-asteisesta iskemiasta (usein kolmen suonen tauti)</li>
+                    </ul>
+                </li>
+                <li><strong>Gated-SPET</strong>:
+                    <ul>
+                        <li>EKG-tahdistettu kuvaus</li>
+                        <li>Seinämäliike, paksuneminen ja LVEF laskettavissa samoista kuvauksista</li>
+                    </ul>
+                </li>
+                <li><strong>Keuhkokertymä (<sup>201</sup>Tl)</strong>:
+                    <ul>
+                        <li>Suurentunut keuhko/sydän-suhde rasituksessa viittaa laajan iskemian aiheuttamaan vasemman kammion toiminnan häiriöön</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h4>Indikaatiot</h4>
+            <ul>
+                <li>Stabiili rintakipu + kohtalainen/suuri sepelvaltimotaudin todennäköisyys + EKG ei tulkittavissa tai fyysinen rasitus ei mahdollista</li>
+                <li>Angiografiassa todettu raja-arvoinen ahtauma &mdash; hemodynamiikallinen merkitys?</li>
+                <li>Viabiliteetin osoittaminen iskeemisessä kardiomyopatiassa (LVEF &lt; 40 %), kun revaskularisaatio suunnitteilla</li>
+                <li>Ennen sydänleikkausta: suuren riskin toimenpide + huono suorituskyky (&lt; 4 MET)</li>
+                <li>Perfuusion herkkyys ja tarkkuus merkitsevän sepelvaltimotaudin löytämiseen ~85&ndash;90 %</li>
+            </ul>
+
+            <h4>MUGA-kuvaus (pumpputoiminta) ja MIBG (hermotus)</h4>
+            <ul>
+                <li><strong>MUGA (Multiple Gated Acquisition)</strong>:
+                    <ul>
+                        <li><sup>99m</sup>Tc-perteknetaatti merkittyihin punasoluihin, EKG-tahdistus</li>
+                        <li>LVEF, tilavuudet, täyttymis- ja tyhjenemishuipunopeudet</li>
+                        <li>Tarkin toistettavuus; käytetään sytostaattien sydäntoksisuuden seurannassa</li>
+                    </ul>
+                </li>
+                <li><strong><sup>123</sup>I-MIBG (metajodibentsyyliguanidiini)</strong>:
+                    <ul>
+                        <li>Kertyy sympaattisiin hermopäätteisiin</li>
+                        <li>Sydämen ja välikarsinan H/M-suhde (heart-to-mediastinum) sekä merkkiaineen washout-nopeus kertovat sympaattisesta hermostuksesta</li>
+                        <li>Käytetään sydämen vajaatoiminnan ennustearvioinnissa ja lewynkappaledementian diagnostiikassa</li>
+                    </ul>
+                </li>
             </ul>
 
             <h3>2.3 Kilpirauhaskuvaus</h3>
+            <p>Kilpirauhasen isotooppitutkimukset ovat harvinaistuneet ultraäänilaitteistojen kehittymisen myötä. Indikaatiot ovat nykyisin tarkasti rajattuja.</p>
+
+            <h4>Merkkiaineet</h4>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr><th>Merkkiaine</th><th>Antotapa</th><th>Annos</th><th>Eff. annos</th><th>Kuvaus</th><th>Huomioitavaa</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><sup>99m</sup>Tc-perteknetaatti (TcO<sub>4</sub><sup>&minus;</sup>)</td><td>i.v.</td><td>150 MBq</td><td>1,6 mSv</td><td>20 min injektiosta</td><td>Kertyy joditilaan (alle 5 %). Kertymää ei voi käyttää kilpirauhaskertymän prosenttilaskentaan.</td></tr>
+                        <tr><td><sup>123</sup>I-natrium­jodidi</td><td>p.o. (kapseli)</td><td>74 MBq</td><td>~0,56 mSv</td><td>4 h ja 24 h jälkeen</td><td>Toimii kuten oikea jodidi. Kilpirauhaskertymä lasketaan 24 h kuvauksesta (normaali 17&ndash;42 %).</td></tr>
+                        <tr><td><sup>131</sup>I</td><td>p.o.</td><td>&mdash;</td><td>Suuri</td><td>&mdash;</td><td>Erittäin harvoin diagnostiikkaan. Käytetään pääosin hoidossa.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4>Indikaatiot</h4>
             <ul>
-                <li><strong>Merkkiaineet</strong>: Tc-99m-perteknetaatti (TcO<sub>4</sub><sup>&minus;</sup>) tai I-123</li>
-                <li><strong>Protokolla</strong>: Tc-99m: 75&ndash;150 MBq, kuvaus 20 min injektiosta. I-123: 7&ndash;15 MBq, kuvaus 4&ndash;24 h.</li>
-                <li><strong>Pinhole-kollimaattori</strong>: Suurennettu kuva kilpirauhasesta, paras resoluutio</li>
-                <li><strong>Indikaatiot</strong>: Kyhmy, Basedow, toksinen adenooma, monikyhmystruuma</li>
+                <li>Hypertyreoosin erotusdiagnostiikka (Basedowin tauti vs. toksinen adenooma vs. monikyhmystruuma) — kilpirauhaskertymän määritys ja jakauman arviointi</li>
+                <li>Ektooppisen kilpirauhaskudoksen osoittaminen (kielityvessä, rintalastan takana)</li>
+                <li>Subakuutin tyreoidiittiitin diagnoosi (kertymä lähes olematon)</li>
+                <li>Kilpirauhasen koon ja muodon arviointi (harvoin — ultraääni on ensisijainen)</li>
             </ul>
 
-            <h3>2.4 Munuaiskuvaus</h3>
+            <h4>Esivalmistelut</h4>
             <ul>
-                <li><strong>Merkkiaineet</strong>: Tc-99m-MAG3 (tubulaarinen eritys), Tc-99m-DTPA (glomerulusfiltrus)</li>
-                <li><strong>Protokolla</strong>: Dynaaminen kuvaus: 1&ndash;2 s/kuva ensimmäiset 60 s (perfuusio), sitten 15&ndash;30 s/kuva 20&ndash;30 min</li>
-                <li><strong>Analyysit</strong>: Renogrammi (time-activity curve), split function (differentiaalinen munuaisfunktio), GFR-laskenta (DTPA)</li>
+                <li>Syömättä 2 h ennen ja jälkeen merkkiaineen antamisen (vettä voi juoda)</li>
+                <li>Merikala, merilevä ja punakaali: ei 3 vrk ennen; jodipitoinen yskänlääke/voide: ei 2 vk ennen</li>
+                <li>Tyreostaatit (Tyrazol): vähintään 2 vrk tauko; tyroksiini (Thyroxin): vähintään 3 vk tauko</li>
+                <li>Jodipitoinen varjoaine: häiritsee 1 kuukaudesta jopa vuoteen — mainittava lähetteessä</li>
+                <li>Metimatsoli tai propyylitiourasiili: 1 viikon tauko</li>
             </ul>
+
+            <h4>Kuvaus ja tulkinta</h4>
+            <ul>
+                <li><strong>Kuvausmenetelmä</strong>: Tasokuvas edestä ja molemmista etuviistoista (45&deg;). Perteknetaatilla lisäksi sivukuvia tarvittaessa. Pinhole-kollimaattori antaa suurennetun kuvan hyvällä resoluutiolla.</li>
+                <li><strong>Normaali löydös</strong>: Molemmat lohkot symmetriset, homogeeninen kertymä. Kilpirauhaskertymä (<sup>123</sup>I) 17&ndash;42 % @ 24 h.</li>
+                <li><strong>Kuuma kyhmy (toksinen adenooma)</strong>: Voimakas paikallinen kertymä, estää normaalin rauhasen kertymän. Ultraäänessä usein >1,5 cm. Hoito: radiojodi tai leikkaus.</li>
+                <li><strong>Kylmä kyhmy</strong>: Paikallinen puutosalue. Syy voi olla kysta, hyvänlaatuinen adenooma tai karsinooma. Vaatii hienoneulabiopsian.</li>
+                <li><strong>Basedowin tauti</strong>: Diffuusisti voimistunut tasainen kertymä (kilpirauhaskertymä usein &gt;50 %). TSH-reseptorivasta-aineet.</li>
+                <li><strong>Monikyhmystruuma</strong>: Epätasainen kertymä; kyhmyjen toiminta vaihtelee.</li>
+                <li><strong>Subakuutti tyreoidiitti</strong>: Kertymä lähes olematon varhaisvaiheessa (myös autoimmuunityreoidiitti, post-partum-tyreoidiitti).</li>
+            </ul>
+
+            <div class="theory-info">
+                <p><strong>Muista:</strong> Kilpirauhasen ultraääni on ensisijainen menetelmä kilpirauhaskyhnyjen tutkimisessa. Isotooppitutkimus lisätään vain, kun tarvitaan tietoa toiminnallisesta tilasta (onko kyhmy hyperaktiivinen).</p>
+            </div>
+
+            <h3>2.4 Munuaisten isotooppitutkimukset</h3>
+            <p>Munuaisten isotooppitutkimuksilla voidaan tutkia munuaisten ja virtsateiden toimintaa monipuolisesti. Keskeisiä tutkimuksia ovat munuaistoiminnan gammakuvaus (MAG3/DTPA), virtsan refluksin gammakuvaus (VUR), munuaiskuorikerroksen kuvaus (DMSA) sekä glomerulusten suodatusnopeuden mittaus (GFR).</p>
+
+            <h4>2.4.1 Munuaistoiminnan gammakuvaus</h4>
+            <p><strong>Indikaatiot:</strong> Yleisin käyttöaihe on laajentunut munuaisallas (hydronefroosi) &mdash; onko kyseessä obstruktio vai pelkkä anatominen laajentu­ma? Muita indikaatioita ovat munuaisten toimintaosuuksien määritys (relatiivinen clearance) ennen sädehoitoa tai munuaisen poistoa, renovaskulaarisen hypertonian selvittely (kaptopriilitehosteinen kuvaus), refluksiselvittely lapsilla, elävän munuaisluovuttajan arviointi sekä traumatilanteet.</p>
+
+            <h5>Merkkiaineet</h5>
+            <p>Isotooppimerkkiaineet joko suodattuvat glomeruluksista tai erittyvät tubuluksiin. Tubulaarisesti erittyvät ovat suositeltavampia paremman ekstraktion vuoksi.</p>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ominaisuus</th>
+                            <th><sup>99m</sup>Tc-DTPA</th>
+                            <th><sup>99m</sup>Tc-MAG3</th>
+                            <th><sup>99m</sup>Tc-EC</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Eritysmeka­nismi</td><td>Glomerulussuodatus (100 %)</td><td>Tubulaarinen eritys (98 %)</td><td>Tubulaarinen eritys (90 %)</td></tr>
+                        <tr><td>Ekstraktio</td><td>20 %</td><td>58 %</td><td>65 %</td></tr>
+                        <tr><td>Annettava aktiivisuus</td><td>300 MBq</td><td>100 MBq</td><td>80 MBq</td></tr>
+                        <tr><td>Efektiivinen annos</td><td>1,89 mSv</td><td>1,10 mSv</td><td>0,50 mSv</td></tr>
+                        <tr><td>GFR-laskenta mahdollinen</td><td>Kyll&auml; (verinaytteist&auml;)</td><td>Ei</td><td>Ei</td></tr>
+                        <tr><td>Huom.</td><td>Ainoa GFR-merkkiaine; heikompi pienillä lapsilla</td><td>K&auml;ytetyin; maksan kautta osin erittyy</td><td>Paras ekstraktio; v&auml;h&auml;isin maksaeritys</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h5>Protokolla</h5>
+            <ul>
+                <li><strong>Valmistautuminen</strong>: Hyvä nesteytys on tärkeää &mdash; dehydraatio hidastaa munuaisfunktiota. Aikuiset juovat 0,5 l vettä ennen tutkimusta. Rakko tyhjennetään juuri ennen kuvausta.</li>
+                <li><strong>Kuvausohjelma</strong>: Dynaaminen kuvaus 20 min. Ensimmäiset 60 s: 1&ndash;2 s/kuva (perfuusiovaihe). Sen jälkeen 15&ndash;30 s/kuva parenkyymi- ja eritysvaihe. Tarvittaessa myöhäiskuvia 30&ndash;60 min.</li>
+                <li><strong>Diureettitehostus</strong>: Furosemidi annetaan yleensä 5&ndash;7 min merkkiaineen jälkeen (F+5 tai F+7). Alle 2-vuotiailla diureetti voidaan antaa heti ennen merkkiainetta (F0). Diureetti nopeuttaa virtsan kulkua laajentuneissa rakenteissa.</li>
+                <li><strong>Asento</strong>: Usein potilas kuvataan istuvassa asennossa, jolloin painovoima tehostaa virtsan kulkua ja lisää obstruktiodi­agnostiikan tarkkuutta.</li>
+                <li><strong>Myöhäiskuva</strong>: Erittäin hyödyllinen epäselvissä tapauksissa &mdash; lapsilla aina. Ennen myöhäiskuvaa tyhjennetään rakko ja kävellään. Hyvin tyhjentynyt myöhäiskuva sulkee luotettavasti pois merkittävän obstruktion.</li>
+            </ul>
+
+            <h5>Tulosteet ja diagnostiset suureet</h5>
+            <ul>
+                <li><strong>Toimintaosuudet (split function)</strong>: Normaalit arvot 45&ndash;55 % / 55&ndash;45 %. Lasketaan Patlak-plot-, integraalimenetelmä- tai dekonvoluutiomenetelmällä. Patlak on tarkin ja robust­tein.</li>
+                <li><strong>Aika-aktiivisuuskäyrä (renogrammi)</strong>: Normaali huippu saavutetaan ~3&ndash;4 min, jonka jälkeen käyrä laskee nopeasti. Huipun myöhästyminen ja käyrän laskun hidastuminen ei yksin ole spesifistä obstruktiolle (myös laaja allas tai vaurioitunut parenkyyymi hidastavat).</li>
+                <li><strong>Siirtoajat (MTT, mean transit time)</strong>: Koko munuaisen keskimääräinen siirtoaika on karkeasti sama kuin renogrammin huipun aika (T<sub>max</sub>). Pidentynyt MTT viittaa virtauseste­en aiheuttamaan kohonneeseen paineeseen altaassa.</li>
+                <li><strong>Ulosvirtaustehokkuus (OE, output efficiency)</strong>: Kuvaa munuaisesta eritetyn merkkiaineen osuuden suhteessa ekstrahoituun merkkiaineeseen kullakin ajan hetkellä. Korjaa sekoittavien tekijöiden (dehydraatio, injektion onnistuminen) vaikutuksen.</li>
+                <li><strong>NORA (normalized residual activity)</strong>: Yksinkertaisempi vaihtoehto OE:lle. Vertaa aktiivisuutta tutkimuksen toisen minuutin tasoon.</li>
+            </ul>
+            <div class="theory-info">
+                <p><strong>OE-viitearvot obstruktiodiagnostiikassa:</strong></p>
+                <ul>
+                    <li>OE20 &gt; 95 % &mdash; normaali</li>
+                    <li>OE20 80&ndash;95 % &mdash; epävarma, seuranta tarpeen</li>
+                    <li>OE20 &lt; 80 % &mdash; viittaa merkittävään obstruktioon</li>
+                    <li>OE20 &lt; 60 % &mdash; vaikea obstruktio</li>
+                    <li>NORA20 &gt; 0,5 &mdash; viittaa obstruktioon; NORA20 &gt; 1,8 &mdash; vaikea obstruktio</li>
+                </ul>
+            </div>
+
+            <h5>Hoitotuloksen ennustaminen</h5>
+            <p>Laajentuneeseen altaaseen liittyvän merkittävän virtausesteen kirurgisen korjauksen (allasplastia tai ahtauman stenttaus) ennusteet:</p>
+            <ul>
+                <li><strong>Toimintaosuus &gt; 30 %</strong>: Kirurginen korjaus todennäköisesti parantaa munuaisfunktiota</li>
+                <li><strong>Toimintaosuus 10&ndash;30 %</strong>: Epävarma ennuste, harkitaan tapauskohtaisesti</li>
+                <li><strong>Toimintaosuus &lt; 10 %</strong>: Korjaus ei todennäköisesti enää palauta funktiota merkittävästi</li>
+            </ul>
+
+            <h4>2.4.2 Virtsan refluksin gammakuvaus (VUR)</h4>
+            <p>Vesikoureteraalisella refluksilla (VUR) tarkoitetaan virtsan nousemista virtsarakosta virtsanjohtimiin ja munuaisaltaisiin. VUR on melko yleinen löydös virtsatietulehduksen sairastaneilla pienillä lapsilla. Isotooppimenetelmä on herkempi kuin röntgenmiktiokystografia (MCG) ja säderasitus on merkittävästi pienempi.</p>
+            <ul>
+                <li><strong>Tekniikka (retrogradiinen/suora menetelmä)</strong>: Rakko katetroidaan ja <sup>99m</sup>Tc-perteknetaatti annetaan katetrista rakkoon. Rakon täyttömäärä: (ikä vuosina&nbsp;+&nbsp;1) &times; 30 ml. Gammakameralla kuvataan koko ajan, koska refluksi voi olla ohimenevä.</li>
+                <li><strong>Indikaatiot</strong>: Ensimmäisen kuumeisen virtsatieinfektion jälkeen lapsilla, VUR:n seurantatutkimus, hoitotoimenpiteiden vaikutuksen arviointi. Pojilla ensimmäinen tutkimus usein röntgentutkimus uretraläpän poissulkemiseksi.</li>
+                <li><strong>Löydösten tulkinta</strong>: Takaisinvirtaus virtsanjohtimeen tai munuaisaltaaseen näkyy kuvista ja/tai munuaisen aktiivisuuden lisääntymisenä aika-aktiivisuuskäyristä. Kirjataan myös täyttömäärä, jolla refluksi ilmaantuu.</li>
+                <li><strong>Epäsuora menetelmä</strong>: Refluksi voidaan todeta myös munuaisgammakuvauksen lopuksi virtsausvaiheessa (rakon ollessa täysi). Ei katetrointia tarvita, mutta herkkyys on huonompi.</li>
+            </ul>
+            <div class="theory-info">
+                <p><strong>Säteilyannos:</strong> Efektiivinen annos ~0,048 mSv &asymp; viikon luonnollinen taustasäteily &asymp; 1/10 röntgenmiktiokystografian annoksesta.</p>
+            </div>
+
+            <h4>2.4.3 Munuaiskuorikerroksen gammakuvaus (DMSA)</h4>
+            <p>Tutkimus on herkin menetelmä munuaisarpien osoittamisessa ja toimivan munuaiskudoksen kartoittamisessa synnynnäisissä anomalioissa. Soveltuu myös toimintaosuuksien tarkaan määritykseen.</p>
+            <ul>
+                <li><strong>Merkkiaine</strong>: <sup>99m</sup>Tc-DMSA (dimerkaptosukkiinihappo) annetaan laskimoon. Se kertyy munuaistubuluksiin ja jää sinne (staattinen kertymä).</li>
+                <li><strong>Kuvaus</strong>: Staattiset kuvat edestä ja viistoista ~2&ndash;4 h injektion jälkeen. Isommille lapsille ja aikuisille lisäksi SPET-kuvaus paremman paikkaerottelun saavuttamiseksi.</li>
+                <li><strong>Löydökset</strong>: Normaali = homogeeninen merkkiaineen kertyminen. Arpi = paikallisesti vähentynyt kertymä munuaisparenkyymissä.</li>
+                <li><strong>Annos</strong>: Efektiivinen annos ~1 mSv iästä riippumatta.</li>
+            </ul>
+
+            <h4>2.4.4 Glomerulusten suodatusnopeus (GFR)</h4>
+            <p>GFR-mittausta käytetään, kun tarvitaan mahdollisimman tarkka arvio munuaisten toiminnasta. Kliinisessä työssä käytetty eGFR (kreatiniinipohjainen laskukaava) on altis virhelähteille.</p>
+            <ul>
+                <li><strong>Merkkiaineet</strong>: <sup>99m</sup>Tc-DTPA tai <sup>51</sup>Cr-EDTA. Molemmat suodattuvat glomeruluksista vapaasti, eivät reabsorboidu eivätkä erity tubuluksista. Merkittävää eroa menetelmien välillä ei ole.</li>
+                <li><strong>Tekniikka</strong>: Pieni aktiivisuus injisoidaan laskimoon (<sup>99m</sup>Tc-DTPA ~10 MBq, <sup>51</sup>Cr-EDTA ~3 MBq). 2&ndash;3 verinäyttettä otetaan 2&ndash;5 h kuluttua. Merkkiaineen häviämisestä plasmasta (eksponentiaalinen lasku) lasketaan GFR.</li>
+                <li><strong>Indikaatiot</strong>: Krooninen munuaissairaus, munuaistoiminnan seuranta munuaistoksisilla lääkkeillä (esim. sytostaatit, aminoglykosidit), elävän munuaisluovuttajan arviointi, munuaisfunktion huononemisen epäily normaalin kreatiniinin tilanteessa.</li>
+                <li><strong>Viitearvot</strong>: Nuoren aikuisen GFR 80&ndash;160 ml/min/1,73 m². Kasvaa syntymästä kahteen ikävuoteen asti, pysyy vakiona aikuisuuteen ja alkaa laskea selvästi ~50 ikävuoden jälkeen.</li>
+            </ul>
+            <div class="theory-warning">
+                <p><strong>Huom:</strong> Merkkiaineen joutuminen suonen ulkopuolelle kudoksiin (ekstravasaatio) mitätöi GFR-tuloksen. Askites, runsas nestekertymä tai voimakas nesteytys aiheuttaa GFR:n yliarviointia.</p>
+            </div>
+            <div class="theory-info">
+                <p><strong>Sädeannokset GFR-mittauksessa:</strong> <sup>99m</sup>Tc-DTPA 0,049 mSv, <sup>51</sup>Cr-EDTA 0,006 mSv &mdash; molemmat erittäin pieniä. <sup>99m</sup>Tc-DTPA-munuaisgammakuvauksessa voidaan ottaa saman injektion jälkeen verinäytteet myös GFR-laskentaa varten.</p>
+            </div>
+
+            <div class="theory-image-slot" data-slot="spet-renogram" data-tab="spet" data-default-caption="Munuaisten dynaaminen renogrammi: aika-aktiivisuuskäyrä molemmille munuaisille. Normaali, obstruktio ja renovaskulaarinen hypertensio."></div>
 
             <h3>2.5 Keuhkoperfuusio ja -ventilaatio</h3>
+            <p>Keuhkojen ventilaatio-perfuusio (V/Q) -gammakuvaus arvioi keuhkoverenkierron ja tuuletuksen alueellista jakautumista. SPET-kuvauksena tehty V/Q-tutkimus on lähes yhtä tarkka keuhkoembolian osoittamisessa kuin varjoaine-TT, mutta sädeannos on pienempi.</p>
+
+            <h4>Keuhkoperfuusion kuvaus</h4>
             <ul>
-                <li><strong>Perfuusio</strong>: Tc-99m-MAA (makroaggregoidut albumiinit), 100&ndash;200 MBq, 200 000&ndash;400 000 partikkelia</li>
-                <li><strong>Ventilaatio</strong>: Tc-99m-Technegas (hiilinanopartikkelit), Kr-81m-kaasu, tai Tc-99m-DTPA-aerosoli</li>
-                <li><strong>Indikaatio</strong>: Keuhkoembolian diagnostiikka (V/Q-mismatch), keuhkofunktion arviointi ennen leikkausta</li>
+                <li><strong>Merkkiaine</strong>: <sup>99m</sup>Tc-MAA (makroaggregoidut albumiinit), annos 80&ndash;200 MBq. Yhdessä annoksessa ~600 000 partikkelia (koko 10&ndash;40 &micro;m). Annetaan hitaasti laskimoon makuuasennossa (tasaisempi jakauma). Partikkelit tukkivat n. joka 1 000. kapillaarin &mdash; biologisesti harmitonta.</li>
+                <li><strong>Vasta-aiheet</strong>: Ei ehdottomia. Annosta pienennetään merkittävässä pulmonaalihypertensiossa, oikealta vasemmalle suuntautuvassa oikovirtauksessa ja kriittisesti sairailla.</li>
+                <li><strong>Kuvaus</strong>: SPET-tutkimus aloitetaan 5 min injektion jälkeen. Mikäli SPET ei ole mahdollinen, tasokuvat vähintään 6 projektiosta (AP, PA, LAT molemmin puolin, obliques).</li>
             </ul>
+
+            <h4>Keuhkoventilaation kuvaus</h4>
+            <ul>
+                <li><strong>Technegas</strong>: <sup>99m</sup>Tc-leimatut hiilinanopartikkelit (30&ndash;60 nm). Liikkuvat keuhkoissa kaasumaisten molekyylien tavoin. Riittää muutama sisäänhengitys &mdash; soveltuu huonokuntoisille. Parempi ventilaatiojakauma kuin DTPA-aerosoli.</li>
+                <li><strong>DTPA-aerosoli</strong>: <sup>99m</sup>Tc-leimattu DTPA nebulisaattorilla hengitettynä. Halvempi menetelmä, mutta partikkelien epätasaisempi jakauma (eritoten ahtaumatauti potilailla).</li>
+                <li><strong>Tutkimusjärjestys</strong>: Ventilaatio ensin (pienempi annos), sitten perfuusio samana päivänä. Jos perfuusio ensin ja tulos epäselvä, ventilaatio yleensä vasta seuraavana päivänä.</li>
+                <li><strong>Pelkkä perfuusiokuvaus</strong>: Riittää, kun ei epäillä keuhko- tai sydänsairautta tai potilas on raskaana (pienempi sädeannos).</li>
+            </ul>
+
+            <h4>Tulkinta: emboliakriteerit (modifioitu PISA-PED)</h4>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr><th>Luokka</th><th>Perfuusiolöydös</th><th>Tulkinta</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1. Normaali</td><td>Ei perfuusiopuutosalueita</td><td>Keuhkoembolia poissuljettu</td></tr>
+                        <tr><td>2. Lähes normaali</td><td>Pienet puutosalueet, joiden koko &le; radiologiset löydökset</td><td>Embolia epätodennäköinen</td></tr>
+                        <tr><td>3. Sopii emboliaan</td><td>Yksi tai useampi kiilamainen lohko/segmentti-tason puutosalue ilman vastaavaa thorax-muutosta; normaali ventilaatio</td><td>Embolia todennäköinen (V/Q-mismatch)</td></tr>
+                        <tr><td>4. Ei todennäköisesti embolia</td><td>Ei-kiilamaiset puutosalueet; löydökset selittyvät thorax-kuvalla</td><td>Obstruktiivinen keuhkosairaus tai parenkyymimuutos</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="theory-info">
+                <p><strong>Tyypillinen embolialöydös (luokka 3):</strong> Yksi tai useampi kiilamainen perfuusiopuutosalue segmenttitasolla. Ventilaatio samalla alueella on normaali (V/Q-mismatch). Normaali tasainen perfuusio sulkee embolian lähes varmasti pois.</p>
+            </div>
+
+            <h4>Preoperatiivinen arviointi</h4>
+            <p>Keuhkoleikkausta edeltävästi V/Q-kuvaus yhdessä spirometrian kanssa arvioi postoperatiivisen keuhkofunktion:</p>
+            <ul>
+                <li>Lasketaan kunkin keuhkon/lohkon osuus kokonaisperfuusiosta ja -ventilaatiosta</li>
+                <li>Ennustetaan postoperatiivinen FEV<sub>1</sub> = preoperatiivinen FEV<sub>1</sub> &times; (1 &minus; poistetun keuhkon osuus %)</li>
+                <li>Postop FEV<sub>1</sub> &lt; 0,8&ndash;1,0 L &rarr; komplikaatioriski suuri; &gt; 1,5&ndash;2,0 L &rarr; riski pieni</li>
+            </ul>
+
+            <div class="theory-info">
+                <p><strong>Krooninen keuhkoembolia:</strong> V/Q-kuvaus on kansainvälisissä ohjeistuksissa ensisijainen menetelmä kroonisen tromboembolisen pulmonaalihypertension (CTEPH) osoittamisessa. Varjoaine-TT voi aliarvioida subkliinisen kroonisen embolisaation.</p>
+            </div>
 
             <h2>3. Täydentävän osaamisen tutkimukset (B-taso)</h2>
 
+            <div class="theory-image-slot" data-slot="spet-mpi-bulls-eye" data-tab="spet" data-default-caption="Sydänperfuusio-SPET (MPI): bulls-eye-projektio normaalista, iskeemisestä ja infarktimuutoksesta. Perfuusio levossa vs. rasituksessa."></div>
+
             <h3>3.1 Aivoperfuusio-SPET</h3>
+            <p><sup>99m</sup>Tc-HMPAO (heksametyylipropyyleeniaminoamiinioksimi) on rasvaliukoinen, veri-aivoesteen läpäisevä merkkiaine, joka kiinnittyy aivokudokseen glutationi-reaktiolla ja pysyy siellä tunteina. Kuvaus heijastaa <em>injektiohetken</em> perfuusiota — tuokiokuvana.</p>
+
+            <h4>Esivalmistelut</h4>
             <ul>
-                <li><strong>Merkkiaine</strong>: Tc-99m-HMPAO tai Tc-99m-ECD. Kertyvät aivojen verenkierron mukaisesti ja lukittuvat aivokudokseen.</li>
-                <li><strong>Indikaatiot</strong>: Epilepsiakirurgian suunnittelu (iktaalinen vs. interiktaalinen), dementian erotusdiagnostiikka</li>
+                <li><strong>Kilpirauhassuoja</strong>: Kalium- tai natriumperkloraatti suun kautta ennen injektiota (vähentää kilpirauhasen ja sylkirauhasten epäspesifistä kertymää).</li>
+                <li><strong>Pään stabilointi</strong>: Päämuotti tai siteet kuvauksen ajaksi — liikeartefaktien välttämiseksi.</li>
+                <li><strong>Epilepsiakuvauksessa</strong>: Merkkiaine on oltava välittömästi käyttövalmis video-EEG-seurannan aikana; iktaalinen injektio &lt; 30 s kohtauksen alusta.</li>
             </ul>
 
-            <h3>3.2 Vartijaimusolmukekuvaus (sentinel node)</h3>
+            <h4>Epilepsia</h4>
+            <p>Menetelmä paikantaa epilepsiafokuksen, kun MRI on normaali tai kliininen tieto ja EEG ovat ristiriidassa.</p>
             <ul>
-                <li><strong>Merkkiaine</strong>: Tc-99m-nanokolloidit (Nanocoll), injektio tuumorin ympärille tai ihonsisäisesti</li>
-                <li><strong>Kuvantaminen</strong>: Planaarikuvaus + SPET/TT + intraoperatiivinen gammakoettimen käyttö</li>
-                <li><strong>Indikaatiot</strong>: Rintasyöpä, melanooma, gynekologiset syövät</li>
+                <li><strong>Iktaalinen SPET</strong>: Injektio &lt; 30 s kohtauksen alusta &rarr; korostunut perfuusio fokuksessa (hyperperfuusio, mahdollinen steal-ilmiö viereisessä kudoksessa). Kuvaus 2 h injektion jälkeen. Jos injektio viivästyy, kuva edustaa peri-iktaalista tilaa.</li>
+                <li><strong>Interiktaalinen SPET</strong>: Toistetaan kohtauksettomuuden aikana &rarr; alentunut perfuusio fokuksessa.</li>
+                <li><strong>Subtraktiokuva (SISCOM)</strong>: Iktaalinen &minus; interiktaalinen normitettuna &rarr; semikvantitatiivinen purkauksen sijaintitieto (poikkeama Z-pisteissä). Auttaa löytämään poikkeavan gyruksen aivojen MRI-fuusiossa.</li>
             </ul>
+
+            <h4>Muistihäiriöt</h4>
+            <p>Aivoperfuusio on sidoksissa aineenvaihduntaan — hypoperfuusioalueet vastaavat FDG-PET:n hypometaboliaa.</p>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr><th>Sairaus</th><th>Tyypillinen perfuusiopiirre</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Alzheimerin tauti (AT)</td><td>Parietaalilohkojen hypoperfuusio, tyypillisesti symmetrinen; frontaalikorteksi usein säästynyt alkuvaiheessa</td></tr>
+                        <tr><td>Frontotemporaalinen dementia (FTD)</td><td>Frontaalinen + anteriorinen temporaalinen hypoperfuusio; tyvitumakkeet usein alentuneita</td></tr>
+                        <tr><td>Lewynkappaletauti (LBD)</td><td>Okkipitaalinen hypoperfuusio (erityisesti primaarinen näköaivokuori), posteriorinen cingulum säästynyt</td></tr>
+                        <tr><td>Vaskulaarinen dementia</td><td>Epäsymmetriset, epäsäännölliset kortikaalinen ja subkortikaaliset puutosalueet</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="theory-image-slot" data-slot="spet-brain-perfusion" data-tab="spet" data-default-caption="Aivoperfuusio-SPET: Alzheimerin tauti vs. frontotemporaalinen dementia vs. Lewynkappaletauti — tyypilliset hypoperfuusioalueet HMPAO-kuvauksessa."></div>
+
+            <h4>Tulehdukselliset aivosairaudet</h4>
+            <ul>
+                <li><strong>Herpesenkefaliitti</strong>: Akuutissa vaiheessa toispuolinen ohimolohkon hyperperfuusio; etenee molemminpuoliseksi. Paikallinen hyperperfuusio on viitteellinen herpekselle (ei täysin spesifinen).</li>
+                <li><strong>Muut enkefaliitit, vaskuliitti, HIV-enkefalopatia</strong>: Diffuusit tai paikallisesti lisääntyneet perfuusiomuutokset; löydös on aina verrattava MRI/TT-löydökseen.</li>
+            </ul>
+            <div class="theory-info">
+                <strong>Menetelmän asema:</strong> Aivoperfuusio-SPET on korvautunut merkittävästi FDG-PET:llä (parempi resoluutio, kvantitaatio). Aktiivisin käyttö on epilepsiakirurgian pre-op-selvittelyssä, jossa iktaalinen SPET on edelleen keskeinen.
+            </div>
+
+            <h3>3.1b DAT-SPET (dopamiinitransportterikuvaus)</h3>
+            <p>[<sup>123</sup>I]FP-CIT (joflupaani, kauppanimi DatSCAN) on tropaanijohdos, joka sitoutuu presynaptiseen dopamiinitransportteriin (DAT) tyvitumakkeissa. DAT-SPET osoittaa dopamiinitransportterin tiheyden — epäsuora mittari nigrostriataalisen dopamiiniradan eheydestä.</p>
+
+            <h4>Indikaatiot</h4>
+            <ul>
+                <li><strong>Essentiaalinen vapina vs. Parkinsonin tauti</strong> (virallinen EMA-indikaatio): Normaali DAT-SPET sulkee pois nigrostriataalisen dopamiinivaurion &mdash; oireiden syy on muu kuin Parkinson.</li>
+                <li><strong>Lewynkappaletauti (LBD) vs. Alzheimerin tauti</strong> (virallinen indikaatio): LBD:hen liittyy dopamiinivajaus, AT:ssa DAT on normaali.</li>
+                <li><strong>Epäselvä parkinsonismi</strong>: Lääkeaineparkinsonismin epäily (normaali DAT-löydös), Parkinson plus -taudin selvittely (MSA, PSP).</li>
+            </ul>
+            <div class="theory-warning">
+                <strong>Rajoitus:</strong> DAT-SPET ei erottele Parkinsonin tautia Parkinson plus -taudeista (MSA, PSP) &mdash; kaikissa nigrostriataalinen dopamiinitransportteri on vähentynyt.
+            </div>
+
+            <h4>Esivalmistelut</h4>
+            <ul>
+                <li><strong>Kilpirauhassuoja</strong>: Kaliumjodidi 120 mg suun kautta 1&ndash;4 h ennen injektiota.</li>
+                <li><strong>Tauotettavat lääkkeet</strong> (DAT:iin voimakkaasti sitoutuvat, &gt; 20 % häiriö):</li>
+            </ul>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr><th>Vaikuttava lääkeaine</th><th>Kauppanimi (esim.)</th><th>Tauko ennen kuvausta</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Bupropionihydrokloridi</td><td>Zyban, Voxtra</td><td>8 vrk</td></tr>
+                        <tr><td>Modafiniili</td><td>Modiodal, Provigil</td><td>3 vrk</td></tr>
+                        <tr><td>Metyylifenidaatti</td><td>Ritalin, Concerta, Medikinet</td><td>2 vrk</td></tr>
+                        <tr><td>Deksamfetamiini</td><td>Dexedrine</td><td>7 vrk</td></tr>
+                        <tr><td>Amfetamiini / metamfetamiini</td><td>&mdash;</td><td>7 / 3 vrk</td></tr>
+                        <tr><td>Kokaiini</td><td>&mdash;</td><td>2 vrk</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4>Tutkimuksen suoritus</h4>
+            <ul>
+                <li><strong>Annos</strong>: 185 MBq i.v. (ei ylitetä; minimiraja 110 MBq).</li>
+                <li><strong>Kuvaus</strong>: Alkaa 3 h injektion jälkeen, kestää ~40 min. Pää tuetaan huolellisesti liikeartefaktien minimoimiseksi.</li>
+                <li><strong>Rekonstruktio</strong>: SPET (+TT) — visuaalinen + semikvantitatiivinen analyysi.</li>
+            </ul>
+
+            <h4>Tulkinta</h4>
+            <ul>
+                <li><strong>Normaali</strong>: Striatumet symmetrisiä, maapähkinänmuotoiset &mdash; nucleus caudatus + putamen erottuvat selvästi.</li>
+                <li><strong>Poikkeava</strong>: Putamenin kertymä vähentynyt kontralateraaliksi oireiseen raajaan (asymmetrinen) &rarr; nigrostriataalisen radan vaurio. Semikvantitatiivinen Z-score &le; &minus;2 tukee löydöstä.</li>
+                <li><strong>Edennyt tauti</strong>: Molemmat putamenit ja nucleus caudatukset voimakkaasti vähentyneet; puoliero yleensä silti nähtävillä.</li>
+                <li><strong>Ikäkorjaus</strong>: DAT-tiheys laskee normaalissa ikääntymisessä &mdash; modernit normatiiviset aineistot sisältävät ikäkorjauksen.</li>
+            </ul>
+            <div class="theory-info">
+                <strong>Säderasitus:</strong> [<sup>123</sup>I]FP-CIT 185 MBq &rarr; efektiivinen annos 4,35 mSv &asymp; 1,4 vuoden taustasäteily.
+            </div>
+
+            <h3>3.2 Vartijaimusolmukekuvaus (sentinel node)</h3>
+            <p>Vartijaimusolmuketutkimuksella kartoitetaan ensimmäiset (lähimmät) imusolmukkeet kasvaimen lymfaattisessa leviämisreitissä. Menetelmä mahdollistaa säästävän kirurgian, kun vartijaimusolmukkeet ovat terveet.</p>
+
+            <h4>Merkkiaine ja nanopartikkelit</h4>
+            <ul>
+                <li><strong>Nanopartikkelit</strong>: <sup>99m</sup>Tc-leimatut albumiini-, rikki- tai antimonikolloidit, hiukkaskoko 50–300 nm. Kulkeutuvat soluvälitilasta lymfatiehyisiin (10–50 &micro;m endoteelijunktioiden kautta) imuvirtauksen mukana.</li>
+                <li><strong>Hiukkaskoon merkitys</strong>: Pienemmät (&lt; 100 nm) mahdollistavat lymfateiden kartoituksen; kookkaammat paikallistavat ensisijaisesti imusolmukkeet.</li>
+            </ul>
+
+            <h4>Injektio ja kuvantaminen</h4>
+            <ul>
+                <li><strong>Injektiokohdat</strong>: Peritumoraalinen, intraturmoraalinen, periareolaarinen, subkutaaninen tai -dermaalinen &mdash; käytännöt vaihtelevat. Useampi injektio on mahdollinen.</li>
+                <li><strong>Kuvantaminen</strong>: Tasokuvat useista projektioista TAI SPET-TT (parempi anatominen paikannus). Imusolmukkeiden sijainti merkataan iholle isotooppikuvien avulla ennen leikkausta &mdash; erityisen tärkeää kainalon ulkopuolisissa imusolmukkeissa.</li>
+                <li><strong>Leikkauksenaikainen gammadetektori</strong>: Säteileviä solmukkeita etsitään intraoperatiivisesti. Primaarikasvaimen merkkaus radioaktiivisella markkerilla on mahdollista, jos paikantaminen on muutoin hankalaa.</li>
+            </ul>
+
+            <h4>Löydösten kliininen merkitys</h4>
+            <ul>
+                <li><strong>Vartijasolmukkeet terveet</strong>: Leikkauksen laajuus voidaan rajoittaa &mdash; kainaloevakuaatio ei tarpeen.</li>
+                <li><strong>Vartijasolmukkeet metastasoituneet</strong>: Laajempi toimenpide (kainaloevakuaatio) indikoidaan.</li>
+                <li><strong>Parasternaalinen / intramammaarinen / vastakkaisen puolen sijainti</strong>: Taudin ennusteen kannalta tärkeä löytää &mdash; SPET-TT paljastaa epätyypilliset sijainnit.</li>
+            </ul>
+            <div class="theory-info">
+                <strong>Indikaatiot:</strong> Rintasyöpä (tärkein &mdash; kainalo ensisijainen imunestekierto-alue), melanooma, gynekologiset syövät (kohdunkaula, vulva). Imunestekierto voi olla poikkeava aiempien leikkausten tai sädehoidon vuoksi &mdash; SPET-TT on tällöin erityisen hyödyllinen.
+            </div>
 
             <h3>3.3 I-131-jälkikuvaus ja MIBG</h3>
             <ul>
@@ -922,6 +1459,7 @@
                 <li><strong>Meckelin divertikkeli</strong>: Tc-99m-perteknetaatti kertyy kohdun ulkopuoliseen mahalaukun limakalvoon Meckelin divertikkelissä. Erityisesti lapsipotilailla.</li>
                 <li><strong>GI-vuodon paikannus</strong>: Tc-99m-leimatut punasolut, dynaaminen kuvaus. Tunnistaa aktiivisen vuodon (&gt; 0,1 ml/min).</li>
                 <li><strong>Sappiteiden kuvantaminen (HIDA)</strong>: Tc-99m-mebrofeniini/disofeniini. Akuutin kolekystiitin diagnostiikka, sappiteiden avoimuus.</li>
+                <li><strong>Sappihappojen imeytymiskoe (SeHCAT)</strong>: <sup>75</sup>Se-homokoolyylikolatauriini (<sup>75</sup>Se-HCAT) kapselina suun kautta. Diagnosoi sappihappojen malabsorption (BAM, bile acid malabsorption) kroonisen vetisen ripulin syynä. Kuvaus gammakameralla: kokonaisvartalokuvaus 3 h ja 7 vrk kapselin ottamisesta. Normaali <sup>75</sup>Se-kertymä (retention) 7 vrk:n kohdalla &gt; 15 %; vaikea BAM &lt; 5 %, kohtalainen 5&ndash;10 %, lievä 10&ndash;15 %. Käytetään erotusdiagnostiikassa Crohnin taudissa, ileumresektiossa ja idiopaattisessa BAM:ssa.</li>
             </ul>
 
             <h3>3.6 Inflammaatio- ja infektiokuvantaminen</h3>
@@ -929,6 +1467,49 @@
                 <li><strong>Leukosiittikuvaus</strong>: Tc-99m- tai In-111-leimatut autologiset leukosyytit. Infektioherkkien proteesien, osteomyeliitin ja inflammatorisen suolistosairauden diagnostiikka.</li>
                 <li><strong>Anti-granulosyyttivasta-aineet</strong>: Tc-99m-sulesomab (LeukoScan). Vaihtoehto leukosyyttikuvaukselle ilman in vitro -leimausvaiheitta.</li>
                 <li><strong>Ga-67-sitraatti</strong>: Vanha inflammaatio/infektiomerkkiaine. Korvattu pääosin FDG-PET:llä ja leukosyyttikuvauksella.</li>
+            </ul>
+
+            <h3>3.7 Lisäkilpirauhasten SPET-TT</h3>
+            <p>Hyperparatyreoosi diagnosoidaan kliinisesti ja laboratoriokokein. Isotooppikuvauksen tavoitteena on paikantaa poikkeavasti toimiva lisäkilpirauhanen (adenooma) ennen mini-invasiivista kirurgiaa &mdash; usein päiväkirurgisena toimenpiteenä. Kirurginen hoito on yleensä kuratiivinen.</p>
+            <div class="theory-info">
+                Lisäkilpirauhasia on yleensä neljä ja ne sijaitsevat kilpirauhaslohkojen takapinnalla. 10 % adenoomista on ektooppisesti muualla (kilpirauhasen sisällä, välikarsinassa tai korkealla kaulalla).
+            </div>
+
+            <h4>Indikaatiot</h4>
+            <ul>
+                <li>Lisäkilpirauhasadenooman tai hyperplasian paikannus &mdash; 75&ndash;85 % primaarisesta hyperparatyreooosista johtuu yksittäisestä hyvänlaatuisesta adenoomasta.</li>
+                <li>Ennen uusintaleikkausta, jos PTH/Ca jää koholla tai tauti uusii ensimmäisen leikkauksen jälkeen.</li>
+                <li>Vasta-aihe: raskaus.</li>
+            </ul>
+
+            <h4>Kaksoisisotooppimenetelmä (<sup>123</sup>I + <sup>99m</sup>Tc-MIBI)</h4>
+            <ul>
+                <li><strong>Periaate</strong>: Ensin pieni annos <sup>123</sup>I paikantaa kilpirauhaskudoksen. 2 h myöhemmin <sup>99m</sup>Tc-sestamibi kertyy sekä kilpirauhaseen että lisäkilpirauhasiin. SPET-TT-kuvauksessa kilpirauhaskudoksen osuus vähennetään analyysivaiheessa &mdash; jäljelle jäävät kertymät edustavat adenoomia tai hyperplasiaa.</li>
+                <li><strong>Kuvaus</strong>: SPET-TT pää/kaula + mediastinum, ~30 min, selinmakuulla liikkumatta. Pään tukemiseen kiinnitetään erityistä huomiota.</li>
+                <li><strong>Säderasitus</strong>: <sup>99m</sup>Tc-MIBI 750 MBq &rarr; 6,75 mSv; <sup>123</sup>I 20 MBq &rarr; 3 mSv; TT ~1,1 mSv. Yhteensä noin 11 mSv.</li>
+            </ul>
+
+            <h4>Esivalmistelut</h4>
+            <ul>
+                <li><strong>Jodivarjoaineet</strong>: Heikentävät jodin kertymistä kilpirauhaseen &rarr; 4&ndash;6 viikon tauko ennen tutkimusta.</li>
+                <li><strong>Tyreostaatit</strong> (metimatsolioli, propyylitiourasiili): 1 viikon tauko.</li>
+                <li><strong>Tyroksiinilääkitys</strong>: Vähintään 3 viikon tauko &mdash; tai suora ohjaus <sup>11</sup>C-metioniini / <sup>18</sup>F-fluorokoliini PET-TT/MRI-tutkimukseen, mikäli taukoa ei voida pitää.</li>
+                <li><strong>Litiumlääkitys</strong>: Heikentää myös jodin kertymistä kilpirauhaseen.</li>
+            </ul>
+
+            <h4>Tulkinta</h4>
+            <ul>
+                <li>Vähennyskuvasta etsitään paikallisesti lisääntynyt kertymä, jolle löytyy anatominen vastine natiivi-TT:stä &rarr; adenooma.</li>
+                <li>Muutoksen koko mitataan ja tarkka sijainti kuvataan suhteessa kilpirauhaseen, henkitorveen ja rintalastan yläreunaan.</li>
+                <li><strong>Haasteet</strong>: Hyvin pienet adenoomat voivat jäädä näkymättä. Multippelit adenoomat ja hyperplasiamuutokset ovat haastavimpia. Hyperaktiivinen kilpirauhaskyhmy tai aktiiviset sylkirauhaset voivat peittää adenooman.</li>
+                <li><strong>Myöhäisvaiheen kuvaus</strong>: Tyroksiinilääkityksen aikana heikon jodikertymän vuoksi suositellaan myöhäisvaiheen kuvaus (2 h MIBI-injektiosta).</li>
+            </ul>
+
+            <h4>PET-TT/MRI-vaihtoehto</h4>
+            <p>Jos kaksoisisotooppimenetelmällä ei paikanneta adenoomaa:</p>
+            <ul>
+                <li><strong><sup>11</sup>C-metioniini</strong>: 6 MBq/kg, kertymäaika 20 min. Hyvä herkkyys ja spesifisyys, myös pienet adenoomat paikantuvat. Edellyttää syklotronin läheisyyttä (t&frac12; = 20 min).</li>
+                <li><strong><sup>18</sup>F-fluorokoliini</strong>: 3&ndash;4 MBq/kg, kertymäaika 60 min. Saatavilla kaikissa Suomen PET-keskuksissa &mdash; PET-TT tai PET-MRI.</li>
             </ul>
 
             <h2>4. Kuvantamisprotokollien optimointiperiaatteet</h2>
@@ -1002,6 +1583,23 @@
                     <li>IAEA Human Health Series No. 6: <em>Quality Assurance for SPECT Systems</em>, 2009.</li>
                 </ol>
             </div>
+
+            <div class="theory-quiz-section" data-tab="spet">
+                <div class="theory-quiz-start">
+                    <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-spet">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
+                    <button class="theory-quiz-btn" onclick="startTheoryQuiz('spet')">
+                        <i class="fas fa-play"></i> Aloita harjoittelu
+                    </button>
+                </div>
+                <div class="theory-quiz-active" style="display: none;"></div>
+            </div>
         </div>
     </div>
 
@@ -1014,7 +1612,29 @@
             <h2>1. Johdanto</h2>
             <p>PET-tutkimukset tarjoavat herkkää, kvantitatiivista tietoa aineenvaihdunnasta, reseptorisitoutumisesta ja geeniekspressiosta in vivo. Tärkein kliininen sovellus on [<sup>18</sup>F]FDG-PET/TT syövän diagnostiikassa ja seurannassa, mutta PET:n käyttöalue laajenee jatkuvasti uusien merkkiaineiden myötä.</p>
 
+            <h4>A-taso &mdash; perusosaamisen tutkimukset</h4>
+            <ul>
+                <li>Kokokehon [<sup>18</sup>F]FDG-PET/TT (onkologia)</li>
+                <li>Sydänperfuusio-PET (<sup>82</sup>Rb, <sup>13</sup>N-NH<sub>3</sub>, <sup>15</sup>O-vesi; kvantitatiivinen MBF)</li>
+                <li>Aivojen FDG-PET (epilepsia, muistisairaudet) ja amyloidikuvaus</li>
+                <li>Eturauhasen kuvaus: <sup>68</sup>Ga/<sup>18</sup>F-PSMA</li>
+                <li>Sädehoidon suunnittelukuvaus (PET/TT-simulaatio, GTV-määritys)</li>
+                <li>Dynaaminen kuvaus (esim. aivot, sydän &mdash; farmakokineettinen analyysi)</li>
+                <li>Tahdistettu kuvaus (EKG-tahdistus tai hengitystahdistus)</li>
+            </ul>
+
+            <h4>B-taso &mdash; täydentävän osaamisen tutkimukset (teoreettinen riittää)</h4>
+            <ul>
+                <li>Dynaaminen aivojen reseptoritutkimus (<sup>11</sup>C-raklopridi D2, <sup>18</sup>F-FDOPA, <sup>11</sup>C-WAY-100635 5-HT<sub>1A</sub> ym.)</li>
+                <li>Aivojen perfuusiokuvaus PET:llä (<sup>15</sup>O-vesi, <sup>13</sup>N-NH<sub>3</sub>)</li>
+                <li>PET/MR-fuusiokuvaus (hybridikuvantaminen, MR-pohjainen vaimennuskorjaus)</li>
+                <li>Somatostatiinireseptori-PET (<sup>68</sup>Ga-DOTATATE/DOTATOC, NET-diagnostiikka)</li>
+                <li>Muut PET-merkkiaineet (Na<sup>18</sup>F luusto, <sup>11</sup>C-metioniini aivot, <sup>18</sup>F-FES rintasyöpä)</li>
+            </ul>
+
             <h2>2. Perusosaamisen tutkimukset (A-taso)</h2>
+
+            <div class="theory-image-slot" data-slot="pet-tutkimukset-fdg-protocol" data-tab="pet-tutkimukset" data-default-caption="FDG-PET/TT-protokolla: paastoaika, uptake-vaihe, koko kehon kuvaus petipositiosta. Tyypillinen kudoskontrasti tuumorin ja normaalitkudoksen välillä."></div>
 
             <h3>2.1 [<sup>18</sup>F]FDG-PET/TT (onkologia)</h3>
             <ul>
@@ -1026,27 +1646,227 @@
             </ul>
 
             <h3>2.2 Sydänperfuusio-PET</h3>
+            <p>Sydämen PET mahdollistaa sydänlihaksen perfuusion absoluuttisen kvantitatiivisen mittauksen (ml/g/min) — ainutlaatuinen ominaisuus, jota gammakuvaus ei tarjoa. Tulkintaa häiritseviä artefakteja on merkittävästi vähemmän kuin SPET:ssä.</p>
+
+            <h4>Merkkiaineet</h4>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr><th>Merkkiaine</th><th>T&frac12;</th><th>Kuvauksen kesto</th><th>Huomioitavaa</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><sup>82</sup>Rb-kloridi</td><td>76 s</td><td>4&ndash;6 min</td><td>Generaattori &mdash; ei syklotronia tarvita. Nopeimmat protokollat.</td></tr>
+                        <tr><td><sup>13</sup>N-ammoniakki</td><td>10 min</td><td>~15 min</td><td>Edellyttää syklotronia. Parempi kuvanlaatu kuin Rb-82.</td></tr>
+                        <tr><td><sup>15</sup>O-vesi</td><td>2 min</td><td>4&ndash;6 min</td><td>Paras kvantitatiivinen gold standard; toistettavissa 10 min välein. Dynaaminen kuvaus välttämätön.</td></tr>
+                        <tr><td><sup>18</sup>F-FDG (viabiliteetti)</td><td>110 min</td><td>~30 min</td><td>Glukoosinkäyttö &rarr; elinkelpoisuuden osoitus. Kuvaus glukoosi­latauksen jälkeen.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4>Käytännön toteutus</h4>
             <ul>
-                <li><strong>Merkkiaineet</strong>: Rb-82 (generaattori, T&frac12; = 76 s), N-13-ammoniakki (T&frac12; = 10 min), F-18-flurpiridaz</li>
-                <li><strong>Periaate</strong>: Rasitus (farmakologinen: adenosiini, regadenosoni) + lepokuva. PET mahdollistaa absoluuttisen myokardiaalisen verenkierron (MBF, ml/min/g) ja koronaarisen virtausreseervin (CFR) kvantitatiivisen mittauksen.</li>
-                <li><strong>Etu SPET:iin nähden</strong>: Parempi spatiaalinen resoluutio, luontainen vaimennuskorjaus, kvantitatiivinen MBF &rarr; tunnistaa tasapainoisen 3-suoniiskemian</li>
+                <li><strong>Valmistautuminen</strong>: Sama kuin SPET:ssä (paasto, kofeiinin välttäminen 12&ndash;24 h, anti-iskeeminen lääkitys tauolle). Dynaaminen kuvaus: merkkiaine ei kerry sydänlihakseen pysyvästi &rarr; farmakologinen rasitus.</li>
+                <li><strong>EKG-tahdistus</strong>: Mahdollinen myös PET:ssä &rarr; seinämäliike, paksuneminen, LVEF.</li>
+                <li><strong>Viabiliteettitutkimus (<sup>18</sup>F-FDG)</strong>: Suun kautta annettava glukoosiannos tai asipimox ennen kuvausta &rarr; stimuloidaan sydänlihaksen glukoosinkäyttöä; diabeetikoilla glukoosi&ndash;insuliini-infuusio.</li>
+                <li><strong>Sarkoidoosi/endokardiitti-protokolla</strong>: Pitkä paasto tai hiilihydraattiköyhä dieetti ennen kuvausta &rarr; minimoidaan normaalin sydänlihaksen FDG-kertymä, jotta tulehdus erottuu selvästi.</li>
             </ul>
 
-            <h3>2.3 Aivoperfuusio- ja aivojen FDG-PET</h3>
+            <h4>Kvantitatiivinen tulkinta</h4>
             <ul>
-                <li><strong>FDG-PET (aivojen metabolia)</strong>: Standardoitu protokolla, kuvaus 30 min injektiosta. Käytetään dementian diagnostiikassa (Alzheimerin hypometabolia temporoparietaalisesti), epilepsian fokuksen paikannuksessa (interiktaalinen hypometabolia).</li>
-                <li><strong>Amyloidi-PET</strong>: [<sup>18</sup>F]Flutemetamoli, [<sup>18</sup>F]florbetapiiri, [<sup>18</sup>F]florbetabeeni. Amyloidiplakkien osoitus Alzheimerin taudissa.</li>
-                <li><strong>Tau-PET</strong>: [<sup>18</sup>F]Flortaucipir. Tau-kertymien osoitus neurodegeneratiivisissa sairauksissa.</li>
+                <li><strong>Myokardiaalinen verenvirtaus (MBF)</strong>: Normaali rasituksessa &gt; 2,3 ml/g/min (<sup>15</sup>O-vesi). Selvästi poikkeava &lt; 2,0 ml/g/min. Muilla merkkiaineilla raja-arvot hieman matalampia (1,8&ndash;2,0 ml/g/min).</li>
+                <li><strong>Koronaarinen virtausreservi (CFR)</strong>: MBF<sub>rasitus</sub> / MBF<sub>lepo</sub> &mdash; pienentynyt viittaa iskemiaan tai mikrovaskulaaritautiin.</li>
+                <li><strong>Monisuonitauti</strong>: Kvantitatiivinen analyysi parantaa tunnistusta merkittävästi &mdash; tasapainoinen 3-suoniiskemia voi jäädä SPET:ssä piiloon suhteellisen perfuusion takia.</li>
+                <li><strong>Viabiliteetti</strong>: Perfuusio&ndash;FDG-mismatch (FDG säilyy alentuneen perfuusion alueella) = iskeeminen mutta elinkelpoinen sydänlihas. Molemmat selvästi alentuneet = infarktiarpikudos. PET-viabiliteetti on eurooppalaisissa suosituksissa asetettu ensisijaiseksi menetelmäksi (FDG-PET = kultainen standardi).</li>
+            </ul>
+
+            <h4>Erityisindikaatiot</h4>
+            <ul>
+                <li><strong>Sarkoidoosi</strong>: Tyypillinen löydös = paikallinen voimakas FDG-kertymä + vastaavalla alueella perfuusiodefekti. Toimii myös taudin aktiivisuuden seurannassa.</li>
+                <li><strong>Endokardiitti / tahdistininfektio</strong>: Paikallinen FDG-kertymä läppäalueella tai annuluksessa &rarr; ESC:n suosituksissa perustutkimus läppäproteesi-infektiodiagnostiikassa.</li>
+            </ul>
+            <div class="theory-info">
+                <strong>Hybridikuvantaminen (IIa-suositus):</strong> Sydämen PET tai SPET yhdistettynä sepelvaltimoiden TT-angiografiaan. Anatominen + toiminnallinen tieto täydentävät toisiaan. ESC:n IIa-luokan suositus kohtalaisen esitodennäköisyyden potilaille.
+            </div>
+
+            <h3>2.3 Aivojen FDG-PET ja amyloidikuvaus</h3>
+
+            <h4>Aivojen FDG-PET: epilepsia</h4>
+            <p><sup>18</sup>F-FDG fosforyloituu neuroneissa ja jää kudokseen &mdash; kertymä heijastaa metabolista aktiivisuutta. PET:n etuna aivoperfuusio-SPET:iin nähden on parempi aksiaalinen resoluutio, kvantitaatio ja PET-MRI-fuusiomahdollisuus.</p>
+            <ul>
+                <li><strong>Interiktaalinen FDG-PET</strong>: Hypometabolia epilepsiafokuksen läheisyydessä (fokus + projektioalue). Käytetään, kun MRI on normaali tai osoittaa vain epäselvän rakenteellisen muutoksen.</li>
+                <li><strong>Muut epilepsiamerkkiaineet</strong>: <sup>18</sup>F-flumatseeniili (GABA<sub>A</sub>/bentsodiatsepiinireseptori); <sup>11</sup>C-&alpha;-metyyli-L-tryptofaani (tuberoosilskleroosin epilepsiafokus &mdash; luotettava, kun useita tubereita tai MRI negatiivinen).</li>
+            </ul>
+
+            <h4>Aivojen FDG-PET: muistisairaudet</h4>
+            <p>Veren glukoosipitoisuus &lt; 7 mmol/l ennen kuvausta (korkea glukoosi kilpailee GLUT-kuljettajista). Tulkinta visuaalinen; kvantitaatio vahvistaa löydöstä.</p>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr><th>Muistisairaus</th><th>Tyypillinen FDG-PET-hypometaboliapiirre</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Alzheimerin tauti (AT)</td><td>Mediaalinen + inferiorinen temporaali, posterior cingulate, precuneus, parietaalikorteksi; frontaalikorteksi usein säästynyt alkuvaiheessa</td></tr>
+                        <tr><td>Frontotemporaalinen dementia (FTD)</td><td>Frontaalilohkot bilateraalisesti + anterioriset cingulukset + anterioriset temporaalikorteksit; tyvitumakkeet</td></tr>
+                        <tr><td>Semanttinen dementia</td><td>Bilateraalinen anterotemporaalinen + infero-/laterotemporaalinen; vasen puoli painottuen</td></tr>
+                        <tr><td>Lewynkappaletauti (LBD)</td><td>Okkipitaalikorteksi (erityisesti primaarinen näköaivokuori); posteriorinen cingulate SÄÄSTYNYT (erottaa AT:sta)</td></tr>
+                        <tr><td>Vaskulaarinen dementia</td><td>Epäsymmetriset paikallinen kortikaalinen + subkortikaalinen hypometabolia</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4>Aivojen amyloidikuvaus (PET)</h4>
+            <p>Amyloidikuvaus osoittaa beeta-amyloidiplakit suoraan — Alzheimerin taudin varhaisin neuropatologinen muutos. Amyloidia voi esiintyä myös normaalin ikääntymisen yhteydessä ja muissa dementioissa.</p>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr><th>Merkkiaine</th><th>Kauppanimi</th><th>Annos</th><th>Efektiivinen annos</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><sup>11</sup>C-PIB</td><td>&mdash;</td><td>550 MBq</td><td>2,9 mSv</td></tr>
+                        <tr><td><sup>18</sup>F-flutemetamol</td><td>Vizamyl</td><td>185 MBq</td><td>6 mSv</td></tr>
+                        <tr><td><sup>18</sup>F-florbetapir</td><td>Amyvid</td><td>370 MBq</td><td>7 mSv</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <ul>
+                <li><strong>Protokolla</strong>: Merkkiaineen annetaan sitoutua 60&ndash;90 min ennen kuvausta. Kuvaus kestää 20&ndash;30 min. PET-kuvat fuusioidaan MRI:hin kortikaalisten kertymien paikannuksen helpottamiseksi.</li>
+                <li><strong>Tulkinta</strong>: Visuaalinen &mdash; normaali = kertymä vain valkeassa aineessa. Amyloidipositiivinen = kortikaaliset kertymät (frontaali, parietaali, temporaali, posterior cingulate, tyvitumakkeet). Kvantitaatio: kortikaali/pikkuaivosuhde &gt; 1,5 = poikkeava.</li>
+                <li><strong>FDG-PET vs. amyloidi-PET</strong>: Amyloidikuvaus on herkempi AT:n varhaiseen osoitukseen; FDG-PET soveltuu paremmin eri muistisairauksien erotusdiagnostiikkaan.</li>
+            </ul>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr><th>Muistisairaus</th><th>FDG-PET</th><th>Amyloidi-PET</th><th>Huomioitavaa</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>AT</td><td>++</td><td>++</td><td>Amyloidipatologia ei ole täysin spesifi AT:lle</td></tr>
+                        <tr><td>FTD</td><td>++</td><td>&minus;</td><td>AT:n frontaalivariantti voi olla amyloidi +</td></tr>
+                        <tr><td>LBD</td><td>+</td><td>&minus;/+</td><td>30&ndash;50 %:lla LBD-potilaista amyloidia</td></tr>
+                        <tr><td>PDD</td><td>+</td><td>&minus;</td><td>Noin 15 % amyloidi +</td></tr>
+                        <tr><td>CBD</td><td>++</td><td>&minus;</td><td>Amyloidi + jos AT mukana</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="theory-info">
+                AT = Alzheimerin tauti; FTD = otsalohkodementia; LBD = lewynkappaletauti; PDD = Parkinsonin taudin muistisairaus; CBD = kortikobasaalinen degeneraatio.
+            </div>
+
+            <h3>2.4 Sädehoidon suunnittelukuvaus (PET/TT-simulaatio)</h3>
+            <p>PET/TT-kuvaus on kiinteä osa useiden syöpien sädehoidon suunnittelua. PET:n metabolinen tieto täydentää TT:n anatomista kuvaa, mikä mahdollistaa kohdetilavuuden (GTV, gross tumor volume) tarkemman määrittämisen.</p>
+
+            <h4>Indikaatiot</h4>
+            <table>
+                <thead>
+                    <tr><th>Syöpätyyppi</th><th>PET-merkkiaine</th><th>Hyöty sädehoidon suunnittelussa</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Keuhkosyöpä (NSCLC)</td><td>[<sup>18</sup>F]FDG</td><td>Erottaa atelektaasi kasvaimesta; imusolmukelevinneisyys</td></tr>
+                    <tr><td>Pää- ja kaulasädehoito</td><td>[<sup>18</sup>F]FDG</td><td>Primaarikasvain + imusolmukkeet; GTV tarkennus</td></tr>
+                    <tr><td>Ruokatorvisyöpä</td><td>[<sup>18</sup>F]FDG</td><td>Kasvaimen pituus, imusolmukkeet, etäpesäkkeiden poissulku</td></tr>
+                    <tr><td>Lymfooma</td><td>[<sup>18</sup>F]FDG</td><td>Involved-field RT: aktiiviset solmukkeet vs. fibroosi</td></tr>
+                    <tr><td>Aivokasvaimet</td><td><sup>11</sup>C-metioniini / <sup>18</sup>F-FET</td><td>Kasvaimen laajuus (parempi kuin FDG aivoissa)</td></tr>
+                </tbody>
+            </table>
+
+            <h4>Protokolla ja tekninen toteutus</h4>
+            <ul>
+                <li><strong>PET-SIM</strong>: Kuvaus tehdään sädehoidon suunnitteluasennossa (kädet ylhäällä, flat-top-pöytä, fiksaatiomask tai -applikaattori). Sama asento kuin varsinaisessa sädehoitosuunnittelun TT-kuvauksessa.</li>
+                <li><strong>GTV-määritys</strong>: PET-metabolinen tilavuus (PTV<sub>PET</sub>) yhdistetään TT-anatomiaan. Tyypillisesti SUV-kynnys 40&ndash;50 % tai automaattiset segmentointialgoritmit (gradient-based, watershed).</li>
+                <li><strong>Metabolinen tuumoritilavuus (MTV)</strong>: Kuvaa kasvaimen kokonaisaktiivisuutta paremmin kuin SUV<sub>max</sub> yksin; ennusteellinen arvo.</li>
+                <li><strong>Hengitysliike</strong>: FDG-PET altis hengitysartefakteille (pallean alue, keuhkot). 4D-PET tai hengitystahdistettu PET parantaa tarkkuutta liikkuvien kasvainten kuvantamisessa.</li>
+            </ul>
+
+            <div class="theory-info">
+                <p><strong>Sairaalafyysikon rooli:</strong> Koordinoi PET/TT-simulaation ja sädehoidon suunnittelun TT:n yhteenrekisteröinnin. Varmistaa, että asento on identtinen molemmissa kuvauksissa. Arvioi hengitysartefaktien vaikutuksen GTV-määritykseen.</p>
+            </div>
+
+            <h3>2.5 Dynaaminen kuvaus ja tahdistettu kuvaus</h3>
+            <p>Dynaaminen PET-kuvaus tarkoittaa, että merkkiaineen kertyminen kuvataan jatkuvana aikasarjana injektiosta alkaen. Tahdistettu kuvaus synkronoi kuvauksen sydämen tai hengityksen rytmiin liikkeen aiheuttamien artefaktien vähentämiseksi.</p>
+
+            <h4>Dynaaminen PET</h4>
+            <ul>
+                <li><strong>Periaate</strong>: Listmode-data jaetaan lyhyisiin aikajaksoihin (framihin), tyypillisesti 6&ndash;12 &times; 10 s + pidempiä framiä myöhemmin. Jokainen frame rekonstruoidaan erikseen &rarr; time-activity curve (TAC) jokaiselle VOI:lle.</li>
+                <li><strong>Käyttö</strong>: Farmakokineettinen mallinnus (ks. osio 4): K<sub>1</sub>, k<sub>2</sub>, k<sub>3</sub>, CMRglc. Sydänperfuusio-PET (<sup>15</sup>O-vesi edellyttää dynaamista kuvausta). Aivojen reseptoritutkimukset.</li>
+                <li><strong>Edellytys</strong>: Input-funktio &mdash; joko arteriaalinen verinäytteenotto (kulta-standardi) tai image-derived input function (IDIF) suuresta suonesta.</li>
+                <li><strong>Kesto</strong>: Tutkimuksesta riippuen 30&ndash;90 min jatkuvaa kuvausta.</li>
+            </ul>
+
+            <h4>EKG-tahdistettu kuvaus</h4>
+            <ul>
+                <li><strong>Periaate</strong>: EKG:n R-piikki jakaa sydänjakson 8&ndash;16 faasiin. Jokainen faasi rekonstruoidaan erikseen &rarr; seinämäliike- ja paksunemisanalyysi.</li>
+                <li><strong>Käyttö PET:ssä</strong>: LVEF, seinämäliike sydänperfuusio-PET:ssä (<sup>82</sup>Rb, <sup>13</sup>N-NH<sub>3</sub>). Sydänlihasviabiliteetti: gated FDG-PET.</li>
+                <li><strong>Huomio</strong>: Arytmiapotilailla gating epäluotettava &mdash; tahdistamaton kuvaus voi olla parempi.</li>
+            </ul>
+
+            <h4>Hengitystahdistettu kuvaus (4D-PET)</h4>
+            <ul>
+                <li><strong>Periaate</strong>: Hengitysliike (4&ndash;25 mm pallean alueella) aiheuttaa kuvan epäterävyyttä ja SUV:n aliarviointia pienissä keuhko- ja maksaleesioissa. Hengitysmonitori (esim. RPM-järjestelmä tai spirometria) jakaa kuvauksen hengitysvaiheiden mukaan.</li>
+                <li><strong>Motion-averaged PET</strong>: Kaikki hengitysvaiheet yhdistetään &rarr; parantunut SNR mutta liiketerävyys säilyy huonona. Paras potilasdosimetriaan.</li>
+                <li><strong>Gated PET (end-expiration gate)</strong>: Vain uloshengityksen lopun fraimit käytetään &rarr; terävämpi kuva, mutta tilastollisesti kohinaisempi.</li>
+                <li><strong>Motion-corrected PET</strong>: Kaikki fraimit rekonstruoidaan ja kohdistetaan deformable image registration (DIR) -algoritmilla &rarr; paras yhdistelmä terävyydestä ja SNR:stä.</li>
             </ul>
 
             <h2>3. Täydentävän osaamisen tutkimukset (B-taso)</h2>
 
-            <h3>3.1 PSMA-PET (eturauhassyöpä)</h3>
+            <h3>3.1 Eturauhassyövän PET-kuvantaminen</h3>
+            <p>Eturauhassyövän isotooppidiagnostiikka on kehittynyt nopeasti. Luuston gammakuvaus ja TT ovat yhä käyttökelpoisia, mutta PET-merkkiaineet ovat herkempiä kaikissa indikaatioissa. Molekyylikuvantaminen sisältyy jo kansainvälisiin hoitosuosituksiin.</p>
+
+            <h4>PET-merkkiaineet</h4>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr><th>Merkkiaine</th><th>Kohde / tapahtuma</th><th>Käyttöalue</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><sup>18</sup>F-FCH / <sup>11</sup>C-CHO (koliini)</td><td>Solukalvosynteesi (koliinikinaasi)</td><td>TNM-staging, PSA-relapsi</td></tr>
+                        <tr><td><sup>18</sup>F-FACBC (flusikloviini, Axumin)</td><td>Aminohappokuljetus (L-AAT)</td><td>TNM-staging, PSA-relapsi</td></tr>
+                        <tr><td><sup>68</sup>Ga-PSMA-11 / <sup>18</sup>F-PSMA-1007</td><td>PSMA-transmembraaniproteiini</td><td>TNM-staging, PSA-relapsi (herkin)</td></tr>
+                        <tr><td>Na<sup>18</sup>F (natriumfluoridi)</td><td>Luuston metabolia (hydroksyapatiitti)</td><td>Luustometastaasit</td></tr>
+                        <tr><td><sup>18</sup>F-FDG</td><td>Glykolyysi</td><td>Vain aggressiivinen korkea-asteinen tauti</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4>Koliini (<sup>18</sup>F-FCH / <sup>11</sup>C-koliini)</h4>
             <ul>
-                <li><strong>Merkkiaineet</strong>: Ga-68-PSMA-11, F-18-PSMA-1007, F-18-DCFPyL</li>
-                <li><strong>Käyttö</strong>: Eturauhassyövän levinneisyyden arviointi, PSA-relapsin jälkeinen residiivin paikannus</li>
-                <li><strong>Etu</strong>: Merkittävästi herkempi kuin perinteinen kuvantaminen (TT, luustokuvaus) pienillä PSA-arvoilla</li>
+                <li>Kertymämekanismi: soluproliferaatio kiihdyttää lipidisynteesiä &rarr; koliini inkorporoituu fosfatidyylikoliiniksi solukalvoon.</li>
+                <li>Spesifisyys histologisesti verifioiduissa näytteissä: ~92&nbsp;%. Sensitiivisyys luustometastaasien toteamisessa: FCH 46&nbsp;% vs. luustokuvaus 16&nbsp;% (p &lt; 0,001).</li>
+                <li>Käytetyin Euroopassa (tuhansia potilaita). Meta-analyysi: 41&nbsp;%:lla potilaista hoito muuttui koliinikuvauksen perusteella.</li>
+                <li>Rajoitus: androgeenideprivaatiohoito (ADT) voi vähentää koliinikertymää.</li>
             </ul>
+
+            <h4>Flusikloviini (<sup>18</sup>F-FACBC, Axumin)</h4>
+            <ul>
+                <li>Isoleusiinianaloginen aminohappo &rarr; kertyy L-aminohappotransporttereiden kautta tuumoriin.</li>
+                <li>Etu koliiniin verrattuna: erittyy vähemmän virtsaan &rarr; virtsarakkokertymä häiritsee vähemmän urologisten elinten arviointia.</li>
+                <li>PSA-kinetiikka ennustaa kuvauslöydöstä: nopea PSA-nousu &rarr; positiivinen tulos. Vertailututkimuksissa vähintään yhtä hyvä kuin koliini.</li>
+            </ul>
+
+            <h4>PSMA-PET (<sup>68</sup>Ga-PSMA-11 ja <sup>18</sup>F-PSMA-1007)</h4>
+            <ul>
+                <li>PSMA (prostate-specific membrane antigen) on transmembraaninen entsymaattinen proteiini, jonka ilmentyminen kasvaa syövän muuttuessa aggressiivisemmaksi ja hormoniresistentiksi. Löytyy ~98&nbsp;%:sta eturauhassyöpäsoluista.</li>
+                <li><strong><sup>68</sup>Ga-PSMA-11</strong>: Generaattoripohjainen (t&frac12; = 67 min). Herkempi kuin koliini &mdash; spesifisyys säilyy. Rajoitus: lyhyt puoliintumisaika edellyttää generaattoria tai syklotroniyhteyden.</li>
+                <li><strong><sup>18</sup>F-PSMA-1007</strong>: Ei juuri erity virtsaan &rarr; selkeä kuva lantion alueesta. Normaali fysiologinen kertymä: sylki- ja kyynelrauhaset, maksa, sappirakko, perna, munuaiset. Kertymän suuruus korreloi Gleason-luokkaan. Saatavilla laajemmin PET-keskuksista.</li>
+                <li>Erityisen herkkiä hyvin pienillä PSA-arvoilla (PSA-relapsin havaitseminen) &mdash; parempi kuin koliini. Soveltuu myös primaaridiagnostiikkaan ja imusolmukekartoitukseen.</li>
+            </ul>
+
+            <h4>Na<sup>18</sup>F-PET (luuston PET)</h4>
+            <ul>
+                <li>Kertyy luun hydroksyapatiittiin metastaasien ympäristön kiihtyneen osteoblastisen metabolian vuoksi.</li>
+                <li>Selvästi konventionaalista luuston gammakuvausta herkempi. Osoittaa kortikaalisia luumuutoksia herkemmin kuin FCH. FCH puolestaan on herkempi luuytimen muutosten toteamisessa.</li>
+                <li>Indikaatiot: luustometastaasien kartoitus (esim. Ra-223-hoidon suunnittelu), luustohoitojen vasteen arviointi (kvantitatiivinen).</li>
+                <li><strong>Rajoitus</strong>: Ei näytä tautia eturauhasessa, imusolmukkeissa, luuytimessä tai viskeraalisissa elimissä.</li>
+            </ul>
+
+            <h4>Kliiniset käyttöaiheet</h4>
+            <ul>
+                <li><strong>Levinneisyysdiagnostiikka (staging)</strong>: PSMA-PET tai FCH-PET täydentää eturauhasen magneettitutkimusta. Gleason &ge; 7 tai nopea PSA-nousu &rarr; PSMA- tai FCH-PET ensisijaisesti.</li>
+                <li><strong>PSA-relapsi</strong>: PSMA-PET tunnistaa uusiutuman jo hyvin pienillä PSA-arvoilla. FCH-PET vaihtoehtona. Na<sup>18</sup>F jos luustometastaasi on erityinen kliininen kysymys.</li>
+                <li><strong>Hoitovasteen seuranta</strong>: Sama merkkiaine kuin lähtötilanteessa. Kvantitatiivinen arvio (SUV<sub>max</sub>, TLG). Luuhoitojen vastetta arvioidaan kvantitatiivisesti, koska visuaalinen arvio on epäluotettava laajassa luustotaudissa.</li>
+            </ul>
+            <div class="theory-info">
+                <strong>Rajoitukset:</strong> Kattavia kontrolloituja monikeskustutkimuksia ei kaikista merkkiaineista vielä ole. Mikään menetelmä ei sovellu seulontaan &mdash; kuvantamiseen tarvitaan kliininen epäily ja usein histologinen varmennus ensin. <sup>18</sup>F-PSMA-merkkiaineiden odotetaan laajentuvan rutiinikäyttöön lähiaikoina.
+            </div>
 
             <h3>3.2 Somatostatiinireseptori-PET</h3>
             <ul>
@@ -1067,6 +1887,60 @@
                     <tr><td>F-18-FES</td><td>Estrogeenireseptori</td><td>Rintasy&ouml;v&auml;n reseptoristatuksen arviointi</td></tr>
                 </tbody>
             </table>
+
+            <h3>3.4 Dynaaminen aivojen reseptoritutkimus</h3>
+            <p>Aivojen reseptori-PET mahdollistaa spesifisten neurotransmitteri- ja reseptorijärjestelmien in vivo -tutkimisen. Tutkimukset ovat pääosin tieteellisiä, mutta osalla on myös kliininen käyttöaihe.</p>
+
+            <h4>Tärkeimmät merkkiaineet</h4>
+            <table>
+                <thead>
+                    <tr><th>Merkkiaine</th><th>Kohde</th><th>Kliininen / tutkimuskäyttö</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>[<sup>11</sup>C]raklopridi / [<sup>18</sup>F]fallypride</td><td>Dopamini D2/D3-reseptori</td><td>Skitsofrenia, Parkinsonin tauti, antipsykoottien reseptoriokupaatio</td></tr>
+                    <tr><td>[<sup>18</sup>F]FDOPA</td><td>Dopamiinisynteesi (AADC-entsyymi)</td><td>Parkinsonismin erotusdiagnostiikka, neuroendokriiniset kasvaimet</td></tr>
+                    <tr><td>[<sup>11</sup>C]WAY-100635</td><td>Serotoniini 5-HT<sub>1A</sub>-reseptori</td><td>Depressio, ahdistuneisuushäiriöt (tutkimus)</td></tr>
+                    <tr><td>[<sup>11</sup>C]flumatseeniili / [<sup>18</sup>F]flumatseeniili</td><td>GABA<sub>A</sub>/bentsodiatsepiinireseptori</td><td>Epilepsia (fokuksen paikannus), ahdistuneisuus (tutkimus)</td></tr>
+                    <tr><td>[<sup>11</sup>C]PIB / amyloidimerkkiaineet</td><td>Beeta-amyloidi</td><td>Alzheimerin tauti (ks. osio 2.3)</td></tr>
+                    <tr><td>[<sup>18</sup>F]MK-6240 / [<sup>18</sup>F]flortaukipiiri</td><td>Tau-proteiini</td><td>Alzheimerin tauti tau-patologian arviointiin</td></tr>
+                </tbody>
+            </table>
+
+            <h4>Tutkimuksen toteutus</h4>
+            <ul>
+                <li><strong>Dynaaminen kuvaus</strong>: Tyypillisesti 60&ndash;90 min jatkuva kuvaus injektiosta alkaen. Lyhyet fraimit (10&ndash;30 s) alussa, pidemmät myöhemmin.</li>
+                <li><strong>Input-funktio</strong>: Arteriaalinen verinäytteenotto tai referenssikudosmalli (esim. pikkuaivot D2-tutkimuksessa). SRTM tai Logan-analyysi sitoutumispotentiaalin (BP<sub>ND</sub>) laskemiseksi.</li>
+                <li><strong>Sitoutumispotentiaali (BP<sub>ND</sub>)</strong>: Kvantitatiivinen mitta reseptoritiheyden ja -affiniteetin yhdistelmästä. Vertailu puoliero tai normaalidataan.</li>
+                <li><strong>Esivalmistelut</strong>: Reseptorin kohdennukseen vaikuttavat lääkkeet tauotetaan (esim. antipsykootit D2-kuvantamisessa, SSRI 5-HT-tutkimuksissa).</li>
+            </ul>
+
+            <h3>3.5 PET/MR-fuusiokuvaus</h3>
+            <p>PET/MR-hybridijärjestelmät yhdistävät PET:n molekyylikuvantamisen MRI:n erinomaiseen pehmytkontrasti-erottelukykyyn. Integroitu PET/MR (samanaikainen kuvaus) on parempi kuin jälkikäteen tehty fuusio, koska potilas ei liiku kuvauksesta toiseen.</p>
+
+            <h4>Tekniset erityispiirteet</h4>
+            <ul>
+                <li><strong>MR-pohjainen vaimennuskorjaus (MRAC)</strong>: PET/MR:ssä ei ole TT:tä vaimennuskorjauksen pohjaksi. MRAC käyttää MRI-kuvia (Dixon-sekvenssit, VIBE) kudosluokitteluun: ilma, keuhkot, rasva, pehmytkudos. Luuston kuvantaminen on haaste (luulla matala MR-signaali).</li>
+                <li><strong>Metalliset implantit</strong>: Aiheuttavat MR-artefakteja, jotka heijastuvat vaimennuskorjaukseen ja PET-kvantitaatioon.</li>
+                <li><strong>Samanaikainen kuvaus</strong>: PET ja MRI samaan aikaan &rarr; täydellinen spatiaalinen koregistraatio ilman liikeartefaktia. Mahdollistaa MR-pohjaisen liikkorjauksen PET-kuviin.</li>
+            </ul>
+
+            <h4>Kliiniset edut ja sovellukset</h4>
+            <table>
+                <thead>
+                    <tr><th>Sovellusalue</th><th>Etu PET/TT:hen nähden</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Aivot (dementia, epilepsia)</td><td>Parempi anatominen detaili, ei lisäsäteilyä, MR-spektroskopia + PET</td></tr>
+                    <tr><td>Pään ja kaulan syövät</td><td>Parempi pehmytkudoskontrasti kasvaimen rajojen määrittelyssä</td></tr>
+                    <tr><td>Eturauhassyöpä</td><td>MRI multiparametrinen + PSMA-PET yhdessä tutkimuksessa</td></tr>
+                    <tr><td>Maksa</td><td>Dynaaminen MRI + FDG-PET perfuusioon ja metaboliaan</td></tr>
+                    <tr><td>Lastenkuvantaminen</td><td>Merkittävästi pienempi säteilyannos kuin PET/TT</td></tr>
+                </tbody>
+            </table>
+
+            <div class="theory-info">
+                <p><strong>Rajoitukset:</strong> PET/MR on kalliimpi ja hitaampi kuin PET/TT. MRAC:iin liittyy systemaattisia virheitä erityisesti keuhkojen ja luuston alueilla. Vasta-aiheet (sydämentahdistin, klaustrofobia) rajoittavat käyttöä. Saatavuus toistaiseksi vain yliopistosairaaloissa.</p>
+            </div>
 
             <h2>4. Farmakokineettinen mallinnus ja kvantitaatio</h2>
 
@@ -1092,6 +1966,7 @@
             </ul>
 
             <h3>4.3 SUV ja sen rajoitukset</h3>
+            <div class="theory-image-slot" data-slot="pet-tutkimukset-suv" data-tab="pet-tutkimukset" data-default-caption="SUV-kvantitaatio: kaava ja normalisointitekijät (paino, kehon pinta-ala, vähärasvainen massa). SUVmax vs. SULpeak -vertailu kliinisessä käytössä."></div>
             <p>SUV on laajimmin käytetty PET:n semikvantitiivinen mitta, mutta siihen liittyy useita virhelähteitä:</p>
             <ul>
                 <li><strong>Uptake-aika</strong>: FDG-kertymä jatkaa kasvamistaan &gt; 60 min. Vakioimaton uptake-aika vaikeuttaa seurantatutkimusten vertailua.</li>
@@ -1104,6 +1979,7 @@
             <div class="theory-info">
                 <p><strong>EARL-akkreditointi:</strong> EANM Research Ltd (EARL) tarjoaa PET/TT-kameroiden akkreditointiohjelman, joka varmistaa SUV-kvantitaation yhdenmukaisuuden eri keskusten ja laitteiden välillä. Tämä on erityisen tärkeää monikeskustutkimuksissa ja hoitovasteen seurannassa.</p>
             </div>
+
 
             <h2>5. Raakadatan rakenne ja talletusmenetelmät</h2>
             <ul>
@@ -1143,6 +2019,8 @@
             </ul>
             <p>Pisteet 1&ndash;3 katsotaan tyypillisesti hoitovasteeksi (CMR).</p>
 
+            <div class="theory-image-slot" data-slot="pet-tutkimukset-percist" data-tab="pet-tutkimukset" data-default-caption="Hoitovasteen arviointi PET:llä: PERCIST-kriteerit (kiinteät kasvaimet) ja Deauville-pisteet (lymfoomat) — CMR, PMR, SMD ja PMD esimerkkikuvilla."></div>
+
             <div class="theory-references">
                 <h3>Viitekirjallisuus</h3>
                 <ol>
@@ -1155,6 +2033,23 @@
                     <li>Badawi RD et al. <em>First Human Imaging Studies with the EXPLORER Total-Body PET Scanner</em>, J Nucl Med, 2019.</li>
                 </ol>
             </div>
+
+            <div class="theory-quiz-section" data-tab="pet-tutkimukset">
+                <div class="theory-quiz-start">
+                    <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-pet-tutkimukset">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
+                    <button class="theory-quiz-btn" onclick="startTheoryQuiz('pet-tutkimukset')">
+                        <i class="fas fa-play"></i> Aloita harjoittelu
+                    </button>
+                </div>
+                <div class="theory-quiz-active" style="display: none;"></div>
+            </div>
         </div>
     </div>
 
@@ -1166,6 +2061,45 @@
 
             <h2>1. Johdanto</h2>
             <p>Radionuklidihoidot (radioligand therapy, RLT; molecular radiotherapy, MRT) käyttävät radioaktiivisia aineita kasvainten tai toimintahäiriöisten kudosten hoitoon. Radionuklidi kohdentuu kasvaimeen joko fysiologisen kertymän (jodihoito) tai spesifisen ligandi-reseptori-sitoutumisen (PSMA, somatostatiinireseptori) kautta. Sairaalafyysikko vastaa annos&shy;dosimetriasta, säteilysuojelusta ja laadunvarmistuksesta.</p>
+
+            <h4>A-taso &mdash; perusosaaminen</h4>
+            <ul>
+                <li>Säteilylajit ja säteilybiologian perusteet (&beta;, &alpha;, LET) isotooppihoitojen näkökulmasta</li>
+                <li>Tavallisimmat hoidot ja niihin lähettämisen syyt (ks. taulukko alla)</li>
+                <li>Jodihoidot: kilpirauhasen liikatoiminta (<sup>131</sup>I, 400&ndash;600 MBq) ja kilpirauhassyöpä (1&ndash;8 GBq)</li>
+                <li>Alfahoitojen erityispiirteet: Ra-223 annostelu (55 kBq/kg), kontaminaatioriskit, alfa-kontaminaation mittaus</li>
+                <li>Säteilysuojeluperiaatteet: potilas, henkilökunta ja väestö</li>
+                <li>Säteilysuojelutoimien ohjaus: hoidon antaminen, eristys, kotiutus (annosnopeusmittaus + ohjeet)</li>
+            </ul>
+
+            <h4>B-taso &mdash; täydentävä osaaminen</h4>
+            <ul>
+                <li>Kontaminaatio- ja siivousprotokollat, exitus radionuklidihoidon jälkeen</li>
+                <li>Annosdosimetrian formalismi (MIRD/OLINDA): S-arvo, kumulatiivinen aktiivisuus</li>
+                <li>Elinkohtaisen annoksen laskemisen periaatteet (munuaiset, luuydin, kasvain)</li>
+                <li>PRRT: <sup>177</sup>Lu-DOTATATE (7 400 MBq &times; 4, SSTR-PET edellytys, WHO 1&ndash;2)</li>
+                <li>PSMA-hoito: <sup>177</sup>Lu-PSMA-617, kylmäpakkaukset sylkirauhasille, PSA-vaste 52&nbsp;%</li>
+                <li>Radioembolisaatio SIRT (<sup>90</sup>Y-mikrosfäärit, MAA-etukuvaus)</li>
+                <li>Uudemmat hoitomuodot: Ac-225-PSMA, FAP-inhibiittorit, teranostiikka</li>
+            </ul>
+
+            <h4>Tavallisimmat radionuklidihoidot ja lähettämisen syyt</h4>
+            <table>
+                <thead>
+                    <tr><th>Hoito</th><th>Nuklidi</th><th>Indikaatio / lähettämisen syy</th><th>Lähettävä erikoisala</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Kilpirauhasen liikatoiminnan radiojodihoito</td><td><sup>131</sup>I</td><td>Graves, toksinen adenooma, monikyhmystruuma &mdash; tyreostaattihoito ei sovi tai epäonnistunut</td><td>Endokrinologia, kirurgia</td></tr>
+                    <tr><td>Kilpirauhassyövän radiojodihoito</td><td><sup>131</sup>I</td><td>Erilaistunut kilpirauhassyöpä tyroidektomian jälkeen; ablaatio ja etäpesäkkeiden hoito</td><td>Onkologia, kirurgia</td></tr>
+                    <tr><td>PRRT (<sup>177</sup>Lu-DOTATATE)</td><td><sup>177</sup>Lu</td><td>Neuroendokriininen kasvain (NET) WHO 1&ndash;2, SSTR-PET positiivinen, etenevä tauti</td><td>Onkologia, gastroenterologia</td></tr>
+                    <tr><td>PSMA-hoito (<sup>177</sup>Lu-PSMA-617)</td><td><sup>177</sup>Lu</td><td>Metastaattinen kastroresistentti eturauhassyöpä, PSMA-PET positiivinen</td><td>Urologinen onkologia</td></tr>
+                    <tr><td>Ra-223 (Xofigo)</td><td><sup>223</sup>Ra</td><td>Eturauhassyöpä + osteoblastiset luustometastaasit, ei viskeraalista tautia</td><td>Onkologia</td></tr>
+                    <tr><td>Radioembolisaatio SIRT</td><td><sup>90</sup>Y</td><td>Maksaan rajautunut etäpesäketauti (kolorektaali, NET, HCC), kirurgiaan soveltumaton</td><td>Onkologia, kirurgia</td></tr>
+                    <tr><td>Lymfooman immunosädehoito</td><td><sup>90</sup>Y</td><td>Uusiutuva follikulaarinen CD20+ non-Hodgkin-lymfooma</td><td>Hematologia</td></tr>
+                    <tr><td>MIBG-hoito</td><td><sup>131</sup>I</td><td>Feokromosytooma / paragangliooma, MIBG-kuvaus positiivinen</td><td>Onkologia, endokrinologia</td></tr>
+                    <tr><td>Radiosynovektomia</td><td><sup>90</sup>Y / <sup>186</sup>Re / <sup>169</sup>Er</td><td>Hoitoresistentti synoviitti (nivelreuma, hemofilia-artropatia)</td><td>Reumatologia, ortopedia</td></tr>
+                </tbody>
+            </table>
 
             <h2>2. Säteilylajit ja säteilybiologian perusteet</h2>
 
@@ -1196,34 +2130,136 @@
 
             <h2>3. Jodihoidot</h2>
 
-            <h3>3.1 Kilpirauhasen liikatoiminnan hoito</h3>
+            <h3>3.1 Kilpirauhasen liikatoiminnan (tyreotoksikoosin) radiojodihoito</h3>
+            <div class="theory-image-slot" data-slot="radionuklidihoidot-overview" data-tab="radionuklidihoidot" data-default-caption="Radionuklidihoidon periaate: nuklidi-ligandi-konjugaatti, reseptori-sitoutuminen kasvaimessa ja sädeannoksen kohdentuminen."></div>
+            <p><sup>131</sup>I-natriumjodidi kertyy kilpirauhaseen NIS-symportteriproteiinin (natrium-jodi-symporteri) kautta &mdash; sama mekanismi kuin normaalissa jodin imeytymisessä. TSH stimuloi NIS-ilmentymistä kilpirauhassolujen kalvoilla. Normaalisti 15&ndash;45&nbsp;% annetusta jodista on vuorokauden kuluttua kilpirauhasessa; liikatoiminnassa osuus on suurempi.</p>
+
+            <h4>Aktiivisuus ja annostelu</h4>
             <ul>
-                <li><strong>Nuklidi</strong>: I-131 (natriumjodidi, kapseli tai liuos)</li>
-                <li><strong>Aktiivisuus</strong>: 200&ndash;600 MBq (riippuen indikaatiosta: Graves, toksinen adenooma, monikyhmystruuma)</li>
-                <li><strong>Periaate</strong>: Joditrappaus (NIS, natrium-jodidi-symporttien) kilpirauhasessa &rarr; paikallinen beetasäteilyannos tuhoaa kilpirauhaskudosta</li>
-                <li><strong>Säteilysuojelu</strong>: Aktiviteetti &lt; 800 MBq tyypillisesti avohoitona. Kotiutusohjeet: etäisyys (ei samaa sänkyä 1&ndash;2 vk), erikseen WC-huuhtelu, lasten ja raskaana olevien välttäminen.</li>
+                <li><strong>Standardiannos</strong>: 400&ndash;600 MBq (vaihtelua jopa 200&ndash;800 MBq riippuen indikaatiosta: Graves, toksinen adenooma, monikyhmystruuma). Ei edellytä etukäteiskuvantamista tai testiannosta.</li>
+                <li><strong>Lääkehoito ennen radiojodia</strong>: Pyritään eutyreoosiin tyreostaateilla. Tyreostaatti tauotetaan 3&ndash;7 vrk ennen hoitoa; voidaan jatkaa 1 viikko hoidon jälkeen.</li>
+                <li><strong>Vasta-aiheet</strong>: Raskaus ja imetys (ehdottomat). Aktiivinen silmäoireyhtymä (suhteellinen &mdash; prednisolonisuoja harkittava).</li>
             </ul>
 
-            <h3>3.2 Kilpirauhassyövän radiojodhoito</h3>
+            <h4>Säteilysuojelu ja kotiuttaminen</h4>
             <ul>
-                <li><strong>Aktiivisuus</strong>: 1100&ndash;7400 MBq (riippuen riskitasosta). Korkeat aktiivisuudet edellyttävät sairaalahoitoa eristyshuoneessa.</li>
-                <li><strong>TSH-stimulaatio</strong>: Tyroksiinin tauko (4 viikkoa) tai rhTSH (Thyrogen) &rarr; TSH-stimulaatio parantaa jodin kertymistä jäännöskudokseen ja metastaaseihin</li>
-                <li><strong>Jälkikuvaus</strong>: I-131 koko kehon kuvaus 3&ndash;7 pv hoidon jälkeen HEGP-kollimaattorilla tai SPET/TT:llä</li>
-                <li><strong>Dosimetria</strong>: Blood-based dosimetry (Benua-menetelmä): rajaa vereen absorboituneen annoksen &lt; 2 Gy. Lesion dosimetry mahdollista SPET/TT-pohjaisesti.</li>
+                <li><strong>Kotiutusraja Suomessa</strong>: &lt; 15 µSv/h metrin etäisyydeltä mitattuna. Raja alittuu tyypillisesti 1&ndash;4 vrk hoidon jälkeen aktiivisuudesta riippuen; TSH-stimulaatiolla kotiutuminen nopeutuu.</li>
+                <li><strong>Kotiutusohjeet</strong>: Ei samaa sänkyä 1&ndash;2 viikkoa. Erillinen WC-huuhtelu. Vältä pitkää lähikontaktia lapsiin ja raskaana oleviin 2&ndash;3 viikkoa.</li>
             </ul>
+
+            <h3>3.2 Kilpirauhassyövän radiojodihoito</h3>
+            <div class="theory-image-slot" data-slot="radionuklidihoidot-rai-therapy" data-tab="radionuklidihoidot" data-default-caption="I-131-radiojoditerapia: NIS-kerääntyminen kilpirauhaseen, aktiivisuuden annostaulukon yhteys riskikertoimeeseen ja säteilysuojelun annosnopeusmittauspisteet."></div>
+            <p>Yli 70&nbsp;% kilpirauhassyövistä on erilaistuneita (follikulaarinen, papillaarinen), jotka keräävät radiojodia NIS-symportterin kautta. Radiojodihoito on oleellinen osa kilpirauhassyövän hoitoa leikkauksenjälkeiseen ablaatioon ja etäpesäkkeiden hoitoon.</p>
+
+            <h4>Aktiivisuudet riskitason mukaan</h4>
+            <table>
+                <thead>
+                    <tr><th>Tautiluokka</th><th>Aktiivisuus (<sup>131</sup>I)</th><th>Huomio</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Matalan riskin ablaatio</td><td>1 GBq</td><td>Hieman enemmän relapseja kuin suuremmilla annoksilla</td></tr>
+                    <tr><td>Ablaatio (tavallinen)</td><td>3&ndash;4 GBq</td><td>Tavallisin valinta</td></tr>
+                    <tr><td>Paikallislevinneisyys</td><td>5&ndash;6 GBq</td><td>Eristyshuone vaaditaan</td></tr>
+                    <tr><td>Etälevinneisyys</td><td>7&ndash;8 GBq</td><td>Eristyshuone vaaditaan</td></tr>
+                </tbody>
+            </table>
+
+            <h4>TSH-stimulaatio ja jälkikuvaus</h4>
+            <ul>
+                <li><strong>TSH-stimulaatio</strong>: Tyroksiinin tauko (4 viikkoa) tai rhTSH (Thyrogen®) &rarr; parantaa jodin kertymistä jäännöskudokseen ja metastaaseihin ilman pitkää hypothyreoosia.</li>
+                <li><strong>Jälkikuvaus</strong>: Gammakamerakuvaus yleensä 2&ndash;5 vrk hoidosta &mdash; selvittää jäljellä olevan kilpirauhaskudoksen, mahdolliset paikallisresidiivit ja etäpesäkkeet. Suuremmilla annoksilla löydetään enemmän pesäkkeitä kuin diagnostisella annoksella.</li>
+                <li><strong>Seurantadiagnostiikka</strong>: Tuumorimarkkeri tyreoglobuliini (Tg) ja kilpirauhasvasta-aineet sekä diagnostiset radiojodikuvaukset (<sup>123</sup>I tai pienellä <sup>131</sup>I-annoksella).</li>
+            </ul>
+
+            <h4>Radiojodinegatiivisuus</h4>
+            <ul>
+                <li>Kilpirauhassyöpä voi seurannassa muuttua radiojodinegatiiviseksi (dediferentiaatio) &rarr; kuvantamisdiagnostiikka FDG-PET:llä.</li>
+                <li><strong>Selumetinibi</strong> (MEK-inhibiittori) voi palauttaa radiojodinegatiivisen taudin radiojodipositiiviseksi &rarr; mahdollistaa uuden radiojodihoitojakson.</li>
+            </ul>
+
+            <div class="theory-info">
+                <p><strong>Kotiutusraja</strong>: &lt; 15 µSv/h @ 1 m. Korkeat aktiivisuudet (≥ 3 GBq) edellyttävät aina sairaalahoitoa eristyshuoneessa. Hoito on hyvin siedetty; merkittävimmät sivuvaikutukset liittyvät sylkirauhasiin (kuiva suu, kaulakipu).</p>
+            </div>
+
 
             <h2>4. Peptidireseptoriradionuklidihoito (PRRT)</h2>
+            <p><sup>177</sup>Lu-DOTATATE (Lutathera®) on neuroendokriinisten kasvainten (NET) standardihoito, joka perustuu somatostatiinireseptoreihin (SSTR 2 ja SSTR 5). Hoito on osa kansainvälisiä hoitosuosituksia (ENETS/NCCN). Noin 7 400 Bq/MBq β&sup1;&sup7;&sup7;-säteilyä, lisäksi 208 keV &gamma;-fotoneja kuvantamista varten.</p>
+
+            <h3>4.1 Potilasvalinta ja edellytykset</h3>
             <ul>
-                <li><strong>Lu-177-DOTATATE (Lutathera)</strong>: Neuroendokriinisten kasvainten hoito. 4 sykliä, 7400 MBq/sykli, 8 viikon välein.</li>
-                <li><strong>Säteilysuojelu</strong>: Potilas erittää aktiivisuutta virtsaan ensimmäiset 24 h. Eristyshuone tarvittaessa.</li>
-                <li><strong>Dosimetria</strong>: Munuaisannos kriittinen rajoite (tyypillisesti kumulatiivinen BED &lt; 28&ndash;40 Gy). Luuytimen annos seuraava rajoite. SPET/TT-pohjainen dosimetria mahdollista.</li>
+                <li><strong>SSTR-PET edellytys</strong>: <sup>68</sup>Ga-oktreotaatti-PET-kuvaus osoittaa maksan fysiologista kertymää suuremman SSTR-ilmentymän pesäkkeissä.</li>
+                <li><strong>WHO-luokka</strong>: 1&ndash;2, proliferaatioindeksi Ki-67 &lt; 20&nbsp;%. Korkean Ki-67:n kasvaimet vastaavat huonommin.</li>
+                <li><strong>Vasta-aiheet</strong>: Raskaus, vaikea munuaisten tai luuytimen vajaatoiminta.</li>
             </ul>
 
-            <h2>5. PSMA-radionuklidihoito</h2>
+            <h3>4.2 Hoitoprotokolla</h3>
             <ul>
-                <li><strong>Lu-177-PSMA-617 (Pluvicto)</strong>: Metastaattisen kastroresistentin eturauhassyövän hoito. 6 sykliä, 7400 MBq/sykli.</li>
-                <li><strong>Edellytys</strong>: PSMA-PET osoittaa riittävän PSMA-ilmentymisen kasvaimissa</li>
-                <li><strong>Dosimetria</strong>: Sylkirauhaset, munuaiset ja luuydin ovat kriittisiä elimiä</li>
+                <li><strong>Annos</strong>: 7 400 MBq/sykli, tavallisesti 4 sykliä 8 viikon välein (Pohjoismaiset suositukset). Käytännössä syklien määrä vaihtelee vasteen ja kriittisten elinten kumulatiivisen annoksen mukaan.</li>
+                <li><strong>Vasteen seuranta</strong>: <sup>68</sup>Ga-SSTR-PET ennen hoitoa ja hoitojaksojen välissä. Gammakuvauksella seurataan <sup>177</sup>Lu-kertymistä syöpäpesäkkeisiin.</li>
+                <li><strong>Kliiniset tulokset</strong>: NETTER-1-tutkimuksessa merkittävä elinaikaetu aiempaan käypään hoitoon nähden. Oireet lievittyivät ja elämänlaatu parani.</li>
+            </ul>
+
+            <h3>4.3 MIBG-hoito (feokromosytooma ja paragangliooma)</h3>
+            <ul>
+                <li><strong>Merkkiaine</strong>: <sup>131</sup>I-MIBG (meta-jodibentsyyliguanidiini) &mdash; noradrenaliinianalogi, kertyy katekolamiineja tuottaviin kasvaimiin.</li>
+                <li><strong>Edellytys</strong>: Positiivinen MIBG-gammakuvaus pienellä (<sup>123</sup>I tai <sup>131</sup>I) tutkimusannoksella ennen hoitoa.</li>
+                <li><strong>Kilpirauhassuoja</strong>: Kaliumperkloraatti + kaliumjodidi ennen ja hoidon jälkeen &mdash; estää <sup>131</sup>I:n vapaan jodin kertymistä kilpirauhaseen.</li>
+                <li><strong>Vasteet</strong>: 30&ndash;60&nbsp;%:lla potilaista biokemiallinen vaste; oireet lievittyvät 70&ndash;90&nbsp;%:lla.</li>
+            </ul>
+
+            <h3>4.4 Kriittiset elimet ja dosimetria</h3>
+            <ul>
+                <li><strong>Munuaiset</strong>: Tärkein kriittinen elin. Kumulatiivinen BED-annos tyypillisesti &lt; 28&ndash;40 Gy. SPET/TT-pohjainen dosimetria suositeltava.</li>
+                <li><strong>Luuydin</strong>: Seuraava rajoite; veriarvojen seuranta jokaisen syklin yhteydessä. Voimakas luuydinlama harvinaista.</li>
+                <li><strong>Säteilysuojelu</strong>: Potilas erittää aktiivisuutta virtsaan ensimmäiset 24&nbsp;h. Eristyshuone tarvittaessa.</li>
+            </ul>
+
+            <h2>5. PSMA-radionuklidihoito (PRLT)</h2>
+            <p><sup>177</sup>Lu-PSMA-617 (Pluvicto®) kohdentuu transmembraaniproteiiniin PSMA (prostate-specific membrane antigen), jota ilmentyy noin 98&nbsp;%:ssa eturauhassyöpäsoluista. Pienmolekyyliset PSMA-inhibiittorit kulkeutuvat solun sisälle (internalisaatio), jolloin säteilyannos kohdistuu tumaansa.</p>
+
+            <h3>5.1 Hoitoprotokolla ja potilasvalinta</h3>
+            <ul>
+                <li><strong>Edellytys</strong>: <sup>68</sup>Ga-PSMA-11-PET-TT osoittaa riittävän PSMA-ilmentymisen kasvaimissa.</li>
+                <li><strong>Annos</strong>: 7 400 MBq/sykli. Vähintään 4 sykliä; käytännössä 2&ndash;7 potilaan taudin mukaan.</li>
+                <li><strong>Vasteen seuranta</strong>: S-PSA + <sup>68</sup>Ga-PSMA-PET kunkin syklin jälkeen. Lupaavimmilla potilailla PSA laskee selvästi jo ensimmäisten syklien aikana.</li>
+            </ul>
+
+            <h3>5.2 Kliiniset tulokset</h3>
+            <ul>
+                <li><strong>PSA-vaste</strong>: &gt; 50&nbsp;%:n PSA-lasku todettiin 52&nbsp;%:lla potilaista (lähtö-PSA keskimäärin &gt; 300 µg/l).</li>
+                <li><strong>Elinaikatulokset</strong>: VISION-tutkimuksessa (2022) <sup>177</sup>Lu-PSMA-617 paransi kokonaiselossaoloaikaa ja elossaoloaikaa ilman taudin etenemistä merkittävästi verrattuna parhaaseen tukihoitoon.</li>
+            </ul>
+
+            <h3>5.3 Kriittiset elimet ja sivuvaikutukset</h3>
+            <ul>
+                <li><strong>Sylki- ja kyynelrauhaset</strong>: Kriittisimmät elimet &mdash; PSMA-lääke kertyy niihin voimakkaasti. Kertymää vähennetään <strong>kylmäpakkauksilla</strong> sylkirauhasten päälle hoidon yhteydessä. Tärkein haittavaikutus: syljenerityksen väheneminen (suun kuivuminen).</li>
+                <li><strong>Munuaiset ja luuydin</strong>: Muut kriittiset elimet; veriarvojen ja munuaistoiminnan seuranta jokaisen syklin yhteydessä.</li>
+                <li><strong>Trombosytopenia</strong>: Pienmolekyylihoitoina (PSMA-617) harvinainen &lt; 3&nbsp;% (vs. 55&nbsp;% vasta-ainehoidoissa, esim. J591).</li>
+            </ul>
+
+            <div class="theory-info">
+                <p><strong>Säteilysuojelu</strong>: Lääke erittyy virtsaan &mdash; WC-hygienia 48&nbsp;h, vältä pitkää lähikontaktia lapsiin ja raskaana oleviin 3&ndash;7 vrk hoidon jälkeen.</p>
+            </div>
+
+            <h2>5b. Lymfooman immunosädehoito (radioimmunoterapia)</h2>
+            <p>Lymfoomat ovat sädeherkkiä kasvaimia, ja lymfoomasolujen pinnalla on spesifisiä antigeenejä, joihin radioaktiiviset vasta-aineet voidaan kohdistaa.</p>
+
+            <h3>5b.1 Yttrium-90-ibritumomabi (Zevalin®)</h3>
+            <ul>
+                <li><strong>Kohdeantigeeni</strong>: CD20, jota ilmentyy B-solulinjaisten lymfoomasolujen pinnalla (ei kanta- eikä plasmasoluissa).</li>
+                <li><strong>Rakenne</strong>: Ibritumomabi-vasta-aine + tiuksetaanikelaatti + <sup>90</sup>Y (&beta;&sup1;, E<sub>max</sub> 2,28 MeV, kantama ~3,8 mm). Beetasäteily tuhoaa kohdesolujen ohella lähellä olevia lymfoomasoluja.</li>
+                <li><strong>Indikaatio</strong>: Uusiutuva tai hoitoresistentti follikulaarinen CD20-positiivinen non-Hodgkin-lymfooma. Osa kansainvälisiä hoitosuosituksia (ASCO/NCCN).</li>
+                <li><strong>Sivuvaikutukset</strong>: Veriarvot heikkenevät ohimenevästi 2&ndash;4 viikon kohdalla annostelusta. Harvinaisia muita merkittäviä haittoja.</li>
+            </ul>
+
+            <div class="theory-info">
+                <p><sup>131</sup>I-tositumomabi (Bexxar®, USA) oli toinen rekisteröity radiolääke &mdash; vertailukelpoisia tuloksia, mutta valmistus lopetettu. Uudet ei-isotooppihoidot (CAR-T-solut, bispesifiset vasta-aineet) ovat kaventaneet radioimmunoterapian käyttöaluetta.</p>
+            </div>
+
+            <h3>5b.2 Uudemmat kohteet ja alfa-säteilijät</h3>
+            <ul>
+                <li><strong>CD22-antigeeni</strong>: Kypsien B-solujen transmembraaniglykoproteiini (ei kanta- eikä plasmasoluissa, vahvasti ilmentynyt maligneissa B-linjoissa). Kohdemolekyyli: epratsumabi + <sup>90</sup>Y-tetraksetaanikelaatti (rekisteröintitutkimukset käynnissä).</li>
+                <li><strong>Alfa-säteilijät</strong>: Aktinium-225 (<sup>225</sup>Ac) ja torium-227 (<sup>227</sup>Th) tutkimuksessa lymfooman kliinisissä hoidoissa &mdash; korkea LET-vaikutus verrattuna beetasäteilijöihin.</li>
             </ul>
 
             <h2>6. Alfahoidon erityispiirteet</h2>
@@ -1234,6 +2270,8 @@
             </ul>
 
             <h2>7. Annosdosimetrian formalismi (MIRD/OLINDA)</h2>
+
+            <div class="theory-image-slot" data-slot="radionuklidihoidot-mird-dosimetry" data-tab="radionuklidihoidot" data-default-caption="MIRD-dosimetrian työnkulku: sarjakuvantaminen → time-activity-käyrä → kumulatiivinen aktiivisuus → OLINDA S-arvot → elinkohtainen annos."></div>
 
             <h3>7.1 MIRD-formalismi</h3>
             <p>MIRD (Medical Internal Radiation Dose) -formalismi on radionuklidihoidon dosimetrian perusta:</p>
@@ -1332,6 +2370,53 @@
                 <li>Sairaalafyysikko arvioi jäljellä olevan aktiivisuuden ja antaa toimintaohjeet</li>
             </ul>
 
+            <h3>10.4 Henkilökunnan säteilysuojelu hoidon antamisen aikana</h3>
+            <p>Radionuklidihoidot ovat suurimpia yksittäisiä säteilylähteitä osastolla. Henkilökunnan suojelu perustuu kolmeen perusperiaatteeseen: ajan minimointiin, etäisyyden maksimointiin ja suojuksiin.</p>
+            <h4>Aikaperusteinen suojelu</h4>
+            <ul>
+                <li><strong>Lääkkeenanto</strong>: <sup>131</sup>I-neste tai -kapseli luovutetaan suojatun ikkunan tai teleskooppivarren kautta — ei suoraan kädestä käteen. Hoitohenkilökunnan oleskeluaika huoneessa minimoidaan (tyypillisesti &lt; 5 min/vuoro).</li>
+                <li><strong>Lähihoito (Lu-177, Ra-223)</strong>: Suunniteltu hoitosuunnitelma vuoroille — lyhyemmät toistuvat käynnit mieluummin kuin pitkä yhtäjaksoinen oleskelu. Kotiutuskriteerit (annopnopeus &lt; 15 µSv/h @ 1 m) määräävät hoidon keston.</li>
+                <li><strong>Sormidosimetria</strong>: TLD- tai OSL-sormusannosimetri pakollinen kaikille, jotka käsittelevät aktiivisuuksia &gt; 200 MBq. Käsittelyaika kirjataan potilasasiakirjaan.</li>
+            </ul>
+            <h4>Etäisyys ja suojukset</h4>
+            <ul>
+                <li><strong>Lyijysuojukset</strong>: <sup>131</sup>I-aktiivisuusastiat säilytetään lyijysuojatuissa konteissa (≥ 3 mm Pb). Ruisku- ja injektiosuojukset (L-suoja) pakollisia iv-radionuklidihoidoissa (Lu-177, Ra-223).</li>
+                <li><strong>Etäisyyssääntö</strong>: Annosnopeus laskee 1/r²-lailla. 2 m etäisyys potilaasta vähentää annoksen neljäsosaan verrattuna 1 m etäisyyteen.</li>
+                <li><strong>Ikkunalasit</strong>: Lyijylasit (Pb-ekvivalentti ≥ 0,75 mm) suositeltavia <sup>131</sup>I- ja <sup>18</sup>F-töissä.</li>
+            </ul>
+            <h4>Annostarkkailurajat (ST 1.7 / BSS)</h4>
+            <ul>
+                <li>Efektiivinen annos: &lt; 20 mSv/v (ammatillinen raja); optimointitavoite &lt; 6 mSv/v</li>
+                <li>Sormien paikallinen annos: &lt; 500 mSv/v</li>
+                <li>Hedelmällisessä iässä olevan naisen efektiivinen annos: &lt; 20 mSv/v; raskausajan ilmoittaminen vapauttaa erityisjärjestelyihin</li>
+            </ul>
+            <div class="theory-info"><strong>Muista:</strong> Yksi <sup>131</sup>I-hoito (3–8 GBq) voi aiheuttaa hoitajalleen jopa 0,1–0,5 mSv per huonekäynti ilman suojauksia. Oikeilla käytänteillä annos jää &lt; 0,01 mSv per käynti.</div>
+
+            <h3>10.5 Kontaminaatiotilanteet ja siivousprotokollat</h3>
+            <p>Radioaktiivinen kontaminaatio tarkoittaa radioaktiivisen aineen tahattomasta leviämistä hallitsemattomaan paikkaan. Yleisin syy on potilaan eritteet (virtsa, sylki, oksennus) tai käsittelyvirhe.</p>
+            <h4>Kontaminaation luokittelu ja havaitseminen</h4>
+            <ul>
+                <li><strong>Pintakontaminaatio</strong> (kiinteä tai nestemäinen aktiivisuus pinnalla): havaitaan käsimittarilla tai pyyhintänäytteellä (&gt; 4 Bq/cm² → toimenpiteitä vaatii, ST 12.2)</li>
+                <li><strong>Ilmakontaminaatio</strong>: <sup>131</sup>I:n haihtuminen nestestä; mitataan aktiivisuusilmaisimella tai hiiliadsorptioputkella (ilmakeräys &gt; 30 min)</li>
+                <li><strong>Sisäinen kontaminaatio</strong>: Nielty, hengitetty tai haavaan joutunut aktiivisuus; ensiaste = bioassay (kilpirauhanen/koko keho -lasku tai virtsa-analyysi)</li>
+            </ul>
+            <h4>Toimintaprotokolla kontaminaatiotilanteessa</h4>
+            <ol>
+                <li><strong>Rajoita leviäminen</strong>: Merkitse alue, poista kontaminoituneet henkilöt, sulje tuuletus jos haihtuvaa (<sup>131</sup>I-neste)</li>
+                <li><strong>Ilmoita</strong>: Isotooppilaboratorion vastaava fyysikko tai päivystävä säteilyturvallisuusvastaava</li>
+                <li><strong>Mittaa laajuus</strong>: Kartoita kontaminoitunut alue Geiger-Müller- tai tuikelaskurilla, merkitse rajat</li>
+                <li><strong>Puhdista</strong>: Käytä laihua pesuainetta + runsas huuhtelu — radioaktiivisuus ei puhdistuu kemiallisesti, mutta laimennus jätevesijärjestelmään on hyväksyttävää alle STUK-raja-arvojen</li>
+                <li><strong>Verifioi</strong>: Pyyhintänäyte tai mittaus puhdistuksen jälkeen — tavoite &lt; 4 Bq/cm²</li>
+                <li><strong>Dokumentoi</strong>: Kirjaa tapahtuma, laajuus, toimenpiteet ja loppumittaukset; ilmoita tarvittaessa STUKille (STL 48 §)</li>
+            </ol>
+            <h4>Jätteiden käsittely</h4>
+            <ul>
+                <li><strong>Kiinteä radioaktiivinen jäte</strong>: Merkitty astia, puoliintumisaika-odotus (10 puoliintumisaikaa ennen tavanomaista jätettä; <sup>131</sup>I: 8 vrk × 10 = 80 vrk; <sup>177</sup>Lu: 6,6 vrk × 10 = 66 vrk)</li>
+                <li><strong>Nestemäinen jäte</strong>: Allastussäiliö tai saostuskaivo — STUK:n hyväksymä laimentamis- ja poistosuunnitelma (lupa &lt; 1 GBq/v viemäriin ilman erillistä lupaa pienissä yksiköissä)</li>
+                <li><strong>Kontaminoituneet vaatteet</strong>: Säilytetään merkityissä pusseissa puoliintumisajan ajan, sitten normaalihuolto tai hävitys aktiviteettimittauksen perusteella</li>
+            </ul>
+            <div class="theory-warning"><strong>Huomio:</strong> <sup>131</sup>I haihtuu helposti happamassa ympäristössä (virtsa pH &lt; 6) — huolehdi riittävästä ilmanvaihdosta potilashuoneessa ja käytä N95-hengityssuojaa virtsanäytteitä käsitellessä ensimmäisten 48 h aikana hoidon jälkeen.</div>
+
             <h2>11. Uudemmat hoitomuodot</h2>
             <ul>
                 <li><strong>Ac-225-PSMA</strong>: Tutkimusvaiheessa. Erittäin lupaavia tuloksia Lu-177-PSMA-refrakterisilla potilailla. Hajoamisketjussa 4 alfaemissiota.</li>
@@ -1358,6 +2443,23 @@
                     <li>EANM/SNMMI guideline for radiosynovectomy.</li>
                 </ol>
             </div>
+
+            <div class="theory-quiz-section" data-tab="radionuklidihoidot">
+                <div class="theory-quiz-start">
+                    <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-radionuklidihoidot">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
+                    <button class="theory-quiz-btn" onclick="startTheoryQuiz('radionuklidihoidot')">
+                        <i class="fas fa-play"></i> Aloita harjoittelu
+                    </button>
+                </div>
+                <div class="theory-quiz-active" style="display: none;"></div>
+            </div>
         </div>
     </div>
 
@@ -1383,11 +2485,13 @@
             </ul>
 
             <h3>2.2 Säteilyn biologiset vaikutukset</h3>
+            <div class="theory-image-slot" data-slot="sateilybiologia-dose-response" data-tab="sateilybiologia" data-default-caption="Annos-vastekäyrät: deterministinen (kynnysarvo) vs. stokastinen (LNT-malli). Diagnostiset annokset vs. terapeuttiset annokset isotooppilääketieteessä."></div>
             <p>Isotooppilääketieteessä säteilyn biologiset vaikutukset jakautuvat:</p>
             <ul>
                 <li><strong>Diagnostiikan annokset</strong>: Tyypillisesti 1&ndash;20 mSv. Stokastiset vaikutukset (syöpäriski) ovat relevantteja, deterministiset vaikutukset eivät toteudu.</li>
                 <li><strong>Hoitoannokset</strong>: Kohde-elimeen 10&ndash;100+ Gy. Deterministiset vaikutukset tavoiteltuja (kasvaimen tuhoaminen) ja rajoittavia (munuaiset, luuydin).</li>
             </ul>
+
 
             <h2>3. Säteilysuojelun periaatteet isotooppilääketieteessä</h2>
 
@@ -1422,6 +2526,8 @@
             <div class="theory-info">
                 <p><strong>DRL:n seuranta:</strong> Sairaalafyysikko analysoi yksikön aktiivisuusmäärät vuosittain ja vertaa DRL-arvoihin. Jos aktiivisuusmäärät ylittävät DRL:n systemaattisesti, on selvitettävä syy (laitteiston kunto, kuvausprotokolla, potilaspopulaatio) ja optimoitava toimintaa.</p>
             </div>
+
+            <div class="theory-image-slot" data-slot="sateilybiologia-drl-finland" data-tab="sateilybiologia" data-default-caption="Suomen DRL-arvot isotooppilääketieteessä (STUK): tavallisimmat tutkimukset, aktiivisuudet ja efektiiviset annokset. Vertailu eurooppalaisiin viitearvoihin."></div>
 
             <h3>3.3 Henkilökunnan suojelu</h3>
             <ul>
@@ -1510,12 +2616,14 @@
             <h2>8. Rakenteellinen säteilysuojelu</h2>
 
             <h3>8.1 Isotooppilaboratorion suojaus</h3>
+            <div class="theory-image-slot" data-slot="sateilybiologia-shielding" data-tab="sateilybiologia" data-default-caption="Isotooppilaboratorion pohjapiirros: suojamateriaalit, tilojen luokittelu (valvonta-alue/tarkkailualue), henkilökunnan kulkureitit ja suojauslaskenta."></div>
             <ul>
                 <li><strong>Seinärakenteet</strong>: Betoni tai lyijyverhous aktiivisuustasojen ja nuklidien mukaan</li>
                 <li><strong>Injektiohuone</strong>: Lyijylasivitriinikaappi, suojattu jäteastia, lyijysuojattu säilytyspaikka</li>
                 <li><strong>Hoitohuone (I-131, Lu-177)</strong>: Lyijyverhous, WC-lattian pesu mahdollisuus, säteilymonitointi oviaukon luona</li>
                 <li><strong>PET-tilojen suojaus</strong>: 511 keV fotonit vaativat merkittävästi paksumman suojauksen kuin Tc-99m (140 keV). Tyypillinen TVL: 17 mm lyijyä tai 34 cm betonia.</li>
             </ul>
+
 
             <h2>9. Lainsäädäntö ja viranomaismääräykset</h2>
 
@@ -1623,6 +2731,23 @@
                     <li>EU BSS Directive 2013/59/Euratom: Artikla 58 (kliininen auditointi).</li>
                 </ol>
             </div>
+
+            <div class="theory-quiz-section" data-tab="sateilybiologia">
+                <div class="theory-quiz-start">
+                    <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-sateilybiologia">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
+                    <button class="theory-quiz-btn" onclick="startTheoryQuiz('sateilybiologia')">
+                        <i class="fas fa-play"></i> Aloita harjoittelu
+                    </button>
+                </div>
+                <div class="theory-quiz-active" style="display: none;"></div>
+            </div>
         </div>
     </div>
 
@@ -1630,8 +2755,205 @@
 {% endblock %}
 
 {% block extra_js %}
+<script src="{% static 'sisalto/js/tts-player.js' %}"></script>
 <script>
 (function() {
+    // ==========================================
+    // THEORY IMAGE SLOTS
+    // ==========================================
+
+    var MODALITY = '{{ modality_id }}';
+    var IS_SUPERUSER = {{ is_superuser|yesno:"true,false" }};
+    var imageData = {};
+    var currentUploadSlot = null;
+    var currentUploadTab = null;
+    var pendingFile = null;
+
+    function loadTheoryImages() {
+        if (!MODALITY) return;
+        fetch('/modaliteetit/api/theory-images/' + MODALITY + '/')
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                imageData = data;
+                renderAllSlots();
+            })
+            .catch(function() {});
+    }
+
+    function renderAllSlots() {
+        document.querySelectorAll('.theory-image-slot').forEach(function(slot) {
+            var slotId = slot.dataset.slot;
+            var info = imageData[slotId];
+            if (info && info.url) {
+                slot.className = 'theory-image-slot has-image size-' + (info.display_size || 'medium');
+                slot.innerHTML =
+                    '<figure>' +
+                        '<div class="theory-image-actions">' +
+                            '<button class="btn-replace" onclick="openUploadModal(\'' + slotId + '\', \'' + slot.dataset.tab + '\')"><i class="fas fa-exchange-alt"></i> Vaihda</button>' +
+                            '<button class="btn-delete" onclick="deleteSlotImage(\'' + slotId + '\', \'' + slot.dataset.tab + '\')"><i class="fas fa-trash"></i> Poista</button>' +
+                        '</div>' +
+                        '<img src="' + info.url + '" alt="' + (info.alt_text || '') + '">' +
+                        '<figcaption>' + (info.caption || '') + '</figcaption>' +
+                    '</figure>';
+            } else {
+                slot.classList.remove('has-image');
+                var defaultCaption = slot.dataset.defaultCaption || '';
+                slot.innerHTML =
+                    '<div class="theory-image-placeholder" onclick="openUploadModal(\'' + slotId + '\', \'' + slot.dataset.tab + '\')">' +
+                        '<i class="fas fa-camera"></i>' +
+                        '<span>Lisää kuva</span>' +
+                        '<span class="slot-label">' + slotId + '</span>' +
+                        '<span style="font-size:0.75rem;max-width:400px;text-align:center;">' + defaultCaption + '</span>' +
+                    '</div>';
+            }
+        });
+    }
+
+    window.toggleEditMode = function() {
+        var btn = document.getElementById('editModeToggle');
+        document.body.classList.toggle('theory-edit-mode');
+        btn.classList.toggle('active');
+        var isActive = document.body.classList.contains('theory-edit-mode');
+        btn.querySelector('span').textContent = isActive ? 'Lopeta muokkaus' : 'Muokkaa kuvia';
+    };
+
+    window.openUploadModal = function(slotId, tabId) {
+        if (!IS_SUPERUSER || !document.body.classList.contains('theory-edit-mode')) return;
+        currentUploadSlot = slotId;
+        currentUploadTab = tabId;
+        pendingFile = null;
+        var modal = document.getElementById('uploadModal');
+        if (!modal) return;
+        var existing = imageData[slotId];
+        document.getElementById('uploadCaption').value = existing ? (existing.caption || '') : (document.querySelector('[data-slot="' + slotId + '"]').dataset.defaultCaption || '');
+        document.getElementById('uploadAlt').value = existing ? (existing.alt_text || '') : '';
+        var sizeVal = existing ? (existing.display_size || 'medium') : 'medium';
+        var sizeRadio = document.querySelector('input[name="uploadSize"][value="' + sizeVal + '"]');
+        if (sizeRadio) sizeRadio.checked = true;
+        var dz = document.getElementById('uploadDropzone');
+        dz.innerHTML = '<i class="fas fa-cloud-upload-alt"></i><span>Vedä kuva tähän, klikkaa valitaksesi tai liitä <kbd>Ctrl+V</kbd></span><input type="file" id="uploadFileInput" accept="image/*" style="display:none;">';
+        document.getElementById('uploadSaveBtn').disabled = !existing;
+        bindDropzone();
+        modal.classList.add('visible');
+        modal.setAttribute('tabindex', '-1');
+        modal.focus();
+    };
+
+    window.closeUploadModal = function() {
+        document.getElementById('uploadModal').classList.remove('visible');
+        currentUploadSlot = null;
+        currentUploadTab = null;
+        pendingFile = null;
+    };
+
+    function bindDropzone() {
+        var dz = document.getElementById('uploadDropzone');
+        var fi = document.getElementById('uploadFileInput');
+        dz.onclick = function() { fi.click(); };
+        fi.onchange = function() { if (fi.files.length) handleFile(fi.files[0]); };
+        dz.ondragover = function(e) { e.preventDefault(); dz.classList.add('dragover'); };
+        dz.ondragleave = function() { dz.classList.remove('dragover'); };
+        dz.ondrop = function(e) {
+            e.preventDefault();
+            dz.classList.remove('dragover');
+            if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+        };
+    }
+
+    function onModalPaste(e) {
+        var modal = document.getElementById('uploadModal');
+        if (!modal || !modal.classList.contains('visible')) return;
+        var items = (e.clipboardData || e.originalEvent && e.originalEvent.clipboardData || {}).items;
+        if (!items) return;
+        for (var i = 0; i < items.length; i++) {
+            if (items[i].type.indexOf('image') !== -1) {
+                e.preventDefault();
+                var file = items[i].getAsFile();
+                var ext = items[i].type === 'image/png' ? '.png' : '.jpg';
+                var renamed = new File([file], 'kuvakaappaus' + ext, { type: items[i].type });
+                handleFile(renamed);
+                return;
+            }
+        }
+    }
+    document.addEventListener('paste', onModalPaste);
+
+    function handleFile(file) {
+        if (!file.type.startsWith('image/')) return;
+        pendingFile = file;
+        document.getElementById('uploadSaveBtn').disabled = false;
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var dz = document.getElementById('uploadDropzone');
+            dz.innerHTML = '<img class="preview" src="' + e.target.result + '"><input type="file" id="uploadFileInput" accept="image/*" style="display:none;">';
+            bindDropzone();
+        };
+        reader.readAsDataURL(file);
+    }
+
+    window.saveUploadedImage = function() {
+        if (!currentUploadSlot || !currentUploadTab) return;
+        var btn = document.getElementById('uploadSaveBtn');
+        btn.disabled = true;
+        btn.textContent = 'Tallennetaan...';
+        var fd = new FormData();
+        fd.append('modality', MODALITY);
+        fd.append('tab_id', currentUploadTab);
+        fd.append('slot_id', currentUploadSlot);
+        fd.append('caption', document.getElementById('uploadCaption').value);
+        fd.append('alt_text', document.getElementById('uploadAlt').value);
+        var sizeEl = document.querySelector('input[name="uploadSize"]:checked');
+        fd.append('display_size', sizeEl ? sizeEl.value : 'medium');
+        if (pendingFile) fd.append('image', pendingFile);
+        fetch('/modaliteetit/api/theory-images/upload/', {
+            method: 'POST',
+            headers: { 'X-CSRFToken': getCookie('csrftoken') },
+            body: fd
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (data.ok) {
+                var sizeEl = document.querySelector('input[name="uploadSize"]:checked');
+                imageData[currentUploadSlot] = {
+                    url: data.url, caption: data.caption, alt_text: data.alt_text,
+                    display_size: sizeEl ? sizeEl.value : 'medium', tab_id: currentUploadTab
+                };
+                renderAllSlots();
+                closeUploadModal();
+            } else {
+                alert(data.error || 'Virhe tallennettaessa.');
+                btn.disabled = false;
+                btn.textContent = 'Tallenna';
+            }
+        })
+        .catch(function() {
+            alert('Verkkovirhe.');
+            btn.disabled = false;
+            btn.textContent = 'Tallenna';
+        });
+    };
+
+    window.deleteSlotImage = function(slotId, tabId) {
+        if (!confirm('Poistetaanko kuva paikasta "' + slotId + '"?')) return;
+        fetch('/modaliteetit/api/theory-images/delete/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+            body: JSON.stringify({ modality: MODALITY, tab_id: tabId, slot_id: slotId })
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (data.ok) { delete imageData[slotId]; renderAllSlots(); }
+            else { alert(data.error || 'Virhe poistettaessa.'); }
+        })
+        .catch(function() { alert('Verkkovirhe.'); });
+    };
+
+    loadTheoryImages();
+
+    // ==========================================
+    // TAB SWITCHING
+    // ==========================================
+
     const tabs = document.querySelectorAll('.theory-tab');
     const panels = document.querySelectorAll('.theory-panel');
 
@@ -1666,6 +2988,305 @@
             activateTab(hash);
         }
     }
+
+    // ========== INLINE QUIZ ==========
+    var TAB_EPA_MAP = {{ tab_epa_map|safe }};
+    var quizState = {};
+
+    function getCSRF() {
+        var c = document.cookie.match(/csrftoken=([^;]+)/);
+        return c ? c[1] : '';
+    }
+
+    // Type selector chip toggle
+    document.querySelectorAll('.tq-type-chip').forEach(function(chip) {
+        chip.addEventListener('click', function(e) {
+            e.preventDefault();
+            var cb = this.querySelector('input[type="checkbox"]');
+            cb.checked = !cb.checked;
+            this.classList.toggle('selected', cb.checked);
+        });
+    });
+
+    function getSelectedTypes(tabId) {
+        var selector = document.getElementById('tq-types-' + tabId);
+        if (!selector) return 'multiple_choice,multi_select,true_false,calculation,matching';
+        var types = [];
+        selector.querySelectorAll('input[type="checkbox"]:checked').forEach(function(cb) {
+            types.push(cb.value);
+            if (cb.value === 'multiple_choice') types.push('multi_select');
+        });
+        return types.length > 0 ? types.join(',') : 'multiple_choice';
+    }
+
+    window.startTheoryQuiz = function(tabId) {
+        var section = document.querySelector('.theory-quiz-section[data-tab="' + tabId + '"]');
+        if (!section) return;
+        section.querySelector('.theory-quiz-start').style.display = 'none';
+        var active = section.querySelector('.theory-quiz-active');
+        active.style.display = 'block';
+        quizState[tabId] = { score: 0, total: 0, types: getSelectedTypes(tabId) };
+        loadQuestion(tabId);
+    };
+
+    window.stopTheoryQuiz = function(tabId) {
+        var section = document.querySelector('.theory-quiz-section[data-tab="' + tabId + '"]');
+        if (!section) return;
+        section.querySelector('.theory-quiz-start').style.display = '';
+        section.querySelector('.theory-quiz-active').style.display = 'none';
+        section.querySelector('.theory-quiz-active').innerHTML = '';
+        delete quizState[tabId];
+    };
+
+    function loadQuestion(tabId) {
+        var epaId = TAB_EPA_MAP[tabId];
+        if (!epaId) return;
+        var active = document.querySelector('.theory-quiz-section[data-tab="' + tabId + '"] .theory-quiz-active');
+        var st = quizState[tabId];
+
+        active.innerHTML = '<div class="theory-quiz-loading"><i class="fas fa-spinner fa-spin"></i><p>Ladataan kysymystä...</p></div>';
+
+        fetch('/modaliteetit/api/question/' + epaId + '/?types=' + encodeURIComponent(st.types))
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (data.error) {
+                    active.innerHTML = '<div class="theory-quiz-loading"><i class="fas fa-inbox"></i><p>' + data.error + '</p></div>';
+                    return;
+                }
+                st.currentQuestionId = data.question_id;
+                st.currentQuestionType = data.question_type;
+
+                var html = '';
+                html += '<div class="theory-quiz-scorebar">';
+                html += '<div class="theory-quiz-scorebar-left">Kysymys ' + (st.total + 1) + ' / ' + data.total_available + '</div>';
+                html += '<div class="theory-quiz-scorebar-right">';
+                html += '<div class="theory-quiz-score-item"><div class="theory-quiz-score-value" id="tq-score-' + tabId + '">' + st.score + '/' + st.total + '</div><div class="theory-quiz-score-label">Oikein</div></div>';
+                html += '<button class="theory-quiz-stop" onclick="stopTheoryQuiz(\'' + tabId + '\')"><i class="fas fa-stop"></i> Lopeta</button>';
+                html += '</div></div>';
+
+                // Type hint
+                var typeHints = {
+                    'multi_select': '<i class="fas fa-check-double"></i> Valitse kaikki oikeat vastaukset',
+                    'true_false': '<i class="fas fa-balance-scale"></i> Oikein vai väärin?',
+                    'calculation': '<i class="fas fa-calculator"></i> Laske oikea arvo',
+                    'matching': '<i class="fas fa-arrows-alt-h"></i> Yhdistä parit'
+                };
+                if (typeHints[data.question_type]) {
+                    html += '<div class="theory-quiz-type-hint">' + typeHints[data.question_type] + '</div>';
+                }
+
+                html += '<div class="theory-quiz-question">' + data.text + '</div>';
+
+                // Render by question type
+                if (data.question_type === 'calculation') {
+                    html += '<div class="theory-quiz-calc-wrapper" id="tq-calc-' + tabId + '">';
+                    html += '<input type="number" step="any" class="theory-quiz-calc-input" id="tq-calc-input-' + tabId + '" placeholder="Vastaus...">';
+                    if (data.calculation_unit) html += '<span class="theory-quiz-calc-unit">' + data.calculation_unit + '</span>';
+                    html += '<span class="theory-quiz-calc-hint">toleranssi &plusmn;' + (data.calculation_tolerance || 5) + '%</span>';
+                    html += '</div>';
+
+                } else if (data.question_type === 'matching' && data.matching_pairs) {
+                    html += '<div class="theory-quiz-matching" id="tq-matching-' + tabId + '">';
+                    data.matching_pairs.forEach(function(pair, idx) {
+                        html += '<div class="theory-quiz-matching-row">';
+                        html += '<span class="theory-quiz-matching-left">' + pair.left + '</span>';
+                        html += '<span class="theory-quiz-matching-arrow">&rarr;</span>';
+                        html += '<select class="theory-quiz-matching-select" data-left="' + pair.left + '">';
+                        html += '<option value="">Valitse...</option>';
+                        data.matching_rights.forEach(function(right) {
+                            html += '<option value="' + right + '">' + right + '</option>';
+                        });
+                        html += '</select>';
+                        html += '</div>';
+                    });
+                    html += '</div>';
+
+                } else {
+                    // multiple_choice, multi_select, true_false
+                    var isMulti = data.question_type === 'multi_select';
+                    html += '<div class="theory-quiz-choices" id="tq-choices-' + tabId + '">';
+                    data.choices.forEach(function(c) {
+                        var indicatorClass = isMulti ? 'checkbox' : '';
+                        var icon = isMulti ? 'fa-check' : 'fa-circle';
+                        html += '<div class="theory-quiz-choice" data-id="' + c.id + '" onclick="toggleChoice(\'' + tabId + '\', this, ' + isMulti + ')">';
+                        html += '<div class="theory-quiz-choice-indicator ' + indicatorClass + '"><i class="fas ' + icon + '"></i></div>';
+                        html += '<div>' + c.text + '</div>';
+                        html += '</div>';
+                    });
+                    html += '</div>';
+                }
+
+                html += '<button class="theory-quiz-submit" id="tq-submit-' + tabId + '" onclick="submitAnswer(\'' + tabId + '\')"><i class="fas fa-check"></i> Vastaa</button>';
+                html += '<div id="tq-result-' + tabId + '" style="display: none;"></div>';
+
+                active.innerHTML = html;
+
+                // Auto-enable submit for calculation (on input) and matching (on change)
+                if (data.question_type === 'calculation') {
+                    var calcInput = document.getElementById('tq-calc-input-' + tabId);
+                    calcInput.addEventListener('input', function() {
+                        var btn = document.getElementById('tq-submit-' + tabId);
+                        btn.classList.toggle('enabled', this.value.trim() !== '');
+                    });
+                    calcInput.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter' && this.value.trim()) submitAnswer(tabId);
+                    });
+                } else if (data.question_type === 'matching') {
+                    document.querySelectorAll('#tq-matching-' + tabId + ' select').forEach(function(sel) {
+                        sel.addEventListener('change', function() {
+                            var allFilled = true;
+                            document.querySelectorAll('#tq-matching-' + tabId + ' select').forEach(function(s) {
+                                if (!s.value) allFilled = false;
+                            });
+                            document.getElementById('tq-submit-' + tabId).classList.toggle('enabled', allFilled);
+                        });
+                    });
+                }
+
+                if (window.MathJax && MathJax.typesetPromise) {
+                    MathJax.typesetPromise([active]);
+                }
+            })
+            .catch(function() {
+                active.innerHTML = '<div class="theory-quiz-loading"><i class="fas fa-exclamation-triangle"></i><p>Virhe ladattaessa kysymystä.</p></div>';
+            });
+    }
+
+    window.toggleChoice = function(tabId, el, isMulti) {
+        if (el.classList.contains('disabled')) return;
+        if (!isMulti) {
+            el.parentElement.querySelectorAll('.theory-quiz-choice').forEach(function(c) { c.classList.remove('selected'); });
+        }
+        el.classList.toggle('selected');
+        var hasSelection = el.parentElement.querySelector('.theory-quiz-choice.selected');
+        document.getElementById('tq-submit-' + tabId).classList.toggle('enabled', !!hasSelection);
+    };
+
+    window.submitAnswer = function(tabId) {
+        var btn = document.getElementById('tq-submit-' + tabId);
+        if (!btn.classList.contains('enabled')) return;
+        btn.classList.remove('enabled');
+        btn.style.display = 'none';
+
+        var st = quizState[tabId];
+        var body = { question_id: st.currentQuestionId };
+
+        if (st.currentQuestionType === 'calculation') {
+            body.calculation_input = parseFloat(document.getElementById('tq-calc-input-' + tabId).value);
+            document.getElementById('tq-calc-input-' + tabId).disabled = true;
+        } else if (st.currentQuestionType === 'matching') {
+            var answers = {};
+            document.querySelectorAll('#tq-matching-' + tabId + ' select').forEach(function(sel) {
+                answers[sel.dataset.left] = sel.value;
+                sel.disabled = true;
+            });
+            body.matching_answers = answers;
+        } else {
+            var selected = [];
+            document.querySelectorAll('#tq-choices-' + tabId + ' .theory-quiz-choice.selected').forEach(function(c) {
+                selected.push(parseInt(c.dataset.id));
+            });
+            document.querySelectorAll('#tq-choices-' + tabId + ' .theory-quiz-choice').forEach(function(c) {
+                c.classList.add('disabled');
+            });
+            body.selected_ids = selected;
+        }
+
+        fetch('/modaliteetit/api/answer/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCSRF() },
+            body: JSON.stringify(body)
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            st.total++;
+            if (data.is_correct) st.score++;
+
+            var scoreEl = document.getElementById('tq-score-' + tabId);
+            if (scoreEl) scoreEl.textContent = st.score + '/' + st.total;
+
+            // Show correct/incorrect feedback per type
+            if (st.currentQuestionType === 'calculation') {
+                var c = data.choices[0];
+                var calcEl = document.getElementById('tq-calc-' + tabId);
+                var feedback = document.createElement('div');
+                feedback.className = 'theory-quiz-calc-feedback ' + (data.is_correct ? 'correct' : 'incorrect');
+                feedback.innerHTML = data.is_correct
+                    ? '<i class="fas fa-check-circle"></i> Oikein!'
+                    : '<i class="fas fa-times-circle"></i> Oikea vastaus: ' + c.correct_answer + ' ' + c.unit;
+                calcEl.appendChild(feedback);
+
+            } else if (st.currentQuestionType === 'matching') {
+                data.choices.forEach(function(c) {
+                    var selects = document.querySelectorAll('#tq-matching-' + tabId + ' select');
+                    selects.forEach(function(sel) {
+                        if (sel.dataset.left === c.left) {
+                            var row = sel.closest('.theory-quiz-matching-row');
+                            row.classList.add(c.pair_correct ? 'correct' : 'incorrect');
+                            if (!c.pair_correct) {
+                                var fix = document.createElement('span');
+                                fix.className = 'theory-quiz-matching-correct';
+                                fix.textContent = ' \u2192 ' + c.right;
+                                row.appendChild(fix);
+                            }
+                        }
+                    });
+                });
+
+            } else {
+                // MC, multi_select, true_false
+                data.choices.forEach(function(c) {
+                    var el = document.querySelector('#tq-choices-' + tabId + ' .theory-quiz-choice[data-id="' + c.id + '"]');
+                    if (!el) return;
+                    if (c.is_correct) {
+                        el.classList.add('correct');
+                        el.querySelector('.theory-quiz-choice-indicator i').className = 'fas fa-check';
+                    } else if (c.was_selected) {
+                        el.classList.add('incorrect');
+                        el.querySelector('.theory-quiz-choice-indicator i').className = 'fas fa-times';
+                    }
+                    if (c.explanation) {
+                        var expDiv = document.createElement('div');
+                        expDiv.className = 'theory-quiz-choice-explanation';
+                        expDiv.textContent = c.explanation;
+                        el.querySelector('div:last-child').appendChild(expDiv);
+                    }
+                });
+            }
+
+            // Result banner + explanation
+            var resultHtml = '';
+            if (data.is_correct) {
+                resultHtml += '<div class="theory-quiz-result-banner correct"><i class="fas fa-check-circle"></i> Oikein!</div>';
+            } else {
+                resultHtml += '<div class="theory-quiz-result-banner incorrect"><i class="fas fa-times-circle"></i> Väärin</div>';
+            }
+            if (data.explanation) {
+                resultHtml += '<div class="theory-quiz-explanation">';
+                resultHtml += '<div class="theory-quiz-explanation-label"><i class="fas fa-lightbulb"></i> Selitys</div>';
+                resultHtml += '<p>' + data.explanation + '</p>';
+                resultHtml += '</div>';
+            }
+            resultHtml += '<button class="theory-quiz-next" onclick="nextQuestion(\'' + tabId + '\')">Seuraava kysymys <i class="fas fa-arrow-right"></i></button>';
+
+            var resultEl = document.getElementById('tq-result-' + tabId);
+            resultEl.innerHTML = resultHtml;
+            resultEl.style.display = 'block';
+
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise([resultEl]);
+            }
+        })
+        .catch(function() {
+            btn.style.display = '';
+            btn.classList.add('enabled');
+            alert('Virhe tarkistettaessa vastausta.');
+        });
+    };
+
+    window.nextQuestion = function(tabId) {
+        loadQuestion(tabId);
+    };
 })();
 </script>
 {% endblock %}

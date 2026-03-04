@@ -4,7 +4,7 @@
 
 ---
 
-## Edistymisen yhteenveto (päivitetty 2026-02-19)
+## Edistymisen yhteenveto (päivitetty 2026-03-04)
 
 | Tehtävä | Kuvaus | Tila |
 |---------|--------|------|
@@ -20,6 +20,12 @@
 | Tehtävä 10 | Saavutusjärjestelmän aktivointi (12 saavutusta) | ✅ Valmis (2026-02-19) |
 | Tehtävä 11 | Heikkojen alueiden tunnistus + tenttivalmius | ✅ Valmis (2026-02-19) |
 | Tehtävä 12 | Tenttisimulaatio (aikarajalla + AI-arviointi) | ✅ Valmis (2026-02-19) |
+| Tehtävä 13 | Teoriakuvien lisääminen modaliteettisivuille | ✅ Valmis (2026-03-02) — 99 slottia 5 modaliteetissa |
+| Tehtävä 14 | Isotooppi.html teoriasisällön laajennus Duodecim-lähteistä | 🔄 Kesken — suunnitelma valmis, toteutus tekemättä |
+| Tehtävä 15 | Usean kysymystyypin tuki teoriaquiziin | ✅ Valmis (2026-03-04) — MC, TF, calculation, matching kaikilla modaliteettisivuilla |
+| Tehtävä 16 | Text-to-Speech (kuuntele-ominaisuus) | ✅ Valmis (2026-03-04) — OpenAI TTS, 5 modaliteettia, välimuisti |
+| Tehtävä 17 | KNF-sivun quiz-osiot | ✅ Valmis (2026-03-04) — 6 välilehteä + tyyppivalitsimet |
+| Tehtävä 18 | .env + python-dotenv -tuki | ✅ Valmis (2026-03-04) — API-avainten hallinta |
 
 ---
 
@@ -621,3 +627,93 @@ Aikarajallinen tenttisimulaatio jossa käyttäjä vastaa esseekysymyksiin ja AI 
   - Esim: "Content: Task 1 - KNF EPA sections complete"
   - Esim: "Content: Task 3 - 150 new MCQs for Radiologia"
   - Esim: "Content: Task 5 - Model answers for Anatomia complete"
+
+---
+
+## Tehtävä 13: Teoriakuvien lisääminen modaliteettisivuille (✅ Valmis 2026-03-02)
+
+### Tavoite
+Lisää kuvanhallinnan mahdollisuus kaikkiin modaliteettiteoriasivuihin. Superuser voi ladata kuvia teoriakuvapaikkoihin (theory-image-slot), jotka näkyvät oikeassa sivupalkissa tekstin vieressä.
+
+### Toteutettu
+
+**Malli ja migraatiot:**
+- `TheoryImage` malli (`sisalto/models.py`): kentät `modality`, `tab_id`, `slot_id`, `image`, `caption`, `alt_text`, `display_size`
+- Migraatiot: `0012_theoryimage`, `0013_theoryimage_display_size`
+
+**API-endpointit** (`sisalto/urls.py` + `sisalto/views.py`):
+- `GET /modaliteetit/api/theory-images/<modality>/` — palauttaa kaikki kuvat modaliteetille
+- `POST /modaliteetit/api/theory-images/upload/` — lataa uuden kuvan slottiin
+- `POST /modaliteetit/api/theory-images/delete/` — poistaa kuvan slotista
+
+**HTML-kuvio** (jokaisessa html-tiedostossa):
+```html
+<div class="theory-image-slot" data-slot="SLOT_ID" data-tab="TAB_ID" data-default-caption="Kuvan otsikko"></div>
+```
+Sijoitussääntö: h3-osion ALUSSA ennen ensimmäistä p/ul-elementtiä. EI koskaan suoraan ennen `<h2>`:ta (sillä on `clear:right` CSS).
+
+**Views.py-kuvio** (jokaisessa view-funktiossa):
+```python
+return render(request, 'sisalto/modaliteetit/X.html', {
+    'modality_id': 'X',
+    'is_superuser': request.user.is_superuser,
+    ...
+})
+```
+
+**JavaScript**: Aina `{% block extra_js %}` -blokissa (ei `{% block content %}` -blokissa), koska `getCookie()` on määritelty vasta rivillä 508 pohjatemplatessa.
+
+### Slottimäärät modaliteeteittain
+
+| Modaliteetti | Slotteja | Välilehdet |
+|---|---|---|
+| radiologia | 24 | läpivalaisu, mri, mammografia, natiivi, tt, us, naytot, hammas, sateilybiologia |
+| isotooppi | 22 | gammakamera, pet, radiofarmasia, spet, pet-tutkimukset, radionuklidihoidot, sateilybiologia |
+| knf | 18 | eeg, heratepotentiaali, iom, uni, tms, laiteturvallisuus |
+| fysiologia | 14 | ekg, verenkierto, keuhkofunktio, gi, dxa |
+| sadehoito | 21 | peruskasitteet, kuvantaminen, ulkoinen, sisainen, dosimetria, laitteet, sateilybiologia |
+| **Yhteensä** | **99** | |
+
+---
+
+## Tehtävä 14: Isotooppi.html teoriasisällön laajennus Duodecim-lähteistä (🔄 Kesken)
+
+### Tavoite
+Laajenna `isotooppi.html`:n kolmen välilehden (SPET, PET-tutkimukset, Radionuklidihoidot) teoriasisältöä käyttäen 7 Duodecim-kirjasta kopioitua tekstitiedostoa projektin juuressa.
+
+### Lähtötiedostot
+- `sydän.txt` — sydänperfuusio SPET ja PET
+- `vartijaimusolmuke.txt` — vartijaimusolmukekuvaus
+- `radionuklidihoidot.txt` — kaikki radionuklidihoidot
+- `kilpirauhanen_lisäkilpirauhanen.txt` — kilpirauhanen ja lisäkilpirauhaset
+- `keuhko.txt` — keuhkoperfuusio- ja ventilaatiokuvaus
+- `Eturauhanen.txt` — eturauhassyövän PET-kuvaukset (PSMA)
+- `Aivot.txt` — aivoperfuusio SPET, DAT-SPET, FDG-PET, amyloidikuvaus
+
+### Muutettava tiedosto
+`sisalto/templates/sisalto/modaliteetit/isotooppi.html`
+- `panel-spet` (n. 256 riviä, rivit ~845–1100)
+- `panel-pet-tutkimukset` (n. 149 riviä, rivit ~1105–1253)
+- `panel-radionuklidihoidot` (n. 199 riviä, rivit ~1258–1456)
+
+### Suunniteltu toteutus (6 operaatiota)
+
+- [ ] **A** — SPET: 2.2 Sydänperfuusio (merkkiaineet, protokolla, bull's eye, MUGA, MIBG) + 2.3 Kilpirauhaskuvaus (123I/perteknetaatti, esivalmistelut, tulkinta)
+- [ ] **B** — SPET: 2.5 Keuhkot (MAA, Technegas vs DTPA, PISA-PED-kriteerit taulukko, preop FEV1)
+- [ ] **C** — SPET: 3.1 Aivoperfuusio + uusi 3.1b DAT-SPET ([123I]FP-CIT, Parkinson/LBD, tauotukset) + 3.2 Vartijaimusolmuke + 3.4 Lisäkilpirauhaset
+- [ ] **D** — PET: 2.2 Sydän (Rb-82/N-13/O-15, kvantifiointi ml/g/min, viabiliteetti FDG, sarkoidoosi/endokardiitti) + 2.3 Aivot FDG-PET + amyloidikuvaus taulukko
+- [ ] **E** — PET: 3.1 Eturauhassyöpä (koliini/flusikloviini/68Ga-PSMA-11/18F-PSMA-1007/Na18F, PSA-relapsi, staging)
+- [ ] **F** — Radionuklidihoidot: päivitä 3.1/3.2/4/5 + lisää radiosynovektomia + SIRT-päivitys + lymfooma-immunosädehoito
+
+### HTML-konventiot
+
+```html
+<!-- Info-laatikoille -->
+<div class="theory-info"><strong>Muista:</strong> ...</div>
+<!-- Varoituksille -->
+<div class="theory-warning"><strong>Huomio:</strong> ...</div>
+<!-- Isotooppimerkinnät -->
+<sup>99m</sup>Tc, <sup>18</sup>F, <sup>123</sup>I, <sup>177</sup>Lu
+<!-- Kuvauspaikoille -->
+<div class="theory-image-slot" data-slot="slot-id" data-tab="tab-id"></div>
+```

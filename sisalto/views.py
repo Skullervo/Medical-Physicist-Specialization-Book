@@ -20,7 +20,7 @@ from django.views.decorators.http import require_POST, require_GET
 from django.http import JsonResponse, HttpResponse
 from django.db.models import F, Max, Q
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Section, EPA, Specialty, ExamQuestion
+from .models import Section, EPA, Specialty, ExamQuestion, TheoryImage
 import json
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
@@ -191,19 +191,19 @@ def modaliteetit_view(request):
 			'name': 'Kliininen neurofysiologia',
 			'description': 'EEG, herätepotentiaali, ENMG, TMS, uni, IOM',
 			'count': 6,
-			'url': '#',
+			'url': '/modaliteetit/knf/',
 			'color': '#fb923c',
 			'icon': 'fa-brain',
-			'available': False,
+			'available': True,
 		},
 		{
 			'name': 'Kliininen fysiologia',
 			'description': 'EKG, verenkierto, keuhkofunktio, GI-kanava, DXA',
 			'count': 5,
-			'url': '#',
+			'url': '/modaliteetit/fysiologia/',
 			'color': '#f87171',
 			'icon': 'fa-heartbeat',
-			'available': False,
+			'available': True,
 		},
 	]
 	return render(request, 'sisalto/modaliteetit/index.html', {
@@ -237,6 +237,8 @@ def modaliteetit_radiologia_view(request):
 	return render(request, 'sisalto/modaliteetit/radiologia.html', {
 		'page_title': 'Radiologian teoria',
 		'tab_epa_map': json.dumps(tab_epa_map),
+		'modality_id': 'radiologia',
+		'is_superuser': request.user.is_superuser if request.user.is_authenticated else False,
 	})
 
 
@@ -263,13 +265,36 @@ def modaliteetit_sadehoito_view(request):
 	return render(request, 'sisalto/modaliteetit/sadehoito.html', {
 		'page_title': 'Sädehoidon teoria',
 		'tab_epa_map': json.dumps(tab_epa_map),
+		'modality_id': 'sadehoito',
+		'is_superuser': request.user.is_superuser,
 	})
 
 
 def modaliteetit_isotooppi_view(request):
 	"""Isotooppilääketiede theory page with tabs for each sub-modality"""
+	spec = Specialty.objects.filter(name__icontains='isotooppi').first()
+	tab_epa_map = {}
+	if spec:
+		epas = EPA.objects.filter(specialty=spec)
+		TAB_TITLES = {
+			'gammakamera': 'Gammakamera',
+			'pet': 'PET-kamera',
+			'radiofarmasia': 'Annostelu',
+			'spet': 'Gammakuvaus',
+			'pet-tutkimukset': 'PET-tutkimukset',
+			'radionuklidihoidot': 'Radionuklidi',
+			'sateilybiologia': 'Säteilybiologia',
+		}
+		for tab_id, title_prefix in TAB_TITLES.items():
+			epa = epas.filter(title__istartswith=title_prefix).first()
+			if epa:
+				tab_epa_map[tab_id] = epa.id
+
 	return render(request, 'sisalto/modaliteetit/isotooppi.html', {
 		'page_title': 'Isotooppilääketieteen teoria',
+		'tab_epa_map': json.dumps(tab_epa_map),
+		'modality_id': 'isotooppi',
+		'is_superuser': request.user.is_superuser,
 	})
 
 
@@ -294,6 +319,35 @@ def modaliteetit_fysiologia_view(request):
 	return render(request, 'sisalto/modaliteetit/fysiologia.html', {
 		'page_title': 'Kliinisen fysiologian teoria',
 		'tab_epa_map': json.dumps(tab_epa_map),
+		'modality_id': 'fysiologia',
+		'is_superuser': request.user.is_superuser,
+	})
+
+
+def modaliteetit_knf_view(request):
+	"""Kliininen neurofysiologia theory page with tabs for each sub-modality"""
+	spec = Specialty.objects.filter(name='KNF').first()
+	tab_epa_map = {}
+	if spec:
+		epas = EPA.objects.filter(specialty=spec)
+		TAB_TITLES = {
+			'eeg': 'EEG',
+			'heratepotentiaali': 'Herätepotentiaali',
+			'iom': 'IOM',
+			'uni': 'Uni',
+			'tms': 'Sarja-TMS',
+			'laiteturvallisuus': 'Laite-',
+		}
+		for tab_id, title_prefix in TAB_TITLES.items():
+			epa = epas.filter(title__istartswith=title_prefix).first()
+			if epa:
+				tab_epa_map[tab_id] = epa.id
+
+	return render(request, 'sisalto/modaliteetit/knf.html', {
+		'page_title': 'Kliinisen neurofysiologian teoria',
+		'tab_epa_map': json.dumps(tab_epa_map),
+		'modality_id': 'knf',
+		'is_superuser': request.user.is_superuser,
 	})
 
 
@@ -303,45 +357,67 @@ def modaliteetit_fysiologia_view(request):
 
 @require_GET
 def theory_quiz_question(request, epa_id):
-	"""Return a random MCQ question for the given EPA."""
+	"""Return a random question for the given EPA. Supports all question types."""
 	import random
 	from quiz.models import Question
 
+	# Accept ?types=multiple_choice,true_false,calculation,matching
+	ALLOWED_TYPES = ['multiple_choice', 'multi_select', 'true_false', 'calculation', 'matching']
+	types_param = request.GET.get('types', '')
+	if types_param:
+		requested_types = [t.strip() for t in types_param.split(',') if t.strip() in ALLOWED_TYPES]
+	else:
+		requested_types = ALLOWED_TYPES
+
 	questions = Question.objects.filter(
 		epa_id=epa_id,
-		question_type__in=['multiple_choice', 'multi_select'],
+		question_type__in=requested_types,
 		is_active=True,
 	)
 	# Exclude already-answered questions (session-based)
-	session_key = f'theory_quiz_answered_{epa_id}'
+	types_suffix = '_'.join(sorted(requested_types))
+	session_key = f'theory_quiz_answered_{epa_id}_{types_suffix}'
 	answered = request.session.get(session_key, [])
 	pool = questions.exclude(id__in=answered)
 	if not pool.exists():
-		# All questions answered — reset pool
 		request.session[session_key] = []
 		answered = []
 		pool = questions
 
 	question = pool.order_by('?').first()
 	if not question:
-		return JsonResponse({'error': 'Ei kysymyksiä'}, status=404)
+		return JsonResponse({'error': 'Ei kysymyksiä valituilla tyypeillä'}, status=404)
 
-	choices = list(question.choices.all().values('id', 'text', 'order'))
-	random.shuffle(choices)
-
-	return JsonResponse({
+	response_data = {
 		'question_id': question.id,
 		'question_type': question.question_type,
 		'text': question.text,
-		'choices': choices,
 		'total_available': questions.count(),
 		'answered_count': len(answered),
-	})
+	}
+
+	if question.question_type == 'calculation':
+		response_data['choices'] = []
+		response_data['calculation_unit'] = question.calculation_unit or ''
+		response_data['calculation_tolerance'] = question.calculation_tolerance or 5.0
+	elif question.question_type == 'matching' and question.matching_pairs:
+		rights = [p['right'] for p in question.matching_pairs]
+		random.shuffle(rights)
+		response_data['choices'] = []
+		response_data['matching_pairs'] = question.matching_pairs
+		response_data['matching_rights'] = rights
+	else:
+		# multiple_choice, multi_select, true_false
+		choices = list(question.choices.all().values('id', 'text', 'order'))
+		random.shuffle(choices)
+		response_data['choices'] = choices
+
+	return JsonResponse(response_data)
 
 
 @require_POST
 def theory_quiz_answer(request):
-	"""Check the user's answer and return results."""
+	"""Check the user's answer and return results. Supports all question types."""
 	from quiz.models import Question
 
 	try:
@@ -350,27 +426,80 @@ def theory_quiz_answer(request):
 		return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
 	question_id = data.get('question_id')
-	selected_ids = data.get('selected_ids', [])
-
-	if not question_id or not selected_ids:
-		return JsonResponse({'error': 'Missing data'}, status=400)
+	if not question_id:
+		return JsonResponse({'error': 'Missing question_id'}, status=400)
 
 	try:
 		question = Question.objects.get(id=question_id, is_active=True)
 	except Question.DoesNotExist:
 		return JsonResponse({'error': 'Question not found'}, status=404)
 
-	choices = question.choices.all()
-	correct_ids = set(choices.filter(is_correct=True).values_list('id', flat=True))
-	selected_set = set(int(x) for x in selected_ids)
-	is_correct = (selected_set == correct_ids)
+	is_correct = False
+	choice_results = []
 
-	# Track in session
-	session_key = f'theory_quiz_answered_{question.epa_id}'
-	answered = request.session.get(session_key, [])
-	if question_id not in answered:
-		answered.append(question_id)
-		request.session[session_key] = answered
+	if question.question_type == 'calculation':
+		calc_input = data.get('calculation_input')
+		if calc_input is None:
+			return JsonResponse({'error': 'Missing calculation_input'}, status=400)
+		try:
+			user_value = float(calc_input)
+		except (ValueError, TypeError):
+			return JsonResponse({'error': 'Invalid calculation input'}, status=400)
+		correct = question.calculation_answer
+		tolerance_pct = question.calculation_tolerance or 5.0
+		if correct is not None and correct != 0:
+			is_correct = abs(user_value - correct) / abs(correct) * 100 <= tolerance_pct
+		elif correct == 0:
+			is_correct = abs(user_value) < 0.001
+		choice_results = [{
+			'correct_answer': correct,
+			'user_answer': user_value,
+			'unit': question.calculation_unit or '',
+			'tolerance_pct': tolerance_pct,
+		}]
+
+	elif question.question_type == 'matching':
+		matching_answers = data.get('matching_answers', {})
+		if question.matching_pairs:
+			correct_pairs = {p['left']: p['right'] for p in question.matching_pairs}
+			is_correct = all(
+				matching_answers.get(left) == right
+				for left, right in correct_pairs.items()
+			)
+			choice_results = [
+				{
+					'left': p['left'],
+					'right': p['right'],
+					'user_right': matching_answers.get(p['left'], ''),
+					'pair_correct': matching_answers.get(p['left']) == p['right'],
+				}
+				for p in question.matching_pairs
+			]
+
+	else:
+		# multiple_choice, multi_select, true_false
+		selected_ids = data.get('selected_ids', [])
+		if not selected_ids:
+			return JsonResponse({'error': 'Missing selected_ids'}, status=400)
+		choices = question.choices.all()
+		correct_ids = set(choices.filter(is_correct=True).values_list('id', flat=True))
+		selected_set = set(int(x) for x in selected_ids)
+		is_correct = (selected_set == correct_ids)
+		choice_results = [{
+			'id': c.id,
+			'text': c.text,
+			'is_correct': c.is_correct,
+			'was_selected': c.id in selected_set,
+			'explanation': c.explanation or '',
+		} for c in choices]
+
+	# Track in session (match all possible type suffixes)
+	for suffix_key in request.session.keys():
+		if suffix_key.startswith(f'theory_quiz_answered_{question.epa_id}_'):
+			answered = request.session.get(suffix_key, [])
+			if question_id not in answered:
+				answered.append(question_id)
+				request.session[suffix_key] = answered
 	request.session.modified = True
 
 	# Update question stats
@@ -379,16 +508,9 @@ def theory_quiz_answer(request):
 		question.times_correct += 1
 	question.save(update_fields=['times_answered', 'times_correct'])
 
-	choice_results = [{
-		'id': c.id,
-		'text': c.text,
-		'is_correct': c.is_correct,
-		'was_selected': c.id in selected_set,
-		'explanation': c.explanation or '',
-	} for c in choices]
-
 	return JsonResponse({
 		'is_correct': is_correct,
+		'question_type': question.question_type,
 		'explanation': question.explanation or '',
 		'choices': choice_results,
 	})
@@ -3234,10 +3356,107 @@ def upload_image_view(request):
     except Exception as e:
         return JsonResponse({ 'error': { 'message': str(e) } }, status=500)
 
+
 # =============================================================================
-# RAPORTOI ONGELMA SECTION MANAGEMENT
+# THEORY IMAGE SLOTS API
 # =============================================================================
 
+@require_GET
+def theory_images_list(request, modality: str):
+    """Return all images for a modality as {slot_id: {url, caption, alt_text}}"""
+    images = TheoryImage.objects.filter(modality=modality).exclude(image='')
+    data = {}
+    for img in images:
+        if img.image:
+            data[img.slot_id] = {
+                'url': img.image.url,
+                'caption': img.caption,
+                'alt_text': img.alt_text,
+                'tab_id': img.tab_id,
+                'display_size': img.display_size,
+            }
+    return JsonResponse(data)
+
+
+@require_POST
+@csrf_protect
+def theory_image_upload(request):
+    """Upload or replace an image in a theory slot. Superuser only."""
+    if not request.user.is_superuser:
+        return JsonResponse({'error': 'Ei oikeuksia.'}, status=403)
+
+    modality = request.POST.get('modality', '').strip()
+    tab_id = request.POST.get('tab_id', '').strip()
+    slot_id = request.POST.get('slot_id', '').strip()
+    caption = request.POST.get('caption', '').strip()
+    alt_text = request.POST.get('alt_text', '').strip()
+    display_size = request.POST.get('display_size', 'medium').strip()
+    if display_size not in ('small', 'medium', 'large', 'full'):
+        display_size = 'medium'
+    image_file = request.FILES.get('image')
+
+    if not all([modality, tab_id, slot_id]):
+        return JsonResponse({'error': 'modality, tab_id ja slot_id vaaditaan.'}, status=400)
+
+    obj, created = TheoryImage.objects.get_or_create(
+        modality=modality, tab_id=tab_id, slot_id=slot_id,
+        defaults={'caption': caption, 'alt_text': alt_text},
+    )
+
+    if image_file:
+        import os, uuid
+        allowed = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg']
+        ext = os.path.splitext(image_file.name)[1].lower()
+        if ext not in allowed:
+            return JsonResponse({'error': 'Sallitut tiedostotyypit: ' + ', '.join(allowed)}, status=400)
+        # Delete old file if replacing
+        if obj.image:
+            try:
+                default_storage.delete(obj.image.name)
+            except Exception:
+                pass
+        filename = f"theory/{uuid.uuid4().hex}{ext}"
+        saved = default_storage.save(filename, ContentFile(image_file.read()))
+        obj.image = saved
+
+    obj.caption = caption
+    obj.alt_text = alt_text
+    obj.display_size = display_size
+    obj.save()
+
+    return JsonResponse({
+        'ok': True,
+        'url': obj.image.url if obj.image else None,
+        'caption': obj.caption,
+        'alt_text': obj.alt_text,
+        'display_size': obj.display_size,
+        'slot_id': obj.slot_id,
+    })
+
+
+@require_POST
+@csrf_protect
+def theory_image_delete(request):
+    """Delete an image from a theory slot. Superuser only."""
+    if not request.user.is_superuser:
+        return JsonResponse({'error': 'Ei oikeuksia.'}, status=403)
+
+    data = json.loads(request.body)
+    modality = data.get('modality', '').strip()
+    tab_id = data.get('tab_id', '').strip()
+    slot_id = data.get('slot_id', '').strip()
+
+    try:
+        obj = TheoryImage.objects.get(modality=modality, tab_id=tab_id, slot_id=slot_id)
+        if obj.image:
+            try:
+                default_storage.delete(obj.image.name)
+            except Exception:
+                pass
+        obj.delete()
+        return JsonResponse({'ok': True})
+    except TheoryImage.DoesNotExist:
+        return JsonResponse({'error': 'Kuvapaikkaa ei löydy.'}, status=404)
 
 
 # =============================================================================
@@ -3269,3 +3488,70 @@ def edit_raportoi_ongelma_section_view(request):
 			return JsonResponse({"success": False, "error": str(e)})
 	
 	return JsonResponse({"success": False, "error": "Virheellinen pyyntö"})
+
+
+# =============================================================================
+# TEXT-TO-SPEECH API (OpenAI TTS)
+# =============================================================================
+
+@require_POST
+@csrf_protect
+def tts_generate(request):
+    """Generate Finnish TTS audio using OpenAI TTS API.
+    Accepts JSON: {text: "..."}
+    Returns: audio/mpeg MP3 stream.
+    Uses file-based cache to avoid re-generating identical chunks.
+    """
+    import hashlib, os
+    from django.conf import settings
+
+    try:
+        data = json.loads(request.body)
+    except (json.JSONDecodeError, ValueError):
+        return JsonResponse({'error': 'Virheellinen JSON'}, status=400)
+
+    text = (data.get('text') or '').strip()
+    if not text:
+        return JsonResponse({'error': 'Teksti puuttuu'}, status=400)
+    if len(text) > 4096:
+        text = text[:4096]
+
+    # File-based cache
+    cache_dir = os.path.join(settings.BASE_DIR, 'media', 'tts_cache')
+    text_hash = hashlib.sha256(text.encode('utf-8')).hexdigest()[:24]
+    cache_path = os.path.join(cache_dir, f'{text_hash}.mp3')
+
+    if os.path.exists(cache_path):
+        with open(cache_path, 'rb') as f:
+            return HttpResponse(f.read(), content_type='audio/mpeg')
+
+    # Generate via OpenAI
+    api_key = os.environ.get('OPENAI_API_KEY', '')
+    if not api_key:
+        print('[TTS] ERROR: OPENAI_API_KEY not found in environment')
+        return JsonResponse({'error': 'OPENAI_API_KEY ei ole asetettu.'}, status=500)
+    print(f'[TTS] Generating audio for {len(text)} chars, api_key starts with {api_key[:8]}...')
+
+    try:
+        import openai
+        import traceback
+        client = openai.OpenAI(api_key=api_key)
+        response = client.audio.speech.create(
+            model='tts-1',
+            voice='nova',
+            input=text,
+            response_format='mp3',
+        )
+        audio_bytes = response.content
+
+        # Cache to disk
+        os.makedirs(cache_dir, exist_ok=True)
+        with open(cache_path, 'wb') as f:
+            f.write(audio_bytes)
+
+        return HttpResponse(audio_bytes, content_type='audio/mpeg')
+
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return JsonResponse({'error': f'TTS-virhe: {str(e)}'}, status=500)

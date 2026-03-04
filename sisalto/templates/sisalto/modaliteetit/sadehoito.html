@@ -13,7 +13,47 @@
     <div class="theory-header">
         <h1><i class="fas fa-radiation" style="color: #34d399; margin-right: 8px;"></i> Sädehoidon teoria</h1>
         <p>Kattava teoriamateriaali sädehoidon fysikaalisista perusteista, hoitotekniikoista, dosimetriasta, laitteista ja säteilybiologiasta. Valitse aihealue alla olevista välilehdistä.</p>
+        {% if is_superuser %}
+        <button class="theory-edit-toggle" id="editModeToggle" onclick="toggleEditMode()">
+            <i class="fas fa-images"></i> <span>Muokkaa kuvia</span>
+        </button>
+        {% endif %}
     </div>
+
+    <!-- Upload modal (superuser only) -->
+    {% if is_superuser %}
+    <div class="theory-upload-modal" id="uploadModal">
+        <div class="theory-upload-modal-content">
+            <h3><i class="fas fa-image" style="color: var(--color-primary); margin-right: 8px;"></i> Lisää kuva</h3>
+            <div class="theory-upload-dropzone" id="uploadDropzone">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span>Vedä kuva tähän tai klikkaa valitaksesi</span>
+                <input type="file" id="uploadFileInput" accept="image/*" style="display: none;">
+            </div>
+            <div class="theory-upload-field">
+                <label for="uploadCaption">Kuvateksti</label>
+                <textarea id="uploadCaption" placeholder="Kuvan selitys suomeksi..."></textarea>
+            </div>
+            <div class="theory-upload-field">
+                <label for="uploadAlt">Alt-teksti (saavutettavuus)</label>
+                <input type="text" id="uploadAlt" placeholder="Kuvaileva teksti ruudunlukijalle...">
+            </div>
+            <div class="theory-upload-field">
+                <label>Kuvan koko</label>
+                <div class="theory-size-picker" id="uploadSizePicker">
+                    <label class="size-option"><input type="radio" name="uploadSize" value="small"> Pieni (40 %)</label>
+                    <label class="size-option"><input type="radio" name="uploadSize" value="medium" checked> Normaali (65 %)</label>
+                    <label class="size-option"><input type="radio" name="uploadSize" value="large"> Suuri (85 %)</label>
+                    <label class="size-option"><input type="radio" name="uploadSize" value="full"> Täysleveys</label>
+                </div>
+            </div>
+            <div class="theory-upload-actions">
+                <button class="btn-cancel" onclick="closeUploadModal()">Peruuta</button>
+                <button class="btn-save" id="uploadSaveBtn" onclick="saveUploadedImage()" disabled>Tallenna</button>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 
     <!-- Tab navigation -->
     <div class="theory-tabs" role="tablist">
@@ -53,6 +93,7 @@
             <h2>2. Ionisoiva säteily ja säteilylajit</h2>
 
             <h3>2.1 Fotonisäteily</h3>
+            <div class="theory-image-slot" data-slot="radiation-types" data-tab="peruskasitteet" data-default-caption="Säteilylajit sädehoidossa: fotoni (röntgen/gamma), elektroni ja protonisäteily — fysikaaliset ominaisuudet"></div>
             <p>Fotonisäteily on sähkömagneettista säteilyä, jolla ei ole massaa eikä varausta. Sädehoidossa käytetään kahta fotonisäteilyn tyyppiä:</p>
             <ul>
                 <li><strong>Röntgensäteily (X-rays)</strong>: Syntyy lineaarikiihdyttimessä, kun kiihdytetyt elektronit osuvat kohdemateriaaliin (yleensä volframi). Säteilyllä on jatkuva energiaspektri jarrutussäteilystä ja diskreettejä karakteristisia viivoja. Sädehoidossa käytetään 4&ndash;18 MV:n röntgensäteilyä. Megavolttialueella puhutaan usein nimellisenergiasta (esim. 6 MV), joka viittaa kiihdytysjännitteeseen eikä suoraan fotonien keskienergiaan.</li>
@@ -110,6 +151,7 @@
             </table>
 
             <h2>4. Fotonien vuorovaikutukset aineen kanssa</h2>
+            <div class="theory-image-slot" data-slot="photon-interactions" data-tab="peruskasitteet" data-default-caption="Fotonivuorovaikutukset: valosähköinen, Compton-sironta ja parinmuodostus energian ja Z:n funktiona"></div>
 
             <h3>4.1 Valosähköinen ilmiö (photoelectric effect)</h3>
             <p>Valosähköisessä ilmiössä fotoni absorboituu kokonaan atomiin ja irrottaa sidotun elektronin. Fotonin koko energia siirtyy elektronille (miinus sidosenergia). Vuorovaikutuksen todennäköisyys on verrannollinen \( Z^3/E^3 \), missä \( Z \) on aineen järjestysluku ja \( E \) fotonin energia. Valosähköinen ilmiö hallitsee matalilla energioilla (&lt; 100 keV) ja suurilla järjestysluvuilla.</p>
@@ -167,6 +209,7 @@
             <h2>6. Säteilykeilan annosjakauma</h2>
 
             <h3>6.1 PDD (percentage depth dose)</h3>
+            <div class="theory-image-slot" data-slot="pdd-curve" data-tab="peruskasitteet" data-default-caption="PDD-käyrä eri fotonienergialla (4 MV, 6 MV, 18 MV): build-up, dmax ja syvyysannos"></div>
             <p>PDD kuvaa annoksen prosentuaalista jakautumista syvyyden funktiona säteilykeilan keskiakselilla:</p>
 
             <div class="formula">
@@ -347,7 +390,13 @@
             <div class="theory-quiz-section" data-tab="peruskasitteet">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
-                    <p>Harjoittele sädehoidon peruskäsitteiden teoriaa monivalintakysymyksillä.</p>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-peruskasitteet">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
                     <button class="theory-quiz-btn" onclick="startTheoryQuiz('peruskasitteet')">
                         <i class="fas fa-play"></i> Aloita harjoittelu
                     </button>
@@ -381,6 +430,7 @@
             <h2>2. TT-simulaatio (CT simulation)</h2>
 
             <h3>2.1 TT-simulaation periaatteet</h3>
+            <div class="theory-image-slot" data-slot="ct-simulation-setup" data-tab="kuvantaminen" data-default-caption="TT-simulaattorin asettelu: tasainen pöytä, lasermerkit ja hoitoasennon immobilisaatio"></div>
             <p>TT-simulaatio on sädehoidon suunnittelun ensimmäinen vaihe. Potilas kuvataan hoitoasennossa leveällä TT-laitteella (bore &ge; 80 cm), jossa on tasainen pöytälevy ja ulkoiset lasermerkit. TT-data tarjoaa kolmiulotteisen anatomisen mallin ja kudosten elektronitiheysinformaation annosalgoritmeja varten.</p>
 
             <h3>2.2 Kuvausprotokollat</h3>
@@ -411,6 +461,7 @@
             <p>Rintakehän ja ylävatsan alueen kasvaimet liikkuvat hengityksen mukana jopa 2&ndash;3 cm. Ilman liikkeenhallintaa PTV-marginaalit kasvavat suuriksi, mikä lisää terveen kudoksen annosta. 4D-CT ja liikkeenhallintatekniikat mahdollistavat liikkeen huomioinnin suunnittelussa ja hoidossa.</p>
 
             <h3>3.2 4D-CT-kuvaus</h3>
+            <div class="theory-image-slot" data-slot="4d-ct-technique" data-tab="kuvantaminen" data-default-caption="4D-CT-rekonstruktio: hengitysfaasit, MIP-ITV ja gating-protokolla keuhkosädehoitoon"></div>
             <p>4D-CT:ssä TT-kuvaus yhdistetään hengityssignaaliin (pinta-anturi, spirometri tai optinen seuranta). Kuvasarja jaetaan faaseihin (tyypillisesti 10 vaihetta hengityssyklin aikana). Jokaisesta faasista rekonstruoidaan täydellinen 3D-kuvasarja, jolloin saadaan aikasarjana koko hengityssyklinen liike visualisoitua.</p>
             <p>4D-CT:stä voidaan muodostaa:</p>
             <ul>
@@ -620,6 +671,7 @@
             <h2>13. DVH-analyysi ja hoitosuunnitelman arviointi</h2>
 
             <h3>13.1 Annos-volyymi-histogrammi (DVH)</h3>
+            <div class="theory-image-slot" data-slot="dvh-analysis" data-tab="kuvantaminen" data-default-caption="Kumulatiivinen DVH: PTV-kattavuus, OAR-rajoitukset ja D95/D2/Dmean-parametrit"></div>
             <p>DVH (dose-volume histogram) on hoitosuunnitelman arvioinnin perustyökalu. Se esittää graafisesti, kuinka suuri osuus rakenteesta saa vähintään tietyn annoksen. Kumulatiivinen DVH on yleisin esitystapa.</p>
             <p>Tärkeimmät DVH-parametrit:</p>
             <ul>
@@ -661,7 +713,13 @@
             <div class="theory-quiz-section" data-tab="kuvantaminen">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
-                    <p>Harjoittele kuvantamisen ja suunnittelun teoriaa monivalintakysymyksillä.</p>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-kuvantaminen">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
                     <button class="theory-quiz-btn" onclick="startTheoryQuiz('kuvantaminen')">
                         <i class="fas fa-play"></i> Aloita harjoittelu
                     </button>
@@ -720,6 +778,7 @@
             <h2>3. Fotonisädehoito</h2>
 
             <h3>2.1 Lineaarikiihdyttimen fotonikeila</h3>
+            <div class="theory-image-slot" data-slot="linac-photon-beam" data-tab="ulkoinen" data-default-caption="Lineaarikiihdyttimen fotonikeila: energiaspektri, FFF vs. FF ja kenttäprofiilit"></div>
             <p>Lineaarikiihdytin (linear accelerator, linac) tuottaa suurienergisiä röntgenfotoneja kiihdyttämällä elektroneja mikroaaltorakenteessa ja suuntaamalla ne volframikohteeseen. Syntyvä röntgensäteily suodatetaan tasoitussuodattimella (flattening filter, FF) tasaisen keilan tuottamiseksi. Nykyaikaisissa laitteissa on myös FFF-moodi (flattening filter free), joka tuottaa suuremman annosnopeuden mutta epätasaisen profilin (keskeltä korkeampi annos). FFF-moodia käytetään erityisesti SBRT-hoidoissa.</p>
             <p>Kliiniset fotonienergiat: 4, 6, 10, 15 ja 18 MV. Nimellisenergia viittaa elektronien kiihdytysenergiaan, ei fotonien keskienergiaan (esim. 6 MV:n keilan keskimääräinen fotonienergia on noin 2 MeV).</p>
 
@@ -781,6 +840,7 @@
             <p>3D-CRT käyttää useita (tyypillisesti 3&ndash;7) kiinteitä keilasuuntia, joiden muoto mukautetaan MLC:llä kohteen BEV-projektion (beam's eye view) mukaan. Suunnittelu on etenevä (forward planning): fyysikko valitsee kenttien suunnat ja painot manuaalisesti. 3D-CRT sopii yksinkertaisiin kohteisiin, joissa OAR:t eivät ole kohteen lähellä tai sisällä.</p>
 
             <h3>5.2 IMRT (intensity-modulated radiation therapy)</h3>
+            <div class="theory-image-slot" data-slot="imrt-technique" data-tab="ulkoinen" data-default-caption="IMRT-fluenssikartta: moduloidut kentät, käänteissuunnittelu ja annosgradientin muodostuminen"></div>
             <p>IMRT moduloi säteilykeilan intensiteettiä kenttäakselin poikkisuunnassa, mahdollistaen konsaaviset annosjakaumat. Tämä on tarpeen, kun OAR sijaitsee kohteen vieressä tai sen sisällä (esim. selkäydin kohdunkaulan syövässä).</p>
             <ul>
                 <li><strong>Käänteissuunnittelu (inverse planning)</strong>: Optimointialgoritmi etsii fluenssijakauman, joka täyttää annetut annoskriteerit (objectives ja constraints). Fysikko/onkologi asettaa tavoitteet, optimoija ratkaisee fluenssin.</li>
@@ -832,6 +892,7 @@
             </ul>
 
             <h2>7. IGRT (kuvaohjattu sädehoito)</h2>
+            <div class="theory-image-slot" data-slot="igrt-methods" data-tab="ulkoinen" data-default-caption="IGRT-menetelmät: kV-CBCT, MV-EPID, pinta-analyysi ja ultraääniohjaus — tarkkuusvertailu"></div>
 
             <h3>7.1 Kuvantamismenetelmät</h3>
             <table>
@@ -999,7 +1060,13 @@
             <div class="theory-quiz-section" data-tab="ulkoinen">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
-                    <p>Harjoittele ulkoisen sädehoidon teoriaa monivalintakysymyksillä.</p>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-ulkoinen">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
                     <button class="theory-quiz-btn" onclick="startTheoryQuiz('ulkoinen')">
                         <i class="fas fa-play"></i> Aloita harjoittelu
                     </button>
@@ -1038,6 +1105,7 @@
             <h2>2. Säteilylähteet</h2>
 
             <h3>2.1 Ir-192 (iridium-192)</h3>
+            <div class="theory-image-slot" data-slot="brachytherapy-sources" data-tab="sisainen" data-default-caption="Brakyterapiasäteilylähteet: Ir-192, Co-60, I-125 — fysikaaliset ominaisuudet ja käyttöalueet"></div>
             <p><sup>192</sup>Ir on nykyisin yleisin HDR-brakyterapian lähde. Puoliintumisaika 73,8 päivää tuottaa riittävän aktiivisuuden kliiniseen käyttöön, mutta vaatii lähdevaihdon noin 3&ndash;4 kuukauden välein. Lähteen fyysinen koko on erittäin pieni (tyypillisesti halkaisija 0,9 mm, pituus 3,5 mm), mikä mahdollistaa ohuiden applikaattoreiden käytön.</p>
 
             <h3>2.2 Co-60 (koboltti-60)</h3>
@@ -1103,6 +1171,7 @@
             <p>Ir-192-lähde vaihdetaan tyypillisesti 3&ndash;4 kuukauden välein (aktiivisuus laskee alle kliinisesti hyväksyttävän tason). Lähdevaihto on valtuutetun huoltohenkilöstön tehtävä. Fyysikon vastuulla on uuden lähteen aktiivisuuden riippumaton varmistaminen ennen kliinistä käyttöä.</p>
 
             <h2>5. TG-43 annosformalismi</h2>
+            <div class="theory-image-slot" data-slot="tg43-formalism" data-tab="sisainen" data-default-caption="TG-43 annosformalismi: koordinaatisto, geometriafunktio ja anisotropiafunktio"></div>
 
             <h3>5.1 Yleiskatsaus</h3>
             <p>AAPM TG-43 (ja päivitetty TG-43U1) on brakyterapian standardiannosformalismi, joka kuvaa pistelähteenomaisen säteilylähteen ympärillä olevaa annosjakaumaa vesiekvivalentissa ympäristössä. Formalismi perustuu mitattaviin ja laskennallisiin parametreihin, jotka on tabelloitu yleisimmille kaupallisille lähteille.</p>
@@ -1160,6 +1229,7 @@
             </div>
 
             <h2>7. Gynekologinen brakyterapia</h2>
+            <div class="theory-image-slot" data-slot="gynecologic-brt" data-tab="sisainen" data-default-caption="Gynekologinen brakyterapia: MRI-pohjainen kohdemäärittely, HR-CTV ja applikaattorit"></div>
 
             <h3>7.1 GEC-ESTRO-suositukset</h3>
             <p>GEC-ESTRO (Groupe Europ&eacute;en de Curieth&eacute;rapie &ndash; European Society for Radiotherapy and Oncology) on julkaissut kansainväliset suositukset MRI-pohjaiselle gynekologiselle brakyterapialle:</p>
@@ -1278,7 +1348,13 @@
             <div class="theory-quiz-section" data-tab="sisainen">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
-                    <p>Harjoittele sisäisen sädehoidon (brakyterapian) teoriaa monivalintakysymyksillä.</p>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-sisainen">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
                     <button class="theory-quiz-btn" onclick="startTheoryQuiz('sisainen')">
                         <i class="fas fa-play"></i> Aloita harjoittelu
                     </button>
@@ -1350,6 +1426,7 @@
             </ol>
 
             <h3>2.2 Kammiotyppit</h3>
+            <div class="theory-image-slot" data-slot="ion-chamber-types" data-tab="dosimetria" data-default-caption="Ionisaatiokammiotyypit: Farmer-kammio, tasolevykammio (Roos/Markus) — rakenne ja käyttöalueet"></div>
             <p>Sädehoidon dosimetriassa käytetään pääasiassa kahta kammiotyyppiä:</p>
             <ul>
                 <li><strong>Sylinterimäinen kammio (thimble/cylindrical chamber)</strong>: Yleisin on Farmer-tyyppinen kammio (0,6 cm&sup3;), joka on referenssiannoksen mittauksen standardi fotoni- ja korkeaenergisille elektronikeiloille. Sylinterimäisen kammion efektiivinen mittauspiste on keräyselektrodin keskipisteen edessä etäisyydellä \( 0{,}6 \cdot r_{cav} \), missä \( r_{cav} \) on kaviteetin sisäsäde.</li>
@@ -1380,6 +1457,7 @@
             </table>
 
             <h2>3. Absorboituneen annoksen mittaus &mdash; IAEA TRS-398</h2>
+            <div class="theory-image-slot" data-slot="trs398-protocol" data-tab="dosimetria" data-default-caption="IAEA TRS-398 kalibrointiketju: BIPM → STUK → sairaala, kalibrointikerroin N_D,w ja korjauskertoimet"></div>
 
             <h3>3.1 Kalibrointiketju</h3>
             <p>Absorboituneen annoksen mittaus perustuu katkeamattomaan kalibrointiketjuun, joka ulottuu kansainvälisistä primäärimittalaboratorioista sairaalaan:</p>
@@ -1529,6 +1607,7 @@
             <h2>5. Suhteellinen dosimetria</h2>
 
             <h3>5.1 PDD- ja profiilimittaukset vesifantomissa</h3>
+            <div class="theory-image-slot" data-slot="relative-dosimetry" data-tab="dosimetria" data-default-caption="Vesifantomimittaukset: PDD-käyrä, poikkisuuntainen profiili ja output-faktorit eri kenttäkoille"></div>
             <p>Suhteellinen dosimetria (relative dosimetry) kuvaa annosjakauman muodon ilman absoluuttista annostasoa. Mittaukset tehdään tyypillisesti automaattisella vesifantomilla (esim. PTW MP3, IBA Blue Phantom).</p>
             <ul>
                 <li><strong>PDD (percentage depth dose)</strong>: Annos syvyyden funktiona keskiakselilla, normalisoitu \( d_{max} \):iin. PDD riippuu energiasta, kenttäkoosta ja SSD:stä.</li>
@@ -1691,7 +1770,13 @@
             <div class="theory-quiz-section" data-tab="dosimetria">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
-                    <p>Harjoittele dosimetrian teoriaa monivalintakysymyksillä.</p>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-dosimetria">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
                     <button class="theory-quiz-btn" onclick="startTheoryQuiz('dosimetria')">
                         <i class="fas fa-play"></i> Aloita harjoittelu
                     </button>
@@ -1743,6 +1828,7 @@
             </div>
 
             <h3>2.3 Mikroaaltolähde</h3>
+            <div class="theory-image-slot" data-slot="linac-structure" data-tab="laitteet" data-default-caption="Lineaarikiihdyttimen rakenne: elektronitykki, kiihdytysputki, taivutusmagneetti ja hoitopää"></div>
             <p>Mikroaaltoenergia tuotetaan kahdella vaihtoehtoisella laitteella:</p>
             <ul>
                 <li><strong>Magnetroni</strong>: Yksinkertaisempi ja halvempi. Itse oskilloiva laite, joka tuottaa mikroaaltopulsseja. Taajuus voi hieman vaihdella. Käyttö: matalamman energian kiihdyttimet (4&ndash;10 MeV).</li>
@@ -1763,6 +1849,7 @@
             <p>Hoitopää on lineaarikiihdyttimen kriittisin osa potilaan annoksen kannalta. Se sisältää kaikki säteilykentän muokkauksen ja monitoroinnin komponentit.</p>
 
             <h3>3.2 Komponenttien järjestys ja funktio</h3>
+            <div class="theory-image-slot" data-slot="treatment-head-components" data-tab="laitteet" data-default-caption="Lineaarikiihdyttimen hoitopää: komponenttijärjestys (kohde, FF, monitorikammio, leuat, MLC)"></div>
             <table>
                 <thead>
                     <tr><th>J&auml;rjestys</th><th>Komponentti</th><th>Funktio</th></tr>
@@ -1925,6 +2012,7 @@
             </div>
 
             <h2>8. Erikoislaitteet</h2>
+            <div class="theory-image-slot" data-slot="special-devices" data-tab="laitteet" data-default-caption="Erikoissädehoitolaitteet: Gamma Knife, CyberKnife, TomoTherapy, MR-linac ja protonikiihdytin"></div>
 
             <h3>8.1 Gamma Knife</h3>
             <p>Gamma Knife on stereotaktinen radiokururgian laite, joka on suunniteltu erityisesti aivojen kohteiden hoitoon. Moderni Gamma Knife (Perfexion/Icon) sisältää 192 Co-60-lähdettä, jotka on järjestetty puolipallon muotoiseen kehykseen. Lähteet fokusoivat säteilyn yhteen pisteeseen (isosentri) eri suunnista, tuottaen erittäin jyrkän annosgradientin.</p>
@@ -2068,7 +2156,13 @@
             <div class="theory-quiz-section" data-tab="laitteet">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
-                    <p>Harjoittele sädehoidon laitteiden teoriaa monivalintakysymyksillä.</p>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-laitteet">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
                     <button class="theory-quiz-btn" onclick="startTheoryQuiz('laitteet')">
                         <i class="fas fa-play"></i> Aloita harjoittelu
                     </button>
@@ -2103,6 +2197,7 @@
             <h2>2. DNA-vauriot ja solujen kuolema</h2>
 
             <h3>2.1 Säteilyn aiheuttamat DNA-vauriot</h3>
+            <div class="theory-image-slot" data-slot="dna-damage-radiation" data-tab="sateilybiologia" data-default-caption="Säteilyn DNA-vauriot: SSB vs. DSB, suora ja epäsuora vaikutus, LET:n merkitys"></div>
             <p>Ionisoiva säteily aiheuttaa DNA-molekyyliin vaurioita sekä suoraan (suora osuma DNA:han) että epäsuorasti (vapaat radikaalit, erityisesti hydroksyyliradikaalit OH&bull; vedestä). DNA-vaurioiden päätyypit:</p>
             <ul>
                 <li><strong>SSB (single-strand break)</strong>: Yksijuostekatko. Yleisin vauriotyyppi (~1000 kpl/Gy/solu). Korjaantuu nopeasti ja tehokkaasti ehjän vastajuosteen avulla. Harvoin johtaa solukuolemaan.</li>
@@ -2129,6 +2224,7 @@
             <h2>3. LQ-malli (lineaarinen-kvadraattinen malli)</h2>
 
             <h3>3.1 Selviytymiskäyrä</h3>
+            <div class="theory-image-slot" data-slot="lq-model-curve" data-tab="sateilybiologia" data-default-caption="LQ-mallin selviytymiskäyrä: α/β-suhteen vaikutus, lineaari- ja kvadraattinen komponentti"></div>
             <p>Lineaarinen-kvadraattinen (LQ) malli kuvaa solujen selviytymistodennäköisyyttä annoksen funktiona:</p>
             <div class="formula">
                 \[ S = e^{-(\alpha D + \beta D^2)} \]
@@ -2284,6 +2380,7 @@
             <h2>8. Kudostoleranssit &mdash; QUANTEC</h2>
 
             <h3>8.1 QUANTEC-suositukset</h3>
+            <div class="theory-image-slot" data-slot="quantec-tolerances" data-tab="sateilybiologia" data-default-caption="QUANTEC-kudostoleranssit: elinkohtalaiset annosrajoitukset (keuhko, selkäydin, sydän, parotis)"></div>
             <p>QUANTEC (Quantitative Analysis of Normal Tissue Effects in the Clinic) kokoaa yhteen elinkohtaiset annosrajoitukset, jotka perustuvat kliinisiin tutkimuksiin. Nämä ovat suosituksia konventionaaliselle fraktioinnille (2 Gy/fx):</p>
             <table>
                 <thead>
@@ -2615,7 +2712,13 @@
             <div class="theory-quiz-section" data-tab="sateilybiologia">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
-                    <p>Harjoittele säteilybiologian ja -suojelun teoriaa monivalintakysymyksillä.</p>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-sateilybiologia">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
                     <button class="theory-quiz-btn" onclick="startTheoryQuiz('sateilybiologia')">
                         <i class="fas fa-play"></i> Aloita harjoittelu
                     </button>
@@ -2647,9 +2750,204 @@
 {% endblock %}
 
 {% block extra_js %}
+<script src="{% static 'sisalto/js/tts-player.js' %}"></script>
 <script>
 (function() {
-    // ========== TAB NAVIGATION ==========
+    // ==========================================
+    // THEORY IMAGE SLOTS
+    // ==========================================
+
+    var MODALITY = '{{ modality_id }}';
+    var IS_SUPERUSER = {{ is_superuser|yesno:"true,false" }};
+    var imageData = {};
+    var currentUploadSlot = null;
+    var currentUploadTab = null;
+    var pendingFile = null;
+
+    function loadTheoryImages() {
+        if (!MODALITY) return;
+        fetch('/modaliteetit/api/theory-images/' + MODALITY + '/')
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                imageData = data;
+                renderAllSlots();
+            })
+            .catch(function() {});
+    }
+
+    function renderAllSlots() {
+        document.querySelectorAll('.theory-image-slot').forEach(function(slot) {
+            var slotId = slot.dataset.slot;
+            var info = imageData[slotId];
+            if (info && info.url) {
+                slot.className = 'theory-image-slot has-image size-' + (info.display_size || 'medium');
+                slot.innerHTML =
+                    '<figure>' +
+                        '<div class="theory-image-actions">' +
+                            '<button class="btn-replace" onclick="openUploadModal(\'' + slotId + '\', \'' + slot.dataset.tab + '\')"><i class="fas fa-exchange-alt"></i> Vaihda</button>' +
+                            '<button class="btn-delete" onclick="deleteSlotImage(\'' + slotId + '\', \'' + slot.dataset.tab + '\')"><i class="fas fa-trash"></i> Poista</button>' +
+                        '</div>' +
+                        '<img src="' + info.url + '" alt="' + (info.alt_text || '') + '">' +
+                        '<figcaption>' + (info.caption || '') + '</figcaption>' +
+                    '</figure>';
+            } else {
+                slot.classList.remove('has-image');
+                var defaultCaption = slot.dataset.defaultCaption || '';
+                slot.innerHTML =
+                    '<div class="theory-image-placeholder" onclick="openUploadModal(\'' + slotId + '\', \'' + slot.dataset.tab + '\')">' +
+                        '<i class="fas fa-camera"></i>' +
+                        '<span>Lisää kuva</span>' +
+                        '<span class="slot-label">' + slotId + '</span>' +
+                        '<span style="font-size:0.75rem;max-width:400px;text-align:center;">' + defaultCaption + '</span>' +
+                    '</div>';
+            }
+        });
+    }
+
+    window.toggleEditMode = function() {
+        var btn = document.getElementById('editModeToggle');
+        document.body.classList.toggle('theory-edit-mode');
+        btn.classList.toggle('active');
+        var isActive = document.body.classList.contains('theory-edit-mode');
+        btn.querySelector('span').textContent = isActive ? 'Lopeta muokkaus' : 'Muokkaa kuvia';
+    };
+
+    window.openUploadModal = function(slotId, tabId) {
+        if (!IS_SUPERUSER || !document.body.classList.contains('theory-edit-mode')) return;
+        currentUploadSlot = slotId;
+        currentUploadTab = tabId;
+        pendingFile = null;
+        var modal = document.getElementById('uploadModal');
+        if (!modal) return;
+        var existing = imageData[slotId];
+        document.getElementById('uploadCaption').value = existing ? (existing.caption || '') : (document.querySelector('[data-slot="' + slotId + '"]').dataset.defaultCaption || '');
+        document.getElementById('uploadAlt').value = existing ? (existing.alt_text || '') : '';
+        var sizeVal = existing ? (existing.display_size || 'medium') : 'medium';
+        var sizeRadio = document.querySelector('input[name="uploadSize"][value="' + sizeVal + '"]');
+        if (sizeRadio) sizeRadio.checked = true;
+        var dz = document.getElementById('uploadDropzone');
+        dz.innerHTML = '<i class="fas fa-cloud-upload-alt"></i><span>Vedä kuva tähän, klikkaa valitaksesi tai liitä <kbd>Ctrl+V</kbd></span><input type="file" id="uploadFileInput" accept="image/*" style="display:none;">';
+        document.getElementById('uploadSaveBtn').disabled = !existing;
+        bindDropzone();
+        modal.classList.add('visible');
+        modal.setAttribute('tabindex', '-1');
+        modal.focus();
+    };
+
+    window.closeUploadModal = function() {
+        document.getElementById('uploadModal').classList.remove('visible');
+        currentUploadSlot = null;
+        currentUploadTab = null;
+        pendingFile = null;
+    };
+
+    function bindDropzone() {
+        var dz = document.getElementById('uploadDropzone');
+        var fi = document.getElementById('uploadFileInput');
+        dz.onclick = function() { fi.click(); };
+        fi.onchange = function() { if (fi.files.length) handleFile(fi.files[0]); };
+        dz.ondragover = function(e) { e.preventDefault(); dz.classList.add('dragover'); };
+        dz.ondragleave = function() { dz.classList.remove('dragover'); };
+        dz.ondrop = function(e) {
+            e.preventDefault();
+            dz.classList.remove('dragover');
+            if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+        };
+    }
+
+    function onModalPaste(e) {
+        var modal = document.getElementById('uploadModal');
+        if (!modal || !modal.classList.contains('visible')) return;
+        var items = (e.clipboardData || e.originalEvent && e.originalEvent.clipboardData || {}).items;
+        if (!items) return;
+        for (var i = 0; i < items.length; i++) {
+            if (items[i].type.indexOf('image') !== -1) {
+                e.preventDefault();
+                var file = items[i].getAsFile();
+                var ext = items[i].type === 'image/png' ? '.png' : '.jpg';
+                var renamed = new File([file], 'kuvakaappaus' + ext, { type: items[i].type });
+                handleFile(renamed);
+                return;
+            }
+        }
+    }
+    document.addEventListener('paste', onModalPaste);
+
+    function handleFile(file) {
+        if (!file.type.startsWith('image/')) return;
+        pendingFile = file;
+        document.getElementById('uploadSaveBtn').disabled = false;
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var dz = document.getElementById('uploadDropzone');
+            dz.innerHTML = '<img class="preview" src="' + e.target.result + '"><input type="file" id="uploadFileInput" accept="image/*" style="display:none;">';
+            bindDropzone();
+        };
+        reader.readAsDataURL(file);
+    }
+
+    window.saveUploadedImage = function() {
+        if (!currentUploadSlot || !currentUploadTab) return;
+        var btn = document.getElementById('uploadSaveBtn');
+        btn.disabled = true;
+        btn.textContent = 'Tallennetaan...';
+        var fd = new FormData();
+        fd.append('modality', MODALITY);
+        fd.append('tab_id', currentUploadTab);
+        fd.append('slot_id', currentUploadSlot);
+        fd.append('caption', document.getElementById('uploadCaption').value);
+        fd.append('alt_text', document.getElementById('uploadAlt').value);
+        var sizeEl = document.querySelector('input[name="uploadSize"]:checked');
+        fd.append('display_size', sizeEl ? sizeEl.value : 'medium');
+        if (pendingFile) fd.append('image', pendingFile);
+        fetch('/modaliteetit/api/theory-images/upload/', {
+            method: 'POST',
+            headers: { 'X-CSRFToken': getCookie('csrftoken') },
+            body: fd
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (data.ok) {
+                var sizeEl = document.querySelector('input[name="uploadSize"]:checked');
+                imageData[currentUploadSlot] = {
+                    url: data.url, caption: data.caption, alt_text: data.alt_text,
+                    display_size: sizeEl ? sizeEl.value : 'medium', tab_id: currentUploadTab
+                };
+                renderAllSlots();
+                closeUploadModal();
+            } else {
+                alert(data.error || 'Virhe tallennettaessa.');
+                btn.disabled = false;
+                btn.textContent = 'Tallenna';
+            }
+        })
+        .catch(function() {
+            alert('Verkkovirhe.');
+            btn.disabled = false;
+            btn.textContent = 'Tallenna';
+        });
+    };
+
+    window.deleteSlotImage = function(slotId, tabId) {
+        if (!confirm('Poistetaanko kuva paikasta "' + slotId + '"?')) return;
+        fetch('/modaliteetit/api/theory-images/delete/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+            body: JSON.stringify({ modality: MODALITY, tab_id: tabId, slot_id: slotId })
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (data.ok) { delete imageData[slotId]; renderAllSlots(); }
+            else { alert(data.error || 'Virhe poistettaessa.'); }
+        })
+        .catch(function() { alert('Verkkovirhe.'); });
+    };
+
+    loadTheoryImages();
+
+    // ==========================================
+    // TAB NAVIGATION
+    // ==========================================
     const tabs = document.querySelectorAll('.theory-tab');
     const panels = document.querySelectorAll('.theory-panel');
 
@@ -2694,13 +2992,34 @@
         return c ? c[1] : '';
     }
 
+    // Type selector chip toggle
+    document.querySelectorAll('.tq-type-chip').forEach(function(chip) {
+        chip.addEventListener('click', function(e) {
+            e.preventDefault();
+            var cb = this.querySelector('input[type="checkbox"]');
+            cb.checked = !cb.checked;
+            this.classList.toggle('selected', cb.checked);
+        });
+    });
+
+    function getSelectedTypes(tabId) {
+        var selector = document.getElementById('tq-types-' + tabId);
+        if (!selector) return 'multiple_choice,multi_select,true_false,calculation,matching';
+        var types = [];
+        selector.querySelectorAll('input[type="checkbox"]:checked').forEach(function(cb) {
+            types.push(cb.value);
+            if (cb.value === 'multiple_choice') types.push('multi_select');
+        });
+        return types.length > 0 ? types.join(',') : 'multiple_choice';
+    }
+
     window.startTheoryQuiz = function(tabId) {
         var section = document.querySelector('.theory-quiz-section[data-tab="' + tabId + '"]');
         if (!section) return;
         section.querySelector('.theory-quiz-start').style.display = 'none';
         var active = section.querySelector('.theory-quiz-active');
         active.style.display = 'block';
-        quizState[tabId] = { score: 0, total: 0 };
+        quizState[tabId] = { score: 0, total: 0, types: getSelectedTypes(tabId) };
         loadQuestion(tabId);
     };
 
@@ -2721,7 +3040,7 @@
 
         active.innerHTML = '<div class="theory-quiz-loading"><i class="fas fa-spinner fa-spin"></i><p>Ladataan kysymystä...</p></div>';
 
-        fetch('/modaliteetit/api/question/' + epaId + '/')
+        fetch('/modaliteetit/api/question/' + epaId + '/?types=' + encodeURIComponent(st.types))
             .then(function(r) { return r.json(); })
             .then(function(data) {
                 if (data.error) {
@@ -2730,7 +3049,6 @@
                 }
                 st.currentQuestionId = data.question_id;
                 st.currentQuestionType = data.question_type;
-                var isMulti = data.question_type === 'multi_select';
 
                 var html = '';
                 html += '<div class="theory-quiz-scorebar">';
@@ -2740,28 +3058,77 @@
                 html += '<button class="theory-quiz-stop" onclick="stopTheoryQuiz(\'' + tabId + '\')"><i class="fas fa-stop"></i> Lopeta</button>';
                 html += '</div></div>';
 
-                if (isMulti) {
-                    html += '<div class="theory-quiz-type-hint"><i class="fas fa-check-double"></i> Valitse kaikki oikeat vastaukset</div>';
+                var typeHints = {
+                    'multi_select': '<i class="fas fa-check-double"></i> Valitse kaikki oikeat vastaukset',
+                    'true_false': '<i class="fas fa-balance-scale"></i> Oikein vai väärin?',
+                    'calculation': '<i class="fas fa-calculator"></i> Laske oikea arvo',
+                    'matching': '<i class="fas fa-arrows-alt-h"></i> Yhdistä parit'
+                };
+                if (typeHints[data.question_type]) {
+                    html += '<div class="theory-quiz-type-hint">' + typeHints[data.question_type] + '</div>';
                 }
 
                 html += '<div class="theory-quiz-question">' + data.text + '</div>';
 
-                html += '<div class="theory-quiz-choices" id="tq-choices-' + tabId + '">';
-                data.choices.forEach(function(c) {
-                    var indicatorClass = isMulti ? 'checkbox' : '';
-                    var icon = isMulti ? 'fa-check' : 'fa-circle';
-                    html += '<div class="theory-quiz-choice" data-id="' + c.id + '" onclick="toggleChoice(\'' + tabId + '\', this, ' + isMulti + ')">';
-                    html += '<div class="theory-quiz-choice-indicator ' + indicatorClass + '"><i class="fas ' + icon + '"></i></div>';
-                    html += '<div>' + c.text + '</div>';
+                if (data.question_type === 'calculation') {
+                    html += '<div class="theory-quiz-calc-wrapper" id="tq-calc-' + tabId + '">';
+                    html += '<input type="number" step="any" class="theory-quiz-calc-input" id="tq-calc-input-' + tabId + '" placeholder="Vastaus...">';
+                    if (data.calculation_unit) html += '<span class="theory-quiz-calc-unit">' + data.calculation_unit + '</span>';
+                    html += '<span class="theory-quiz-calc-hint">toleranssi &plusmn;' + (data.calculation_tolerance || 5) + '%</span>';
                     html += '</div>';
-                });
-                html += '</div>';
+                } else if (data.question_type === 'matching' && data.matching_pairs) {
+                    html += '<div class="theory-quiz-matching" id="tq-matching-' + tabId + '">';
+                    data.matching_pairs.forEach(function(pair, idx) {
+                        html += '<div class="theory-quiz-matching-row">';
+                        html += '<span class="theory-quiz-matching-left">' + pair.left + '</span>';
+                        html += '<span class="theory-quiz-matching-arrow">&rarr;</span>';
+                        html += '<select class="theory-quiz-matching-select" data-left="' + pair.left + '">';
+                        html += '<option value="">Valitse...</option>';
+                        data.matching_rights.forEach(function(right) {
+                            html += '<option value="' + right + '">' + right + '</option>';
+                        });
+                        html += '</select>';
+                        html += '</div>';
+                    });
+                    html += '</div>';
+                } else {
+                    var isMulti = data.question_type === 'multi_select';
+                    html += '<div class="theory-quiz-choices" id="tq-choices-' + tabId + '">';
+                    data.choices.forEach(function(c) {
+                        var indicatorClass = isMulti ? 'checkbox' : '';
+                        var icon = isMulti ? 'fa-check' : 'fa-circle';
+                        html += '<div class="theory-quiz-choice" data-id="' + c.id + '" onclick="toggleChoice(\'' + tabId + '\', this, ' + isMulti + ')">';
+                        html += '<div class="theory-quiz-choice-indicator ' + indicatorClass + '"><i class="fas ' + icon + '"></i></div>';
+                        html += '<div>' + c.text + '</div>';
+                        html += '</div>';
+                    });
+                    html += '</div>';
+                }
 
                 html += '<button class="theory-quiz-submit" id="tq-submit-' + tabId + '" onclick="submitAnswer(\'' + tabId + '\')"><i class="fas fa-check"></i> Vastaa</button>';
-
                 html += '<div id="tq-result-' + tabId + '" style="display: none;"></div>';
 
                 active.innerHTML = html;
+
+                if (data.question_type === 'calculation') {
+                    var calcInput = document.getElementById('tq-calc-input-' + tabId);
+                    calcInput.addEventListener('input', function() {
+                        document.getElementById('tq-submit-' + tabId).classList.toggle('enabled', this.value.trim() !== '');
+                    });
+                    calcInput.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter' && this.value.trim()) submitAnswer(tabId);
+                    });
+                } else if (data.question_type === 'matching') {
+                    document.querySelectorAll('#tq-matching-' + tabId + ' select').forEach(function(sel) {
+                        sel.addEventListener('change', function() {
+                            var allFilled = true;
+                            document.querySelectorAll('#tq-matching-' + tabId + ' select').forEach(function(s) {
+                                if (!s.value) allFilled = false;
+                            });
+                            document.getElementById('tq-submit-' + tabId).classList.toggle('enabled', allFilled);
+                        });
+                    });
+                }
 
                 if (window.MathJax && MathJax.typesetPromise) {
                     MathJax.typesetPromise([active]);
@@ -2778,14 +3145,8 @@
             el.parentElement.querySelectorAll('.theory-quiz-choice').forEach(function(c) { c.classList.remove('selected'); });
         }
         el.classList.toggle('selected');
-
         var hasSelection = el.parentElement.querySelector('.theory-quiz-choice.selected');
-        var btn = document.getElementById('tq-submit-' + tabId);
-        if (hasSelection) {
-            btn.classList.add('enabled');
-        } else {
-            btn.classList.remove('enabled');
-        }
+        document.getElementById('tq-submit-' + tabId).classList.toggle('enabled', !!hasSelection);
     };
 
     window.submitAnswer = function(tabId) {
@@ -2795,19 +3156,33 @@
         btn.style.display = 'none';
 
         var st = quizState[tabId];
-        var selected = [];
-        document.querySelectorAll('#tq-choices-' + tabId + ' .theory-quiz-choice.selected').forEach(function(c) {
-            selected.push(parseInt(c.dataset.id));
-        });
+        var body = { question_id: st.currentQuestionId };
 
-        document.querySelectorAll('#tq-choices-' + tabId + ' .theory-quiz-choice').forEach(function(c) {
-            c.classList.add('disabled');
-        });
+        if (st.currentQuestionType === 'calculation') {
+            body.calculation_input = parseFloat(document.getElementById('tq-calc-input-' + tabId).value);
+            document.getElementById('tq-calc-input-' + tabId).disabled = true;
+        } else if (st.currentQuestionType === 'matching') {
+            var answers = {};
+            document.querySelectorAll('#tq-matching-' + tabId + ' select').forEach(function(sel) {
+                answers[sel.dataset.left] = sel.value;
+                sel.disabled = true;
+            });
+            body.matching_answers = answers;
+        } else {
+            var selected = [];
+            document.querySelectorAll('#tq-choices-' + tabId + ' .theory-quiz-choice.selected').forEach(function(c) {
+                selected.push(parseInt(c.dataset.id));
+            });
+            document.querySelectorAll('#tq-choices-' + tabId + ' .theory-quiz-choice').forEach(function(c) {
+                c.classList.add('disabled');
+            });
+            body.selected_ids = selected;
+        }
 
         fetch('/modaliteetit/api/answer/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCSRF() },
-            body: JSON.stringify({ question_id: st.currentQuestionId, selected_ids: selected })
+            body: JSON.stringify(body)
         })
         .then(function(r) { return r.json(); })
         .then(function(data) {
@@ -2817,23 +3192,49 @@
             var scoreEl = document.getElementById('tq-score-' + tabId);
             if (scoreEl) scoreEl.textContent = st.score + '/' + st.total;
 
-            data.choices.forEach(function(c) {
-                var el = document.querySelector('#tq-choices-' + tabId + ' .theory-quiz-choice[data-id="' + c.id + '"]');
-                if (!el) return;
-                if (c.is_correct) {
-                    el.classList.add('correct');
-                    el.querySelector('.theory-quiz-choice-indicator i').className = 'fas fa-check';
-                } else if (c.was_selected) {
-                    el.classList.add('incorrect');
-                    el.querySelector('.theory-quiz-choice-indicator i').className = 'fas fa-times';
-                }
-                if (c.explanation) {
-                    var expDiv = document.createElement('div');
-                    expDiv.className = 'theory-quiz-choice-explanation';
-                    expDiv.textContent = c.explanation;
-                    el.querySelector('div:last-child').appendChild(expDiv);
-                }
-            });
+            if (st.currentQuestionType === 'calculation') {
+                var c = data.choices[0];
+                var calcEl = document.getElementById('tq-calc-' + tabId);
+                var feedback = document.createElement('div');
+                feedback.className = 'theory-quiz-calc-feedback ' + (data.is_correct ? 'correct' : 'incorrect');
+                feedback.innerHTML = data.is_correct
+                    ? '<i class="fas fa-check-circle"></i> Oikein!'
+                    : '<i class="fas fa-times-circle"></i> Oikea vastaus: ' + c.correct_answer + ' ' + c.unit;
+                calcEl.appendChild(feedback);
+            } else if (st.currentQuestionType === 'matching') {
+                data.choices.forEach(function(c) {
+                    document.querySelectorAll('#tq-matching-' + tabId + ' select').forEach(function(sel) {
+                        if (sel.dataset.left === c.left) {
+                            var row = sel.closest('.theory-quiz-matching-row');
+                            row.classList.add(c.pair_correct ? 'correct' : 'incorrect');
+                            if (!c.pair_correct) {
+                                var fix = document.createElement('span');
+                                fix.className = 'theory-quiz-matching-correct';
+                                fix.textContent = ' \u2192 ' + c.right;
+                                row.appendChild(fix);
+                            }
+                        }
+                    });
+                });
+            } else {
+                data.choices.forEach(function(c) {
+                    var el = document.querySelector('#tq-choices-' + tabId + ' .theory-quiz-choice[data-id="' + c.id + '"]');
+                    if (!el) return;
+                    if (c.is_correct) {
+                        el.classList.add('correct');
+                        el.querySelector('.theory-quiz-choice-indicator i').className = 'fas fa-check';
+                    } else if (c.was_selected) {
+                        el.classList.add('incorrect');
+                        el.querySelector('.theory-quiz-choice-indicator i').className = 'fas fa-times';
+                    }
+                    if (c.explanation) {
+                        var expDiv = document.createElement('div');
+                        expDiv.className = 'theory-quiz-choice-explanation';
+                        expDiv.textContent = c.explanation;
+                        el.querySelector('div:last-child').appendChild(expDiv);
+                    }
+                });
+            }
 
             var resultHtml = '';
             if (data.is_correct) {
@@ -2841,14 +3242,12 @@
             } else {
                 resultHtml += '<div class="theory-quiz-result-banner incorrect"><i class="fas fa-times-circle"></i> Väärin</div>';
             }
-
             if (data.explanation) {
                 resultHtml += '<div class="theory-quiz-explanation">';
                 resultHtml += '<div class="theory-quiz-explanation-label"><i class="fas fa-lightbulb"></i> Selitys</div>';
                 resultHtml += '<p>' + data.explanation + '</p>';
                 resultHtml += '</div>';
             }
-
             resultHtml += '<button class="theory-quiz-next" onclick="nextQuestion(\'' + tabId + '\')">Seuraava kysymys <i class="fas fa-arrow-right"></i></button>';
 
             var resultEl = document.getElementById('tq-result-' + tabId);

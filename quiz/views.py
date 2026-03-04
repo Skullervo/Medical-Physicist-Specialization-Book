@@ -85,11 +85,16 @@ def quiz_practice(request):
                 'error': 'Valitse vahintaan yksi aihealue.',
             })
 
-        # Store selected EPAs and difficulty in session
+        # Store selected EPAs, difficulty and question types in session
         epa_ids = [int(x) for x in epa_ids]
         difficulty = request.POST.get('difficulty', 'all')
+        question_types = request.POST.getlist('question_types')
+        # If 'all' selected or nothing selected, treat as all types
+        if 'all' in question_types or not question_types:
+            question_types = []
         request.session['quiz_epa_ids'] = epa_ids
         request.session['quiz_difficulty'] = difficulty
+        request.session['quiz_question_types'] = question_types
         request.session['quiz_score'] = 0
         request.session['quiz_total'] = 0
         request.session['quiz_answered'] = []
@@ -101,6 +106,8 @@ def quiz_practice(request):
             qs = qs.filter(difficulty=3)
         elif difficulty == 'hard':
             qs = qs.filter(difficulty__in=[4, 5])
+        if question_types:
+            qs = qs.filter(question_type__in=question_types)
         total_questions = qs.count()
 
         difficulty_labels = {
@@ -135,11 +142,12 @@ def api_get_question(request):
     epa_ids = request.session.get('quiz_epa_ids', [])
     answered = request.session.get('quiz_answered', [])
     difficulty = request.session.get('quiz_difficulty', 'all')
+    question_types = request.session.get('quiz_question_types', [])
 
     if not epa_ids:
         return JsonResponse({'error': 'No EPAs selected'}, status=400)
 
-    # Build base filter with optional difficulty
+    # Build base filter with optional difficulty and question types
     base_filter = {'epa_id__in': epa_ids, 'is_active': True}
     if difficulty == 'easy':
         base_filter['difficulty__in'] = [1, 2]
@@ -147,6 +155,8 @@ def api_get_question(request):
         base_filter['difficulty'] = 3
     elif difficulty == 'hard':
         base_filter['difficulty__in'] = [4, 5]
+    if question_types:
+        base_filter['question_type__in'] = question_types
 
     # Get unanswered questions from selected EPAs
     questions = Question.objects.filter(**base_filter).exclude(id__in=answered)
@@ -180,19 +190,32 @@ def api_get_question(request):
 
     question = Question.objects.get(id=question_id)
 
-    choices = list(question.choices.all().values('id', 'text', 'order'))
-    random.shuffle(choices)
-
-    return JsonResponse({
+    response_data = {
         'question_id': question.id,
         'question_type': question.question_type,
         'difficulty': question.difficulty,
         'text': question.text,
         'epa_title': question.epa.title,
-        'choices': choices,
         'score': request.session.get('quiz_score', 0),
         'total': request.session.get('quiz_total', 0),
-    })
+    }
+
+    if question.question_type == 'calculation':
+        response_data['choices'] = []
+        response_data['calculation_unit'] = question.calculation_unit or ''
+        response_data['calculation_tolerance'] = question.calculation_tolerance or 5.0
+    elif question.question_type == 'matching' and question.matching_pairs:
+        rights = [p['right'] for p in question.matching_pairs]
+        random.shuffle(rights)
+        response_data['choices'] = []
+        response_data['matching_pairs'] = question.matching_pairs
+        response_data['matching_rights'] = rights
+    else:
+        choices = list(question.choices.all().values('id', 'text', 'order'))
+        random.shuffle(choices)
+        response_data['choices'] = choices
+
+    return JsonResponse(response_data)
 
 
 @require_POST
@@ -204,22 +227,78 @@ def api_check_answer(request):
         return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
     question_id = data.get('question_id')
-    selected_ids = data.get('selected_ids', [])
-
-    if not question_id or not selected_ids:
-        return JsonResponse({'error': 'Missing data'}, status=400)
+    if not question_id:
+        return JsonResponse({'error': 'Missing question_id'}, status=400)
 
     try:
         question = Question.objects.get(id=question_id, is_active=True)
     except Question.DoesNotExist:
         return JsonResponse({'error': 'Question not found'}, status=404)
 
-    # Get all choices with correct/explanation info
-    choices = question.choices.all()
-    correct_ids = set(choices.filter(is_correct=True).values_list('id', flat=True))
-    selected_set = set(int(x) for x in selected_ids)
+    # Grade answer based on question type
+    selected_set = set()
+    choice_results = []
 
-    is_correct = (selected_set == correct_ids)
+    if question.question_type == 'calculation':
+        calc_input = data.get('calculation_input')
+        if calc_input is None:
+            return JsonResponse({'error': 'Missing calculation_input'}, status=400)
+        try:
+            user_value = float(calc_input)
+        except (ValueError, TypeError):
+            return JsonResponse({'error': 'Invalid calculation input'}, status=400)
+        correct = question.calculation_answer
+        tolerance_pct = question.calculation_tolerance or 5.0
+        if correct is not None and correct != 0:
+            is_correct = abs(user_value - correct) / abs(correct) * 100 <= tolerance_pct
+        elif correct == 0:
+            is_correct = abs(user_value) < 0.001
+        else:
+            is_correct = False
+        choice_results = [{
+            'correct_answer': correct,
+            'user_answer': user_value,
+            'unit': question.calculation_unit or '',
+            'tolerance_pct': tolerance_pct,
+        }]
+
+    elif question.question_type == 'matching':
+        matching_answers = data.get('matching_answers', {})
+        if question.matching_pairs:
+            correct_pairs = {p['left']: p['right'] for p in question.matching_pairs}
+            is_correct = all(
+                matching_answers.get(left) == right
+                for left, right in correct_pairs.items()
+            )
+            choice_results = [
+                {
+                    'left': p['left'],
+                    'correct_right': p['right'],
+                    'user_right': matching_answers.get(p['left'], ''),
+                    'pair_correct': matching_answers.get(p['left']) == p['right'],
+                }
+                for p in question.matching_pairs
+            ]
+        else:
+            is_correct = False
+
+    else:
+        # multiple_choice, multi_select, true_false — all use Choice model
+        selected_ids = data.get('selected_ids', [])
+        if not selected_ids:
+            return JsonResponse({'error': 'Missing selected_ids'}, status=400)
+        choices = question.choices.all()
+        correct_ids = set(choices.filter(is_correct=True).values_list('id', flat=True))
+        selected_set = set(int(x) for x in selected_ids)
+        is_correct = (selected_set == correct_ids)
+        for c in choices:
+            choice_results.append({
+                'id': c.id,
+                'text': c.text,
+                'is_correct': c.is_correct,
+                'was_selected': c.id in selected_set,
+                'explanation': c.explanation,
+            })
 
     # Update session stats
     request.session['quiz_total'] = request.session.get('quiz_total', 0) + 1
@@ -243,24 +322,12 @@ def api_check_answer(request):
     new_achievements = []
     if request.user.is_authenticated:
         _persist_quiz_progress(request.user, question, is_correct, selected_set)
-        # Check for newly earned achievements
         from progress.achievement_checker import check_achievements
         newly_earned = check_achievements(request.user)
         new_achievements = [
             {'name': a.name, 'icon': a.icon, 'xp_reward': a.xp_reward}
             for a in newly_earned
         ]
-
-    # Build detailed choice results
-    choice_results = []
-    for c in choices:
-        choice_results.append({
-            'id': c.id,
-            'text': c.text,
-            'is_correct': c.is_correct,
-            'was_selected': c.id in selected_set,
-            'explanation': c.explanation,
-        })
 
     response_data = {
         'is_correct': is_correct,
@@ -308,10 +375,8 @@ def api_get_review_question(request):
         return JsonResponse({'done': True, 'remaining': 0})
 
     question = card.question
-    choices = list(question.choices.all().values('id', 'text', 'order'))
-    random.shuffle(choices)
 
-    return JsonResponse({
+    response_data = {
         'done': False,
         'remaining': due_cards.count(),
         'card_id': card.id,
@@ -320,10 +385,26 @@ def api_get_review_question(request):
         'difficulty': question.difficulty,
         'text': question.text,
         'epa_title': question.epa.title,
-        'choices': choices,
         'interval_days': card.interval_days,
         'repetitions': card.repetitions,
-    })
+    }
+
+    if question.question_type == 'calculation':
+        response_data['choices'] = []
+        response_data['calculation_unit'] = question.calculation_unit or ''
+        response_data['calculation_tolerance'] = question.calculation_tolerance or 5.0
+    elif question.question_type == 'matching' and question.matching_pairs:
+        rights = [p['right'] for p in question.matching_pairs]
+        random.shuffle(rights)
+        response_data['choices'] = []
+        response_data['matching_pairs'] = question.matching_pairs
+        response_data['matching_rights'] = rights
+    else:
+        choices = list(question.choices.all().values('id', 'text', 'order'))
+        random.shuffle(choices)
+        response_data['choices'] = choices
+
+    return JsonResponse(response_data)
 
 
 @require_POST
@@ -338,21 +419,77 @@ def api_submit_review(request):
         return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
     question_id = data.get('question_id')
-    selected_ids = data.get('selected_ids', [])
-
-    if not question_id or not selected_ids:
-        return JsonResponse({'error': 'Missing data'}, status=400)
+    if not question_id:
+        return JsonResponse({'error': 'Missing question_id'}, status=400)
 
     try:
         question = Question.objects.get(id=question_id, is_active=True)
     except Question.DoesNotExist:
         return JsonResponse({'error': 'Question not found'}, status=404)
 
-    # Check answer
-    choices = question.choices.all()
-    correct_ids = set(choices.filter(is_correct=True).values_list('id', flat=True))
-    selected_set = set(int(x) for x in selected_ids)
-    is_correct = (selected_set == correct_ids)
+    # Grade answer based on question type
+    selected_set = set()
+    choice_results = []
+
+    if question.question_type == 'calculation':
+        calc_input = data.get('calculation_input')
+        if calc_input is None:
+            return JsonResponse({'error': 'Missing calculation_input'}, status=400)
+        try:
+            user_value = float(calc_input)
+        except (ValueError, TypeError):
+            return JsonResponse({'error': 'Invalid calculation input'}, status=400)
+        correct = question.calculation_answer
+        tolerance_pct = question.calculation_tolerance or 5.0
+        if correct is not None and correct != 0:
+            is_correct = abs(user_value - correct) / abs(correct) * 100 <= tolerance_pct
+        elif correct == 0:
+            is_correct = abs(user_value) < 0.001
+        else:
+            is_correct = False
+        choice_results = [{
+            'correct_answer': correct,
+            'user_answer': user_value,
+            'unit': question.calculation_unit or '',
+            'tolerance_pct': tolerance_pct,
+        }]
+
+    elif question.question_type == 'matching':
+        matching_answers = data.get('matching_answers', {})
+        if question.matching_pairs:
+            correct_pairs = {p['left']: p['right'] for p in question.matching_pairs}
+            is_correct = all(
+                matching_answers.get(left) == right
+                for left, right in correct_pairs.items()
+            )
+            choice_results = [
+                {
+                    'left': p['left'],
+                    'correct_right': p['right'],
+                    'user_right': matching_answers.get(p['left'], ''),
+                    'pair_correct': matching_answers.get(p['left']) == p['right'],
+                }
+                for p in question.matching_pairs
+            ]
+        else:
+            is_correct = False
+
+    else:
+        selected_ids = data.get('selected_ids', [])
+        if not selected_ids:
+            return JsonResponse({'error': 'Missing selected_ids'}, status=400)
+        choices = question.choices.all()
+        correct_ids = set(choices.filter(is_correct=True).values_list('id', flat=True))
+        selected_set = set(int(x) for x in selected_ids)
+        is_correct = (selected_set == correct_ids)
+        for c in choices:
+            choice_results.append({
+                'id': c.id,
+                'text': c.text,
+                'is_correct': c.is_correct,
+                'was_selected': c.id in selected_set,
+                'explanation': c.explanation,
+            })
 
     # Update SR card
     try:
@@ -379,17 +516,6 @@ def api_submit_review(request):
     if is_correct:
         question.times_correct += 1
     question.save(update_fields=['times_answered', 'times_correct'])
-
-    # Build choice results
-    choice_results = []
-    for c in choices:
-        choice_results.append({
-            'id': c.id,
-            'text': c.text,
-            'is_correct': c.is_correct,
-            'was_selected': c.id in selected_set,
-            'explanation': c.explanation,
-        })
 
     # Check for newly earned achievements
     from progress.achievement_checker import check_achievements

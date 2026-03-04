@@ -13,7 +13,47 @@
     <div class="theory-header">
         <h1><i class="fas fa-heartbeat" style="color: #f87171; margin-right: 8px;"></i> Kliinisen fysiologian teoria</h1>
         <p>Kattava teoriamateriaali kliinisen fysiologian mittausmenetelmistä, laitteista ja signaalinkäsittelystä. Valitse aihealue alla olevista välilehdistä.</p>
+        {% if is_superuser %}
+        <button class="theory-edit-toggle" id="editModeToggle" onclick="toggleEditMode()">
+            <i class="fas fa-images"></i> <span>Muokkaa kuvia</span>
+        </button>
+        {% endif %}
     </div>
+
+    <!-- Upload modal (superuser only) -->
+    {% if is_superuser %}
+    <div class="theory-upload-modal" id="uploadModal">
+        <div class="theory-upload-modal-content">
+            <h3><i class="fas fa-image" style="color: var(--color-primary); margin-right: 8px;"></i> Lisää kuva</h3>
+            <div class="theory-upload-dropzone" id="uploadDropzone">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span>Vedä kuva tähän tai klikkaa valitaksesi</span>
+                <input type="file" id="uploadFileInput" accept="image/*" style="display: none;">
+            </div>
+            <div class="theory-upload-field">
+                <label for="uploadCaption">Kuvateksti</label>
+                <textarea id="uploadCaption" placeholder="Kuvan selitys suomeksi..."></textarea>
+            </div>
+            <div class="theory-upload-field">
+                <label for="uploadAlt">Alt-teksti (saavutettavuus)</label>
+                <input type="text" id="uploadAlt" placeholder="Kuvaileva teksti ruudunlukijalle...">
+            </div>
+            <div class="theory-upload-field">
+                <label>Kuvan koko</label>
+                <div class="theory-size-picker" id="uploadSizePicker">
+                    <label class="size-option"><input type="radio" name="uploadSize" value="small"> Pieni (40 %)</label>
+                    <label class="size-option"><input type="radio" name="uploadSize" value="medium" checked> Normaali (65 %)</label>
+                    <label class="size-option"><input type="radio" name="uploadSize" value="large"> Suuri (85 %)</label>
+                    <label class="size-option"><input type="radio" name="uploadSize" value="full"> Täysleveys</label>
+                </div>
+            </div>
+            <div class="theory-upload-actions">
+                <button class="btn-cancel" onclick="closeUploadModal()">Peruuta</button>
+                <button class="btn-save" id="uploadSaveBtn" onclick="saveUploadedImage()" disabled>Tallenna</button>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 
     <!-- Tab navigation -->
     <div class="theory-tabs" role="tablist">
@@ -40,12 +80,365 @@
     <div class="theory-panel active" id="panel-ekg" role="tabpanel">
         <div class="theory-content">
 
-            <!-- EKG_CONTENT_PLACEHOLDER -->
+            <h2>1. EKG:n synty ja biofysiikka</h2>
+
+<p>Elektrokardiografia (EKG) on biopotentiaalimittaus, jossa sydämen lihassolujoukon depolarisaatio- ja repolarisaatioprosessien summa havaitaan ihon pinnalta jännitteenä. Signaali on tyypillisesti 0,5–5 mV amplitudiltaan ja sen taajuussisältö on välillä 0,05–150 Hz. Sairaalafyysikon on hallittava sekä solukalvodynamiikan sähköiset perusteet että mittausgeometrian matemaattinen kuvaus.</p>
+
+<h3>1.1 Sydänlihassolun toimintapotentiaali</h3>
+
+<p>Sydänlihassolun lepopotentiaali on noin \(-90\) mV. Depolarisaation aikana nopea \(\text{Na}^+\)-ionien sisäänvirtaus nostaa kalvojännitteen positiiviseksi (ns. faasin 0 nousuvaihe, kesto noin 1–2 ms). Tätä seuraa osittainen repolarisaatio (faasi 1), platoo-vaihe jossa \(\text{Ca}^{2+}\)-sisäänvirtaus ja \(\text{K}^+\)-ulosvirtaus ovat tasapainossa (faasi 2, kesto 200–300 ms) sekä lopullinen repolarisaatio \(\text{K}^+\)-ulosvirtauksen myötä (faasi 3).</p>
+
+<div class="theory-highlight">
+    <h4>Sydänlihassolun toimintapotentiaalin vaiheet</h4>
+    <p><strong>Faasi 0:</strong> Nopea depolarisaatio (\(\text{Na}^+\)-kanavat), kesto 1–2 ms<br>
+    <strong>Faasi 1:</strong> Nopea osittainen repolarisaatio (\(\text{K}^+\)-ulosvirtaus)<br>
+    <strong>Faasi 2:</strong> Platoo-vaihe (\(\text{Ca}^{2+}\) sisään / \(\text{K}^+\) ulos), 200–300 ms<br>
+    <strong>Faasi 3:</strong> Lopullinen repolarisaatio (\(\text{K}^+\)-kanavat)<br>
+    <strong>Faasi 4:</strong> Lepopotentiaali \(-90\) mV</p>
+</div>
+
+<h3>1.2 Depolarisaation eteneminen ja johtoratasjärjestelmä</h3>
+
+<p>Sinussolmuke (SA-solmuke) toimii sydämen luonnollisena tahdistimena taajuudella 60–100/min. Impulssi leviää ensin eteisten sydänlihassoluihin, minkä jälkeen se hidastuu eteis-kammiosolmukkeessa (AV-solmuke) noin 100–120 ms:n viiveen verran. Tämä viive mahdollistaa eteisten mekaanisen supistumisen ennen kammioiden aktivoitumista. AV-solmukkeesta impulssi etenee Hisin kimpun kautta oikeaan ja vasempaan haarakkeeseen ja edelleen Purkinjen säikeistöön, joka aktivoi kammioiden sydänlihaksen nopeasti endokardiumista epikardiumiin.</p>
+
+<h3>1.3 Einthovenin kolmiomalli</h3>
+
+<p>Willem Einthoven esitti vuonna 1903 mallin, jossa sydämen sähköistä toimintaa kuvataan <strong>tasasivuisella kolmiolla</strong>, jonka kärjet sijaitsevat oikeassa kädessä, vasemmassa kädessä ja vasemmassa jalassa. Sydän oletetaan kolmion keskipisteeseen sijoittuvaksi pistevaraukseksi.</p>
+
+<div class="theory-formula">
+    <p><strong>Einthovenin laki:</strong></p>
+    $$U_{\text{II}} = U_{\text{I}} + U_{\text{III}}$$
+    <p>missä \(U_{\text{I}}\), \(U_{\text{II}}\) ja \(U_{\text{III}}\) ovat raajakytkentöjen jännitteet.</p>
+</div>
+
+<p>Vahvistetut unipolaariset raajakytkennät (aVR, aVL, aVF) saadaan kahdesta raajasta muodostetun referenssin ja kolmannen raajan jännitteen erotuksena:</p>
+
+<div class="theory-formula">
+    $$aVR = U_{RA} - \frac{U_{LA} + U_{LL}}{2}, \quad aVL = U_{LA} - \frac{U_{RA} + U_{LL}}{2}, \quad aVF = U_{LL} - \frac{U_{RA} + U_{LA}}{2}$$
+</div>
+
+<h3>1.4 Dipolimalli ja sydänvektori</h3>
+
+<p>Tarkemmassa biofysikaalisessa kuvauksessa sydämen sähköistä tilaa mallinnetaan <strong>ekvivalenttisena sähköisenä dipolina</strong>, jonka suunta ja suuruus muuttuvat jatkuvasti sydänsyklin aikana. Tätä kutsutaan <strong>sydänvektoriksi</strong> \(\vec{H}(t)\). Ihon pinnalta mitattu jännite missä tahansa kytkennässä on sydänvektorin projektio kytkentävektorin \(\vec{L}\) suuntaan:</p>
+
+<div class="theory-formula">
+    $$V(t) = \vec{H}(t) \cdot \vec{L}$$
+</div>
+
+<div class="theory-highlight">
+    <h4>Dipolimallin rajoitukset</h4>
+    <p>Dipolimalli on yksinkertaistus: todellisuudessa sydämessä on samanaikaisesti monta depolarisaatiorintamaa, ja torson epähomogeeninen johtavuus (keuhkot, luut, rasvakudos) vaikuttaa signaalin leviämiseen. Tarkempi mallinnus vaatii <strong>multipolikehitelmää</strong> ja <strong>numeerista tilavuusjohde-mallinnusta (BEM/FEM)</strong>.</p>
+</div>
+
+<h3>1.5 EKG-signaalin aaltomuodot ja aikaintervallit</h3>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Komponentti</th><th>Fysiologinen merkitys</th><th>Normaali kesto</th><th>Normaali amplitudi</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><strong>P-aalto</strong></td><td>Eteisten depolarisaatio</td><td>&lt; 120 ms</td><td>&lt; 2,5 mm (0,25 mV)</td></tr>
+        <tr><td><strong>PR-intervalli</strong></td><td>SA-solmukkeesta kammioiden aktivoitumiseen</td><td>120–200 ms</td><td>-</td></tr>
+        <tr><td><strong>QRS-kompleksi</strong></td><td>Kammioiden depolarisaatio</td><td>&lt; 120 ms</td><td>Vaihtelee kytkennöittäin</td></tr>
+        <tr><td><strong>ST-segmentti</strong></td><td>Kammioiden täysi depolarisaatio (platoo-vaihe)</td><td>-</td><td>Isoelektrinen (poikkeama &lt; 1 mm)</td></tr>
+        <tr><td><strong>T-aalto</strong></td><td>Kammioiden repolarisaatio</td><td>-</td><td>Positiivinen useimmissa kytkennöissä</td></tr>
+        <tr><td><strong>QT-intervalli</strong></td><td>Kammioiden kokonainen sähköinen sykli</td><td>350–440 ms (sykeriippuvainen)</td><td>-</td></tr>
+    </tbody>
+</table>
+
+<hr>
+
+<h2>2. Kytkentäjärjestelmät</h2>
+
+<h3>2.1 Standardi 12-kytkentäinen EKG</h3>
+<div class="theory-image-slot" data-slot="ecg-lead-system" data-tab="ekg" data-default-caption="12-kytkentäinen EKG: raajakytkennät (I, II, III, aVR, aVL, aVF) ja rintakytkennät (V1–V6)"></div>
+
+<p>Kansainvälisesti standardoitu 12-kytkentäinen EKG muodostaa kliinisen diagnostiikan perustan. Se koostuu kolmesta ryhmästä:</p>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Ryhmä</th><th>Kytkennät</th><th>Tyyppi</th><th>Anatominen näkymä</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><strong>Bipolaariset raajakytkennät</strong></td><td>I, II, III</td><td>Kahden raajan välinen potentiaaliero</td><td>Frontaalitaso</td></tr>
+        <tr><td><strong>Unipolaariset raajakytkennät</strong></td><td>aVR, aVL, aVF</td><td>Goldbergerin vahvistetut unipolaariset</td><td>Frontaalitaso (täydentävät)</td></tr>
+        <tr><td><strong>Rintakytkennät</strong></td><td>V1–V6</td><td>Unipolaariset, Wilsonin keskusliitäntä</td><td>Horisontaalitaso</td></tr>
+    </tbody>
+</table>
+
+<h4>Rintakytkentöjen sijoittelu</h4>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Kytkentä</th><th>Sijainti</th><th>Kliininen merkitys</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><strong>V1</strong></td><td>4. kylkiväli, oikea sternaalireuna</td><td>Oikea kammio, septumi</td></tr>
+        <tr><td><strong>V2</strong></td><td>4. kylkiväli, vasen sternaalireuna</td><td>Septaalinen näkymä</td></tr>
+        <tr><td><strong>V3</strong></td><td>V2:n ja V4:n puoliväli</td><td>Anteroseptaalinen siirtymäalue</td></tr>
+        <tr><td><strong>V4</strong></td><td>5. kylkiväli, keskiklavikulaarilinja</td><td>Vasemman kammion kärkialue</td></tr>
+        <tr><td><strong>V5</strong></td><td>Sama vaakataso kuin V4, etuaksillaarilinja</td><td>Vasemman kammion lateraalialue</td></tr>
+        <tr><td><strong>V6</strong></td><td>Sama vaakataso, keskiaksillaarilinja</td><td>Vasemman kammion lateraaliseinä</td></tr>
+    </tbody>
+</table>
+
+<div class="theory-highlight">
+    <h4>Wilsonin keskusliitäntä (WCT)</h4>
+    <p>Rintakytkentöjen referenssipiste muodostetaan yhdistämällä kaikki kolme raajaelektrodia 5 k&Omega; vastuksien kautta yhteen pisteeseen. Tätä kutsutaan <strong>Wilsonin keskusterminaaliksi (WCT)</strong>:</p>
+    <p>\(V_{WCT} = \frac{V_{RA} + V_{LA} + V_{LL}}{3} \approx 0\)</p>
+</div>
+
+<h3>2.2 Mason-Likar -modifikaatio</h3>
+
+<p>Rasitus-EKG:ssä ja pitkäaikaisrekisteröinnissä käytetään <strong>Mason-Likar -modifioitua kytkentää</strong>, jossa raajaelektrodit siirretään ranteista ja nilkoista rintakehälle ja lonkkaan. Tämä vähentää liikeartefakteja mutta <strong>muuttaa hieman signaalin amplitudia ja sähköakselia</strong>. Siksi Mason-Likar -EKG:tä ja standardi-EKG:tä ei saa suoraan verrata toisiinsa diagnostiikassa.</p>
+
+<h3>2.3 Ortogonaalinen Frank-kytkentäjärjestelmä</h3>
+
+<p>Ernest Frank kehitti vuonna 1956 <strong>korjatun ortogonaalisen kytkentäjärjestelmän</strong>, joka käyttää seitsemää elektrodia ja resistiivistä verkkoa tuottaakseen kolme matemaattisesti ortogonaalista komponenttia: \(X\) (vasen-oikea), \(Y\) (ylä-ala) ja \(Z\) (etu-taka). Frank-kytkentöjen tuottamaa <strong>vektorikardiogrammia (VKG)</strong> käytetään erityisesti sydämen sähköakselin tarkkaan määritykseen ja haarakatkosten analyysiin.</p>
+
+<hr>
+
+<h2>3. Vahvistimet ja suodatus</h2>
+
+<h3>3.1 EKG-vahvistimen vaatimukset</h3>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Parametri</th><th>Vaatimus (IEC 60601-2-25)</th><th>Selitys</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><strong>Sisääntuloimpedanssi</strong></td><td>&ge; 10 M&Omega; (tyypillisesti &ge; 100 M&Omega;)</td><td>Minimoi elektrodin impedanssin vaikutus</td></tr>
+        <tr><td><strong>CMRR</strong></td><td>&ge; 100 dB (100 000:1)</td><td>Yhteismuotoisen häiriön vaimennus</td></tr>
+        <tr><td><strong>Kohinataso</strong></td><td>&le; 30 &mu;V<sub>pp</sub></td><td>Sisäinen kohina pieni suhteessa signaaliin</td></tr>
+        <tr><td><strong>Taajuusvaste</strong></td><td>0,05–150 Hz (&plusmn; 3 dB)</td><td>Diagnostinen laatu, QRS-muoto ei vääristy</td></tr>
+        <tr><td><strong>Vahvistus</strong></td><td>10 mm/mV (standardi)</td><td>Amplitudin kalibrointi</td></tr>
+        <tr><td><strong>Galvaaninen erotus</strong></td><td>Potilasvirta &lt; 10 &mu;A</td><td>Sähköturvallisuus (CF-tyyppi)</td></tr>
+    </tbody>
+</table>
+
+<h3>3.2 Yhteismuotoisen signaalin vaimennus (CMRR)</h3>
+
+<div class="theory-formula">
+    $$\text{CMRR} = 20 \cdot \log_{10}\left(\frac{A_d}{A_{cm}}\right) \text{ [dB]}$$
+    <p>missä \(A_d\) = eromuotoinen vahvistus ja \(A_{cm}\) = yhteismuotoinen vahvistus.</p>
+</div>
+
+<div class="theory-warning">
+    <p><strong>Käytännön huomio:</strong> Eri elektrodien välinen impedanssiero heikentää tehollista CMRR-arvoa merkittävästi. Jos yhdellä elektrodilla impedanssi on 50 k&Omega; ja toisella 5 k&Omega;, CMRR voi pudota 100 dB:stä alle 60 dB:n. Siksi ihon impedanssin minimointi (&lt; 5 k&Omega;) on ratkaisevan tärkeää.</p>
+</div>
+
+<h3>3.3 Suodatustyypit ja taajuuskaistat</h3>
+
+<h4>Ylipäästösuodatin (high-pass filter)</h4>
+<ul>
+    <li><strong>Diagnostinen EKG:</strong> rajataajuus 0,05 Hz</li>
+    <li><strong>Monitorointi:</strong> rajataajuus 0,5–1 Hz (nopeampi stabiloituminen)</li>
+</ul>
+
+<div class="theory-warning">
+    <p><strong>Varoitus:</strong> Jos ylipäästösuodattimen rajataajuus asetetaan liian korkeaksi diagnostisessa EKG:ssä (esim. 0,5 Hz), <strong>ST-segmentti vääristyy</strong>, mikä voi johtaa vääriin iskemia- tai infarktidiagnooseihin.</p>
+</div>
+
+<h4>Alipäästösuodatin (low-pass filter)</h4>
+<ul>
+    <li><strong>Diagnostinen EKG:</strong> rajataajuus 150 Hz (vähintään 100 Hz)</li>
+    <li><strong>Monitorointi:</strong> rajataajuus 40–70 Hz</li>
+    <li><strong>Pediatrinen EKG:</strong> rajataajuus 250 Hz</li>
+</ul>
+
+<h4>Diagnostinen vs. monitorointi-bandwidth</h4>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Ominaisuus</th><th>Diagnostinen EKG</th><th>Monitorointi-EKG</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>Taajuuskaista</td><td>0,05–150 Hz</td><td>0,5–40 Hz</td></tr>
+        <tr><td>Käyttötarkoitus</td><td>Tarkka morfologinen analyysi</td><td>Rytmin ja sykkeen seuranta</td></tr>
+        <tr><td>ST-analyysi</td><td>Luotettava</td><td>Ei luotettava</td></tr>
+        <tr><td>QRS-amplitudi</td><td>Aito</td><td>Vaimentunut</td></tr>
+    </tbody>
+</table>
+
+<hr>
+
+<h2>4. QT-ajan mittaus ja korjaus</h2>
+<div class="theory-image-slot" data-slot="ecg-qt-correction" data-tab="ekg" data-default-caption="QT-ajan mittaus EKG:stä ja QTc-korjauskaavat (Bazett, Fridericia, Hodges)"></div>
+
+<p>QT-intervalli kuvaa kammioiden sähköisen systolen kokonaiskestoa. Sen piteneminen altistaa hengenvaaralliselle <strong>kääntyvien kärkien takykardialle (Torsades de pointes)</strong>.</p>
+
+<h3>4.1 QT-ajan korjauskaavat</h3>
+
+<h4>Bazett-kaava (1920)</h4>
+<div class="theory-formula">
+    $$QTc_B = \frac{QT}{\sqrt{RR}}$$
+    <p>missä QT ja RR ilmaistaan sekunteina. Ylikorjaa takykardiassa, alikorjaa bradykardiassa.</p>
+</div>
+
+<h4>Fridericia-kaava (1920)</h4>
+<div class="theory-formula">
+    $$QTc_F = \frac{QT}{\sqrt[3]{RR}}$$
+    <p>Tarkempi taajuuksilla 60–100/min. Suositellaan lääketutkimuksissa (ICH E14 -ohje).</p>
+</div>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Kaava</th><th>Menetelmä</th><th>Käyttökohteet</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><strong>Bazett</strong></td><td>\(QT / \sqrt{RR}\)</td><td>Yleisin kliininen käyttö</td></tr>
+        <tr><td><strong>Fridericia</strong></td><td>\(QT / \sqrt[3]{RR}\)</td><td>Lääketutkimukset, ICH E14</td></tr>
+        <tr><td><strong>Hodges</strong></td><td>Lineaarinen: \(QT + 1{,}75 \cdot (HR - 60)\)</td><td>Lineaarinen malli</td></tr>
+        <tr><td><strong>Framingham</strong></td><td>\(QT + 0{,}154 \cdot (1 - RR)\)</td><td>Populaatiopohjaiset tutkimukset</td></tr>
+    </tbody>
+</table>
+
+<div class="theory-warning">
+    <p><strong>Viitearvot:</strong> QTc &lt; 440 ms (miehet) ja QTc &lt; 460 ms (naiset) katsotaan normaaleiksi. QTc &gt; 500 ms on selkeästi pidentynyt. Eri algoritmit ja korjauskaavat voivat antaa eri QTc-arvoja samasta EKG:stä, joten <strong>menetelmä on aina raportoitava</strong>.</p>
+</div>
+
+<hr>
+
+<h2>5. Artefaktit ja häiriönpoisto</h2>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Artefaktityyppi</th><th>Taajuusalue</th><th>Tunnuspiirteet</th><th>Tyypilliset syyt</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><strong>Perusviivan vaeltelu</strong></td><td>&lt; 0,5 Hz</td><td>Hidas aaltoileva siirtymä</td><td>Hengitys, potilaan liike, huono elektrodikontakti</td></tr>
+        <tr><td><strong>Verkkohäiriö</strong></td><td>50 Hz (+ harmoniset)</td><td>Säännöllinen sinimuotoinen häiriö</td><td>Sähköverkon induktio, huono maadoitus</td></tr>
+        <tr><td><strong>Lihasartefakti (EMG)</strong></td><td>20–300 Hz</td><td>Nopea satunnainen kohina</td><td>Lihasjännitys, palelu</td></tr>
+        <tr><td><strong>Liikeartefakti</strong></td><td>1–10 Hz</td><td>Epäsäännölliset suuret poikkeamat</td><td>Potilaan liike, johtojen heiluminen</td></tr>
+        <tr><td><strong>Elektrodikontaktihäiriö</strong></td><td>Laajakaista</td><td>Äkillinen perusviivan hyppäys</td><td>Irtoava elektrodi, kuiva geeli</td></tr>
+    </tbody>
+</table>
+
+<h3>Häiriönpoiston menetelmät</h3>
+
+<ul>
+    <li><strong>Right-leg drive (RLD)</strong>: Oikean jalan elektrodi maadoitusreferenssinä aktiivisella piirillä</li>
+    <li><strong>Ihon valmistelu</strong>: Tavoiteimpedanssi &lt; 5 k&Omega;, symmetria elektrodien välillä</li>
+    <li><strong>Adaptiivinen suodatus (LMS)</strong>: Seuraa häiriösignaalin ominaisuuksia adaptiivisesti</li>
+    <li><strong>Wavelet-analyysi</strong>: Hajottaa signaalin taajuuskomponentteihin ilman vaiheviivettä</li>
+    <li><strong>Keskiarvoistusmenetelmä</strong>: Parantaa SNR-suhdetta \(\sqrt{N}\)-kertaisesti</li>
+</ul>
+
+<hr>
+
+<h2>6. Rasitus-EKG ja pitkäaikaisrekisteröinti (Holter)</h2>
+
+<h3>6.1 Rasitus-EKG</h3>
+
+<p>Rasitus-EKG mittaa sydämen sähköistä toimintaa asteittain kasvavan fyysisen kuormituksen aikana. Pääasiallinen diagnostinen käyttöaihe on <strong>sepelvaltimotaudin iskemian osoittaminen</strong>.</p>
+
+<ul>
+    <li><strong>Kytkentämodifikaatio:</strong> Mason-Likar, raajaelektrodit rintakehälle</li>
+    <li><strong>Suodatus:</strong> Low-pass vähintään 40 Hz, high-pass 0,05 Hz diagnostiikassa</li>
+    <li><strong>Näytteenottotaajuus:</strong> vähintään 500 Hz, mieluiten 1000 Hz</li>
+    <li><strong>ST-kriteeri:</strong> ST-muutos &ge; 1 mm (0,1 mV) 80 ms J-pisteen jälkeen = positiivinen iskemia</li>
+</ul>
+
+<h3>6.2 Pitkäaikaisrekisteröinti (Holter)</h3>
+<div class="theory-image-slot" data-slot="ecg-holter" data-tab="ekg" data-default-caption="Holter-rekisteröinti: perinteinen vs. patch — käyttöaiheet ja analysointi"></div>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Parametri</th><th>Perinteinen Holter</th><th>Patch Holter</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>Kytkennät</td><td>3–7 (Mason-Likar-modif.)</td><td>1–2 (integroitu sensori)</td></tr>
+        <tr><td>Tallennuskesto</td><td>24–72 h</td><td>7–14 vrk</td></tr>
+        <tr><td>Näytteenottotaajuus</td><td>256–1024 Hz</td><td>256–512 Hz</td></tr>
+        <tr><td>Resoluutio</td><td>12–16 bittiä</td><td>12–16 bittiä</td></tr>
+        <tr><td>Tallennus</td><td>Flash-muisti, siirto jälkikäteen</td><td>Langaton (Bluetooth/NFC)</td></tr>
+    </tbody>
+</table>
+
+<hr>
+
+<h2>7. Tahdistinpotilaan EKG</h2>
+
+<div class="theory-highlight">
+    <h4>Tahdistintyypit ja niiden EKG-vaikutus</h4>
+    <p><strong>AAI (eteisen tahdistus):</strong> Piikki ennen P-aaltoa, QRS normaali<br>
+    <strong>VVI (kammion tahdistus):</strong> Piikki ennen leveää QRS-kompleksia (&gt; 120 ms), T-aalto diskordantti<br>
+    <strong>DDD (kaksoistahdistus):</strong> Kaksi piikkiä: yksi ennen P-aaltoa, toinen ennen QRS:ää<br>
+    <strong>CRT (biventrikulaarinen):</strong> Kahden kammioelektrodin samanaikainen stimulaatio</p>
+</div>
+
+<p>Tahdistinpulssi on tyypillisesti 2–5 V amplitudiltaan ja 0,3–1,0 ms kestoltaan. EKG-järjestelmän on toivuttava nopeasti saturaatiosta ja tunnistettava pulssi luotettavasti.</p>
+
+<h3>EKG-tahdistus muissa sovelluksissa</h3>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Sovellus</th><th>Tahdistuksen tarkoitus</th><th>Kriittiset parametrit</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><strong>Sydämen MRI</strong></td><td>Kuvankeruun ajoitus sydämen sykliin</td><td>R-piikin tunnistus magneettikentässä (MHD-artefakti)</td></tr>
+        <tr><td><strong>Sydämen TT (CTA)</strong></td><td>Prospektiivinen tai retrospektiivinen tahdistus</td><td>R-R-intervallin säännöllisyys</td></tr>
+        <tr><td><strong>Isotooppikuvantaminen</strong></td><td>Tahdistettu (gated) perfuusiokuvaus</td><td>Syklin jako aikaikkunoihin</td></tr>
+        <tr><td><strong>Ultraääni</strong></td><td>M-moodin ja Dopplerin ajoitus</td><td>QRS-tunnistuksen luotettavuus</td></tr>
+    </tbody>
+</table>
+
+<div class="theory-warning">
+    <p><strong>Vaaratilanne:</strong> Jos EKG-laite ei tunnista tahdistinpulsseja oikein, automaattinen rytmitulkinta voi antaa vääriä hälytyksiä (esim. "asystole" tai "kammiovärinä"). Laitteiden tahdistintunnistuksen validointi on sairaalafyysikon vastuulla.</p>
+</div>
+
+<hr>
+
+<h2>8. Laadunvarmistus ja kalibrointi</h2>
+
+<h3>8.1 Keskeiset standardit</h3>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Standardi</th><th>Kattavuus</th><th>Keskeiset vaatimukset</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><strong>IEC 60601-2-25</strong></td><td>EKG-laitteiden turvallisuus ja suorituskyky</td><td>Taajuusvaste, amplituditarkkuus, kohinataso, CMRR</td></tr>
+        <tr><td><strong>IEC 60601-2-47</strong></td><td>Ambulatoriset EKG-laitteet (Holter)</td><td>Rytmintunnistuksen tarkkuus, tallennuksen eheys</td></tr>
+        <tr><td><strong>IEC 60601-2-27</strong></td><td>EKG-monitorointi</td><td>Hälytysviiveet, häiriönsietokyky</td></tr>
+        <tr><td><strong>AHA/ACC/HRS 2007</strong></td><td>EKG:n standardointi ja tulkinta</td><td>Suodatusvaatimukset, kytkentäkriteerit</td></tr>
+    </tbody>
+</table>
+
+<h3>8.2 Kalibrointitestit</h3>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Testityyppi</th><th>Tarkoitus</th><th>Menetelmä</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><strong>CAL-signaali</strong></td><td>Vahvistuksen ja paperinnopeuden tarkistus</td><td>1 mV, 200 ms suorakaidepulssi</td></tr>
+        <tr><td><strong>Sinisignaali</strong></td><td>Taajuusvasteen mittaus</td><td>Pyyhkäisevä sinisignaali 0,05–150 Hz</td></tr>
+        <tr><td><strong>EKG-simulaattori</strong></td><td>Koko mittausketjun toiminta</td><td>Tunnettu EKG-aaltomuoto</td></tr>
+        <tr><td><strong>Kohinamittaus</strong></td><td>Sisäisen kohinan määritys</td><td>Oikosuljetut tulot</td></tr>
+        <tr><td><strong>CMRR-testi</strong></td><td>Yhteismuotoisen häiriön vaimennus</td><td>Sama signaali molempiin tuloihin</td></tr>
+    </tbody>
+</table>
+
+<div class="theory-highlight">
+    <h4>Suositeltava laadunvarmistusaikataulu</h4>
+    <p><strong>Päivittäin:</strong> Kalibrointipulssin visuaalinen tarkistus (10 mm / mV)<br>
+    <strong>Viikoittain:</strong> EKG-simulaattoritesti (perusrytmit ja parametrit)<br>
+    <strong>Kuukausittain:</strong> Elektrodijohtojen impedanssi ja eheys<br>
+    <strong>Puolivuosittain:</strong> Kattava taajuusvastetesti, CMRR-mittaus, kohinamittaus<br>
+    <strong>Vuosittain:</strong> Täydellinen tekninen tarkistus IEC 60601-2-25 mukaisesti</p>
+</div>
 
             <div class="theory-quiz-section" data-tab="ekg">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
-                    <p>Harjoittele EKG-tutkimusten teoriaa monivalintakysymyksillä.</p>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-ekg">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
                     <button class="theory-quiz-btn" onclick="startTheoryQuiz('ekg')">
                         <i class="fas fa-play"></i> Aloita harjoittelu
                     </button>
@@ -73,12 +466,328 @@
     <div class="theory-panel" id="panel-verenkierto" role="tabpanel">
         <div class="theory-content">
 
-            <!-- VERENKIERTO_CONTENT_PLACEHOLDER -->
+            <h2>1. Verenpaineen fysiologia ja mittauksen perusteet</h2>
+
+<p>Verenpaine on yksi tärkeimmistä hemodynaamisista suureista, ja sen luotettava mittaaminen on kliinisen fysiologian perustehtäviä. Sairaalafyysikon tulee ymmärtää verenpaineen fysiologiset perusteet, jotta hän voi arvioida eri mittausmenetelmien soveltuvuutta ja virhelähteitä.</p>
+
+<h3>1.1 Verenpaineen synty ja säätelyjärjestelmät</h3>
+<div class="theory-image-slot" data-slot="bp-physiology" data-tab="verenkierto" data-default-caption="Verenpaineen säätelyjärjestelmät: barorefleksi, RAAS ja sympaattinen hermosto"></div>
+
+<p>Valtimoverenpaine syntyy sydämen pumppaustoiminnan ja verisuoniston kokonaisvastuksen (TPR) yhteisvaikutuksesta:</p>
+
+<div class="theory-formula">
+$$\text{MAP} = \text{CO} \times \text{TPR}$$
+</div>
+
+<p>missä \(\text{CO} = \text{SV} \times \text{HR}\), eli iskutilavuus kerrottuna syketaajuudella.</p>
+
+<div class="theory-highlight">
+<h4>Verenpaineen keskeiset komponentit</h4>
+<p><strong>Systolinen paine (SBP)</strong>: Huippuarvo vasemman kammion systolen aikana. Riippuu iskutilavuudesta, ejektionopeudesta ja aortan kompliansista.<br>
+<strong>Diastolinen paine (DBP)</strong>: Matalin arvo ennen seuraavaa systolea. Riippuu perifeerisestä vastuksesta ja diastolen kestosta.<br>
+<strong>Pulssipaine (PP)</strong>: \(\text{PP} = \text{SBP} - \text{DBP}\). Kuvastaa verisuoniston jäykkyyttä ja on itsenäinen kardiovaskulaarinen riskitekijä.</p>
+</div>
+
+<h3>1.2 Keskivaltimopaine (MAP)</h3>
+
+<div class="theory-formula">
+$$\text{MAP} \approx P_{\text{diast}} + \frac{1}{3}(P_{\text{syst}} - P_{\text{diast}}) = \frac{P_{\text{syst}} + 2 \cdot P_{\text{diast}}}{3}$$
+</div>
+
+<p>Tarkka MAP saadaan integroimalla painekäyrä yhden sydänsyklin yli:</p>
+
+<div class="theory-formula">
+$$\text{MAP} = \frac{1}{T} \int_0^T P(t)\, dt$$
+</div>
+
+<p>Oskillometriset mittarit määrittävät MAP:n suoraan maksimioskillaatiopisteenä, minkä vuoksi MAP on tarkin parametri näillä laitteilla.</p>
+
+<h3>1.3 Verenpaineen luokittelu</h3>
+
+<table class="theory-table">
+<thead>
+<tr><th>Luokka</th><th>Systolinen (mmHg)</th><th>Diastolinen (mmHg)</th><th>ABPM 24 h keskiarvo</th></tr>
+</thead>
+<tbody>
+<tr><td>Optimaalinen</td><td>&lt; 120</td><td>&lt; 80</td><td>&lt; 115/75</td></tr>
+<tr><td>Normaali</td><td>120–129</td><td>80–84</td><td>-</td></tr>
+<tr><td>Kohonnut, aste I</td><td>140–159</td><td>90–99</td><td>&ge; 130/80</td></tr>
+<tr><td>Kohonnut, aste II</td><td>160–179</td><td>100–109</td><td>&ge; 145/90</td></tr>
+<tr><td>Kohonnut, aste III</td><td>&ge; 180</td><td>&ge; 110</td><td>&ge; 160/100</td></tr>
+</tbody>
+</table>
+
+<div class="theory-warning">
+<h4>Valkotakkihypertensio ja naamioitunut hypertensio</h4>
+<p><strong>Valkotakkihypertensio</strong>: Vastaanottopaine koholla (&ge; 140/90 mmHg), mutta ABPM/kotimittaus normaali. Esiintyvyys 15–30 %.<br>
+<strong>Naamioitunut hypertensio</strong>: Vastaanottopaine normaali, mutta ABPM/kotimittaus koholla. Esiintyvyys noin 10–15 %. Kardiovaskulaarinen riski lähes yhtä suuri kuin pysyvässä hypertensiossa.</p>
+</div>
+
+<hr>
+
+<h2>2. Oskillometrinen mittausmenetelmä</h2>
+
+<p>Oskillometrinen menetelmä on nykyisin yleisin ei-invasiivisen verenpainemittauksen tekniikka. Mansetin täyttämisen ja kontrolloidun tyhjennyksen aikana paineanturi rekisteröi valtimon pulsaatioista johtuvat oskillaatiot.</p>
+
+<div class="theory-highlight">
+<h4>Oskillometrisen mittauksen ydinperiaate</h4>
+<p><strong>MAP</strong> määritetään suoraan kohdasta, jossa oskillaatioamplitudi on suurimmillaan. <strong>Systolinen ja diastolinen paine</strong> lasketaan algoritmisesti: systolinen vastaa tyypillisesti 40–60 % maksimioskillaatiosta nousevalla puolella ja diastolinen 60–80 % laskevalla puolella. Nämä prosenttiosuudet vaihtelevat valmistajittain.</p>
+</div>
+
+<h3>2.1 Mansetin valinta</h3>
+
+<table class="theory-table">
+<thead>
+<tr><th>Mansettikoko</th><th>Kumipussin leveys (cm)</th><th>Kumipussin pituus (cm)</th><th>Olkavarren ympärysmitta (cm)</th></tr>
+</thead>
+<tbody>
+<tr><td>Pieni aikuinen</td><td>12</td><td>22</td><td>22–26</td></tr>
+<tr><td>Standardi aikuinen</td><td>13</td><td>30</td><td>27–34</td></tr>
+<tr><td>Suuri aikuinen</td><td>16</td><td>36</td><td>35–44</td></tr>
+<tr><td>Reisimansetti</td><td>20</td><td>42</td><td>45–52</td></tr>
+</tbody>
+</table>
+
+<div class="theory-warning">
+<h4>Mansettikoon vaikutus mittaustulokseen</h4>
+<p><strong>Liian kapea mansetti</strong>: Yliarvioi verenpaineen jopa 10–15 mmHg.<br>
+<strong>Liian leveä mansetti</strong>: Aliarvioi verenpaineen 3–5 mmHg.<br>
+<strong>Nyrkkisääntö</strong>: Kumipussin leveyden tulee olla noin 40 % olkavarren ympärysmitasta ja pituuden kattaa vähintään 80 %.</p>
+</div>
+
+<h3>2.2 Oskillometrisen algoritmin rajoitukset</h3>
+
+<ul>
+<li><strong>Eteisvärinä (FA)</strong>: Epäsäännölliset sykevälit aiheuttavat vaihtelevat oskillaatioamplitudit. Mittaus voi epäonnistua tai antaa virheellisiä tuloksia.</li>
+<li><strong>Pieni pulssipaine</strong>: Shokkitilassa oskillaatioamplitudi on pieni, mikä heikentää luotettavuutta.</li>
+<li><strong>Mediakalsinoosi</strong>: Jäykät valtimoseinämät eivät kompressoidu normaalisti, mikä johtaa systolisen paineen yliarviointiin.</li>
+</ul>
+
+<hr>
+
+<h2>3. Auskultatorinen menetelmä</h2>
+
+<h3>3.1 Korotkoff-äänet ja niiden faasit</h3>
+
+<table class="theory-table">
+<thead>
+<tr><th>Faasi</th><th>Ääni</th><th>Kliininen merkitys</th><th>Mekanismi</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>I</strong></td><td>Ensimmäinen selkeä napakka ääni</td><td><strong>= Systolinen paine</strong></td><td>Veri alkaa virrata kompressoidun valtimon läpi</td></tr>
+<tr><td><strong>II</strong></td><td>Pehmeät suhinat</td><td>Ei diagnostista merkitystä</td><td>Turbulentti virtaus</td></tr>
+<tr><td><strong>III</strong></td><td>Voimistuvat terävät äänet</td><td>Ei diagnostista merkitystä</td><td>Suurempi virtaus</td></tr>
+<tr><td><strong>IV</strong></td><td>Vaimenevat äänet</td><td>Diastolinen paine (lapset, raskaus)</td><td>Virtaus lähestyy laminaarista</td></tr>
+<tr><td><strong>V</strong></td><td>Äänet loppuvat</td><td><strong>= Diastolinen paine</strong> (aikuiset)</td><td>Valtimo pysyy auki, laminaarinen virtaus</td></tr>
+</tbody>
+</table>
+
+<div class="theory-highlight">
+<h4>Auskultatioaukko (Auscultatory Gap)</h4>
+<p>Joillakin potilailla Korotkoff-äänet katoavat faasien II ja III välillä. Tämä voi johtaa systolisen paineen aliarviointiin. Auskultatioaukko voi olla jopa 20–40 mmHg leveä.</p>
+</div>
+
+<hr>
+
+<h2>4. Ambulatorinen verenpainemittaus (ABPM)</h2>
+
+<p>ABPM on 24 tunnin jatkuva verenpainemittaus normaalin päivittäisen toiminnan aikana. Se on suositeltavin menetelmä hypertension diagnostiikassa.</p>
+
+<h3>4.1 Mittausprotokolla</h3>
+<div class="theory-image-slot" data-slot="abpm-24h" data-tab="verenkierto" data-default-caption="ABPM 24h-rekisteröinti: vuorokausiprofiili, yölasku ja valkotakki-hypertensio"></div>
+
+<table class="theory-table">
+<thead>
+<tr><th>Parametri</th><th>Tyypillinen asetus</th><th>ESH-suositus</th></tr>
+</thead>
+<tbody>
+<tr><td>Päiväaika</td><td>15 min välein</td><td>Vähintään 20 min välein</td></tr>
+<tr><td>Yöaika</td><td>30 min välein</td><td>Vähintään 30 min välein</td></tr>
+<tr><td>Mittausjakson kesto</td><td>24 h</td><td>Vähintään 24 h</td></tr>
+<tr><td>Onnistuneiden mittausten osuus</td><td>-</td><td>&ge; 70 %</td></tr>
+</tbody>
+</table>
+
+<h3>4.2 Diagnostiset raja-arvot ja yölasku</h3>
+
+<div class="theory-highlight">
+<h4>Diagnostiset raja-arvot (ESH 2023)</h4>
+<p><strong>24 h keskiarvo</strong>: &ge; 130/80 mmHg kohonnut<br>
+<strong>Päiväkeskiarvo</strong>: &ge; 135/85 mmHg kohonnut<br>
+<strong>Yökeskiarvo</strong>: &ge; 120/70 mmHg kohonnut</p>
+</div>
+
+<div class="theory-formula">
+$$\text{Yölasku (\%)} = \frac{P_{\text{päivä}} - P_{\text{yö}}}{P_{\text{päivä}}} \times 100\%$$
+</div>
+
+<table class="theory-table">
+<thead>
+<tr><th>Dipping-profiili</th><th>Yölasku</th><th>Kliininen merkitys</th></tr>
+</thead>
+<tbody>
+<tr><td>Extreme dipper</td><td>&gt; 20 %</td><td>Yöaikainen hypoperfuusioriski</td></tr>
+<tr><td>Dipper (normaali)</td><td>10–20 %</td><td>Normaali vuorokausirytmi</td></tr>
+<tr><td>Non-dipper</td><td>0–10 %</td><td>Kohonnut kardiovaskulaarinen riski</td></tr>
+<tr><td>Reverse dipper (riser)</td><td>&lt; 0 %</td><td>Korkein riski, liittyy uniapneaan, munuaissairauteen</td></tr>
+</tbody>
+</table>
+
+<hr>
+
+<h2>5. Nilkka-olkavarsipaineindeksi (ABI)</h2>
+<div class="theory-image-slot" data-slot="abi-measurement" data-tab="verenkierto" data-default-caption="ABI-mittaus: mansettipaikat nilkassa ja olkavarressa, raja-arvot PAD-diagnostiikassa"></div>
+
+<p>ABI on yksinkertainen ja kustannustehokas perifeerisen valtimotaudin (PAD) seulontatutkimus.</p>
+
+<div class="theory-formula">
+$$\text{ABI} = \frac{\max(P_{\text{a. tib. post.}},\; P_{\text{a. dors. pedis}})}{\max(P_{\text{oikea olkavarsi}},\; P_{\text{vasen olkavarsi}})}$$
+</div>
+
+<table class="theory-table">
+<thead>
+<tr><th>ABI-arvo</th><th>Tulkinta</th><th>Kliininen merkitys</th></tr>
+</thead>
+<tbody>
+<tr><td>&gt; 1,40</td><td>Epäluotettava</td><td>Mediakalsinoosi estää kompression (diabetes, CKD)</td></tr>
+<tr><td>1,00–1,40</td><td>Normaali</td><td>PAD epätodennäköinen</td></tr>
+<tr><td>0,91–0,99</td><td>Rajatapaus</td><td>Harkittava rasitus-ABI-tutkimusta</td></tr>
+<tr><td>0,41–0,90</td><td>Lievä-kohtalainen PAD</td><td>Katkokävely, kohonnut riski</td></tr>
+<tr><td>&le; 0,40</td><td>Vaikea PAD / kriittinen iskemia</td><td>Leposärky, trofinen haava, amputaatioriski</td></tr>
+</tbody>
+</table>
+
+<h3>Varvaspaine ja TBI</h3>
+
+<p>Kun ABI ei ole luotettava (mediakalsinoosi, ABI &gt; 1,40), käytetään varvaspainemittausta:</p>
+
+<div class="theory-formula">
+$$\text{TBI} = \frac{P_{\text{varvas}}}{P_{\text{olkavarsi}}}$$
+</div>
+
+<ul>
+<li><strong>TBI &ge; 0,7</strong>: normaali</li>
+<li><strong>TBI &lt; 0,7</strong>: viittaa PAD:iin</li>
+<li><strong>Absoluuttinen varvaspaine &lt; 30 mmHg</strong>: kriittinen iskemia</li>
+</ul>
+
+<hr>
+
+<h2>6. Verenpainemittarin validointi</h2>
+
+<h3>6.1 ISO 81060-2:2018 -standardi</h3>
+
+<p>ISO 81060-2 on yhdistetty kansainvälinen standardi, joka korvaa aiemmat AAMI- ja ESH-protokollat.</p>
+
+<div class="theory-highlight">
+<h4>Hyväksymiskriteerit</h4>
+<p><strong>Kriteeri 1 (yksilötaso):</strong> Keskipoikkeama &le; &plusmn; 5 mmHg, keskihajonta &le; 8 mmHg<br>
+<strong>Kriteeri 2 (mittauskohtainen):</strong> &ge; 85 % mittauksista &plusmn; 10 mmHg sisällä, &ge; 95 % &plusmn; 15 mmHg sisällä</p>
+</div>
+
+<div class="theory-warning">
+<h4>Laitehankinnan validointitarkistus</h4>
+<p>Ennen uuden verenpainemittarin käyttöönottoa sairaalafyysikon tulee tarkistaa:<br>
+1. Onko laite validoitu ISO 81060-2:2018 -protokollan mukaisesti?<br>
+2. Onko validointitutkimus julkaistu vertaisarvioidussa lehdessä?<br>
+3. Onko laite validoitu käyttötarkoitusta vastaavalle potilasryhmälle?<br>
+4. Löytyykö laite STRIDE BP -tietokannasta?</p>
+</div>
+
+<hr>
+
+<h2>7. Virhelähteet ja laadunvarmistus</h2>
+
+<h3>7.1 Systemaattiset virhelähteet</h3>
+
+<table class="theory-table">
+<thead>
+<tr><th>Virhelähde</th><th>Vaikutus</th><th>Suuruusluokka</th><th>Eliminointi</th></tr>
+</thead>
+<tbody>
+<tr><td>Väärä mansettikoko</td><td>Liian kapea yliarvioi</td><td>5–15 mmHg</td><td>Olkavarren ympärysmitta mitataan</td></tr>
+<tr><td>Käsi sydämen alapuolella</td><td>Hydrostaattinen paine nostaa</td><td>+7,4 mmHg / 10 cm</td><td>Mansetti sydämen tasolla</td></tr>
+<tr><td>Kalibraatiovirhe</td><td>Systemaattinen poikkeama</td><td>Vaihtelee</td><td>T-putkitarkistus &plusmn; 3 mmHg vuosittain</td></tr>
+<tr><td>Mediakalsinoosi</td><td>Yliarvioi painetta</td><td>10–50+ mmHg</td><td>ABI &gt; 1,4 tunnistaa; varvaspaine</td></tr>
+</tbody>
+</table>
+
+<h3>7.2 Laadunvarmistusohjelma</h3>
+
+<table class="theory-table">
+<thead>
+<tr><th>Toimenpide</th><th>Taajuus</th><th>Hyväksymiskriteeri</th></tr>
+</thead>
+<tbody>
+<tr><td>Kalibraatiotarkistus (T-putki)</td><td>Vuosittain + huollon jälkeen</td><td>&plusmn; 3 mmHg kolmella painetasolla</td></tr>
+<tr><td>Vuototesti</td><td>Vuosittain + ennen ABPM-jaksoa</td><td>&lt; 4 mmHg/min</td></tr>
+<tr><td>Mansetin kunnon tarkistus</td><td>Jokaisen käyttökerran yhteydessä</td><td>Ei repeämiä, kumipussi ehjä</td></tr>
+<tr><td>ABPM-laitteen toimintatarkistus</td><td>Ennen jokaista 24 h -jaksoa</td><td>Testimittaus antaa tuloksen</td></tr>
+<tr><td>Mittaajien koulutus</td><td>Vuosittain</td><td>Mittausprotokollan noudattaminen</td></tr>
+</tbody>
+</table>
+
+<hr>
+
+<h2>8. Sykevälivaihtelu (HRV)</h2>
+
+<p>Sykevälivaihtelu (HRV, Heart Rate Variability) on fysiologinen ilmiö, jossa RR-intervalli vaihtelee lyönnistä toiseen autonomisen hermoston säätelyn seurauksena. <strong>Korkea HRV viittaa hyvään autonomiseen säätelykykyyn</strong>, madaltunut HRV liittyy kohonneeseen kardiovaskulaariseen riskiin.</p>
+
+<h3>8.1 Aikatasomenetelmät</h3>
+
+<table class="theory-table">
+<thead>
+<tr><th>Parametri</th><th>Kuvaus</th><th>Yksikkö</th><th>Kliininen merkitys</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>SDNN</strong></td><td>Kaikkien NN-intervallien keskihajonta</td><td>ms</td><td>Kokonaisvaihtelu; 24 h normaali &gt; 100 ms</td></tr>
+<tr><td><strong>RMSSD</strong></td><td>Peräkkäisten NN-intervallien erotusten neliöiden keskiarvon neliöjuuri</td><td>ms</td><td>Vagaalinen mittari. Normaali &gt; 25 ms</td></tr>
+<tr><td><strong>pNN50</strong></td><td>Osuus peräkkäisistä NN-intervalleista, joiden ero &gt; 50 ms</td><td>%</td><td>Korreloi RMSSD:n kanssa; vagaalinen mittari</td></tr>
+</tbody>
+</table>
+
+<div class="theory-formula">
+$$\text{RMSSD} = \sqrt{\frac{1}{N-1} \sum_{i=1}^{N-1}(\text{RR}_{i+1} - \text{RR}_i)^2}$$
+</div>
+
+<h3>8.2 Taajuustasomenetelmät</h3>
+
+<table class="theory-table">
+<thead>
+<tr><th>Komponentti</th><th>Taajuuskaista</th><th>Fysiologinen tausta</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>VLF</strong></td><td>0,003–0,04 Hz</td><td>Termoregulaatio, RAAS</td></tr>
+<tr><td><strong>LF</strong></td><td>0,04–0,15 Hz</td><td>Sympaattinen + parasympaattinen; baroreseptorirefleksi</td></tr>
+<tr><td><strong>HF</strong></td><td>0,15–0,40 Hz</td><td>Parasympaattinen; respiratorinen sinusarytmia</td></tr>
+</tbody>
+</table>
+
+<h3>8.3 Autonomisen hermoston tutkimusprotokolla (Ewing-testistö)</h3>
+
+<table class="theory-table">
+<thead>
+<tr><th>Testi</th><th>Para-/Sympaattinen</th><th>Normaali vaste</th><th>Poikkeava</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>Syväänhengitystesti</strong></td><td>Parasympaattinen</td><td>HR-vaihtelu &ge; 15/min</td><td>&lt; 10/min</td></tr>
+<tr><td><strong>Valsalvan koe</strong></td><td>Molemmat</td><td>Suhde &ge; 1,21</td><td>&lt; 1,10</td></tr>
+<tr><td><strong>Seisomaan nousu (30:15)</strong></td><td>Parasympaattinen</td><td>Suhde &ge; 1,04</td><td>&lt; 1,00</td></tr>
+<tr><td><strong>Ortostaattinen RR-vaste</strong></td><td>Sympaattinen</td><td>Syst. lasku &lt; 20 mmHg</td><td>&ge; 20 mmHg</td></tr>
+<tr><td><strong>Isometrinen puristuskoe</strong></td><td>Sympaattinen</td><td>Diast. nousu &ge; 16 mmHg</td><td>&lt; 10 mmHg</td></tr>
+</tbody>
+</table>
 
             <div class="theory-quiz-section" data-tab="verenkierto">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
-                    <p>Harjoittele verenkiertotutkimusten teoriaa monivalintakysymyksillä.</p>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-verenkierto">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
                     <button class="theory-quiz-btn" onclick="startTheoryQuiz('verenkierto')">
                         <i class="fas fa-play"></i> Aloita harjoittelu
                     </button>
@@ -105,12 +814,319 @@
     <div class="theory-panel" id="panel-keuhkofunktio" role="tabpanel">
         <div class="theory-content">
 
-            <!-- KEUHKOFUNKTIO_CONTENT_PLACEHOLDER -->
+            <h2>1. Spirometria &mdash; fysiologinen perusta ja virtaus-tilavuuskäyrä</h2>
+
+<p>Spirometria on keuhkofunktiotutkimusten kulmakivi. Se mittaa keuhkojen ventilaatiokykyä &mdash; sekä staattisia tilavuuksia että dynaamisia virtaussuureita. Sairaalafyysikon näkökulmasta spirometria on mittausteknisesti vaativa kokonaisuus, jossa anturifysiikka, signaalinkäsittely, BTPS-korjaukset ja laadunvarmistus muodostavat kriittisen ketjun.</p>
+
+<h3>1.1 Keuhkotilavuudet ja -kapasiteetit</h3>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Suure</th><th>Lyhenne</th><th>Määritelmä</th><th>Tyypillinen arvo</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>Kertahengitystilavuus</td><td>V<sub>T</sub></td><td>Normaalin hengityksen aikana siirtyvä tilavuus</td><td>~0,5 l</td></tr>
+        <tr><td>Jäännösilma</td><td>RV</td><td>Keuhkoihin jäävä tilavuus maksimaalisen uloshengityksen jälkeen</td><td>~1,5 l</td></tr>
+        <tr><td>Vitaalikapasiteetti</td><td>VC</td><td>IRV + V<sub>T</sub> + ERV</td><td>~4,0 l</td></tr>
+        <tr><td>Kokonaiskeuhkokapasiteetti</td><td>TLC</td><td>VC + RV</td><td>~5,5 l</td></tr>
+        <tr><td>Funktionaalinen jäännöskapasiteetti</td><td>FRC</td><td>ERV + RV &mdash; lepäävä hengitys päättyy tähän tasoon</td><td>~2,5 l</td></tr>
+    </tbody>
+</table>
+
+<div class="theory-highlight">
+    <h4>RV ja FRC</h4>
+    <p>Jäännösilma (RV) ja funktionaalinen jäännöskapasiteetti (FRC) ovat tilavuuksia, joita <strong>ei voida mitata spirometrialla</strong>. Niiden määrittämiseen tarvitaan kehon pletysmografia, kaasudiluutiomenetelmä (He-diluutio) tai typpihuuhtelu (N<sub>2</sub>-washout).</p>
+</div>
+
+<h3>1.2 Pakotettu spirometria &mdash; dynaamiset suureet</h3>
+<div class="theory-image-slot" data-slot="spirometry-technique" data-tab="keuhkofunktio" data-default-caption="Spirometrian pakotettu puhallus: FVC, FEV₁ ja FEV₁/FVC-suhde ajatilavuuskäyrässä"></div>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Suure</th><th>Lyhenne</th><th>Kuvaus</th><th>Kliininen merkitys</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>Pakotettu vitaalikapasiteetti</td><td>FVC</td><td>Maksimaalisen pakotetun uloshengityksen kokonaistilavuus</td><td>Alentunut restriktiossa; voi laskea myös obstruktiossa</td></tr>
+        <tr><td>Sekuntikapasiteetti</td><td>FEV<sub>1</sub></td><td>Ensimmäisen sekunnin aikana ulospuhallettu tilavuus</td><td>Obstruktion vakavuuden mittari</td></tr>
+        <tr><td>FEV<sub>1</sub>/FVC-suhde</td><td>FEV<sub>1</sub>/FVC</td><td>Sekuntikapasiteetin osuus kokonaistilavuudesta</td><td><strong>Obstruktion päämittari</strong>: alentunut obstruktiossa</td></tr>
+        <tr><td>Huippuvirtaus</td><td>PEF</td><td>Uloshengityksen maksimivirtaus</td><td>Riippuu effort-tasosta; alentunut obstruktiossa</td></tr>
+        <tr><td>Keskivirtaus</td><td>FEF<sub>25&ndash;75</sub></td><td>Virtauksen keskiarvo FVC:n 25&ndash;75 %:n välillä</td><td>Herkkä pienten hengitysteiden obstruktiolle</td></tr>
+    </tbody>
+</table>
+
+<h3>1.3 Virtaus-tilavuuskäyrä (flow-volume loop)</h3>
+<div class="theory-image-slot" data-slot="flow-volume-loop" data-tab="keuhkofunktio" data-default-caption="Virtaus-tilavuuskäyrä: normaali, obstruktiivinen ja restriktiiivinen malli"></div>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Käyrän muoto</th><th>Ominaisuudet</th><th>Kliininen tulkinta</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><strong>Normaali</strong></td><td>Terävä PEF-huippu, lineaarinen laskuosa</td><td>Normaali ventilaatio</td></tr>
+        <tr><td><strong>Obstruktiivinen</strong></td><td>Konkaavi uloshengityskäyrä, alentunut PEF</td><td>Astma, COPD</td></tr>
+        <tr><td><strong>Restriktiivinen</strong></td><td>Normaali muoto mutta pienentynyt</td><td>Keuhkofibroosi, rintakehädeformiteetti</td></tr>
+        <tr><td><strong>Kiinteä ylähengitystieobstruktio</strong></td><td>Tasainen plateau molemmissa</td><td>Trakean kasvain, arpikurouma</td></tr>
+        <tr><td><strong>Vaihteleva extratorakaalinen</strong></td><td>Plateau sisäänhengityksessä</td><td>Laryngeaalinen kasvain</td></tr>
+    </tbody>
+</table>
+
+<hr>
+
+<h2>2. Spirometrian suoritustekniikka ja hyväksymiskriteerit (ATS/ERS 2019)</h2>
+
+<h3>2.1 Yksittäisen puhalluksen hyväksymiskriteerit</h3>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Kriteeri</th><th>Vaatimus (ATS/ERS 2019)</th><th>Hylkäysperuste</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>Aloituksen nopeus (BEV)</td><td>Back-extrapolation volume &le; 5 % FVC:stä tai &le; 0,100 l</td><td>Hidas aloitus: FEV<sub>1</sub> yliarvioituu</td></tr>
+        <tr><td>Yskä</td><td>Ei yskää ensimmäisen sekunnin aikana</td><td>Yskä invalidioi FEV<sub>1</sub>:n</td></tr>
+        <tr><td>Glottiksen sulkeutuminen</td><td>Ei virtauksen äkillistä katkeamista</td><td>FVC alenee artefaktisesti</td></tr>
+        <tr><td>Puhalluksen kesto / tasanko</td><td>Tilavuuden muutos &lt; 0,025 l viimeisen 1 s aikana TAI &ge; 15 s</td><td>FVC voi jäädä liian matalaksi</td></tr>
+    </tbody>
+</table>
+
+<div class="theory-highlight">
+    <h4>Toistettavuusvaatimukset</h4>
+    <p>Vähintään <strong>3 hyväksyttävää puhallusta</strong>, joista kahden parhaan FVC-arvojen ero on <strong>&le; 0,150 l</strong> ja FEV<sub>1</sub>-arvojen ero <strong>&le; 0,150 l</strong>. Jos FVC &lt; 1,000 l, toleranssi on &le; 0,100 l. Raportoidaan suurin FVC ja suurin FEV<sub>1</sub> &mdash; nämä voivat olla eri puhalluksista.</p>
+</div>
+
+<h3>2.2 Laadunluokitus (ATS/ERS 2019 grading)</h3>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Laatuluokka</th><th>Hyväksyttäviä puhalluksia</th><th>Toistettavuus</th><th>Käyttökelpoisuus</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><strong>A</strong></td><td>&ge; 3</td><td>&le; 0,150 l</td><td>Luotettava</td></tr>
+        <tr><td><strong>B</strong></td><td>&ge; 3</td><td>&le; 0,200 l</td><td>Käyttökelpoinen</td></tr>
+        <tr><td><strong>C</strong></td><td>&ge; 2</td><td>&le; 0,200 l</td><td>Käyttökelpoinen varauksella</td></tr>
+        <tr><td><strong>D</strong></td><td>&ge; 2</td><td>&le; 0,250 l</td><td>Tulkittava varauksella</td></tr>
+        <tr><td><strong>E</strong></td><td>1</td><td>&mdash;</td><td>Varauksella tulkittava</td></tr>
+        <tr><td><strong>F</strong></td><td>0</td><td>&mdash;</td><td>Ei käyttökelpoista tulosta</td></tr>
+    </tbody>
+</table>
+
+<hr>
+
+<h2>3. Kehon pletysmografia &mdash; periaate, FRC ja hengitystieresistanssi</h2>
+
+<p>Kehon pletysmografia on referenssimenetelmä keuhkojen kokonaistilavuuksien määrittämiseen. Se perustuu <strong>Boylen lakiin</strong>:</p>
+
+<div class="theory-formula">
+    $$ P_1 V_1 = P_2 V_2 $$
+</div>
+
+<p>Potilas istuu ilmatiiviissä kammiossa. Normaalin uloshengityksen lopussa venttiili sulkeutuu ja potilas yrittää hengittää suljetun venttiilin läpi. Suupaineen ja kammiopaineen muutosten perusteella lasketaan FRC:</p>
+
+<div class="theory-formula">
+    $$ FRC = \frac{\Delta V_{\text{kammio}} \cdot (P_{\text{atm}} - P_{\text{H}_2\text{O}})}{P_{\text{suu,2}} - P_{\text{suu,1}}} $$
+</div>
+
+<p>Kokonaistilavuudet lasketaan yhdistämällä spirometriaan:</p>
+
+<div class="theory-formula">
+    $$ TLC = FRC + IC, \quad RV = TLC - VC $$
+</div>
+
+<div class="theory-highlight">
+    <h4>RV/TLC-suhde</h4>
+    <p>Kohonnut RV/TLC-suhde (&gt; 0,40) viittaa ilmasalpaukseen (air trapping). Pletysmografinen FRC on usein suurempi kuin kaasudiluutiolla mitattu FRC, koska pletysmografia mittaa <strong>kaiken</strong> rintakehän sisäisen kaasun &mdash; mukaan lukien huonosti ventiloidut alueet.</p>
+</div>
+
+<h3>Hengitystieresistanssi (R<sub>aw</sub>)</h3>
+
+<div class="theory-formula">
+    $$ R_{\text{aw}} = \frac{P_{\text{alv}} - P_{\text{suu}}}{\dot{V}} $$
+</div>
+
+<p>Normaali R<sub>aw</sub> on noin 0,5&ndash;2,0 cmH<sub>2</sub>O&middot;l<sup>&minus;1</sup>&middot;s. Koska R<sub>aw</sub> riippuu keuhkotilavuudesta, raportoidaan usein <strong>spesifinen konduktanssi</strong> sG<sub>aw</sub> = 1/(R<sub>aw</sub> &times; FRC), joka on tilavuudesta riippumaton.</p>
+
+<hr>
+
+<h2>4. Diffuusiokapasiteetti (D<sub>L</sub>CO)</h2>
+<div class="theory-image-slot" data-slot="dlco-principle" data-tab="keuhkofunktio" data-default-caption="DLCO single-breath -menetelmä: testikaasuseoksen otto, hengityspidätys ja alveolaarinäyte"></div>
+
+<p>Diffuusiokapasiteetti mittaa keuhkojen kykyä siirtää kaasua alveoleista verenkiertoon. Mittaus perustuu hiilimonoksidin (CO) ominaisuuteen: CO sitoutuu hemoglobiiniin noin <strong>210-kertaisesti</strong> happeen verrattuna.</p>
+
+<h3>4.1 Single-breath -menetelmä (ATS/ERS 2017)</h3>
+
+<ol>
+    <li>Uloshengitys RV-tasoon</li>
+    <li>Nopea maksimaalinen sisäänhengitys testikaasua (0,3 % CO + 10 % He + 21 % O<sub>2</sub>). V<sub>I</sub> &ge; 85 % VC:stä.</li>
+    <li>Hengityspidätys 10 &plusmn; 2 s TLC-tasolla (Jones&ndash;Meade-menetelmä)</li>
+    <li>Nopea uloshengitys: dead space huuhdellaan (0,75&ndash;1,0 l), sitten alveolaarinäyte (0,5&ndash;1,0 l)</li>
+</ol>
+
+<div class="theory-formula">
+    $$ V_A = V_I \cdot \frac{F_{I,\text{He}}}{F_{A,\text{He}}} $$
+</div>
+
+<div class="theory-formula">
+    $$ D_L\text{CO} = \frac{V_A}{t_h \cdot (P_B - 47)} \cdot \ln\left(\frac{F_{A,\text{CO,alku}}}{F_{A,\text{CO,loppu}}}\right) $$
+</div>
+
+<h3>4.2 Korjaukset</h3>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Korjaus</th><th>Peruste</th><th>Vaikutussuunta</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><strong>Hemoglobiinikorjaus</strong></td><td>Standardi-Hb: miehet 14,6 g/dl, naiset 13,4 g/dl</td><td>Anemia &darr; D<sub>L</sub>CO:ta</td></tr>
+        <tr><td><strong>COHb-korjaus</strong></td><td>Tupakoitsijoilla CO jo sitoutunut Hb:iin</td><td>Kohonnut COHb &darr; D<sub>L</sub>CO:ta</td></tr>
+        <tr><td><strong>D<sub>L</sub>CO/V<sub>A</sub> (K<sub>CO</sub>)</strong></td><td>Transfer coefficient &mdash; tilavuuteen suhteutettu</td><td>Erottaa diffuusiohäiriön ja pienen keuhkon</td></tr>
+    </tbody>
+</table>
+
+<div class="theory-highlight">
+    <h4>D<sub>L</sub>CO:n kliininen tulkinta</h4>
+    <p><strong>Alentunut:</strong> keuhkofibroosi, emfyseema, keuhkoemboolia, anemia, keuhkoverenpainetauti.<br>
+    <strong>Kohonnut:</strong> keuhkoverenvuoto, polysytemia, vasen-oikea-shuntti.<br>
+    <strong>Normaali obstruktion kanssa:</strong> astmassa keuhkokudos on rakenteellisesti terve &rarr; D<sub>L</sub>CO säilyy normaalina toisin kuin emfyseemassa.</p>
+</div>
+
+<hr>
+
+<h2>5. Bronkodilataatiokoe ja bronkoprovokatiokoe</h2>
+
+<h3>5.1 Bronkodilataatiokoe</h3>
+
+<p>Arvioi keuhkoputkiobstruktion <strong>palautuvuutta</strong>. Astmadiagnostiikan kulmakivi.</p>
+
+<ol>
+    <li>Perusspirometria</li>
+    <li>Inhaloitava bronkodilataattori: <strong>salbutamoli 0,4 mg</strong></li>
+    <li>Odotus 15 minuuttia</li>
+    <li>Uusintaspirometria</li>
+</ol>
+
+<div class="theory-highlight">
+    <h4>Merkitsevän vasteen kriteerit</h4>
+    <p><strong>ATS/ERS 2021:</strong> FEV<sub>1</sub> kasvaa &ge; <strong>10 % ennustearvosta</strong>. Tämä korvaa aiemman kriteerin (&ge; 12 % JA &ge; 200 ml alkuarvosta), joka suosi pitkiä potilaita.</p>
+</div>
+
+<h3>5.2 Bronkoprovokatiokoe</h3>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Menetelmä</th><th>Provokaatioaine</th><th>Päätepiste</th><th>Positiivinen tulos</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><strong>Metakoliini</strong> (suora)</td><td>Kolinerginen agonisti</td><td>PC<sub>20</sub>: pitoisuus joka laskee FEV<sub>1</sub>:tä 20 %</td><td>PC<sub>20</sub> &lt; 4 mg/ml (selvä BHR)</td></tr>
+        <tr><td><strong>Mannitoli</strong> (epäsuora)</td><td>Osmoottinen ärsyke</td><td>PD<sub>15</sub>: kumulatiivinen annos joka laskee FEV<sub>1</sub>:tä 15 %</td><td>PD<sub>15</sub> &lt; 635 mg</td></tr>
+        <tr><td><strong>Rasitus</strong> (epäsuora)</td><td>Fyysinen kuormitus 85 % HR<sub>max</sub></td><td>FEV<sub>1</sub>-lasku rasituksen jälkeen</td><td>FEV<sub>1</sub>-lasku &ge; 10&ndash;15 %</td></tr>
+    </tbody>
+</table>
+
+<div class="theory-warning">
+    <p><strong>Turvallisuus:</strong> Provokaatiotesteissä on aina oltava saatavilla hätälääkkeet (salbutamoli, adrenaliini), happihoitovälineistö ja elvytysvälineistö. Testin suorittajan on tunnettava keskeytyskriteerit.</p>
+</div>
+
+<hr>
+
+<h2>6. Viitearvot ja tulkinta (GLI-2012)</h2>
+
+<p>Global Lung Function Initiative (GLI-2012) käyttää <strong>LMS-menetelmää</strong> (Lambda-Mu-Sigma) z-scoren laskemiseen:</p>
+
+<div class="theory-formula">
+    $$ z = \frac{\left(\frac{\text{mitattu}}{M}\right)^L - 1}{L \cdot S} $$
+</div>
+
+<p>Kliinisesti merkittävä poikkeama: <strong>z &lt; &minus;1,645</strong> (= 5. persentiilin alaraja, LLN).</p>
+
+<div class="theory-highlight">
+    <h4>Miksi LLN eikä kiinteä raja 0,70?</h4>
+    <p>Perinteinen FEV<sub>1</sub>/FVC &lt; 0,70 -kriteeri (GOLD) <strong>ylidiagnosoi obstruktiota iäkkäillä</strong>, koska suhde laskee fysiologisesti iän myötä. GLI-2012:n LLN on ikävakioitu ja tilastollisesti perusteltu raja.</p>
+</div>
+
+<h3>Tulkinta-algoritmi</h3>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Vaihe</th><th>Kriteeri</th><th>Tulkinta</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>1. Obstruktio?</td><td>FEV<sub>1</sub>/FVC &lt; LLN</td><td>Obstruktiivinen häiriö</td></tr>
+        <tr><td>2. Vaikeusaste</td><td>FEV<sub>1</sub> z-score</td><td>Lievä (z &ge; &minus;2), kohtalainen, vaikea (z &lt; &minus;2,5), erittäin vaikea (z &lt; &minus;3)</td></tr>
+        <tr><td>3. Restriktio?</td><td>TLC &lt; LLN (vaatii pletysmografian)</td><td>Restriktiivinen häiriö</td></tr>
+        <tr><td>4. Sekamuotoinen?</td><td>FEV<sub>1</sub>/FVC &lt; LLN JA TLC &lt; LLN</td><td>Obstruktio + restriktio</td></tr>
+        <tr><td>5. Diffuusiohäiriö?</td><td>D<sub>L</sub>CO &lt; LLN</td><td>Alveolaari-kapillaaritason häiriö</td></tr>
+    </tbody>
+</table>
+
+<hr>
+
+<h2>7. Anturiteknologiat</h2>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Ominaisuus</th><th>Pneumotakografi</th><th>Ultraääni</th><th>Turbiini</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>Mittausperiaate</td><td>Differentiaalipaine (Poiseuille)</td><td>Kulkuaikaero</td><td>Pyörimisnopeus</td></tr>
+        <tr><td>Tarkkuus</td><td>Erinomainen (referenssi)</td><td>Erinomainen</td><td>Hyvä</td></tr>
+        <tr><td>Kosteusherkkyys</td><td>Korkea (vaatii lämmityksen)</td><td>Matala</td><td>Matala</td></tr>
+        <tr><td>Puhdistettavuus</td><td>Vaikea</td><td>Helppo</td><td>Kertakäyttöinen</td></tr>
+        <tr><td>Kustannus</td><td>Kohtalainen</td><td>Korkea</td><td>Matala</td></tr>
+        <tr><td>Käyttökohde</td><td>Laboratorio (referenssi)</td><td>Laboratorio (moderni)</td><td>Seulonta, kotikäyttö</td></tr>
+    </tbody>
+</table>
+
+<div class="theory-formula">
+    <p><strong>Pneumotakografi:</strong> \(\dot{V} = \frac{\Delta P}{R}\) &emsp; <strong>Ultraääni:</strong> \(\dot{V} \propto \frac{1}{t_{\text{vastavirta}}} - \frac{1}{t_{\text{myötävirta}}}\)</p>
+</div>
+
+<div class="theory-highlight">
+    <h4>Pneumotakografin virhelähteet</h4>
+    <p><strong>Kosteuden kondensoituminen</strong> resistanssielementtiin muuttaa kalibraatiota &mdash; Fleisch-pneumotakografit on lämmitettävä kehonlämpötilaan. <strong>Lima</strong> lisää resistanssia &rarr; virtaus aliarvioidaan. <strong>Turbulenssi</strong> suurilla virtauksilla (&gt; 12 l/s) aiheuttaa epälineaarisuutta.</p>
+</div>
+
+<hr>
+
+<h2>8. Kalibrointi ja laadunvarmistus</h2>
+
+<h3>8.1 Tilavuuskalibrointi</h3>
+
+<p>ATS/ERS 2019 vaatii päivittäisen tilavuuskalibroinnin <strong>3 litran kalibrointipumpulla</strong>. Kolme peräkkäistä pumppausliikettä eri virtausnopeuksilla. Hyväksymisraja: &plusmn; 3,5 % (eli 3,0 l &plusmn; 0,105 l).</p>
+
+<h3>8.2 BTPS-korjaus</h3>
+
+<p>Mitatut tilavuudet muunnetaan BTPS-olosuhteisiin (Body Temperature, Pressure, Saturated = 37 &deg;C, ilmanpaine, 100 % kosteus):</p>
+
+<div class="theory-formula">
+    $$ V_{\text{BTPS}} = V_{\text{mitattu}} \times \frac{(P_B - P_{\text{H}_2\text{O,huone}})}{(P_B - 47)} \times \frac{310}{T_{\text{huone}} + 273} $$
+</div>
+
+<h3>8.3 Laadunvarmistusohjelma</h3>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Toimenpide</th><th>Taajuus</th><th>Hyväksymisraja</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>Tilavuuskalibrointi (3 l pumppu)</td><td>Päivittäin</td><td>&plusmn; 3,5 %</td></tr>
+        <tr><td>Virtauslineaarisuuden tarkistus</td><td>Viikoittain</td><td>&plusmn; 3,5 % kaikilla virtauksilla (0,5&ndash;12 l/s)</td></tr>
+        <tr><td>Biologinen kontrolli (terve henkilö)</td><td>Viikoittain</td><td>FEV<sub>1</sub> ja FVC eivät muutu &gt; 5 % pitkäaikaisesta keskiarvosta</td></tr>
+        <tr><td>Kaasuanalysaattorit (DLCO)</td><td>Päivittäin</td><td>Valmistajan toleranssi</td></tr>
+        <tr><td>Kammion vuototesti (pletysmografia)</td><td>Viikoittain</td><td>&lt; 0,5 cmH<sub>2</sub>O / 10 s</td></tr>
+        <tr><td>Ohjelmiston validointi (ATS/ERS-testiaallot)</td><td>Päivitysten jälkeen</td><td>&plusmn; 3 % tai &plusmn; 50 ml</td></tr>
+        <tr><td>Kokonaisarvio</td><td>Vuosittain</td><td>Dokumentoitu tarkistusraportti</td></tr>
+    </tbody>
+</table>
 
             <div class="theory-quiz-section" data-tab="keuhkofunktio">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
-                    <p>Harjoittele keuhkofunktiotutkimusten teoriaa monivalintakysymyksillä.</p>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-keuhkofunktio">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
                     <button class="theory-quiz-btn" onclick="startTheoryQuiz('keuhkofunktio')">
                         <i class="fas fa-play"></i> Aloita harjoittelu
                     </button>
@@ -137,12 +1153,260 @@
     <div class="theory-panel" id="panel-gi" role="tabpanel">
         <div class="theory-content">
 
-            <!-- GI_CONTENT_PLACEHOLDER -->
+            <h2>1. Ruokatorven manometria &mdash; korkean resoluution manometria (HRM)</h2>
+
+<p>Korkean resoluution manometria (HRM) on ruokatorven motiliteettitutkimusten nykyinen standardi. HRM-katetri sisältää tyypillisesti <strong>36 paineanturia</strong> 1 cm:n välein, mikä mahdollistaa painekentän jatkuvan kuvaamisen koko ruokatorven alueella. Tulos visualisoidaan kolorimetrisena <strong>Clouse-karttana</strong>, jossa aika-sijainti-paine esitetään värikoodattuna.</p>
+
+<h3>1.1 HRM-tutkimuksen suoritus</h3>
+<div class="theory-image-slot" data-slot="hrm-catheter" data-tab="gi" data-default-caption="HRM-katetri ja Clouse-kartta: värillinen painekenttäkuva ruokatorven peristaltiikasta"></div>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Vaihe</th><th>Kuvaus</th><th>Nielaisujen määrä</th><th>Tarkoitus</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>Lepovaiheen rekisteröinti</td><td>30 s ilman nielaisuja</td><td>0</td><td>LES:n ja UES:n lepopaineen määritys</td></tr>
+        <tr><td>Yksittäisnielaisut (wet swallows)</td><td>5 ml vettä, 20&ndash;30 s välein</td><td>10</td><td>Peristaltiikan ja LES-relaksaation arviointi</td></tr>
+        <tr><td>Moninkertaiset peräkkäisnielaisut</td><td>2 ml:n vesinielaisut 2&ndash;3 s välein</td><td>5 peräkkäinen</td><td>Deglutitive inhibition -testaus</td></tr>
+        <tr><td>Provokaatiot</td><td>Kiinteä ruoka, nopea juominen (200 ml)</td><td>Vaihteleva</td><td>Kliinisten olosuhteiden mallintaminen</td></tr>
+    </tbody>
+</table>
+
+<h3>1.2 Keskeiset mittaussuureet</h3>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Suure</th><th>Lyhenne</th><th>Määritelmä</th><th>Normaali viitearvo</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>Integroitu relaksaatiopaine</td><td>IRP</td><td>Matalin 4 s:n keskipaine 10 s:n ikkunassa nielaisun jälkeen</td><td>&lt; 15 mmHg (selkäasento), &lt; 12 mmHg (pysty)</td></tr>
+        <tr><td>Distaalinen kontraktiili-integraali</td><td>DCI</td><td>Peristalttisen supistuksen paine &times; aika &times; pituus</td><td>450&ndash;8000 mmHg&middot;s&middot;cm</td></tr>
+        <tr><td>Distaalinen latenssi</td><td>DL</td><td>Aika UES:n avautumisesta CDP-pisteeseen</td><td>&gt; 4,5 s</td></tr>
+        <tr><td>LES:n lepopaine</td><td>&mdash;</td><td>Paine lepotilassa suhteessa intragastriseen paineeseen</td><td>10&ndash;35 mmHg</td></tr>
+    </tbody>
+</table>
+
+<div class="theory-formula">
+    <p><strong>DCI:n laskenta:</strong></p>
+    $$\text{DCI} = \int_{t_1}^{t_2} \int_{s_1}^{s_2} P(s,t) \, ds \, dt \quad [\text{mmHg} \cdot \text{s} \cdot \text{cm}]$$
+</div>
+
+<hr>
+
+<h2>2. Chicagon luokitus v4.0 &mdash; motiliteettihäiriöiden diagnostiikka</h2>
+<div class="theory-image-slot" data-slot="chicago-classification" data-tab="gi" data-default-caption="Chicagon luokitus v4.0: achalasia tyypit I–III, EGJOO ja esofageaaliset motiliteettihäiriöt"></div>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Diagnoosi</th><th>IRP</th><th>Peristaltiikka</th><th>Lisäkriteerit</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><strong>Achalasia tyyppi I</strong></td><td>Koholla</td><td>100 % failed (DCI &lt; 100)</td><td>Ei pressurisaatiota</td></tr>
+        <tr><td><strong>Achalasia tyyppi II</strong></td><td>Koholla</td><td>100 % failed</td><td>Panesofageaalinen pressurisaatio &ge; 20 %</td></tr>
+        <tr><td><strong>Achalasia tyyppi III</strong></td><td>Koholla</td><td>Ennenaikaisia supistuksia &ge; 20 %</td><td>DL &lt; 4,5 s; spastiset kuviot</td></tr>
+        <tr><td><strong>EGJOO</strong></td><td>Koholla</td><td>Normaalia peristaltiikkaa</td><td>Vaatii kliinisen korrelaation</td></tr>
+        <tr><td><strong>Distal esophageal spasm</strong></td><td>Normaali</td><td>&ge; 20 % ennenaikaisia</td><td>DL &lt; 4,5 s ja DCI &gt; 450</td></tr>
+        <tr><td><strong>Hyperkontraktilinen</strong></td><td>Normaali</td><td>&ge; 20 % DCI &gt; 8000</td><td>"Jackhammer"-kuvio</td></tr>
+        <tr><td><strong>IEM</strong></td><td>Normaali</td><td>&gt; 70 % ineffektiivisiä (DCI &lt; 450)</td><td>Merkittävä vain GERD-kontekstissa</td></tr>
+    </tbody>
+</table>
+
+<div class="theory-warning">
+    <h4>CCv4.0:n uutuus: asennon merkitys</h4>
+    <p>Versio 4.0 vaatii tutkimuksen sekä <strong>selkäasennossa että pystyasennossa</strong>. IRP-viitearvot eroavat asennon mukaan. Jos poikkeava löydös todetaan vain toisessa asennossa, diagnoosi on <strong>inkonklusiivinen</strong> ja vaatii lisäselvittelyjä.</p>
+</div>
+
+<hr>
+
+<h2>3. pH-impedanssimittaus &mdash; GERD-diagnostiikka</h2>
+<div class="theory-image-slot" data-slot="ph-impedance-trace" data-tab="gi" data-default-caption="pH-impedanssijälki: hapan, heikosti hapan ja ei-hapan refluksi impedanssikuvaajassa"></div>
+
+<p>24 tunnin pH-impedanssimonitorointi on GERD:n objektiivisen diagnostiikan kultastandardi. Impedanssimittaus tunnistaa refluksin ruokatorven sisällön sähköisen johtavuuden muutoksina:</p>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Sisältö</th><th>Impedanssi (tyypillinen)</th><th>Selitys</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>Ilma</td><td>&gt; 3000 &Omega;</td><td>Huono johde; korkea impedanssi</td></tr>
+        <tr><td>Neste (refluksaatti)</td><td>&lt; 1500 &Omega;</td><td>Ionit johtavat sähköä; matala impedanssi</td></tr>
+    </tbody>
+</table>
+
+<div class="theory-formula">
+    $$Z = \frac{\rho \cdot L}{A}$$
+    <p>missä \(\rho\) on väliaineen resistiivisyys, \(L\) elektrodien välinen etäisyys ja \(A\) poikkipinta-ala.</p>
+</div>
+
+<h3>3.1 Lyon-konsensus v2.0 (2024)</h3>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Parametri</th><th>Normaali</th><th>Inkonklusiivinen</th><th>Patologinen</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><strong>AET (acid exposure time)</strong></td><td>&lt; 4 %</td><td>4&ndash;6 %</td><td>&gt; 6 %</td></tr>
+        <tr><td><strong>Refluksiepisodien määrä</strong></td><td>&lt; 40/vrk</td><td>40&ndash;80/vrk</td><td>&gt; 80/vrk</td></tr>
+        <tr><td><strong>MNBI</strong></td><td>&gt; 2500 &Omega;</td><td>1500&ndash;2500 &Omega;</td><td>&lt; 1500 &Omega;</td></tr>
+    </tbody>
+</table>
+
+<div class="theory-highlight">
+    <h4>MNBI &mdash; limakalvon kunnon mittari</h4>
+    <p>Mean Nocturnal Baseline Impedance mitataan kolmesta yöllisestä ajanjaksosta. MNBI heijastaa ruokatorven limakalvon integriteettia &mdash; alentunut MNBI (&lt; 1500 &Omega;) viittaa limakalvovaurioon ja on erityisen hyödyllinen, kun AET on raja-arvoisella vyöhykkeellä.</p>
+</div>
+
+<hr>
+
+<h2>4. Anorektaalinen manometria &mdash; London-luokitus</h2>
+
+<p>Korkean resoluution anorektaalinen manometria (HR-ARM) mittaa anaalisulkijoiden toimintaa ja ulostusdynamiikkaa. London-luokitus standardisoi löydösten tulkinnan.</p>
+
+<h3>London-luokituksen diagnostiset ryhmät</h3>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Luokka</th><th>Rektaalinen paine</th><th>Analkanavan relaksaatio</th><th>Tulkinta</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><strong>Normaali ulostus</strong></td><td>Riittävä nousu</td><td>Riittävä relaksaatio</td><td>Koordinoitu dynamiikka</td></tr>
+        <tr><td><strong>Dyssynergia I</strong></td><td>Riittävä nousu</td><td>Paradoksaalinen supistus</td><td>EAS supistuu, kun pitäisi relaksoitua</td></tr>
+        <tr><td><strong>Dyssynergia II</strong></td><td>Riittämätön nousu</td><td>Paradoksaalinen supistus</td><td>Sekä propulsiivinen että relaksaatiovaje</td></tr>
+        <tr><td><strong>Dyssynergia III</strong></td><td>Riittävä nousu</td><td>Puuttuva relaksaatio</td><td>Relaksaatio jää vajaaksi</td></tr>
+        <tr><td><strong>Dyssynergia IV</strong></td><td>Riittämätön nousu</td><td>Puuttuva relaksaatio</td><td>Globaali propulsiivinen vaje</td></tr>
+    </tbody>
+</table>
+
+<div class="theory-warning">
+    <h4>RAIR ja Hirschsprungin tauti</h4>
+    <p>Rektoanaalisen inhibitorisen refleksin (RAIR) <strong>puuttuminen</strong> viittaa enterisen hermoston puutokseen, erityisesti Hirschsprungin tautiin. Löydös edellyttää aina histologista vahvistusta.</p>
+</div>
+
+<hr>
+
+<h2>5. Paksusuolen manometria ja transittiotutkimukset</h2>
+
+<h3>5.1 Keskeiset motiliteettikuviot</h3>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Kuvio</th><th>Ominaisuudet</th><th>Kliininen merkitys</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><strong>HAPC</strong></td><td>Amplitudi &gt; 75 mmHg, etenee &ge; 30 cm</td><td>Massaliike; puuttuminen viittaa neuropatiaan</td></tr>
+        <tr><td><strong>Gastrocolinen refleksi</strong></td><td>Motiliteetin lisääntyminen 15&ndash;30 min aterian jälkeen</td><td>Puuttuminen viittaa hermostohäiriöön</td></tr>
+        <tr><td><strong>Bisacodyl-vaste</strong></td><td>HAPC:iden esiintyminen stimulaation jälkeen</td><td>Puuttuminen viittaa myopatiaan</td></tr>
+    </tbody>
+</table>
+
+<h3>5.2 Transittiotutkimukset</h3>
+
+<p><strong>Hinton-testi:</strong> Potilas nielee 20&ndash;24 röntgenpositiivista markkeria. Natiivikuva 5 vrk:n kuluttua. Normaali kokonaistransittiaika on &lt; 72 h. Segmentaalinen jakauma erottaa diffuusin slow transit -ummetuksen ja ulostusobstruktion.</p>
+
+<p><strong>SmartPill:</strong> Langaton kapseli mittaa samanaikaisesti pH:ta, painetta ja lämpötilaa koko GI-kanavan läpi. Antaa mahalaukun tyhjenemisajan, ohutsuolen transittion ja paksusuolen transittion.</p>
+
+<hr>
+
+<h2>6. Paineanturiteknologiat</h2>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Ominaisuus</th><th>Solid-state (piezoresistiivinen)</th><th>Vesiperfuusio</th><th>Fiberoptinen (FBG)</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>Mittausperiaate</td><td>Paineen muutos &rarr; vastuksen muutos</td><td>Hydrostaattinen paine kapillaarissa</td><td>Bragg-hilaheijastuksen aallonpituuden muutos</td></tr>
+        <tr><td>Vasteaika</td><td>&lt; 1 ms</td><td>~100&ndash;200 ms</td><td>&lt; 1 ms</td></tr>
+        <tr><td>Anturien määrä</td><td>36 (tyypillinen)</td><td>8&ndash;24</td><td>Skaalautuva (kuidun pituuden mukaan)</td></tr>
+        <tr><td>Asennon herkkyys</td><td>Vähäinen</td><td>Merkittävä (hydrostaattinen gradientti)</td><td>Vähäinen</td></tr>
+        <tr><td>MRI-yhteensopivuus</td><td>Ei</td><td>Rajoitetusti</td><td>Kyllä</td></tr>
+        <tr><td>Käyttö nykyisin</td><td>HRM-standardi</td><td>Lähinnä anorektaali</td><td>Tutkimuskäyttö</td></tr>
+    </tbody>
+</table>
+
+<hr>
+
+<h2>7. Signaalinkäsittely ja analyysityökalut</h2>
+
+<h3>7.1 Signaalin esikäsittely</h3>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Vaihe</th><th>Menetelmä</th><th>Tarkoitus</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>Nollatasokalibrointi</td><td>Atmosfääripaineen vähennys</td><td>Kaikkien anturien yhteinen referenssi</td></tr>
+        <tr><td>Lämpötilakompensointi</td><td>Lineaarinen korjaus</td><td>Estää baseline-ryömintä</td></tr>
+        <tr><td>Suodatus</td><td>Alipäästö 15&ndash;25 Hz</td><td>Sähköisen kohinan poisto</td></tr>
+        <tr><td>Hengitysartefaktin poisto</td><td>Notch 0,15&ndash;0,4 Hz tai adaptiivinen</td><td>Hengityksen aiheuttaman vaihtelun eliminointi</td></tr>
+        <tr><td>Intragastrinen referenssi</td><td>Gastrisen kanavan paineen vähennys</td><td>Paineen esitys suhteessa mahalaukun paineeseen</td></tr>
+    </tbody>
+</table>
+
+<div class="theory-highlight">
+    <h4>Automaattinen analyysi vs. manuaalinen korjaus</h4>
+    <p>Nykyaikaiset HRM-ohjelmistot tarjoavat automaattisen analyysin, mutta <strong>manuaalinen tarkistus on aina välttämätön</strong>. Algoritmit voivat tulkita hengitysartefaktin supistukseksi, sijoittaa IRP-ikkunan väärin tai sekoittaa kaksoismielaisun yhteen nielaisuun.</p>
+</div>
+
+<hr>
+
+<h2>8. Laadunvarmistus ja kalibrointi</h2>
+
+<h3>8.1 HRM-katetrin kalibrointi (kahden pisteen)</h3>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Kalibrointipiste</th><th>Olosuhteet</th><th>Hyväksymiskriteeri</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><strong>Nollapiste (0 mmHg)</strong></td><td>Katetri atmosfääripaineessa</td><td>Kaikkien anturien luku &plusmn; 1 mmHg nollasta</td></tr>
+        <tr><td><strong>Korkea paine (100/300 mmHg)</strong></td><td>Paineistettu kammio</td><td>&plusmn; 5 % referenssiarvosta</td></tr>
+    </tbody>
+</table>
+
+<h3>8.2 pH-anturin kalibrointi</h3>
+
+<p>Kahden puskuriliuoksen kalibrointi (pH 7,01 ja pH 1,07). Teoreettinen herkkyys 37 &deg;C:ssa on noin <strong>&minus;61,5 mV/pH-yksikkö</strong> (Nernst-yhtälö). Hyväksyttävä kliininen herkkyys &ge; 90 % teoreettisesta.</p>
+
+<h3>8.3 Säännöllinen laadunvarmistusohjelma</h3>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Tarkistus</th><th>Taajuus</th><th>Dokumentointi</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>Katetrin kalibrointi</td><td>Ennen jokaista tutkimusta</td><td>Kalibrointiloki ohjelmistossa</td></tr>
+        <tr><td>pH-puskuriliuosten tarkistus</td><td>Päivittäin (käyttöpäivänä)</td><td>Puskuriloki</td></tr>
+        <tr><td>Katetrin visuaalinen tarkistus</td><td>Ennen jokaista käyttöä</td><td>Tarkistuslista</td></tr>
+        <tr><td>Ohjelmistoversion päivitys</td><td>Kuukausittain</td><td>Versioloki</td></tr>
+        <tr><td>Referenssimittaus fantomilla</td><td>Kuukausittain</td><td>QA-raportti</td></tr>
+        <tr><td>Desinfektioprosessin validointi</td><td>Vuosittain</td><td>Validointiraportti</td></tr>
+    </tbody>
+</table>
+
+<h3>8.4 Tyypilliset artefaktit</h3>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Artefakti</th><th>Ilmeneminen</th><th>Syy</th><th>Korjaus</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><strong>Hengitysartefakti</strong></td><td>Toistuva horisontaalinen painevaihtelu</td><td>Rintaontelon painevaihtelut</td><td>Ohjelmallinen suodatus</td></tr>
+        <tr><td><strong>Katetrin liukuminen</strong></td><td>LES:n painevyöhyke siirtyy ylöspäin</td><td>Katetri liukuu ulos</td><td>Uudelleensijoitus</td></tr>
+        <tr><td><strong>Baseline-ryömintä</strong></td><td>Hidas painetason muutos</td><td>Lämpötilariippuvuus</td><td>Post-hoc-korjaus</td></tr>
+        <tr><td><strong>Viallinen kanava</strong></td><td>Vakioarvo tai satunnaiskohina</td><td>Anturin mekaaninen vaurio</td><td>Kanavan poisto/interpolointi</td></tr>
+    </tbody>
+</table>
 
             <div class="theory-quiz-section" data-tab="gi">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
-                    <p>Harjoittele GI-kanavan tutkimusten teoriaa monivalintakysymyksillä.</p>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-gi">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
                     <button class="theory-quiz-btn" onclick="startTheoryQuiz('gi')">
                         <i class="fas fa-play"></i> Aloita harjoittelu
                     </button>
@@ -169,12 +1433,75 @@
     <div class="theory-panel" id="panel-dxa" role="tabpanel">
         <div class="theory-content">
 
-            <!-- DXA_CONTENT_PLACEHOLDER -->
+            <h2>1. DXA-mittauksen fysikaaliset perusteet</h2>
+
+<p>DXA (Dual-energy X-ray Absorptiometry) mittaa luun mineraalitiheyttä (BMD) kahdella eri röntgenenergialla. Menetelmä perustuu siihen, että luun ja pehmytkudoksen vaimennuskertoimet eroavat toisistaan energiariippuvaisesti.</p>
+
+<h3>1.1 Kaksienerginen röntgenabsorptiometria</h3>
+<div class="theory-image-slot" data-slot="dxa-principle" data-tab="dxa" data-default-caption="DXA-periaate: kaksienerginen röntgenvaimennus, BMD-laskenta ja T-score-tulkinta"></div>
+
+<p>Röntgenkeila kulkee potilaan läpi, ja detektori mittaa säteilyn vaimennuksen kahdella eri energialla (tyypillisesti 40 keV ja 70&ndash;100 keV). Beer-Lambertin lain mukaan:</p>
+
+<div class="theory-formula">
+    $$I = I_0 \cdot e^{-\mu_b \cdot m_b - \mu_s \cdot m_s}$$
+    <p>missä \(\mu_b\) ja \(\mu_s\) ovat luun ja pehmytkudoksen massavaimennuskertoimet ja \(m_b\) ja \(m_s\) vastaavat pintamassat (g/cm²).</p>
+</div>
+
+<p>Kahdella energialla saadaan kaksi yhtälöä ja kaksi tuntematonta (\(m_b\) ja \(m_s\)), joten luun pintamassa (= BMD) voidaan ratkaista. R-arvo (ratio) on vaimennusten suhde kahdella energialla:</p>
+
+<div class="theory-formula">
+    $$R = \frac{\ln(I_0/I)_{\text{low}}}{\ln(I_0/I)_{\text{high}}}$$
+</div>
+
+<div class="theory-highlight">
+    <h4>Energianerotusmenetelmät</h4>
+    <p><strong>K-reunasuodatus:</strong> Jatkuvaspektrisestä säteilystä suodatetaan kaksi energiakaistaa (esim. cerium-suodatin). Käytössä Hologic-laitteissa.<br>
+    <strong>Jännitteen vaihtelu:</strong> Röntgenputken jännitettä vaihdetaan pulsseittain (esim. 70 kV / 140 kV). Käytössä GE Lunar -laitteissa.</p>
+</div>
+
+<hr>
+
+<h2>2. Laiteteknologia</h2>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Ominaisuus</th><th>Pencil-beam (kynäkeila)</th><th>Fan-beam (viuhkakeila)</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>Keilan muoto</td><td>Kapea keila, pyyhkäisy rivi kerrallaan</td><td>Leveä viuhka, koko rivi kerralla</td></tr>
+        <tr><td>Detektori</td><td>Yksi tai muutama</td><td>Monidetektoririvi</td></tr>
+        <tr><td>Mittausaika</td><td>3&ndash;10 min</td><td>10&ndash;30 s</td></tr>
+        <tr><td>Spatiaalinen resoluutio</td><td>Hyvä</td><td>Erinomainen</td></tr>
+        <tr><td>Geometrinen suurennus</td><td>Minimaalinen</td><td>Merkittävä (etäisyysriippuvainen)</td></tr>
+        <tr><td>Potilasannos</td><td>1&ndash;5 &mu;Sv</td><td>5&ndash;15 &mu;Sv</td></tr>
+    </tbody>
+</table>
+
+<hr>
+
+<h2>3. Mittauskohteet ja potilasasettelu</h2>
+<div class="theory-image-slot" data-slot="dxa-scan-sites" data-tab="dxa" data-default-caption="DXA-mittauskohteet: lanneranka (L1–L4), proksimaalinen reisi ja distaalinen radius"></div>
+
+<table class="theory-table">
+    <thead>
+        <tr><th>Mittauskohde</th><th>ROI</th><th>Potilasasettelu</th><th>Erityishuomiot</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><strong>Lanneranka AP (L1&ndash;L4)</strong></td><td>L1&ndash;L4 kokonaisarvo + yksittäiset nikamat</td><td>Selinmakuu, polvet kohotettu 90&deg;</td><td>Vähintään 2 arvioitavissa olevaa nikamaa; poista artefaktiset nikamat (degeneratiiviset muutokset, kompressiomurtuma)</td></tr>
+        <tr><td><strong>Proksimaalinen reisi</strong></td><td>Femoral neck, total hip, Ward's triangle</td><td>Selinmakuu, sisärotaatio 15&ndash;25&deg;</td><td>Femoral neck on primäärinen WHO-diagnostiikkakohde</td></tr>
+        <tr><td><strong>Distaalinen radius (1/3)</strong></td><td>1/3 radius (ei-dominoiva käsi)</td><td>Käsi levossa mittausyksikössä</td><td>Käytetään, kun selkäranka ja reisi eivät ole arvioitavissa</td></tr>
+        <tr><td><strong>Koko keho</strong></td><td>Koko luusto + kehonkoostumus</td><td>Selinmakuu, kädet sivuilla</td><td>Kehonkoostumusmittaus
 
             <div class="theory-quiz-section" data-tab="dxa">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
-                    <p>Harjoittele luuston mineraalitiheyden mittauksen teoriaa monivalintakysymyksillä.</p>
+                    <p>Valitse kysymystyypit ja aloita harjoittelu.</p>
+                    <div class="theory-quiz-type-selector" id="tq-types-dxa">
+                        <label class="tq-type-chip selected"><input type="checkbox" value="multiple_choice" checked> Monivalinta</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="true_false" checked> Oikein/Väärin</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="calculation" checked> Laskutehtävä</label>
+                        <label class="tq-type-chip selected"><input type="checkbox" value="matching" checked> Yhdistä parit</label>
+                    </div>
                     <button class="theory-quiz-btn" onclick="startTheoryQuiz('dxa')">
                         <i class="fas fa-play"></i> Aloita harjoittelu
                     </button>
@@ -199,9 +1526,204 @@
 {% endblock %}
 
 {% block extra_js %}
+<script src="{% static 'sisalto/js/tts-player.js' %}"></script>
 <script>
 (function() {
-    // ========== TAB NAVIGATION ==========
+    // ==========================================
+    // THEORY IMAGE SLOTS
+    // ==========================================
+
+    var MODALITY = '{{ modality_id }}';
+    var IS_SUPERUSER = {{ is_superuser|yesno:"true,false" }};
+    var imageData = {};
+    var currentUploadSlot = null;
+    var currentUploadTab = null;
+    var pendingFile = null;
+
+    function loadTheoryImages() {
+        if (!MODALITY) return;
+        fetch('/modaliteetit/api/theory-images/' + MODALITY + '/')
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                imageData = data;
+                renderAllSlots();
+            })
+            .catch(function() {});
+    }
+
+    function renderAllSlots() {
+        document.querySelectorAll('.theory-image-slot').forEach(function(slot) {
+            var slotId = slot.dataset.slot;
+            var info = imageData[slotId];
+            if (info && info.url) {
+                slot.className = 'theory-image-slot has-image size-' + (info.display_size || 'medium');
+                slot.innerHTML =
+                    '<figure>' +
+                        '<div class="theory-image-actions">' +
+                            '<button class="btn-replace" onclick="openUploadModal(\'' + slotId + '\', \'' + slot.dataset.tab + '\')"><i class="fas fa-exchange-alt"></i> Vaihda</button>' +
+                            '<button class="btn-delete" onclick="deleteSlotImage(\'' + slotId + '\', \'' + slot.dataset.tab + '\')"><i class="fas fa-trash"></i> Poista</button>' +
+                        '</div>' +
+                        '<img src="' + info.url + '" alt="' + (info.alt_text || '') + '">' +
+                        '<figcaption>' + (info.caption || '') + '</figcaption>' +
+                    '</figure>';
+            } else {
+                slot.classList.remove('has-image');
+                var defaultCaption = slot.dataset.defaultCaption || '';
+                slot.innerHTML =
+                    '<div class="theory-image-placeholder" onclick="openUploadModal(\'' + slotId + '\', \'' + slot.dataset.tab + '\')">' +
+                        '<i class="fas fa-camera"></i>' +
+                        '<span>Lisää kuva</span>' +
+                        '<span class="slot-label">' + slotId + '</span>' +
+                        '<span style="font-size:0.75rem;max-width:400px;text-align:center;">' + defaultCaption + '</span>' +
+                    '</div>';
+            }
+        });
+    }
+
+    window.toggleEditMode = function() {
+        var btn = document.getElementById('editModeToggle');
+        document.body.classList.toggle('theory-edit-mode');
+        btn.classList.toggle('active');
+        var isActive = document.body.classList.contains('theory-edit-mode');
+        btn.querySelector('span').textContent = isActive ? 'Lopeta muokkaus' : 'Muokkaa kuvia';
+    };
+
+    window.openUploadModal = function(slotId, tabId) {
+        if (!IS_SUPERUSER || !document.body.classList.contains('theory-edit-mode')) return;
+        currentUploadSlot = slotId;
+        currentUploadTab = tabId;
+        pendingFile = null;
+        var modal = document.getElementById('uploadModal');
+        if (!modal) return;
+        var existing = imageData[slotId];
+        document.getElementById('uploadCaption').value = existing ? (existing.caption || '') : (document.querySelector('[data-slot="' + slotId + '"]').dataset.defaultCaption || '');
+        document.getElementById('uploadAlt').value = existing ? (existing.alt_text || '') : '';
+        var sizeVal = existing ? (existing.display_size || 'medium') : 'medium';
+        var sizeRadio = document.querySelector('input[name="uploadSize"][value="' + sizeVal + '"]');
+        if (sizeRadio) sizeRadio.checked = true;
+        var dz = document.getElementById('uploadDropzone');
+        dz.innerHTML = '<i class="fas fa-cloud-upload-alt"></i><span>Vedä kuva tähän, klikkaa valitaksesi tai liitä <kbd>Ctrl+V</kbd></span><input type="file" id="uploadFileInput" accept="image/*" style="display:none;">';
+        document.getElementById('uploadSaveBtn').disabled = !existing;
+        bindDropzone();
+        modal.classList.add('visible');
+        modal.setAttribute('tabindex', '-1');
+        modal.focus();
+    };
+
+    window.closeUploadModal = function() {
+        document.getElementById('uploadModal').classList.remove('visible');
+        currentUploadSlot = null;
+        currentUploadTab = null;
+        pendingFile = null;
+    };
+
+    function bindDropzone() {
+        var dz = document.getElementById('uploadDropzone');
+        var fi = document.getElementById('uploadFileInput');
+        dz.onclick = function() { fi.click(); };
+        fi.onchange = function() { if (fi.files.length) handleFile(fi.files[0]); };
+        dz.ondragover = function(e) { e.preventDefault(); dz.classList.add('dragover'); };
+        dz.ondragleave = function() { dz.classList.remove('dragover'); };
+        dz.ondrop = function(e) {
+            e.preventDefault();
+            dz.classList.remove('dragover');
+            if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+        };
+    }
+
+    function onModalPaste(e) {
+        var modal = document.getElementById('uploadModal');
+        if (!modal || !modal.classList.contains('visible')) return;
+        var items = (e.clipboardData || e.originalEvent && e.originalEvent.clipboardData || {}).items;
+        if (!items) return;
+        for (var i = 0; i < items.length; i++) {
+            if (items[i].type.indexOf('image') !== -1) {
+                e.preventDefault();
+                var file = items[i].getAsFile();
+                var ext = items[i].type === 'image/png' ? '.png' : '.jpg';
+                var renamed = new File([file], 'kuvakaappaus' + ext, { type: items[i].type });
+                handleFile(renamed);
+                return;
+            }
+        }
+    }
+    document.addEventListener('paste', onModalPaste);
+
+    function handleFile(file) {
+        if (!file.type.startsWith('image/')) return;
+        pendingFile = file;
+        document.getElementById('uploadSaveBtn').disabled = false;
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var dz = document.getElementById('uploadDropzone');
+            dz.innerHTML = '<img class="preview" src="' + e.target.result + '"><input type="file" id="uploadFileInput" accept="image/*" style="display:none;">';
+            bindDropzone();
+        };
+        reader.readAsDataURL(file);
+    }
+
+    window.saveUploadedImage = function() {
+        if (!currentUploadSlot || !currentUploadTab) return;
+        var btn = document.getElementById('uploadSaveBtn');
+        btn.disabled = true;
+        btn.textContent = 'Tallennetaan...';
+        var fd = new FormData();
+        fd.append('modality', MODALITY);
+        fd.append('tab_id', currentUploadTab);
+        fd.append('slot_id', currentUploadSlot);
+        fd.append('caption', document.getElementById('uploadCaption').value);
+        fd.append('alt_text', document.getElementById('uploadAlt').value);
+        var sizeEl = document.querySelector('input[name="uploadSize"]:checked');
+        fd.append('display_size', sizeEl ? sizeEl.value : 'medium');
+        if (pendingFile) fd.append('image', pendingFile);
+        fetch('/modaliteetit/api/theory-images/upload/', {
+            method: 'POST',
+            headers: { 'X-CSRFToken': getCookie('csrftoken') },
+            body: fd
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (data.ok) {
+                var sizeEl = document.querySelector('input[name="uploadSize"]:checked');
+                imageData[currentUploadSlot] = {
+                    url: data.url, caption: data.caption, alt_text: data.alt_text,
+                    display_size: sizeEl ? sizeEl.value : 'medium', tab_id: currentUploadTab
+                };
+                renderAllSlots();
+                closeUploadModal();
+            } else {
+                alert(data.error || 'Virhe tallennettaessa.');
+                btn.disabled = false;
+                btn.textContent = 'Tallenna';
+            }
+        })
+        .catch(function() {
+            alert('Verkkovirhe.');
+            btn.disabled = false;
+            btn.textContent = 'Tallenna';
+        });
+    };
+
+    window.deleteSlotImage = function(slotId, tabId) {
+        if (!confirm('Poistetaanko kuva paikasta "' + slotId + '"?')) return;
+        fetch('/modaliteetit/api/theory-images/delete/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+            body: JSON.stringify({ modality: MODALITY, tab_id: tabId, slot_id: slotId })
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (data.ok) { delete imageData[slotId]; renderAllSlots(); }
+            else { alert(data.error || 'Virhe poistettaessa.'); }
+        })
+        .catch(function() { alert('Verkkovirhe.'); });
+    };
+
+    loadTheoryImages();
+
+    // ==========================================
+    // TAB NAVIGATION
+    // ==========================================
     const tabs = document.querySelectorAll('.theory-tab');
     const panels = document.querySelectorAll('.theory-panel');
 
@@ -246,13 +1768,34 @@
         return c ? c[1] : '';
     }
 
+    // Type selector chip toggle
+    document.querySelectorAll('.tq-type-chip').forEach(function(chip) {
+        chip.addEventListener('click', function(e) {
+            e.preventDefault();
+            var cb = this.querySelector('input[type="checkbox"]');
+            cb.checked = !cb.checked;
+            this.classList.toggle('selected', cb.checked);
+        });
+    });
+
+    function getSelectedTypes(tabId) {
+        var selector = document.getElementById('tq-types-' + tabId);
+        if (!selector) return 'multiple_choice,multi_select,true_false,calculation,matching';
+        var types = [];
+        selector.querySelectorAll('input[type="checkbox"]:checked').forEach(function(cb) {
+            types.push(cb.value);
+            if (cb.value === 'multiple_choice') types.push('multi_select');
+        });
+        return types.length > 0 ? types.join(',') : 'multiple_choice';
+    }
+
     window.startTheoryQuiz = function(tabId) {
         var section = document.querySelector('.theory-quiz-section[data-tab="' + tabId + '"]');
         if (!section) return;
         section.querySelector('.theory-quiz-start').style.display = 'none';
         var active = section.querySelector('.theory-quiz-active');
         active.style.display = 'block';
-        quizState[tabId] = { score: 0, total: 0 };
+        quizState[tabId] = { score: 0, total: 0, types: getSelectedTypes(tabId) };
         loadQuestion(tabId);
     };
 
@@ -273,7 +1816,7 @@
 
         active.innerHTML = '<div class="theory-quiz-loading"><i class="fas fa-spinner fa-spin"></i><p>Ladataan kysymystä...</p></div>';
 
-        fetch('/modaliteetit/api/question/' + epaId + '/')
+        fetch('/modaliteetit/api/question/' + epaId + '/?types=' + encodeURIComponent(st.types))
             .then(function(r) { return r.json(); })
             .then(function(data) {
                 if (data.error) {
@@ -282,7 +1825,6 @@
                 }
                 st.currentQuestionId = data.question_id;
                 st.currentQuestionType = data.question_type;
-                var isMulti = data.question_type === 'multi_select';
 
                 var html = '';
                 html += '<div class="theory-quiz-scorebar">';
@@ -292,28 +1834,77 @@
                 html += '<button class="theory-quiz-stop" onclick="stopTheoryQuiz(\'' + tabId + '\')"><i class="fas fa-stop"></i> Lopeta</button>';
                 html += '</div></div>';
 
-                if (isMulti) {
-                    html += '<div class="theory-quiz-type-hint"><i class="fas fa-check-double"></i> Valitse kaikki oikeat vastaukset</div>';
+                var typeHints = {
+                    'multi_select': '<i class="fas fa-check-double"></i> Valitse kaikki oikeat vastaukset',
+                    'true_false': '<i class="fas fa-balance-scale"></i> Oikein vai väärin?',
+                    'calculation': '<i class="fas fa-calculator"></i> Laske oikea arvo',
+                    'matching': '<i class="fas fa-arrows-alt-h"></i> Yhdistä parit'
+                };
+                if (typeHints[data.question_type]) {
+                    html += '<div class="theory-quiz-type-hint">' + typeHints[data.question_type] + '</div>';
                 }
 
                 html += '<div class="theory-quiz-question">' + data.text + '</div>';
 
-                html += '<div class="theory-quiz-choices" id="tq-choices-' + tabId + '">';
-                data.choices.forEach(function(c) {
-                    var indicatorClass = isMulti ? 'checkbox' : '';
-                    var icon = isMulti ? 'fa-check' : 'fa-circle';
-                    html += '<div class="theory-quiz-choice" data-id="' + c.id + '" onclick="toggleChoice(\'' + tabId + '\', this, ' + isMulti + ')">';
-                    html += '<div class="theory-quiz-choice-indicator ' + indicatorClass + '"><i class="fas ' + icon + '"></i></div>';
-                    html += '<div>' + c.text + '</div>';
+                if (data.question_type === 'calculation') {
+                    html += '<div class="theory-quiz-calc-wrapper" id="tq-calc-' + tabId + '">';
+                    html += '<input type="number" step="any" class="theory-quiz-calc-input" id="tq-calc-input-' + tabId + '" placeholder="Vastaus...">';
+                    if (data.calculation_unit) html += '<span class="theory-quiz-calc-unit">' + data.calculation_unit + '</span>';
+                    html += '<span class="theory-quiz-calc-hint">toleranssi &plusmn;' + (data.calculation_tolerance || 5) + '%</span>';
                     html += '</div>';
-                });
-                html += '</div>';
+                } else if (data.question_type === 'matching' && data.matching_pairs) {
+                    html += '<div class="theory-quiz-matching" id="tq-matching-' + tabId + '">';
+                    data.matching_pairs.forEach(function(pair, idx) {
+                        html += '<div class="theory-quiz-matching-row">';
+                        html += '<span class="theory-quiz-matching-left">' + pair.left + '</span>';
+                        html += '<span class="theory-quiz-matching-arrow">&rarr;</span>';
+                        html += '<select class="theory-quiz-matching-select" data-left="' + pair.left + '">';
+                        html += '<option value="">Valitse...</option>';
+                        data.matching_rights.forEach(function(right) {
+                            html += '<option value="' + right + '">' + right + '</option>';
+                        });
+                        html += '</select>';
+                        html += '</div>';
+                    });
+                    html += '</div>';
+                } else {
+                    var isMulti = data.question_type === 'multi_select';
+                    html += '<div class="theory-quiz-choices" id="tq-choices-' + tabId + '">';
+                    data.choices.forEach(function(c) {
+                        var indicatorClass = isMulti ? 'checkbox' : '';
+                        var icon = isMulti ? 'fa-check' : 'fa-circle';
+                        html += '<div class="theory-quiz-choice" data-id="' + c.id + '" onclick="toggleChoice(\'' + tabId + '\', this, ' + isMulti + ')">';
+                        html += '<div class="theory-quiz-choice-indicator ' + indicatorClass + '"><i class="fas ' + icon + '"></i></div>';
+                        html += '<div>' + c.text + '</div>';
+                        html += '</div>';
+                    });
+                    html += '</div>';
+                }
 
                 html += '<button class="theory-quiz-submit" id="tq-submit-' + tabId + '" onclick="submitAnswer(\'' + tabId + '\')"><i class="fas fa-check"></i> Vastaa</button>';
-
                 html += '<div id="tq-result-' + tabId + '" style="display: none;"></div>';
 
                 active.innerHTML = html;
+
+                if (data.question_type === 'calculation') {
+                    var calcInput = document.getElementById('tq-calc-input-' + tabId);
+                    calcInput.addEventListener('input', function() {
+                        document.getElementById('tq-submit-' + tabId).classList.toggle('enabled', this.value.trim() !== '');
+                    });
+                    calcInput.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter' && this.value.trim()) submitAnswer(tabId);
+                    });
+                } else if (data.question_type === 'matching') {
+                    document.querySelectorAll('#tq-matching-' + tabId + ' select').forEach(function(sel) {
+                        sel.addEventListener('change', function() {
+                            var allFilled = true;
+                            document.querySelectorAll('#tq-matching-' + tabId + ' select').forEach(function(s) {
+                                if (!s.value) allFilled = false;
+                            });
+                            document.getElementById('tq-submit-' + tabId).classList.toggle('enabled', allFilled);
+                        });
+                    });
+                }
 
                 if (window.MathJax && MathJax.typesetPromise) {
                     MathJax.typesetPromise([active]);
@@ -330,14 +1921,8 @@
             el.parentElement.querySelectorAll('.theory-quiz-choice').forEach(function(c) { c.classList.remove('selected'); });
         }
         el.classList.toggle('selected');
-
         var hasSelection = el.parentElement.querySelector('.theory-quiz-choice.selected');
-        var btn = document.getElementById('tq-submit-' + tabId);
-        if (hasSelection) {
-            btn.classList.add('enabled');
-        } else {
-            btn.classList.remove('enabled');
-        }
+        document.getElementById('tq-submit-' + tabId).classList.toggle('enabled', !!hasSelection);
     };
 
     window.submitAnswer = function(tabId) {
@@ -347,19 +1932,33 @@
         btn.style.display = 'none';
 
         var st = quizState[tabId];
-        var selected = [];
-        document.querySelectorAll('#tq-choices-' + tabId + ' .theory-quiz-choice.selected').forEach(function(c) {
-            selected.push(parseInt(c.dataset.id));
-        });
+        var body = { question_id: st.currentQuestionId };
 
-        document.querySelectorAll('#tq-choices-' + tabId + ' .theory-quiz-choice').forEach(function(c) {
-            c.classList.add('disabled');
-        });
+        if (st.currentQuestionType === 'calculation') {
+            body.calculation_input = parseFloat(document.getElementById('tq-calc-input-' + tabId).value);
+            document.getElementById('tq-calc-input-' + tabId).disabled = true;
+        } else if (st.currentQuestionType === 'matching') {
+            var answers = {};
+            document.querySelectorAll('#tq-matching-' + tabId + ' select').forEach(function(sel) {
+                answers[sel.dataset.left] = sel.value;
+                sel.disabled = true;
+            });
+            body.matching_answers = answers;
+        } else {
+            var selected = [];
+            document.querySelectorAll('#tq-choices-' + tabId + ' .theory-quiz-choice.selected').forEach(function(c) {
+                selected.push(parseInt(c.dataset.id));
+            });
+            document.querySelectorAll('#tq-choices-' + tabId + ' .theory-quiz-choice').forEach(function(c) {
+                c.classList.add('disabled');
+            });
+            body.selected_ids = selected;
+        }
 
         fetch('/modaliteetit/api/answer/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCSRF() },
-            body: JSON.stringify({ question_id: st.currentQuestionId, selected_ids: selected })
+            body: JSON.stringify(body)
         })
         .then(function(r) { return r.json(); })
         .then(function(data) {
@@ -369,23 +1968,49 @@
             var scoreEl = document.getElementById('tq-score-' + tabId);
             if (scoreEl) scoreEl.textContent = st.score + '/' + st.total;
 
-            data.choices.forEach(function(c) {
-                var el = document.querySelector('#tq-choices-' + tabId + ' .theory-quiz-choice[data-id="' + c.id + '"]');
-                if (!el) return;
-                if (c.is_correct) {
-                    el.classList.add('correct');
-                    el.querySelector('.theory-quiz-choice-indicator i').className = 'fas fa-check';
-                } else if (c.was_selected) {
-                    el.classList.add('incorrect');
-                    el.querySelector('.theory-quiz-choice-indicator i').className = 'fas fa-times';
-                }
-                if (c.explanation) {
-                    var expDiv = document.createElement('div');
-                    expDiv.className = 'theory-quiz-choice-explanation';
-                    expDiv.textContent = c.explanation;
-                    el.querySelector('div:last-child').appendChild(expDiv);
-                }
-            });
+            if (st.currentQuestionType === 'calculation') {
+                var c = data.choices[0];
+                var calcEl = document.getElementById('tq-calc-' + tabId);
+                var feedback = document.createElement('div');
+                feedback.className = 'theory-quiz-calc-feedback ' + (data.is_correct ? 'correct' : 'incorrect');
+                feedback.innerHTML = data.is_correct
+                    ? '<i class="fas fa-check-circle"></i> Oikein!'
+                    : '<i class="fas fa-times-circle"></i> Oikea vastaus: ' + c.correct_answer + ' ' + c.unit;
+                calcEl.appendChild(feedback);
+            } else if (st.currentQuestionType === 'matching') {
+                data.choices.forEach(function(c) {
+                    document.querySelectorAll('#tq-matching-' + tabId + ' select').forEach(function(sel) {
+                        if (sel.dataset.left === c.left) {
+                            var row = sel.closest('.theory-quiz-matching-row');
+                            row.classList.add(c.pair_correct ? 'correct' : 'incorrect');
+                            if (!c.pair_correct) {
+                                var fix = document.createElement('span');
+                                fix.className = 'theory-quiz-matching-correct';
+                                fix.textContent = ' \u2192 ' + c.right;
+                                row.appendChild(fix);
+                            }
+                        }
+                    });
+                });
+            } else {
+                data.choices.forEach(function(c) {
+                    var el = document.querySelector('#tq-choices-' + tabId + ' .theory-quiz-choice[data-id="' + c.id + '"]');
+                    if (!el) return;
+                    if (c.is_correct) {
+                        el.classList.add('correct');
+                        el.querySelector('.theory-quiz-choice-indicator i').className = 'fas fa-check';
+                    } else if (c.was_selected) {
+                        el.classList.add('incorrect');
+                        el.querySelector('.theory-quiz-choice-indicator i').className = 'fas fa-times';
+                    }
+                    if (c.explanation) {
+                        var expDiv = document.createElement('div');
+                        expDiv.className = 'theory-quiz-choice-explanation';
+                        expDiv.textContent = c.explanation;
+                        el.querySelector('div:last-child').appendChild(expDiv);
+                    }
+                });
+            }
 
             var resultHtml = '';
             if (data.is_correct) {
@@ -393,14 +2018,12 @@
             } else {
                 resultHtml += '<div class="theory-quiz-result-banner incorrect"><i class="fas fa-times-circle"></i> Väärin</div>';
             }
-
             if (data.explanation) {
                 resultHtml += '<div class="theory-quiz-explanation">';
                 resultHtml += '<div class="theory-quiz-explanation-label"><i class="fas fa-lightbulb"></i> Selitys</div>';
                 resultHtml += '<p>' + data.explanation + '</p>';
                 resultHtml += '</div>';
             }
-
             resultHtml += '<button class="theory-quiz-next" onclick="nextQuestion(\'' + tabId + '\')">Seuraava kysymys <i class="fas fa-arrow-right"></i></button>';
 
             var resultEl = document.getElementById('tq-result-' + tabId);

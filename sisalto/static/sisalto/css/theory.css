@@ -19,6 +19,7 @@
 
 .theory-header {
   margin-bottom: var(--space-8);
+  position: relative;
 }
 
 .theory-header h1 {
@@ -36,6 +37,12 @@
   font-size: 1.05rem;
   margin: 0;
   line-height: 1.5;
+}
+
+.theory-header .theory-edit-toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 /* ============================================
@@ -335,6 +342,386 @@
   font-style: italic;
 }
 
+/* ===== Theory Image Slots ===== */
+.theory-image-slot {
+  display: none;
+  margin: var(--space-5) 0;
+}
+
+.theory-image-slot.has-image {
+  display: block;
+}
+
+.theory-image-slot figure {
+  margin: 0;
+  text-align: center;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  position: relative;
+}
+
+.theory-image-slot figure img {
+  max-width: 100%;
+  max-height: 600px;
+  height: auto;
+  border-radius: var(--radius-sm);
+  object-fit: contain;
+}
+
+/* Major section headings (h2) clear floated images — prevents bleed across big topics.
+   h3/h4 sub-headings intentionally do NOT clear so text can wrap beside images. */
+.theory-panel h2 {
+  clear: right;
+}
+
+/* Image size variants — small/medium/large float right, full stays block */
+.theory-image-slot.has-image.size-small,
+.theory-image-slot.has-image.size-medium,
+.theory-image-slot.has-image.size-large {
+  float: right;
+  clear: right;
+  margin: 0 0 var(--space-4) var(--space-5);
+}
+
+.theory-image-slot.has-image.size-small  { width: 35%; }
+.theory-image-slot.has-image.size-medium { width: 50%; }
+.theory-image-slot.has-image.size-large  { width: 65%; }
+
+.theory-image-slot.has-image.size-full {
+  float: none;
+  clear: both;
+  width: 100%;
+  margin: var(--space-5) 0;
+}
+
+/* Image fills its container in all float variants */
+.theory-image-slot.has-image figure img {
+  max-width: 100%;
+}
+
+/* Clearfix: ensure panel content clears floated images */
+.theory-panel::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+/* Edit mode: show all slots (including empty) floating right — mirrors final layout */
+body.theory-edit-mode .theory-image-slot {
+  display: block;
+  float: right;
+  clear: right;
+  width: 42%;
+  margin: 0 0 var(--space-4) var(--space-5);
+}
+
+/* Full-size slots remain full-width even in edit mode */
+body.theory-edit-mode .theory-image-slot.has-image.size-full {
+  float: none !important;
+  width: 100% !important;
+  margin: var(--space-5) 0 !important;
+}
+
+.theory-image-slot figcaption {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin-top: var(--space-3);
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* Empty slot placeholder (visible only in edit mode) */
+.theory-image-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 180px;
+  border: 2px dashed var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--bg-raised);
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.theory-image-placeholder:hover {
+  border-color: var(--color-primary);
+  background: rgba(96, 165, 250, 0.05);
+}
+
+.theory-image-placeholder i {
+  font-size: 2rem;
+  color: var(--text-tertiary);
+}
+
+.theory-image-placeholder span {
+  font-size: 0.875rem;
+}
+
+.theory-image-placeholder .slot-label {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  opacity: 0.7;
+  font-family: var(--font-mono);
+}
+
+/* Image action buttons (edit mode) */
+.theory-image-actions {
+  display: none;
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  gap: var(--space-1);
+}
+
+body.theory-edit-mode .theory-image-actions {
+  display: flex;
+}
+
+.theory-image-actions button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.theory-image-actions .btn-replace {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.theory-image-actions .btn-delete {
+  background: var(--color-red);
+  color: #fff;
+}
+
+.theory-image-actions button:hover {
+  opacity: 0.85;
+}
+
+/* Edit mode toggle */
+.theory-edit-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 8px 16px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+  margin-left: auto;
+}
+
+.theory-edit-toggle:hover {
+  border-color: var(--color-primary);
+  color: var(--text-primary);
+}
+
+.theory-edit-toggle.active {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: rgba(96, 165, 250, 0.08);
+}
+
+.theory-edit-toggle i {
+  font-size: 1rem;
+}
+
+/* Upload modal */
+.theory-upload-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  align-items: center;
+  justify-content: center;
+}
+
+.theory-upload-modal.visible {
+  display: flex;
+}
+
+.theory-upload-modal-content {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  max-width: 560px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.theory-upload-modal h3 {
+  margin: 0 0 var(--space-4);
+  color: var(--text-primary);
+  font-size: 1.125rem;
+}
+
+.theory-upload-dropzone {
+  border: 2px dashed var(--border-default);
+  border-radius: var(--radius-md);
+  padding: var(--space-6);
+  text-align: center;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  margin-bottom: var(--space-4);
+}
+
+.theory-upload-dropzone:hover,
+.theory-upload-dropzone.dragover {
+  border-color: var(--color-primary);
+  background: rgba(96, 165, 250, 0.05);
+}
+
+.theory-upload-dropzone i {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: var(--space-2);
+}
+
+.theory-upload-dropzone img.preview {
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: var(--radius-sm);
+  margin-top: var(--space-3);
+}
+
+.theory-upload-field {
+  margin-bottom: var(--space-3);
+}
+
+.theory-upload-field label {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-1);
+  font-weight: 500;
+}
+
+.theory-upload-field input,
+.theory-upload-field textarea {
+  width: 100%;
+  padding: 8px 12px;
+  background: var(--bg-base);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  font-family: inherit;
+}
+
+.theory-upload-field textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.theory-upload-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.theory-upload-actions button {
+  padding: 8px 20px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.theory-upload-actions .btn-cancel {
+  background: var(--bg-raised);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-default);
+}
+
+.theory-upload-actions .btn-save {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.theory-upload-actions .btn-save:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Size picker in upload modal */
+.theory-size-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: 4px;
+}
+
+.size-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--bg-base);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.size-option:has(input:checked) {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* Keyboard shortcut hint in dropzone */
+.theory-upload-dropzone kbd {
+  display: inline-block;
+  padding: 1px 6px;
+  background: var(--bg-overlay);
+  border: 1px solid var(--border-default);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+/* Caption inline edit (edit mode) */
+.theory-image-slot .caption-edit {
+  display: none;
+  margin-top: var(--space-2);
+}
+
+body.theory-edit-mode .theory-image-slot .caption-edit {
+  display: block;
+}
+
+.caption-edit input {
+  width: 100%;
+  padding: 6px 10px;
+  background: var(--bg-base);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.813rem;
+  font-style: italic;
+  text-align: center;
+}
+
 /* References section */
 .theory-references {
   background: var(--bg-raised);
@@ -523,6 +910,45 @@
   color: var(--text-tertiary);
   margin: 0 0 var(--space-4);
   font-size: 0.95rem;
+}
+
+/* Type selector chips */
+.theory-quiz-type-selector {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.tq-type-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  background: var(--bg-overlay);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full, 9999px);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.tq-type-chip input[type="checkbox"] {
+  display: none;
+}
+
+.tq-type-chip.selected {
+  background: rgba(96, 165, 250, 0.15);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.tq-type-chip:hover {
+  border-color: var(--color-primary);
 }
 
 .theory-quiz-btn {
@@ -818,4 +1244,273 @@
 
 .theory-quiz-stop:hover {
   background: rgba(248, 113, 113, 0.2);
+}
+
+/* Calculation input */
+.theory-quiz-calc-wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-4);
+}
+
+.theory-quiz-calc-input {
+  width: 180px;
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg-surface);
+  border: 2px solid var(--border-default);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.theory-quiz-calc-input:focus {
+  border-color: var(--color-primary);
+}
+
+.theory-quiz-calc-input:disabled {
+  opacity: 0.6;
+}
+
+.theory-quiz-calc-unit {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.theory-quiz-calc-hint {
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+  font-style: italic;
+}
+
+.theory-quiz-calc-feedback {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-top: var(--space-2);
+}
+
+.theory-quiz-calc-feedback.correct {
+  background: rgba(52, 211, 153, 0.12);
+  color: var(--color-success);
+}
+
+.theory-quiz-calc-feedback.incorrect {
+  background: rgba(248, 113, 113, 0.12);
+  color: var(--color-red);
+}
+
+/* Matching pairs */
+.theory-quiz-matching {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.theory-quiz-matching-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  transition: border-color 0.2s;
+}
+
+.theory-quiz-matching-row.correct {
+  border-color: var(--color-success);
+  background: rgba(52, 211, 153, 0.06);
+}
+
+.theory-quiz-matching-row.incorrect {
+  border-color: var(--color-red);
+  background: rgba(248, 113, 113, 0.06);
+}
+
+.theory-quiz-matching-left {
+  font-weight: 600;
+  color: var(--text-primary);
+  min-width: 120px;
+  flex-shrink: 0;
+}
+
+.theory-quiz-matching-arrow {
+  color: var(--text-tertiary);
+  font-size: 1.1rem;
+}
+
+.theory-quiz-matching-select {
+  flex: 1;
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg-overlay);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.theory-quiz-matching-select:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.theory-quiz-matching-correct {
+  color: var(--color-success);
+  font-weight: 600;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+/* ============================================
+   TTS (Text-to-Speech) Player
+   ============================================ */
+
+.tts-listen-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-default);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  margin-bottom: 20px;
+}
+
+.tts-listen-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.tts-listen-btn.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+.tts-listen-btn.loading {
+  background: var(--bg-overlay);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  cursor: wait;
+}
+
+.tts-listen-btn i {
+  font-size: 0.95rem;
+}
+
+/* Floating player bar */
+.tts-player-bar {
+  position: fixed;
+  bottom: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  transition: bottom 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tts-player-bar.visible {
+  bottom: 24px;
+}
+
+.tts-player-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 20px;
+  background: var(--bg-overlay);
+  border: 1px solid var(--border-default);
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.tts-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border-default);
+  background: var(--bg-raised);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+  flex-shrink: 0;
+}
+
+.tts-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.tts-progress {
+  width: 120px;
+  flex-shrink: 0;
+}
+
+.tts-progress-bar {
+  height: 4px;
+  background: var(--bg-base);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.tts-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--color-primary);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.tts-status-text {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  white-space: nowrap;
+  min-width: 80px;
+  text-align: center;
+}
+
+.tts-speed-btn {
+  width: auto !important;
+  padding: 0 12px !important;
+  border-radius: 6px !important;
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .tts-player-inner {
+    gap: 8px;
+    padding: 8px 14px;
+  }
+
+  .tts-progress {
+    width: 60px;
+  }
+
+  .tts-status-text {
+    display: none;
+  }
 }

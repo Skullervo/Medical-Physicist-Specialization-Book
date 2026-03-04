@@ -24,6 +24,7 @@ urlpatterns = [
     path('modaliteetit/sadehoito/', views.modaliteetit_sadehoito_view, name='modaliteetit_sadehoito'),
     path('modaliteetit/isotooppi/', views.modaliteetit_isotooppi_view, name='modaliteetit_isotooppi'),
     path('modaliteetit/fysiologia/', views.modaliteetit_fysiologia_view, name='modaliteetit_fysiologia'),
+    path('modaliteetit/knf/', views.modaliteetit_knf_view, name='modaliteetit_knf'),
     path('modaliteetit/api/question/<int:epa_id>/', views.theory_quiz_question, name='theory_quiz_question'),
     path('modaliteetit/api/answer/', views.theory_quiz_answer, name='theory_quiz_answer'),
     
@@ -251,4 +252,10 @@ urlpatterns = [
     
     # Image upload for CKEditor
     path('upload-image/', views.upload_image_view, name='upload_image'),
+
+    # Theory image slots API (upload/delete MUST come before <str:modality>)
+    path('modaliteetit/api/tts/', views.tts_generate, name='tts_generate'),
+    path('modaliteetit/api/theory-images/upload/', views.theory_image_upload, name='theory_image_upload'),
+    path('modaliteetit/api/theory-images/delete/', views.theory_image_delete, name='theory_image_delete'),
+    path('modaliteetit/api/theory-images/<str:modality>/', views.theory_images_list, name='theory_images_list'),
 ]
