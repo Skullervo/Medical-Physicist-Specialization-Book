@@ -24,6 +24,12 @@
             <div style="font-size: 1.4em; font-weight: 700; color: #f1c40f;" id="percentDisplay">-</div>
             <div style="color: #7f8c8d; font-size: 0.8em;">Prosentti</div>
         </div>
+        {% if quiz_mode == 'timed' %}
+        <div id="timerDisplay" style="display: flex; align-items: center; gap: 6px; font-size: 1.15em; font-weight: 700; color: #f1c40f; padding: 6px 14px; background: rgba(241,196,15,0.1); border: 1px solid rgba(241,196,15,0.3); border-radius: 8px;">
+            <i class="fas fa-stopwatch"></i>
+            <span id="timerText">--:--</span>
+        </div>
+        {% endif %}
         <a id="stopBtn" href="#" style="background: rgba(231,76,60,0.15); color: #e74c3c; border: 1px solid rgba(231,76,60,0.3); padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 0.9em; font-weight: 600; transition: all 0.2s;" onmouseover="this.style.background='rgba(231,76,60,0.25)'" onmouseout="this.style.background='rgba(231,76,60,0.15)'">
             <i class="fas fa-stop" style="margin-right: 6px;"></i>Lopeta
         </a>
@@ -46,8 +52,11 @@
         </div>
 
         <!-- Difficulty -->
-        <div id="difficultyBadge" style="margin-bottom: 16px;">
+        <div id="difficultyBadge" style="margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
             <span style="padding: 4px 12px; border-radius: 12px; font-size: 0.8em;"></span>
+            <span id="adaptiveBadge" style="display:none; color: #a78bfa; font-size: 0.75em; background: rgba(167,139,250,0.1); border: 1px solid rgba(167,139,250,0.2); padding: 2px 8px; border-radius: 6px;" title="Adaptiivinen taso">
+                <i class="fas fa-robot" style="margin-right: 3px;"></i><span id="adaptiveLevel"></span>
+            </span>
         </div>
 
         <!-- Question type hint -->
@@ -81,6 +90,29 @@
                     <i class="fas fa-lightbulb" style="margin-right: 6px;"></i>Selitys
                 </div>
                 <p id="explanationText" style="color: #b0b8c1; line-height: 1.6; margin: 0;"></p>
+            </div>
+
+            <!-- Comments section -->
+            <div id="commentsSection" style="margin-bottom: 20px;">
+                <details>
+                    <summary style="cursor: pointer; color: var(--text-tertiary); font-size: 0.85em; user-select: none; list-style: none; display: flex; align-items: center; gap: 6px;">
+                        <i class="fas fa-comments"></i>
+                        <span id="commentsToggleLabel">Kommentit</span>
+                    </summary>
+                    <div id="commentsBody" style="margin-top: 12px; background: var(--bg-raised, #1c2333); border-radius: 8px; padding: 16px; border: 1px solid var(--border-default, #2d3a4a);">
+                        <div id="commentsList" style="margin-bottom: 12px;"></div>
+                        {% if user.is_authenticated %}
+                        <div style="display: flex; gap: 8px; margin-top: 8px;">
+                            <textarea id="commentInput" rows="2" placeholder="Kirjoita kommentti..." style="flex: 1; background: var(--bg-overlay, #232b3e); color: var(--text-primary, #e2e8f0); border: 1px solid var(--border-default, #2d3a4a); border-radius: 6px; padding: 8px 10px; font-size: 0.88em; font-family: inherit; resize: none;"></textarea>
+                            <button id="commentSubmitBtn" onclick="submitComment()" style="background: var(--color-primary, #60a5fa); color: white; border: none; border-radius: 6px; padding: 0 16px; cursor: pointer; font-size: 0.85em; white-space: nowrap;">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                        {% else %}
+                        <p style="color: var(--text-disabled, #4a5568); font-size: 0.85em; margin: 0;"><a href="/login/" style="color: var(--color-primary, #60a5fa);">Kirjaudu sisään</a> lisätäksesi kommentin.</p>
+                        {% endif %}
+                    </div>
+                </details>
             </div>
 
             <!-- Next question button -->
@@ -140,8 +172,195 @@
 <script>
 (function() {
     const CSRF_TOKEN = getCookie('csrftoken');
+    const IS_AUTHENTICATED = {% if user.is_authenticated %}true{% else %}false{% endif %};
+    const QUIZ_MODE = '{{ quiz_mode|default:"tutor" }}';
+    const QUESTION_TARGET = {{ quiz_question_target|default:0 }};
+    const TIME_LIMIT_SECONDS = {{ quiz_time_limit_seconds|default:0 }};
+
+    const IS_SUPERUSER = {% if user.is_superuser %}true{% else %}false{% endif %};
+
     let currentQuestion = null;
     let answered = false;
+    let currentNoteText = '';
+    let questionStartTime = null;
+
+    // Timed-mode state
+    let timedResults = [];
+    let timerInterval = null;
+    let remainingSeconds = TIME_LIMIT_SECONDS;
+    let questionCount = 0;
+
+    // ==========================================
+    // FLAG & NOTE FUNCTIONS
+    // ==========================================
+
+    const FLAG_OPTIONS = {
+        wrong:     { icon: 'fa-times-circle', color: '#e74c3c', label: 'Väärin' },
+        guess:     { icon: 'fa-question-circle', color: '#f1c40f', label: 'Arvaus' },
+        important: { icon: 'fa-star', color: '#3498db', label: 'Tärkeä' },
+    };
+
+    function renderFlagNoteToolbar(data) {
+        const old = document.getElementById('flagNoteToolbar');
+        if (old) old.remove();
+        if (!IS_AUTHENTICATED) return;
+
+        currentNoteText = data.note_text || '';
+        const currentFlag = data.flag_type || null;
+
+        const toolbar = document.createElement('div');
+        toolbar.id = 'flagNoteToolbar';
+        toolbar.style.cssText = 'display: flex; align-items: center; gap: 8px; margin-bottom: 16px;';
+
+        // Flag button
+        const flagWrap = document.createElement('div');
+        flagWrap.style.cssText = 'position: relative;';
+
+        const flagIcon = currentFlag ? FLAG_OPTIONS[currentFlag].icon : 'fa-flag';
+        const flagColor = currentFlag ? FLAG_OPTIONS[currentFlag].color : '#7f8c8d';
+        const flagLabel = currentFlag ? FLAG_OPTIONS[currentFlag].label : 'Merkitse';
+
+        const flagBtn = document.createElement('button');
+        flagBtn.id = 'flagToggle';
+        flagBtn.style.cssText = 'background: none; border: 1px solid ' + flagColor + '; color: ' + flagColor + '; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85em; transition: all 0.15s;';
+        flagBtn.innerHTML = '<i class="fas ' + flagIcon + '"></i> ' + flagLabel;
+        flagBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const menu = document.getElementById('flagMenu');
+            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+        });
+
+        const menu = document.createElement('div');
+        menu.id = 'flagMenu';
+        menu.style.cssText = 'display: none; position: absolute; top: 100%; left: 0; background: #1a252f; border: 1px solid #34495e; border-radius: 8px; padding: 4px 0; z-index: 100; min-width: 160px; margin-top: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);';
+
+        Object.entries(FLAG_OPTIONS).forEach(function([type, opt]) {
+            const btn = document.createElement('button');
+            btn.style.cssText = 'display: block; width: 100%; text-align: left; background: ' + (currentFlag === type ? 'rgba(52,152,219,0.15)' : 'none') + '; border: none; color: ' + opt.color + '; padding: 8px 14px; cursor: pointer; font-size: 0.9em; transition: background 0.1s;';
+            btn.innerHTML = '<i class="fas ' + opt.icon + '" style="width: 18px;"></i> ' + opt.label;
+            btn.onmouseover = function() { this.style.background = 'rgba(52,152,219,0.1)'; };
+            btn.onmouseout = function() { this.style.background = currentFlag === type ? 'rgba(52,152,219,0.15)' : 'none'; };
+            btn.addEventListener('click', function() {
+                toggleFlag(type);
+                menu.style.display = 'none';
+            });
+            menu.appendChild(btn);
+        });
+
+        if (currentFlag) {
+            const divider = document.createElement('div');
+            divider.style.cssText = 'border-top: 1px solid #34495e; margin: 2px 0;';
+            menu.appendChild(divider);
+            const removeBtn = document.createElement('button');
+            removeBtn.style.cssText = 'display: block; width: 100%; text-align: left; background: none; border: none; color: #95a5a6; padding: 8px 14px; cursor: pointer; font-size: 0.9em;';
+            removeBtn.innerHTML = '<i class="fas fa-trash" style="width: 18px;"></i> Poista merkintä';
+            removeBtn.addEventListener('click', function() {
+                toggleFlag(currentFlag);
+                menu.style.display = 'none';
+            });
+            menu.appendChild(removeBtn);
+        }
+
+        flagWrap.appendChild(flagBtn);
+        flagWrap.appendChild(menu);
+
+        // Note button
+        const hasNote = currentNoteText.length > 0;
+        const noteBtn = document.createElement('button');
+        noteBtn.id = 'noteToggle';
+        noteBtn.style.cssText = 'background: none; border: 1px solid ' + (hasNote ? '#2ecc71' : '#7f8c8d') + '; color: ' + (hasNote ? '#2ecc71' : '#7f8c8d') + '; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85em; transition: all 0.15s;';
+        noteBtn.innerHTML = '<i class="fas fa-sticky-note"></i> ' + (hasNote ? 'Muistiinpano' : 'Lisää muistiinpano');
+        noteBtn.addEventListener('click', function() {
+            showNoteModal(currentQuestion.question_id, currentNoteText);
+        });
+
+        toolbar.appendChild(flagWrap);
+        toolbar.appendChild(noteBtn);
+
+        const typeHint = document.getElementById('typeHint');
+        typeHint.after(toolbar);
+
+        // Close menu on outside click
+        document.addEventListener('click', function closeMenu(e) {
+            if (!flagWrap.contains(e.target)) {
+                menu.style.display = 'none';
+                document.removeEventListener('click', closeMenu);
+            }
+        });
+    }
+
+    function toggleFlag(flagType) {
+        if (!currentQuestion) return;
+        fetch('/quiz/api/flag/toggle/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': CSRF_TOKEN },
+            body: JSON.stringify({ question_id: currentQuestion.question_id, flag_type: flagType }),
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(result) {
+            currentQuestion.flag_type = result.flag_type;
+            renderFlagNoteToolbar(currentQuestion);
+        });
+    }
+
+    function showNoteModal(questionId, existingText) {
+        const oldModal = document.getElementById('noteModal');
+        if (oldModal) oldModal.remove();
+
+        const modal = document.createElement('div');
+        modal.id = 'noteModal';
+        modal.style.cssText = 'position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 1000;';
+        modal.innerHTML =
+            '<div style="background: #2c3e50; border-radius: 12px; padding: 24px; width: 90%; max-width: 500px; border: 1px solid #34495e;">' +
+                '<h3 style="color: #ecf0f1; margin: 0 0 16px;"><i class="fas fa-sticky-note" style="color: #2ecc71; margin-right: 8px;"></i>Muistiinpano</h3>' +
+                '<textarea id="noteTextarea" style="width: 100%; height: 120px; background: #1a252f; color: #ecf0f1; border: 1px solid #4a6274; border-radius: 8px; padding: 12px; font-size: 0.95em; resize: vertical; box-sizing: border-box;">' + (existingText || '') + '</textarea>' +
+                '<div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px;">' +
+                    '<button id="noteCancelBtn" style="background: #34495e; color: #ecf0f1; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">Peruuta</button>' +
+                    '<button id="noteSaveBtn" style="background: #2ecc71; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600;">Tallenna</button>' +
+                '</div>' +
+            '</div>';
+        document.body.appendChild(modal);
+
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) modal.remove();
+        });
+        document.getElementById('noteCancelBtn').addEventListener('click', function() { modal.remove(); });
+        document.getElementById('noteSaveBtn').addEventListener('click', function() {
+            const text = document.getElementById('noteTextarea').value.trim();
+            fetch('/quiz/api/note/save/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': CSRF_TOKEN },
+                body: JSON.stringify({ question_id: questionId, note_text: text }),
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(result) {
+                currentNoteText = result.note_text || '';
+                currentQuestion.note_text = currentNoteText;
+                renderFlagNoteToolbar(currentQuestion);
+                modal.remove();
+            });
+        });
+    }
+
+    function renderTheoryLink(data) {
+        const old = document.getElementById('theoryLink');
+        if (old) old.remove();
+        if (data.is_correct || !data.theory_link) return;
+
+        const linkDiv = document.createElement('div');
+        linkDiv.id = 'theoryLink';
+        linkDiv.style.cssText = 'background: rgba(52,152,219,0.1); border: 1px solid rgba(52,152,219,0.3); border-radius: 8px; padding: 12px 16px; margin-bottom: 16px;';
+        linkDiv.innerHTML =
+            '<a href="' + data.theory_link.url + '" target="_blank" style="color: #3498db; text-decoration: none; font-weight: 500;">' +
+                '<i class="fas fa-book-open" style="margin-right: 8px;"></i>' +
+                'Lue lisää: ' + data.theory_link.epa_title +
+                '<i class="fas fa-external-link-alt" style="margin-left: 6px; font-size: 0.8em;"></i>' +
+            '</a>';
+        const expEl = document.getElementById('generalExplanation');
+        expEl.after(linkDiv);
+    }
+
+    // ==========================================
 
     const DIFFICULTY_LABELS = {
         1: {text: 'Helppo', color: '#2ecc71', bg: 'rgba(46,204,113,0.15)'},
@@ -172,6 +391,16 @@
 
         currentQuestion = data;
         answered = false;
+        questionStartTime = Date.now();
+
+        // Reset comments section
+        const commentsSection = document.getElementById('commentsSection');
+        if (commentsSection) {
+            const details = commentsSection.querySelector('details');
+            if (details) details.open = false;
+            document.getElementById('commentsList').innerHTML = '';
+            document.getElementById('commentsToggleLabel').textContent = 'Kommentit';
+        }
 
         // EPA badge
         const epaBadge = document.querySelector('#epaBadge span');
@@ -184,6 +413,15 @@
         diffBadge.style.color = diff.color;
         diffBadge.style.background = diff.bg;
 
+        // Adaptive level badge
+        const adaptiveBadge = document.getElementById('adaptiveBadge');
+        if (data.adaptive_target) {
+            document.getElementById('adaptiveLevel').textContent = 'Taso ' + data.adaptive_target + '/5';
+            adaptiveBadge.style.display = 'inline-flex';
+        } else {
+            adaptiveBadge.style.display = 'none';
+        }
+
         // Question type hint
         const typeHint = document.getElementById('typeHint');
         const typeHints = {
@@ -191,11 +429,13 @@
             'true_false': 'Valitse: Oikein vai Väärin?',
             'calculation': 'Laske oikea arvo',
             'matching': 'Yhdistä parit: valitse oikea vastine jokaiselle termille',
+            'cloze': 'Täydennä puuttuvat kohdat',
         };
         typeHint.textContent = typeHints[data.question_type] || 'Valitse yksi oikea vaihtoehto';
         typeHint.style.display = 'block';
 
         // Question text
+        document.getElementById('questionText').style.display = 'block';
         document.getElementById('questionText').textContent = data.text;
 
         // Build input UI based on question type
@@ -319,6 +559,45 @@
                 container.appendChild(row);
             });
 
+        } else if (data.question_type === 'cloze' && data.cloze_segments) {
+            // Cloze: render text segments + inline input fields
+            const clozeWrap = document.createElement('div');
+            clozeWrap.id = 'clozeWrap';
+            clozeWrap.style.cssText = 'background: #1a252f; border: 2px solid #34495e; border-radius: 8px; padding: 20px; line-height: 2.2; font-size: 1.05em; color: #b0b8c1;';
+
+            data.cloze_segments.forEach(seg => {
+                if (seg.type === 'text') {
+                    const span = document.createElement('span');
+                    span.textContent = seg.value;
+                    clozeWrap.appendChild(span);
+                } else if (seg.type === 'blank') {
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.className = 'cloze-input';
+                    input.dataset.clozeId = seg.id;
+                    input.placeholder = seg.hint || '____';
+                    input.autocomplete = 'off';
+                    const width = Math.max(80, Math.min(200, seg.length * 12 + 24));
+                    input.style.cssText = 'background: #0f1a24; border: 2px solid #4a6274; color: #ecf0f1; padding: 4px 10px; border-radius: 6px; font-size: 0.95em; font-weight: 600; width: ' + width + 'px; text-align: center; margin: 0 4px; transition: border-color 0.15s;';
+                    input.addEventListener('input', function() {
+                        const allFilled = Array.from(document.querySelectorAll('.cloze-input'))
+                            .every(inp => inp.value.trim() !== '');
+                        const submitBtn = document.getElementById('submitAnswer');
+                        submitBtn.disabled = !allFilled;
+                        submitBtn.style.background = allFilled ? '#3498db' : '#34495e';
+                        submitBtn.style.color = allFilled ? 'white' : '#7f8c8d';
+                        submitBtn.style.cursor = allFilled ? 'pointer' : 'not-allowed';
+                    });
+                    input.addEventListener('focus', function() { this.style.borderColor = '#3498db'; });
+                    input.addEventListener('blur', function() { this.style.borderColor = '#4a6274'; });
+                    clozeWrap.appendChild(input);
+                }
+            });
+            container.appendChild(clozeWrap);
+
+            // Hide the questionText for cloze (the text is in the cloze segments)
+            document.getElementById('questionText').style.display = 'none';
+
         } else {
             // multiple_choice / multi_select — original logic
             const inputType = data.question_type === 'multi_select' ? 'checkbox' : 'radio';
@@ -362,6 +641,9 @@
         submitBtn.style.color = '#7f8c8d';
         submitBtn.style.cursor = 'not-allowed';
 
+        // Flag & note toolbar
+        renderFlagNoteToolbar(data);
+
         // Update score display
         updateScoreDisplay(data.score, data.total);
     }
@@ -395,7 +677,7 @@
         answered = true;
 
         // Disable all inputs
-        document.querySelectorAll('#choicesContainer input, #choicesContainer select, #calcInput').forEach(el => {
+        document.querySelectorAll('#choicesContainer input, #choicesContainer select, #calcInput, .cloze-input').forEach(el => {
             el.disabled = true;
         });
         document.querySelectorAll('.choice-option').forEach(label => {
@@ -406,7 +688,8 @@
         document.getElementById('answerSection').style.display = 'none';
 
         // Build payload based on question type
-        let payload = { question_id: currentQuestion.question_id };
+        const timeSpent = questionStartTime ? Math.round((Date.now() - questionStartTime) / 1000) : null;
+        let payload = { question_id: currentQuestion.question_id, time_spent_seconds: timeSpent };
 
         if (currentQuestion.question_type === 'calculation') {
             const calcVal = document.getElementById('calcInput');
@@ -417,6 +700,12 @@
                 matchingAnswers[select.dataset.left] = select.value;
             });
             payload.matching_answers = matchingAnswers;
+        } else if (currentQuestion.question_type === 'cloze') {
+            const clozeAnswers = {};
+            document.querySelectorAll('.cloze-input').forEach(inp => {
+                clozeAnswers[inp.dataset.clozeId] = inp.value;
+            });
+            payload.cloze_answers = clozeAnswers;
         } else {
             payload.selected_ids = Array.from(document.querySelectorAll('#choicesContainer input:checked'))
                 .map(input => parseInt(input.value));
@@ -440,6 +729,45 @@
     }
 
     function showResult(data) {
+        // Timed-mode: skip explanation, just flash result and move on
+        if (QUIZ_MODE === 'timed') {
+            questionCount++;
+            timedResults.push({
+                question: currentQuestion ? currentQuestion.text : '',
+                epa_title: currentQuestion ? currentQuestion.epa_title : '',
+                is_correct: data.is_correct,
+                explanation: data.explanation || '',
+                choices: data.choices || [],
+            });
+            updateScoreDisplay(data.score, data.total);
+
+            // Brief flash of correct/incorrect
+            const banner = document.getElementById('resultBanner');
+            const icon = document.getElementById('resultIcon');
+            const text = document.getElementById('resultText');
+            if (data.is_correct) {
+                banner.style.background = 'rgba(46,204,113,0.15)';
+                banner.style.border = '1px solid rgba(46,204,113,0.3)';
+                icon.className = 'fas fa-check-circle'; icon.style.color = '#2ecc71';
+                text.style.color = '#2ecc71'; text.textContent = 'Oikein!';
+            } else {
+                banner.style.background = 'rgba(231,76,60,0.15)';
+                banner.style.border = '1px solid rgba(231,76,60,0.3)';
+                icon.className = 'fas fa-times-circle'; icon.style.color = '#e74c3c';
+                text.style.color = '#e74c3c'; text.textContent = 'Väärin';
+            }
+            document.getElementById('generalExplanation').style.display = 'none';
+            document.getElementById('resultSection').style.display = 'block';
+
+            // Stop or continue
+            if (QUESTION_TARGET > 0 && questionCount >= QUESTION_TARGET) {
+                setTimeout(endTimedSession, 700);
+            } else {
+                setTimeout(loadQuestion, 700);
+            }
+            return;
+        }
+
         // Type-specific result display
         const qtype = currentQuestion ? currentQuestion.question_type : 'multiple_choice';
 
@@ -453,6 +781,30 @@
                 resultSpan.style.cssText = 'margin-top: 10px; color: ' + (data.is_correct ? '#2ecc71' : '#e74c3c') + '; font-size: 0.9em;';
                 resultSpan.innerHTML = 'Oikea vastaus: <strong>' + c.correct_answer + ' ' + c.unit + '</strong>';
                 wrapper.after(resultSpan);
+            }
+        } else if (qtype === 'cloze') {
+            // Color each cloze input green/red based on correctness
+            data.choices.forEach(item => {
+                const input = document.querySelector('.cloze-input[data-cloze-id="' + item.id + '"]');
+                if (!input) return;
+                if (item.is_correct) {
+                    input.style.borderColor = '#2ecc71';
+                    input.style.background = 'rgba(46,204,113,0.15)';
+                    input.style.color = '#2ecc71';
+                } else {
+                    input.style.borderColor = '#e74c3c';
+                    input.style.background = 'rgba(231,76,60,0.15)';
+                    input.style.color = '#e74c3c';
+                    // Show correct answer below the input
+                    const hint = document.createElement('span');
+                    hint.style.cssText = 'color: #2ecc71; font-size: 0.83em; font-weight: 600; margin-left: 4px;';
+                    hint.textContent = '→ ' + item.correct_answer;
+                    input.after(hint);
+                }
+            });
+            const clozeWrap = document.getElementById('clozeWrap');
+            if (clozeWrap) {
+                clozeWrap.style.borderColor = data.is_correct ? '#2ecc71' : '#e74c3c';
             }
         } else if (qtype === 'matching') {
             data.choices.forEach(pair => {
@@ -522,7 +874,13 @@
             document.getElementById('generalExplanation').style.display = 'none';
         }
 
+        // Theory cross-reference link (wrong answers)
+        renderTheoryLink(data);
+
         document.getElementById('resultSection').style.display = 'block';
+
+        // Load comments for this question
+        if (currentQuestion) loadComments(currentQuestion.id);
 
         // Update score
         updateScoreDisplay(data.score, data.total);
@@ -608,6 +966,86 @@
         document.getElementById('stopBtn').style.display = 'none';
     }
 
+    // ==========================================
+    // TIMED MODE FUNCTIONS
+    // ==========================================
+
+    function startTimer() {
+        if (!TIME_LIMIT_SECONDS) return;
+        remainingSeconds = TIME_LIMIT_SECONDS;
+        updateTimerDisplay();
+        timerInterval = setInterval(function() {
+            remainingSeconds--;
+            updateTimerDisplay();
+            if (remainingSeconds <= 0) {
+                clearInterval(timerInterval);
+                endTimedSession();
+            }
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        const el = document.getElementById('timerText');
+        if (!el) return;
+        const m = Math.floor(remainingSeconds / 60);
+        const s = remainingSeconds % 60;
+        el.textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+        const display = document.getElementById('timerDisplay');
+        if (display) {
+            if (remainingSeconds <= 60) {
+                display.style.color = '#e74c3c';
+                display.style.background = 'rgba(231,76,60,0.1)';
+                display.style.borderColor = 'rgba(231,76,60,0.3)';
+            } else {
+                display.style.color = '#f1c40f';
+                display.style.background = 'rgba(241,196,15,0.1)';
+                display.style.borderColor = 'rgba(241,196,15,0.3)';
+            }
+        }
+    }
+
+    function endTimedSession() {
+        clearInterval(timerInterval);
+        const correct = timedResults.filter(function(r) { return r.is_correct; }).length;
+        const total = timedResults.length;
+        const pct = total > 0 ? Math.round(correct / total * 100) : 0;
+
+        let resultsHtml = '';
+        timedResults.forEach(function(r, i) {
+            const color = r.is_correct ? '#2ecc71' : '#e74c3c';
+            const borderColor = r.is_correct ? 'rgba(46,204,113,0.4)' : 'rgba(231,76,60,0.4)';
+            const bg = r.is_correct ? 'rgba(46,204,113,0.06)' : 'rgba(231,76,60,0.06)';
+            const icon = r.is_correct ? 'fa-check-circle' : 'fa-times-circle';
+            resultsHtml += '<div style="border-left: 3px solid ' + borderColor + '; background: ' + bg + '; border-radius: 8px; padding: 14px 16px; margin-bottom: 10px;">' +
+                '<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">' +
+                '<span style="background: ' + borderColor + '; color: ' + color + '; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8em; font-weight: 700; flex-shrink: 0;">' + (i + 1) + '</span>' +
+                '<span style="color: #7f8c8d; font-size: 0.8em;">' + (r.epa_title || '') + '</span>' +
+                '<i class="fas ' + icon + '" style="color: ' + color + '; margin-left: auto;"></i>' +
+                '</div>' +
+                '<p style="color: #ecf0f1; margin: 0 0 8px 0; font-size: 0.95em;">' + r.question + '</p>' +
+                (r.explanation ? '<div style="color: #b0b8c1; font-size: 0.88em; border-top: 1px solid #34495e; padding-top: 8px; margin-top: 8px;"><i class="fas fa-info-circle" style="margin-right: 4px; color: #3498db;"></i>' + r.explanation + '</div>' : '') +
+                '</div>';
+        });
+
+        if (total === 0) {
+            resultsHtml = '<p style="color: #7f8c8d; text-align: center;">Ei vastausta kirjattu.</p>';
+        }
+
+        document.getElementById('questionContainer').innerHTML =
+            '<div style="text-align: center; padding: 20px 0 30px;">' +
+            '<div style="font-size: 2.5em; margin-bottom: 8px;">' + (pct >= 60 ? '🎯' : '📝') + '</div>' +
+            '<h2 style="color: #ecf0f1; margin: 0 0 6px 0;">Istunto päättyi</h2>' +
+            '<div style="display: flex; justify-content: center; gap: 24px; margin: 16px 0;">' +
+            '<div style="text-align: center;"><div style="font-size: 2em; font-weight: 700; color: #2ecc71;">' + correct + '/' + total + '</div><div style="color: #7f8c8d; font-size: 0.85em;">oikein</div></div>' +
+            '<div style="text-align: center;"><div style="font-size: 2em; font-weight: 700; color: #f1c40f;">' + pct + '%</div><div style="color: #7f8c8d; font-size: 0.85em;">tarkkuus</div></div>' +
+            '</div></div>' +
+            '<div style="max-height: 60vh; overflow-y: auto; margin-bottom: 24px;">' + resultsHtml + '</div>' +
+            '<div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">' +
+            '<a href="/quiz/" style="background: #3498db; color: white; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 600;"><i class="fas fa-redo" style="margin-right: 8px;"></i>Uusi harjoittelu</a>' +
+            '<a href="/progress/" style="background: #34495e; color: #ecf0f1; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 600;"><i class="fas fa-chart-bar" style="margin-right: 8px;"></i>Edistyminen</a>' +
+            '</div>';
+    }
+
     // Event listeners
     document.getElementById('submitAnswer').addEventListener('click', submitAnswer);
     document.getElementById('nextQuestion').addEventListener('click', loadQuestion);
@@ -629,8 +1067,85 @@
         }
     });
 
-    // Load first question
+    // ==========================================
+    // COMMENTS FUNCTIONS
+    // ==========================================
+
+    window.loadComments = function(questionId) {
+        const section = document.getElementById('commentsSection');
+        if (!section) return;
+        // Reset
+        document.getElementById('commentsList').innerHTML = '';
+        document.getElementById('commentsToggleLabel').textContent = 'Kommentit';
+
+        fetch('/quiz/api/comments/' + questionId + '/')
+            .then(r => r.json())
+            .then(data => {
+                const count = data.comments.length;
+                const label = count > 0 ? 'Kommentit (' + count + ')' : 'Kommentit';
+                document.getElementById('commentsToggleLabel').textContent = label;
+                renderComments(data.comments);
+            });
+    };
+
+    function renderComments(comments) {
+        const list = document.getElementById('commentsList');
+        if (!comments.length) {
+            list.innerHTML = '<p style="color: var(--text-disabled, #4a5568); font-size: 0.85em; margin: 0;">Ei kommentteja vielä.</p>';
+            return;
+        }
+        list.innerHTML = comments.map(c => {
+            const resolvedStyle = c.is_resolved ? 'opacity: 0.5;' : '';
+            const resolvedBadge = c.is_resolved ? ' <span style="color: #34d399; font-size: 0.75em;">[ratkaistu]</span>' : '';
+            const resolveBtn = IS_SUPERUSER
+                ? '<button onclick="resolveComment(' + c.id + ')" style="background: none; border: none; color: #34d399; font-size: 0.75em; cursor: pointer; padding: 0 4px;" title="Merkitse ratkaisuksi"><i class="fas fa-check"></i></button>'
+                : '';
+            return '<div style="border-top: 1px solid var(--border-default, #2d3a4a); padding: 8px 0; ' + resolvedStyle + '">' +
+                '<div style="display: flex; justify-content: space-between; align-items: baseline;">' +
+                '<span style="color: var(--color-primary, #60a5fa); font-size: 0.8em; font-weight: 600;">' + c.username + resolvedBadge + '</span>' +
+                '<span style="color: var(--text-disabled, #4a5568); font-size: 0.75em;">' + c.created_at + resolveBtn + '</span>' +
+                '</div>' +
+                '<p style="color: var(--text-secondary, #94a3b8); font-size: 0.88em; margin: 4px 0 0 0; white-space: pre-wrap;">' + c.text.replace(/</g, '&lt;') + '</p>' +
+                '</div>';
+        }).join('');
+    }
+
+    window.submitComment = function() {
+        const input = document.getElementById('commentInput');
+        const text = (input.value || '').trim();
+        if (!text || !currentQuestion) return;
+        const btn = document.getElementById('commentSubmitBtn');
+        btn.disabled = true;
+
+        fetch('/quiz/api/comments/add/', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json', 'X-CSRFToken': CSRF_TOKEN},
+            body: JSON.stringify({question_id: currentQuestion.id, text: text}),
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.error) { alert(data.error); return; }
+            input.value = '';
+            loadComments(currentQuestion.id);
+        })
+        .finally(() => { btn.disabled = false; });
+    };
+
+    window.resolveComment = function(commentId) {
+        fetch('/quiz/api/comments/resolve/', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json', 'X-CSRFToken': CSRF_TOKEN},
+            body: JSON.stringify({comment_id: commentId}),
+        })
+        .then(r => r.json())
+        .then(() => { if (currentQuestion) loadComments(currentQuestion.id); });
+    };
+
+    // Load first question + start timer if timed mode
     loadQuestion();
+    if (QUIZ_MODE === 'timed') {
+        startTimer();
+    }
 })();
 </script>
 {% endblock %}

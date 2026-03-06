@@ -212,6 +212,89 @@ def modaliteetit_view(request):
 	})
 
 
+# =============================================================================
+# THEORY <-> QUESTION CROSS-REFERENCE UTILITY
+# =============================================================================
+
+# Maps specialty name patterns to modality slugs and tab_id -> EPA title prefix
+_MODALITY_TAB_MAP = {
+	'Radiolog': {
+		'slug': 'radiologia',
+		'tabs': {
+			'natiivi': 'Natiivikuvantaminen',
+			'tt': 'Tietokonetomografia',
+			'mri': 'Magneettikuvaus',
+			'lapivalaisu': 'Läpivalaisu',
+			'mammografia': 'Mammografia',
+			'ultraaani': 'Ultraääni',
+			'naytot': 'Kuvankatselunäytöt',
+			'hammas': 'Hammaskuvantaminen',
+			'sateilysuojelu': 'Säteilybiologia',
+		}
+	},
+	'dehoito': {
+		'slug': 'sadehoito',
+		'tabs': {
+			'peruskasitteet': 'Peruskäsitteet',
+			'kuvantaminen': 'Kuvantaminen',
+			'ulkoinen': 'Ulkoinen',
+			'sisainen': 'Sisäinen',
+			'dosimetria': 'Dosimetria',
+			'laitteet': 'Laitteet',
+			'sateilybiologia': 'Säteilybiologia',
+		}
+	},
+	'isotooppi': {
+		'slug': 'isotooppi',
+		'tabs': {
+			'gammakamera': 'Gammakamera',
+			'pet': 'PET-kamera',
+			'radiofarmasia': 'Annostelu',
+			'spet': 'Gammakuvaus',
+			'pet-tutkimukset': 'PET-tutkimukset',
+			'radionuklidihoidot': 'Radionuklidi',
+			'sateilybiologia': 'Säteilybiologia',
+		}
+	},
+	'fysiolog': {
+		'slug': 'fysiologia',
+		'tabs': {
+			'ekg': 'EKG',
+			'verenkierto': 'Verenkierto',
+			'keuhkofunktio': 'Keuhkofunktio',
+			'gi': 'GI-kanavan',
+			'dxa': 'Luuston',
+		}
+	},
+	'KNF': {
+		'slug': 'knf',
+		'tabs': {
+			'eeg': 'EEG',
+			'heratepotentiaali': 'Herätepotentiaali',
+			'iom': 'IOM',
+			'uni': 'Uni',
+			'tms': 'Sarja-TMS',
+			'laiteturvallisuus': 'Laite-',
+		}
+	},
+}
+
+
+def get_theory_link_for_epa(epa) -> dict | None:
+	"""Return {'url': '/modaliteetit/radiologia/#natiivi', 'epa_title': '...'} or None."""
+	specialty_name = epa.specialty.name if epa.specialty else ''
+
+	for pattern, config in _MODALITY_TAB_MAP.items():
+		if pattern in specialty_name or specialty_name == pattern:
+			for tab_id, title_prefix in config['tabs'].items():
+				if epa.title.startswith(title_prefix):
+					return {
+						'url': f"/modaliteetit/{config['slug']}/#{tab_id}",
+						'epa_title': epa.title,
+					}
+	return None
+
+
 def modaliteetit_radiologia_view(request):
 	"""Radiologia theory page with tabs for each sub-modality"""
 	import random as _random  # noqa: F811
@@ -234,9 +317,16 @@ def modaliteetit_radiologia_view(request):
 			epa = epas.filter(title__istartswith=title_prefix).first()
 			if epa:
 				tab_epa_map[tab_id] = epa.id
+	# Question counts per tab
+	from quiz.models import Question
+	tab_question_counts = {}
+	for tab_id, epa_id in tab_epa_map.items():
+		tab_question_counts[tab_id] = Question.objects.filter(epa_id=epa_id, is_active=True).count()
+
 	return render(request, 'sisalto/modaliteetit/radiologia.html', {
 		'page_title': 'Radiologian teoria',
 		'tab_epa_map': json.dumps(tab_epa_map),
+		'tab_question_counts': json.dumps(tab_question_counts),
 		'modality_id': 'radiologia',
 		'is_superuser': request.user.is_superuser if request.user.is_authenticated else False,
 	})
@@ -262,9 +352,15 @@ def modaliteetit_sadehoito_view(request):
 			if epa:
 				tab_epa_map[tab_id] = epa.id
 
+	from quiz.models import Question
+	tab_question_counts = {}
+	for tab_id, epa_id in tab_epa_map.items():
+		tab_question_counts[tab_id] = Question.objects.filter(epa_id=epa_id, is_active=True).count()
+
 	return render(request, 'sisalto/modaliteetit/sadehoito.html', {
 		'page_title': 'Sädehoidon teoria',
 		'tab_epa_map': json.dumps(tab_epa_map),
+		'tab_question_counts': json.dumps(tab_question_counts),
 		'modality_id': 'sadehoito',
 		'is_superuser': request.user.is_superuser,
 	})
@@ -290,9 +386,15 @@ def modaliteetit_isotooppi_view(request):
 			if epa:
 				tab_epa_map[tab_id] = epa.id
 
+	from quiz.models import Question
+	tab_question_counts = {}
+	for tab_id, epa_id in tab_epa_map.items():
+		tab_question_counts[tab_id] = Question.objects.filter(epa_id=epa_id, is_active=True).count()
+
 	return render(request, 'sisalto/modaliteetit/isotooppi.html', {
 		'page_title': 'Isotooppilääketieteen teoria',
 		'tab_epa_map': json.dumps(tab_epa_map),
+		'tab_question_counts': json.dumps(tab_question_counts),
 		'modality_id': 'isotooppi',
 		'is_superuser': request.user.is_superuser,
 	})
@@ -316,9 +418,15 @@ def modaliteetit_fysiologia_view(request):
 			if epa:
 				tab_epa_map[tab_id] = epa.id
 
+	from quiz.models import Question
+	tab_question_counts = {}
+	for tab_id, epa_id in tab_epa_map.items():
+		tab_question_counts[tab_id] = Question.objects.filter(epa_id=epa_id, is_active=True).count()
+
 	return render(request, 'sisalto/modaliteetit/fysiologia.html', {
 		'page_title': 'Kliinisen fysiologian teoria',
 		'tab_epa_map': json.dumps(tab_epa_map),
+		'tab_question_counts': json.dumps(tab_question_counts),
 		'modality_id': 'fysiologia',
 		'is_superuser': request.user.is_superuser,
 	})
@@ -343,9 +451,15 @@ def modaliteetit_knf_view(request):
 			if epa:
 				tab_epa_map[tab_id] = epa.id
 
+	from quiz.models import Question
+	tab_question_counts = {}
+	for tab_id, epa_id in tab_epa_map.items():
+		tab_question_counts[tab_id] = Question.objects.filter(epa_id=epa_id, is_active=True).count()
+
 	return render(request, 'sisalto/modaliteetit/knf.html', {
 		'page_title': 'Kliinisen neurofysiologian teoria',
 		'tab_epa_map': json.dumps(tab_epa_map),
+		'tab_question_counts': json.dumps(tab_question_counts),
 		'modality_id': 'knf',
 		'is_superuser': request.user.is_superuser,
 	})
@@ -361,8 +475,8 @@ def theory_quiz_question(request, epa_id):
 	import random
 	from quiz.models import Question
 
-	# Accept ?types=multiple_choice,true_false,calculation,matching
-	ALLOWED_TYPES = ['multiple_choice', 'multi_select', 'true_false', 'calculation', 'matching']
+	# Accept ?types=multiple_choice,true_false,calculation,matching,cloze
+	ALLOWED_TYPES = ['multiple_choice', 'multi_select', 'true_false', 'calculation', 'matching', 'cloze']
 	types_param = request.GET.get('types', '')
 	if types_param:
 		requested_types = [t.strip() for t in types_param.split(',') if t.strip() in ALLOWED_TYPES]
@@ -406,11 +520,29 @@ def theory_quiz_question(request, epa_id):
 		response_data['choices'] = []
 		response_data['matching_pairs'] = question.matching_pairs
 		response_data['matching_rights'] = rights
+	elif question.question_type == 'cloze':
+		from quiz.views import _parse_cloze_text
+		segments, _ = _parse_cloze_text(question.text)
+		response_data['text'] = ''
+		response_data['choices'] = []
+		response_data['cloze_segments'] = segments
 	else:
 		# multiple_choice, multi_select, true_false
 		choices = list(question.choices.all().values('id', 'text', 'order'))
 		random.shuffle(choices)
 		response_data['choices'] = choices
+
+	# Include flag/note data for authenticated users
+	if request.user.is_authenticated:
+		from progress.models import FlaggedQuestion, QuestionNote
+		flag = FlaggedQuestion.objects.filter(
+			user=request.user, question_id=question.id
+		).first()
+		note = QuestionNote.objects.filter(
+			user=request.user, question_id=question.id
+		).first()
+		response_data['flag_type'] = flag.flag_type if flag else None
+		response_data['note_text'] = note.note_text if note else ''
 
 	return JsonResponse(response_data)
 
@@ -475,6 +607,10 @@ def theory_quiz_answer(request):
 				}
 				for p in question.matching_pairs
 			]
+
+	elif question.question_type == 'cloze':
+		from quiz.views import _grade_cloze
+		is_correct, choice_results = _grade_cloze(question, data)
 
 	else:
 		# multiple_choice, multi_select, true_false
@@ -960,6 +1096,82 @@ def ai_evaluate_exam_answer(request):
     if new_achievements:
         response_data['new_achievements'] = new_achievements
     return JsonResponse(response_data)
+
+
+@require_POST
+def ai_tutor_chat(request):
+    """Server-side AI tutor endpoint. Replaces direct client-side OpenAI calls."""
+    import json as _json
+    import openai
+
+    try:
+        data = _json.loads(request.body)
+    except (_json.JSONDecodeError, ValueError):
+        return JsonResponse({'error': 'Virheellinen pyyntö'}, status=400)
+
+    message = data.get('message', '').strip()
+    history = data.get('history', [])
+    epa_id = data.get('epa_id')
+
+    if not message:
+        return JsonResponse({'error': 'Tyhjä viesti'}, status=400)
+    if len(message) > 1000:
+        return JsonResponse({'error': 'Viesti liian pitkä (max 1000 merkkiä)'}, status=400)
+
+    system_prompt = (
+        "Olet asiantunteva AI-tutori, joka auttaa sairaalafyysikon erikoistumiskoulutuksen opiskelijoita. "
+        "Erikoisalueesi: Radiologia, Sädehoito, Isotooppilääketiede, Kliininen neurofysiologia, Kliininen fysiologia. "
+        "Vastaa aina suomeksi. Ole tarkka, käytännönläheinen ja pedagoginen. "
+        "Viittaa tarvittaessa relevantteihin standardeihin (IAEA, STUK, AAPM, ICRU, IEC, Khan). "
+        "Jos kysymys ei liity sairaalafysiikkaan, ohjaa opiskelija ystävällisesti takaisin aiheeseen."
+    )
+
+    if epa_id:
+        from sisalto.models import EPA, Section
+        try:
+            epa = EPA.objects.get(id=int(epa_id))
+            sections = Section.objects.filter(epa=epa).exclude(content='').order_by('order')
+            context_parts = [f"EPA-kortti: {epa.title}"]
+            total_len = 0
+            for s in sections:
+                snippet = s.content[:400]
+                context_parts.append(f"[{s.title}]: {snippet}")
+                total_len += len(snippet)
+                if total_len > 3000:
+                    break
+            system_prompt += "\n\nKonteksti — opiskelija tutkii tätä EPA-korttia:\n" + "\n".join(context_parts)
+        except (EPA.DoesNotExist, ValueError, TypeError):
+            pass
+
+    trimmed_history = history[-20:] if len(history) > 20 else history
+    # Validate history entries to prevent injection
+    safe_history = [
+        {'role': h['role'], 'content': str(h['content'])[:2000]}
+        for h in trimmed_history
+        if isinstance(h, dict) and h.get('role') in ('user', 'assistant') and h.get('content')
+    ]
+
+    messages = [{'role': 'system', 'content': system_prompt}]
+    messages.extend(safe_history)
+    messages.append({'role': 'user', 'content': message})
+
+    import os
+    api_key = os.environ.get('OPENAI_API_KEY')
+    if not api_key:
+        return JsonResponse({'error': 'AI-tutori ei ole käytettävissä tällä hetkellä'}, status=503)
+
+    client = openai.OpenAI(api_key=api_key)
+    try:
+        response = client.chat.completions.create(
+            model='gpt-4o',
+            messages=messages,
+            max_tokens=800,
+            temperature=0.7,
+        )
+        reply = response.choices[0].message.content.strip()
+        return JsonResponse({'reply': reply})
+    except Exception as e:
+        return JsonResponse({'error': 'AI-virhe, yritä uudelleen'}, status=500)
 
 
 def epas_view(request):
@@ -3555,3 +3767,18 @@ def tts_generate(request):
         import traceback
         traceback.print_exc()
         return JsonResponse({'error': f'TTS-virhe: {str(e)}'}, status=500)
+
+
+def service_worker_js(request):
+    """Serve service worker at root scope /sw.js with no-cache headers."""
+    from django.template.loader import render_to_string
+    content = render_to_string('sisalto/sw.js', {}, request=request)
+    response = HttpResponse(content, content_type='application/javascript')
+    response['Service-Worker-Allowed'] = '/'
+    response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    return response
+
+
+def offline_page(request):
+    """Offline fallback page served by service worker."""
+    return render(request, 'sisalto/offline.html')

@@ -5,6 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Sairaalafyysikon erikoistumiskirja{% endblock %}</title>
+    <!-- PWA -->
+    <link rel="manifest" href="{% static 'sisalto/manifest.json' %}">
+    <meta name="theme-color" content="#60a5fa">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Erikoistuminen">
 
     <!-- Google Fonts: Outfit + Source Sans 3 + JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -549,5 +555,15 @@
     </script>
 
     {% block extra_js %}{% endblock %}
+
+    <!-- PWA Service Worker registration -->
+    <script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js')
+                .catch(err => console.warn('SW registration failed:', err));
+        });
+    }
+    </script>
 </body>
 </html>

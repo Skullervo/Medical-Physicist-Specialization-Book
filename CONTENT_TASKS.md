@@ -4,7 +4,7 @@
 
 ---
 
-## Edistymisen yhteenveto (päivitetty 2026-03-04)
+## Edistymisen yhteenveto (päivitetty 2026-03-05)
 
 | Tehtävä | Kuvaus | Tila |
 |---------|--------|------|
@@ -26,6 +26,19 @@
 | Tehtävä 16 | Text-to-Speech (kuuntele-ominaisuus) | ✅ Valmis (2026-03-04) — OpenAI TTS, 5 modaliteettia, välimuisti |
 | Tehtävä 17 | KNF-sivun quiz-osiot | ✅ Valmis (2026-03-04) — 6 välilehteä + tyyppivalitsimet |
 | Tehtävä 18 | .env + python-dotenv -tuki | ✅ Valmis (2026-03-04) — API-avainten hallinta |
+| Tehtävä 19 | Kysymysten merkitseminen + muistiinpanot | ✅ Valmis (2026-03-04) — FlaggedQuestion (3 tyyppiä) + QuestionNote, UI kaikissa quiz-tiloissa |
+| Tehtävä 20 | Teoria ↔ Kysymys -ristiviittaus | ✅ Valmis (2026-03-04) — Teorialinkit vääriin vastauksiin, kysymysmäärä-badget tab-painikkeissa |
+| Tehtävä 21 | Aukkotehtävät (Cloze deletion) | ✅ Valmis (2026-03-04) — `{{cN::answer::hint}}` -syntaksi, backend + frontend kaikissa quiz-tiloissa |
+| Tehtävä 22 | SM-2 → FSRS algoritmipäivitys | ✅ Valmis (2026-03-05) — py-fsrs 6.3.0, 4-tasoinen arviointi, predicted intervals, retrievability |
+| Tehtävä 23 | AI-muistikortit (Flashcards) | ✅ Valmis (2026-03-05) — GPT-4o generoi termi→selitys -kortit Section-sisällöstä, flip-card UI, FSRS-kertaus |
+| Tehtävä 24 | AI-tutor/copilot — Tekoälypohjainen oppimisavustaja | ✅ Valmis (2026-03-06) — GPT-4o palvelinpuolella, chatbot-widget päivitetty, EPA-kontekstituki |
+| Tehtävä 25 | Timed vs Tutor -moodi — Ajastettu tenttivalmistelu vs. välitön palaute | ✅ Valmis (2026-03-06) — moodinvalinta quiz_homessa, countdown-timer, per-kysymys tulossivu |
+| Tehtävä 26 | Parannettu analytiikka — Trendikaaviot, aika/kysymys, ennustettu tenttipisteet | ✅ Valmis (2026-03-06) — 30-pv trendikaavio, 90-pv heatmap, vaikeimmat kysymykset, time_spent_seconds tallennus |
+| Tehtävä 27 | Oppimispolut — Rakenteelliset opiskelusuunnitelmat erikoisaloittain | ✅ Valmis (2026-03-06) — /progress/paths/ yleiskatsaus + detailsivu per erikoisala, dashboard-widget |
+| Tehtävä 28 | PWA ja offline-tuki — Asennettava verkkosovellus välimuistilla | ✅ Valmis (2026-03-06) — manifest.json, service worker, offline-sivu, SW-rekisteröinti base-templateen |
+| Tehtävä 29 | Anki-vienti — Flashcardien vienti .apkg-muotoon | ✅ Valmis (2026-03-06) |
+| Tehtävä 30 | Kysymyskohtaiset kommentit — Käyttäjien kommentit ja keskustelu per kysymys | ✅ Valmis (2026-03-06) |
+| Tehtävä 31 | Adaptiivinen vaikeus — Automaattinen vaikeustason säätö suorituksen mukaan | ✅ Valmis (2026-03-06) |
 
 ---
 
@@ -717,3 +730,157 @@ Laajenna `isotooppi.html`:n kolmen välilehden (SPET, PET-tutkimukset, Radionukl
 <!-- Kuvauspaikoille -->
 <div class="theory-image-slot" data-slot="slot-id" data-tab="tab-id"></div>
 ```
+
+---
+
+## Tehtävä 24: AI-tutor/copilot (⬜ Tekemättä — KORKEA PRIORITEETTI)
+
+### Tavoite
+Toteuta tekoälypohjainen oppimisavustaja joka osaa vastata opiskelijan kysymyksiin EPA-teoriasisällön ja kontekstin perusteella. Käyttäjä voi kysyä minkä tahansa EPA:n tai kysymyksen aiheesta, saada selityksiä, pyytää esimerkkejä ja jatkaa keskustelua.
+
+### Ominaisuudet
+- Kelluvaa chat-paneeli joka on käytettävissä koko alustalla (quiz, teoria, tenttiharjoittelu)
+- Kontekstitietoisuus: tietää minkä EPA:n tai kysymyksen parissa käyttäjä työskentelee
+- Backend-endpoint käyttää OpenAI GPT-4o (sama kuin `sisalto/ai_evaluator.py`)
+- Viestihistoria tallennettuna session-pohjaisesti tai tietokantaan
+- Syöte: käyttäjän kysymys + EPA-konteksti (teoriateksti, nykyinen kysymys)
+- EPA-teoria haetaan automaattisesti kontekstiksi
+
+### Toteutussuunnitelma
+
+**Backend:**
+- Uusi endpoint: `POST /api/tutor/chat/` (`sisalto/views.py`)
+- Parametrit: `{message, epa_id, question_id, conversation_id}`
+- Vastaus: `{reply, conversation_id, usage}`
+- Kontekstin kokoaminen: `EPA.title + Section.content[:3000]`
+- OpenAI GPT-4o, `temperature=0.7`, `max_tokens=1500`
+- Conversation history: max 10 viestiparia (sliding window)
+
+**Frontend:**
+- Kelluva chat-widget (`position: fixed; bottom: right`) — kaikissa sivupohjissa
+- Avautuu painikkeesta (pyöreä sininen nappi, kuplaikkoni)
+- Chat-paneeli: viestit, syötekenttä, lähetä-nappi
+- Tuki pikanäppäimille: Enter = lähetä, Escape = sulje
+- Markdown-renderöinti vastauksille (bold, listat, koodit)
+- Latausindikaattori API-kutsun aikana
+
+**Tiedostot:**
+- `sisalto/views.py` — uusi `ai_tutor_chat()` view
+- `sisalto/urls.py` — uusi URL-pattern
+- `sisalto/static/sisalto/js/ai-tutor.js` — chat-widget JS
+- `sisalto/static/sisalto/css/ai-tutor.css` — widgetin tyyli
+- `sisalto/templates/sisalto/base_summereditor.html` — widget + skriptit footer-alueelle
+
+### Priorisointi
+Tämä on tärkein puuttuva ominaisuus (UWorld AI Tutor, AMBOSS Ask AMBOSS -verrokit). Toteuta ensin.
+
+---
+
+## Tehtävä 25: Timed vs Tutor -moodi (⬜ Tekemättä — KORKEA PRIORITEETTI)
+
+### Tavoite
+Lisää quiz-harjoitteluun kaksi eri moodia: **Tutor-moodi** (nykyinen: välitön palaute jokaisen vastauksen jälkeen) ja **Timed-moodi** (ajastettu tenttiharjoittelu ilman välitöntä palautetta).
+
+### Timed-moodi
+- Käyttäjä valitsee ennen harjoittelun aloitusta: kysymysmäärä (10/25/50) + aikaraja (minuutteina)
+- Näyttää ajastimen (countdown timer) sivun yläosassa
+- Ei näytä oikeaa vastausta tai selitystä kysymyksen jälkeen
+- Kun aika loppuu tai kaikki vastattu → tulossivu
+- Tulossivu: oikein/väärin per kysymys + selitykset kootusti lopussa
+
+### Toteutus
+- `quiz_home.html`: moodin valinta UI (radio-buttons tai toggle)
+- `quiz_practice.html`: uusi `timed-mode` JS-logiikka
+- `api_get_question()`: lisää `session_id`-tuki timed-moodille (ryhmittely per istunto)
+- `api_check_answer()`: palauta tulos mutta ei selitystä jos `mode=timed`
+- Session-pohjainen tallenne: `quiz_session_{id}` → lista question_id + user_answer
+
+---
+
+## Tehtävä 26: Parannettu analytiikka (✅ Valmis — 2026-03-06)
+
+### Tavoite
+Laajenna progress-dashboardia konkreettisemmilla oppimisanalytiikoilla jotka auttavat käyttäjää ymmärtämään edistymistään paremmin.
+
+### Uudet visualisoinnit
+1. **Trendikaavio** — 30 päivän tarkkuusprosentti (line chart, Chart.js tai CSS-pohjainen)
+2. **Aika per kysymys** — keskimääräinen vastaamisaika (tallennettava frontend-aika) + jakauma
+3. **Ennustettu tenttipisteet** — lasketaan accuracy × coverage × difficulty, skaalataan 0-5
+4. **Heatmap** — viimeisen 3 kuukauden aktiivisuus (GitHub-tyylinen päiväkohtainen heatmap)
+5. **Vaikeimmmat kysymykset** — top 10 eniten väärin vastattu (suora linkki kysymykseen)
+
+### Toteutus
+- `UserQuizAttempt`-malliin: `time_spent_seconds` IntegerField (optional)
+- Progress-dashboard API: uusi `GET /progress/api/stats/` → JSON-data kaavioille
+- Chart.js CDN — yksinkertaiset, kevyet kaaviot
+- Mobiiliresponsiiivisuus: kaaviot skrollaantuvat vaakasuunnassa
+
+---
+
+## Tehtävä 27: Oppimispolut (✅ Valmis — 2026-03-06)
+
+### Tavoite
+Strukturoidut opiskelusuunnitelmat jotka ohjaavat käyttäjän EPA-alueiden läpi järjestyksessä erikoisalakohtaisesti.
+
+### Rakenne
+- Viisi oppimispolkua (yksi per erikoisala): Radiologia, Sädehoito, Isotooppilääketiede, KNF, Kliininen fysiologia
+- Jokainen polku: EPA-kortit järjestyksessä (perusteet ensin, erikoisosaaminen myöhemmin)
+- Edistyminen: % EPA-korteista "hallussa" (mastery threshold)
+- Seuraava askel -suositus: mikä EPA kannattaa opiskella seuraavaksi
+
+### Toteutus
+- Uusi sivu: `/progress/learning-path/` tai `/modaliteetit/polku/<specialty>/`
+- `LearningPath` -malli tai staattiset konfiguraatiot (dict-pohjainen riittää alussa)
+- Dashboard-integraatio: "Jatka polkua" -kortti
+
+---
+
+## Tehtävä 28: PWA ja offline-tuki (✅ Valmis — 2026-03-06)
+
+### Tavoite
+Tee alustasta asennettava progressiivinen verkkosovellus (PWA) joka toimii rajoitetusti myös offline-tilassa.
+
+### Toteutus
+- `manifest.json` — sovelluksen metadata (nimi, ikoni, värit)
+- `service-worker.js` — välimuististrategi (Cache-first EPA-sisällölle, Network-first API:lle)
+- iOS/Android-asennettavuus
+- Offline-fallback: "Olet offline-tilassa, tässä viimeksi katsomasi sisältö"
+
+---
+
+## Tehtävä 29: Anki-vienti (✅ Valmis — 2026-03-06)
+
+### Tavoite
+Mahdollista AI-generoitujen flashcardien vienti Anki-yhteensopivaan `.apkg`-muotoon.
+
+### Toteutus
+- Endpoint: `GET /quiz/flashcards/export/anki/?epa_id=X` tai kaikki
+- Python-kirjasto: `genanki` (`pip install genanki`)
+- Deck: EPA-nimi, kortit: front/back, tagit: erikoisala + EPA
+- Käyttöliittymä: "Vie Ankiin" -painike flashcard-sivulla
+
+---
+
+## Tehtävä 30: Kysymyskohtaiset kommentit (✅ Valmis — 2026-03-06)
+
+### Tavoite
+Mahdollista käyttäjien välinen kommentointi yksittäisissä kysymyksissä (erityishyödyllinen virheellisten selitysten tai epäselvien muotoilujen ilmoittamiseen).
+
+### Toteutus
+- Uusi malli: `QuestionComment(question, user, text, created_at, is_resolved)`
+- Moderointi: superuser voi merkata kommentit ratkaistuiksi
+- UI: "Kommentit" -osio jokaisen kysymyksen selitysosiossa
+- Admin-integraatio: kommentit admin-paneelissa
+
+---
+
+## Tehtävä 31: Adaptiivinen vaikeus (✅ Valmis — 2026-03-06)
+
+### Tavoite
+Kysymysten automaattinen vaikeustason säätö käyttäjän suorituksen perusteella, niin että harjoittelu pysyy sopivan haastavana (Goldilocks-vyöhyke).
+
+### Toteutus
+- Tavoiteoikein-prosentti: 75–85% (liian helppo → vaikeampi, liian vaikea → helpompi)
+- `api_get_question()`: suodata kysymykset käyttäjäkohtaisen difficulty-kohteen perusteella
+- Liukuva ikkuna: viimeiset 20 vastausta → laske accuracy → säädä difficulty_target
+- Tallennus: `UserProfile`-malliin tai sessio-muuttujaan

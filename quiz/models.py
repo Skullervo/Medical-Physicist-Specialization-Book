@@ -28,6 +28,8 @@ class Question(models.Model):
         ('calculation', 'Laskutehtävä'),
         ('open_ended', 'Avoin kysymys (AI-arviointi)'),
         ('matching', 'Yhdistä parit'),
+        ('cloze', 'Aukkotehtävä'),
+        ('flashcard', 'Muistikortti'),
         ('exam_essay', 'Tenttikysymys (AI-arviointi)'),
     ]
 

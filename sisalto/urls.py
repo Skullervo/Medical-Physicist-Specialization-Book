@@ -17,6 +17,7 @@ urlpatterns = [
     path('exam/generate/', views.generate_exam_view, name='generate_exam'),
     path('exam/submit/', views.submit_exam_answers_view, name='submit_exam_answers'),
     path('exam/ai-evaluate/', views.ai_evaluate_exam_answer, name='ai_evaluate_exam_answer'),
+    path('api/tutor/chat/', views.ai_tutor_chat, name='ai_tutor_chat'),
     path('search/', views.search_view, name='search'),
     path('epas/', views.epas_view, name='epas'),
     path('modaliteetit/', views.modaliteetit_view, name='modaliteetit'),

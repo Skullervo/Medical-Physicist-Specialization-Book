@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import (
     UserQuizAttempt, SpacedRepetitionCard, EPAProgress,
     DailyStats, Achievement, UserAchievement,
+    FlaggedQuestion, QuestionNote, QuestionComment,
 )
 
 
@@ -14,8 +15,11 @@ class UserQuizAttemptAdmin(admin.ModelAdmin):
 
 @admin.register(SpacedRepetitionCard)
 class SpacedRepetitionCardAdmin(admin.ModelAdmin):
-    list_display = ['user', 'question', 'ease_factor', 'interval_days', 'repetitions', 'next_review']
-    list_filter = ['repetitions']
+    list_display = [
+        'user', 'question', 'stability', 'difficulty', 'fsrs_state',
+        'interval_days', 'repetitions', 'lapses', 'next_review',
+    ]
+    list_filter = ['fsrs_state', 'repetitions']
 
 
 @admin.register(EPAProgress)
@@ -38,3 +42,27 @@ class AchievementAdmin(admin.ModelAdmin):
 @admin.register(UserAchievement)
 class UserAchievementAdmin(admin.ModelAdmin):
     list_display = ['user', 'achievement', 'earned_at']
+
+
+@admin.register(FlaggedQuestion)
+class FlaggedQuestionAdmin(admin.ModelAdmin):
+    list_display = ['user', 'question', 'flag_type', 'created_at']
+    list_filter = ['flag_type']
+
+
+@admin.register(QuestionNote)
+class QuestionNoteAdmin(admin.ModelAdmin):
+    list_display = ['user', 'question', 'updated_at']
+
+
+@admin.register(QuestionComment)
+class QuestionCommentAdmin(admin.ModelAdmin):
+    list_display = ['user', 'question', 'text_preview', 'is_resolved', 'created_at']
+    list_filter = ['is_resolved', 'created_at']
+    list_editable = ['is_resolved']
+    search_fields = ['user__username', 'text']
+    readonly_fields = ['created_at']
+
+    def text_preview(self, obj):
+        return obj.text[:60] + '...' if len(obj.text) > 60 else obj.text
+    text_preview.short_description = 'Kommentti'

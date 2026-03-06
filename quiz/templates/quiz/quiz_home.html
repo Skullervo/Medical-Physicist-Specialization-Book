@@ -13,6 +13,18 @@
     </p>
 </div>
 
+<!-- Quick links -->
+<div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
+    <a href="/quiz/flashcards/" style="display: flex; align-items: center; gap: 10px; background: rgba(251,146,60,0.1); border: 1px solid rgba(251,146,60,0.3); color: #fb923c; padding: 12px 20px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 0.95em; transition: all 0.15s;">
+        <i class="fas fa-layer-group"></i>
+        Muistikortit
+    </a>
+    <a href="/quiz/spaced-review/" style="display: flex; align-items: center; gap: 10px; background: rgba(167,139,250,0.1); border: 1px solid rgba(167,139,250,0.3); color: #a78bfa; padding: 12px 20px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 0.95em; transition: all 0.15s;">
+        <i class="fas fa-brain"></i>
+        Kertaus (SR)
+    </a>
+</div>
+
 {% if error %}
 <div style="background: #c0392b; color: white; padding: 12px 20px; border-radius: 8px; margin-bottom: 20px;">
     <i class="fas fa-exclamation-triangle" style="margin-right: 8px;"></i>{{ error }}
@@ -24,9 +36,16 @@
 
     <!-- Difficulty selector -->
     <div style="background: #2c3e50; border-radius: 12px; padding: 20px; border: 1px solid #34495e; margin-bottom: 20px;">
-        <h3 style="color: #ecf0f1; margin: 0 0 14px 0; font-size: 1.05em;">
-            <i class="fas fa-signal" style="color: #f1c40f; margin-right: 8px;"></i>Vaikeustaso
-        </h3>
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+            <h3 style="color: #ecf0f1; margin: 0; font-size: 1.05em;">
+                <i class="fas fa-signal" style="color: #f1c40f; margin-right: 8px;"></i>Vaikeustaso
+            </h3>
+            {% if adaptive_target %}
+            <span style="font-size: 0.8em; color: #a78bfa; background: rgba(167,139,250,0.12); border: 1px solid rgba(167,139,250,0.25); padding: 4px 10px; border-radius: 6px;" title="Automaattinen vaikeustaso suorituksesi perusteella">
+                <i class="fas fa-robot" style="margin-right: 4px;"></i>Adaptiivinen taso: {{ adaptive_target }}/5
+            </span>
+            {% endif %}
+        </div>
         <div style="display: flex; flex-wrap: wrap; gap: 10px;">
             <label style="display: flex; align-items: center; gap: 8px; padding: 10px 18px; background: #1a252f; border: 2px solid #3498db; border-radius: 8px; cursor: pointer; transition: all 0.15s;" class="difficulty-option" data-difficulty="all">
                 <input type="radio" name="difficulty" value="all" checked style="accent-color: #3498db; width: 16px; height: 16px;">
@@ -73,6 +92,52 @@
                 <input type="checkbox" name="question_types" value="matching" style="accent-color: #a78bfa; width: 16px; height: 16px;">
                 <span style="color: #a78bfa; font-size: 0.95em;"><i class="fas fa-link" style="margin-right: 5px;"></i>Yhdistä parit</span>
             </label>
+            <label style="display: flex; align-items: center; gap: 8px; padding: 10px 18px; background: #1a252f; border: 2px solid #34495e; border-radius: 8px; cursor: pointer; transition: all 0.15s;" class="qtype-option" data-qtype="cloze">
+                <input type="checkbox" name="question_types" value="cloze" style="accent-color: #f472b6; width: 16px; height: 16px;">
+                <span style="color: #f472b6; font-size: 0.95em;"><i class="fas fa-pen-fancy" style="margin-right: 5px;"></i>Aukkotehtävä</span>
+            </label>
+        </div>
+    </div>
+
+    <!-- Moodinvalinta -->
+    <div style="margin-bottom: 20px;">
+        <h3 style="color: #b0b8c1; margin: 0 0 12px 0; font-size: 1em; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
+            <i class="fas fa-sliders-h" style="margin-right: 6px;"></i>Harjoittelumoodi
+        </h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+            <label style="display: flex; align-items: center; gap: 8px; padding: 10px 18px; background: #1a252f; border: 2px solid #3498db; border-radius: 8px; cursor: pointer; transition: all 0.15s;" class="mode-option" id="mode-tutor-label">
+                <input type="radio" name="mode" value="tutor" checked style="accent-color: #3498db; width: 16px; height: 16px;">
+                <span style="color: #ecf0f1; font-size: 0.95em;"><i class="fas fa-chalkboard-teacher" style="margin-right: 6px; color: #3498db;"></i>Tutor-moodi</span>
+                <span style="color: #7f8c8d; font-size: 0.8em; margin-left: 4px;">— välitön palaute</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; padding: 10px 18px; background: #1a252f; border: 2px solid #34495e; border-radius: 8px; cursor: pointer; transition: all 0.15s;" class="mode-option" id="mode-timed-label">
+                <input type="radio" name="mode" value="timed" style="accent-color: #e67e22; width: 16px; height: 16px;">
+                <span style="color: #ecf0f1; font-size: 0.95em;"><i class="fas fa-stopwatch" style="margin-right: 6px; color: #e67e22;"></i>Timed-moodi</span>
+                <span style="color: #7f8c8d; font-size: 0.8em; margin-left: 4px;">— tenttiharjoittelu</span>
+            </label>
+        </div>
+        <!-- Timed-moodin lisäasetukset -->
+        <div id="timedControls" style="display:none; background: #1a252f; border: 1px solid #e67e22; border-radius: 8px; padding: 14px 18px; display: none; flex-wrap: wrap; gap: 20px;">
+            <label style="display: flex; align-items: center; gap: 8px; color: #ecf0f1; font-size: 0.95em;">
+                <i class="fas fa-list-ol" style="color: #e67e22;"></i>
+                Kysymyksiä:
+                <select name="question_target" style="background: #2c3e50; color: #ecf0f1; border: 1px solid #34495e; border-radius: 6px; padding: 4px 10px; font-size: 0.95em; margin-left: 4px;">
+                    <option value="10">10</option>
+                    <option value="25" selected>25</option>
+                    <option value="50">50</option>
+                </select>
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; color: #ecf0f1; font-size: 0.95em;">
+                <i class="fas fa-clock" style="color: #e67e22;"></i>
+                Aikaraja:
+                <select name="time_limit_minutes" style="background: #2c3e50; color: #ecf0f1; border: 1px solid #34495e; border-radius: 6px; padding: 4px 10px; font-size: 0.95em; margin-left: 4px;">
+                    <option value="10">10 min</option>
+                    <option value="20">20 min</option>
+                    <option value="30" selected>30 min</option>
+                    <option value="45">45 min</option>
+                    <option value="60">60 min</option>
+                </select>
+            </label>
         </div>
     </div>
 
@@ -85,6 +150,12 @@
             <button type="button" id="clearAll" style="background: #34495e; color: #ecf0f1; border: 1px solid #4a6785; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
                 <i class="fas fa-times"></i> Poista valinnat
             </button>
+            {% if user.is_authenticated %}
+            <label style="display: flex; align-items: center; gap: 8px; padding: 8px 16px; background: #1a252f; border: 1px solid #34495e; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
+                <input type="checkbox" name="flagged_only" style="accent-color: #e74c3c; width: 16px; height: 16px;">
+                <span style="color: #e74c3c;"><i class="fas fa-flag" style="margin-right: 4px;"></i>Vain merkityt</span>
+            </label>
+            {% endif %}
         </div>
         <div id="selectedCount" style="color: #95a5a6; font-size: 0.95em;">
             <span id="selectedEpaCount">0</span> aihetta valittu &middot; <span id="selectedQuestionCount">0</span> kysymysta
@@ -153,6 +224,18 @@
     const specialtyCheckboxes = document.querySelectorAll('.specialty-checkbox');
     const difficultyRadios = document.querySelectorAll('input[name="difficulty"]');
     const startBar = document.getElementById('startBar');
+
+    // Moodinvalinta
+    const modeRadios = document.querySelectorAll('input[name="mode"]');
+    const timedControls = document.getElementById('timedControls');
+    modeRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            const isTimed = this.value === 'timed';
+            timedControls.style.display = isTimed ? 'flex' : 'none';
+            document.getElementById('mode-tutor-label').style.borderColor = isTimed ? '#34495e' : '#3498db';
+            document.getElementById('mode-timed-label').style.borderColor = isTimed ? '#e67e22' : '#34495e';
+        });
+    });
 
     function getSelectedDifficulty() {
         const checked = document.querySelector('input[name="difficulty"]:checked');

@@ -68,12 +68,6 @@
                 <span id="resultText" style="font-size: 1.1em; font-weight: 600;"></span>
             </div>
 
-            <!-- SR schedule info -->
-            <div id="srSchedule" style="background: var(--bg-raised); border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; text-align: center; border-left: 3px solid var(--color-isotooppi);">
-                <i class="fas fa-clock" style="color: var(--color-isotooppi); margin-right: 6px;"></i>
-                <span id="srScheduleText" style="color: var(--text-secondary); font-size: 0.9em;"></span>
-            </div>
-
             <!-- General explanation -->
             <div id="generalExplanation" style="background: var(--bg-raised); border-radius: 8px; padding: 16px 20px; margin-bottom: 20px; border-left: 3px solid var(--color-primary);">
                 <div style="color: var(--color-primary); font-weight: 600; margin-bottom: 8px;">
@@ -82,12 +76,56 @@
                 <p id="explanationText" style="color: var(--text-secondary); line-height: 1.6; margin: 0;"></p>
             </div>
 
-            <!-- Next button -->
-            <div style="text-align: center;">
-                <button id="nextQuestion"
-                        style="background: var(--color-isotooppi); color: white; border: none; padding: 14px 40px; border-radius: 8px; font-size: 1.05em; font-weight: 600; cursor: pointer; transition: all 0.2s;">
-                    Seuraava <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
-                </button>
+            <!-- Comments section -->
+            <div id="commentsSection" style="margin-bottom: 20px;">
+                <details>
+                    <summary style="cursor: pointer; color: var(--text-tertiary); font-size: 0.85em; user-select: none; list-style: none; display: flex; align-items: center; gap: 6px;">
+                        <i class="fas fa-comments"></i>
+                        <span id="commentsToggleLabel">Kommentit</span>
+                    </summary>
+                    <div id="commentsBody" style="margin-top: 12px; background: var(--bg-raised); border-radius: 8px; padding: 16px; border: 1px solid var(--border-default);">
+                        <div id="commentsList" style="margin-bottom: 12px;"></div>
+                        {% if user.is_authenticated %}
+                        <div style="display: flex; gap: 8px; margin-top: 8px;">
+                            <textarea id="commentInput" rows="2" placeholder="Kirjoita kommentti..." style="flex: 1; background: var(--bg-overlay); color: var(--text-primary); border: 1px solid var(--border-default); border-radius: 6px; padding: 8px 10px; font-size: 0.88em; font-family: inherit; resize: none;"></textarea>
+                            <button id="commentSubmitBtn" onclick="submitComment()" style="background: var(--color-primary); color: white; border: none; border-radius: 6px; padding: 0 16px; cursor: pointer; font-size: 0.85em; white-space: nowrap;">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                        {% else %}
+                        <p style="color: var(--text-disabled); font-size: 0.85em; margin: 0;"><a href="/login/" style="color: var(--color-primary);">Kirjaudu sisään</a> lisätäksesi kommentin.</p>
+                        {% endif %}
+                    </div>
+                </details>
+            </div>
+
+            <!-- FSRS rating buttons -->
+            <div id="fsrsRatingSection" style="margin-top: 20px;">
+                <div style="color: var(--text-tertiary); font-size: 0.85em; text-align: center; margin-bottom: 10px;">
+                    <i class="fas fa-brain" style="margin-right: 4px;"></i>Kuinka hyvin muistit?
+                </div>
+                <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+                    <button class="fsrs-rate-btn" data-rating="1"
+                            style="flex: 1; min-width: 90px; max-width: 140px; background: rgba(248,113,113,0.12); color: var(--color-error); border: 2px solid rgba(248,113,113,0.3); padding: 12px 8px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.15s; font-weight: 600;">
+                        <div style="font-size: 0.95em;">Taas</div>
+                        <div class="fsrs-interval" style="font-size: 0.75em; opacity: 0.8; margin-top: 2px;"></div>
+                    </button>
+                    <button class="fsrs-rate-btn" data-rating="2"
+                            style="flex: 1; min-width: 90px; max-width: 140px; background: rgba(251,146,60,0.12); color: var(--color-orange); border: 2px solid rgba(251,146,60,0.3); padding: 12px 8px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.15s; font-weight: 600;">
+                        <div style="font-size: 0.95em;">Vaikea</div>
+                        <div class="fsrs-interval" style="font-size: 0.75em; opacity: 0.8; margin-top: 2px;"></div>
+                    </button>
+                    <button class="fsrs-rate-btn" data-rating="3"
+                            style="flex: 1; min-width: 90px; max-width: 140px; background: rgba(96,165,250,0.12); color: var(--color-primary); border: 2px solid rgba(96,165,250,0.3); padding: 12px 8px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.15s; font-weight: 600;">
+                        <div style="font-size: 0.95em;">Hyva</div>
+                        <div class="fsrs-interval" style="font-size: 0.75em; opacity: 0.8; margin-top: 2px;"></div>
+                    </button>
+                    <button class="fsrs-rate-btn" data-rating="4"
+                            style="flex: 1; min-width: 90px; max-width: 140px; background: rgba(52,211,153,0.12); color: var(--color-success); border: 2px solid rgba(52,211,153,0.3); padding: 12px 8px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.15s; font-weight: 600;">
+                        <div style="font-size: 0.95em;">Helppo</div>
+                        <div class="fsrs-interval" style="font-size: 0.75em; opacity: 0.8; margin-top: 2px;"></div>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -123,10 +161,184 @@
 <script>
 (function() {
     var CSRF_TOKEN = getCookie('csrftoken');
+    var IS_SUPERUSER = {% if user.is_superuser %}true{% else %}false{% endif %};
     var currentQuestion = null;
     var answered = false;
+    var currentNoteText = '';
     var initialDueCount = {{ due_count }};
     var totalCards = {{ total_cards }};
+
+    // ==========================================
+    // FLAG & NOTE FUNCTIONS
+    // ==========================================
+
+    var FLAG_OPTIONS = {
+        wrong:     { icon: 'fa-times-circle', color: 'var(--color-error)', label: 'Väärin' },
+        guess:     { icon: 'fa-question-circle', color: 'var(--color-warning)', label: 'Arvaus' },
+        important: { icon: 'fa-star', color: 'var(--color-primary)', label: 'Tärkeä' },
+    };
+
+    function renderFlagNoteToolbar(data) {
+        var old = document.getElementById('flagNoteToolbar');
+        if (old) old.remove();
+
+        currentNoteText = data.note_text || '';
+        var currentFlag = data.flag_type || null;
+
+        var toolbar = document.createElement('div');
+        toolbar.id = 'flagNoteToolbar';
+        toolbar.style.cssText = 'display: flex; align-items: center; gap: 8px; margin-bottom: 16px;';
+
+        // Flag button
+        var flagWrap = document.createElement('div');
+        flagWrap.style.cssText = 'position: relative;';
+
+        var flagIcon = currentFlag ? FLAG_OPTIONS[currentFlag].icon : 'fa-flag';
+        var flagColor = currentFlag ? FLAG_OPTIONS[currentFlag].color : 'var(--text-tertiary)';
+        var flagLabel = currentFlag ? FLAG_OPTIONS[currentFlag].label : 'Merkitse';
+
+        var flagBtn = document.createElement('button');
+        flagBtn.id = 'flagToggle';
+        flagBtn.style.cssText = 'background: none; border: 1px solid ' + flagColor + '; color: ' + flagColor + '; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85em; transition: all 0.15s;';
+        flagBtn.innerHTML = '<i class="fas ' + flagIcon + '"></i> ' + flagLabel;
+        flagBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            var menu = document.getElementById('flagMenu');
+            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+        });
+
+        var menu = document.createElement('div');
+        menu.id = 'flagMenu';
+        menu.style.cssText = 'display: none; position: absolute; top: 100%; left: 0; background: var(--bg-raised); border: 1px solid var(--border-default); border-radius: 8px; padding: 4px 0; z-index: 100; min-width: 160px; margin-top: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);';
+
+        Object.keys(FLAG_OPTIONS).forEach(function(type) {
+            var opt = FLAG_OPTIONS[type];
+            var btn = document.createElement('button');
+            btn.style.cssText = 'display: block; width: 100%; text-align: left; background: ' + (currentFlag === type ? 'rgba(96,165,250,0.15)' : 'none') + '; border: none; color: ' + opt.color + '; padding: 8px 14px; cursor: pointer; font-size: 0.9em; transition: background 0.1s;';
+            btn.innerHTML = '<i class="fas ' + opt.icon + '" style="width: 18px;"></i> ' + opt.label;
+            btn.onmouseover = function() { this.style.background = 'rgba(96,165,250,0.1)'; };
+            btn.onmouseout = function() { this.style.background = currentFlag === type ? 'rgba(96,165,250,0.15)' : 'none'; };
+            btn.addEventListener('click', function() {
+                toggleFlag(type);
+                menu.style.display = 'none';
+            });
+            menu.appendChild(btn);
+        });
+
+        if (currentFlag) {
+            var divider = document.createElement('div');
+            divider.style.cssText = 'border-top: 1px solid var(--border-default); margin: 2px 0;';
+            menu.appendChild(divider);
+            var removeBtn = document.createElement('button');
+            removeBtn.style.cssText = 'display: block; width: 100%; text-align: left; background: none; border: none; color: var(--text-tertiary); padding: 8px 14px; cursor: pointer; font-size: 0.9em;';
+            removeBtn.innerHTML = '<i class="fas fa-trash" style="width: 18px;"></i> Poista merkintä';
+            removeBtn.addEventListener('click', function() {
+                toggleFlag(currentFlag);
+                menu.style.display = 'none';
+            });
+            menu.appendChild(removeBtn);
+        }
+
+        flagWrap.appendChild(flagBtn);
+        flagWrap.appendChild(menu);
+
+        // Note button
+        var hasNote = currentNoteText.length > 0;
+        var noteBtn = document.createElement('button');
+        noteBtn.id = 'noteToggle';
+        noteBtn.style.cssText = 'background: none; border: 1px solid ' + (hasNote ? 'var(--color-success)' : 'var(--text-tertiary)') + '; color: ' + (hasNote ? 'var(--color-success)' : 'var(--text-tertiary)') + '; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85em; transition: all 0.15s;';
+        noteBtn.innerHTML = '<i class="fas fa-sticky-note"></i> ' + (hasNote ? 'Muistiinpano' : 'Lisää muistiinpano');
+        noteBtn.addEventListener('click', function() {
+            showNoteModal(currentQuestion.question_id, currentNoteText);
+        });
+
+        toolbar.appendChild(flagWrap);
+        toolbar.appendChild(noteBtn);
+
+        var srInfo = document.getElementById('srInfo');
+        srInfo.after(toolbar);
+
+        // Close menu on outside click
+        document.addEventListener('click', function closeMenu(e) {
+            if (!flagWrap.contains(e.target)) {
+                menu.style.display = 'none';
+                document.removeEventListener('click', closeMenu);
+            }
+        });
+    }
+
+    function toggleFlag(flagType) {
+        if (!currentQuestion) return;
+        fetch('/quiz/api/flag/toggle/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': CSRF_TOKEN },
+            body: JSON.stringify({ question_id: currentQuestion.question_id, flag_type: flagType }),
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(result) {
+            currentQuestion.flag_type = result.flag_type;
+            renderFlagNoteToolbar(currentQuestion);
+        });
+    }
+
+    function showNoteModal(questionId, existingText) {
+        var oldModal = document.getElementById('noteModal');
+        if (oldModal) oldModal.remove();
+
+        var modal = document.createElement('div');
+        modal.id = 'noteModal';
+        modal.style.cssText = 'position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 1000;';
+        modal.innerHTML =
+            '<div style="background: var(--bg-surface); border-radius: 12px; padding: 24px; width: 90%; max-width: 500px; border: 1px solid var(--border-default);">' +
+                '<h3 style="color: var(--text-primary); margin: 0 0 16px;"><i class="fas fa-sticky-note" style="color: var(--color-success); margin-right: 8px;"></i>Muistiinpano</h3>' +
+                '<textarea id="noteTextarea" style="width: 100%; height: 120px; background: var(--bg-raised); color: var(--text-primary); border: 1px solid var(--border-default); border-radius: 8px; padding: 12px; font-size: 0.95em; resize: vertical; box-sizing: border-box;">' + (existingText || '') + '</textarea>' +
+                '<div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px;">' +
+                    '<button id="noteCancelBtn" style="background: var(--bg-overlay); color: var(--text-primary); border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">Peruuta</button>' +
+                    '<button id="noteSaveBtn" style="background: var(--color-success); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600;">Tallenna</button>' +
+                '</div>' +
+            '</div>';
+        document.body.appendChild(modal);
+
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) modal.remove();
+        });
+        document.getElementById('noteCancelBtn').addEventListener('click', function() { modal.remove(); });
+        document.getElementById('noteSaveBtn').addEventListener('click', function() {
+            var text = document.getElementById('noteTextarea').value.trim();
+            fetch('/quiz/api/note/save/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': CSRF_TOKEN },
+                body: JSON.stringify({ question_id: questionId, note_text: text }),
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(result) {
+                currentNoteText = result.note_text || '';
+                currentQuestion.note_text = currentNoteText;
+                renderFlagNoteToolbar(currentQuestion);
+                modal.remove();
+            });
+        });
+    }
+
+    function renderTheoryLink(data) {
+        var old = document.getElementById('theoryLink');
+        if (old) old.remove();
+        if (data.is_correct || !data.theory_link) return;
+
+        var linkDiv = document.createElement('div');
+        linkDiv.id = 'theoryLink';
+        linkDiv.style.cssText = 'background: rgba(96,165,250,0.1); border: 1px solid rgba(96,165,250,0.3); border-radius: 8px; padding: 12px 16px; margin-bottom: 16px;';
+        linkDiv.innerHTML =
+            '<a href="' + data.theory_link.url + '" target="_blank" style="color: var(--color-primary); text-decoration: none; font-weight: 500;">' +
+                '<i class="fas fa-book-open" style="margin-right: 8px;"></i>' +
+                'Lue lisää: ' + data.theory_link.epa_title +
+                '<i class="fas fa-external-link-alt" style="margin-left: 6px; font-size: 0.8em;"></i>' +
+            '</a>';
+        var expEl = document.getElementById('generalExplanation');
+        expEl.after(linkDiv);
+    }
+
+    // ==========================================
 
     var DIFFICULTY_LABELS = {
         1: {text: 'Helppo', color: 'var(--color-success)', bg: 'rgba(52,211,153,0.15)'},
@@ -168,6 +380,15 @@
         currentQuestion = data;
         answered = false;
 
+        // Reset comments
+        var commentsSection = document.getElementById('commentsSection');
+        if (commentsSection) {
+            var details = commentsSection.querySelector('details');
+            if (details) details.open = false;
+            document.getElementById('commentsList').innerHTML = '';
+            document.getElementById('commentsToggleLabel').textContent = 'Kommentit';
+        }
+
         // Update remaining counter
         document.getElementById('remainingDisplay').textContent = data.remaining;
 
@@ -181,13 +402,22 @@
         diffBadge.style.color = diff.color;
         diffBadge.style.background = diff.bg;
 
-        // SR info
+        // SR info (FSRS)
         var reps = data.repetitions || 0;
-        var interval = data.interval_days || 0;
-        document.getElementById('srRepetitions').textContent =
-            'Kertaus #' + (reps + 1) + (interval > 0 ? ' (edellinen: ' + interval + ' pv sitten)' : ' (uusi)');
+        var stab = data.stability || 0;
+        var retr = data.retrievability || 0;
+        var fsrsDiff = data.fsrs_difficulty || 0;
+        var srText = 'Kertaus #' + (reps + 1);
+        if (stab > 0) {
+            srText += ' | Stabiilius: ' + stab + ' pv';
+            srText += ' | Muistaminen: ' + retr + '%';
+        } else {
+            srText += ' (uusi)';
+        }
+        document.getElementById('srRepetitions').textContent = srText;
 
         // Question text
+        document.getElementById('questionText').style.display = 'block';
         document.getElementById('questionText').textContent = data.text;
 
         // Build input UI based on question type
@@ -304,6 +534,45 @@
                 container.appendChild(row);
             });
 
+        } else if (data.question_type === 'cloze' && data.cloze_segments) {
+            // Cloze: render text segments + inline input fields
+            var clozeWrap = document.createElement('div');
+            clozeWrap.id = 'clozeWrap';
+            clozeWrap.style.cssText = 'background: var(--bg-raised); border: 2px solid var(--border-default); border-radius: 8px; padding: 20px; line-height: 2.2; font-size: 1.05em; color: var(--text-secondary);';
+
+            data.cloze_segments.forEach(function(seg) {
+                if (seg.type === 'text') {
+                    var span = document.createElement('span');
+                    span.textContent = seg.value;
+                    clozeWrap.appendChild(span);
+                } else if (seg.type === 'blank') {
+                    var input = document.createElement('input');
+                    input.type = 'text';
+                    input.className = 'cloze-input';
+                    input.dataset.clozeId = seg.id;
+                    input.placeholder = seg.hint || '____';
+                    input.autocomplete = 'off';
+                    var width = Math.max(80, Math.min(200, seg.length * 12 + 24));
+                    input.style.cssText = 'background: var(--bg-base); border: 2px solid var(--border-default); color: var(--text-primary); padding: 4px 10px; border-radius: 6px; font-size: 0.95em; font-weight: 600; width: ' + width + 'px; text-align: center; margin: 0 4px; transition: border-color 0.15s;';
+                    input.addEventListener('input', function() {
+                        var allFilled = Array.from(document.querySelectorAll('.cloze-input'))
+                            .every(function(inp) { return inp.value.trim() !== ''; });
+                        var submitBtn = document.getElementById('submitAnswer');
+                        submitBtn.disabled = !allFilled;
+                        submitBtn.style.background = allFilled ? 'var(--color-primary)' : 'var(--bg-overlay)';
+                        submitBtn.style.color = allFilled ? 'white' : 'var(--text-disabled)';
+                        submitBtn.style.cursor = allFilled ? 'pointer' : 'not-allowed';
+                    });
+                    input.addEventListener('focus', function() { this.style.borderColor = 'var(--color-primary)'; });
+                    input.addEventListener('blur', function() { this.style.borderColor = 'var(--border-default)'; });
+                    clozeWrap.appendChild(input);
+                }
+            });
+            container.appendChild(clozeWrap);
+
+            // Hide questionText for cloze (text is in cloze segments)
+            document.getElementById('questionText').style.display = 'none';
+
         } else {
             // multiple_choice / multi_select
             var inputType = data.question_type === 'multi_select' ? 'checkbox' : 'radio';
@@ -346,6 +615,9 @@
         submitBtn.style.background = 'var(--bg-overlay)';
         submitBtn.style.color = 'var(--text-disabled)';
         submitBtn.style.cursor = 'not-allowed';
+
+        // Flag & note toolbar
+        renderFlagNoteToolbar(data);
     }
 
     function onChoiceChange() {
@@ -376,7 +648,7 @@
         answered = true;
 
         // Disable inputs
-        document.querySelectorAll('#choicesContainer input, #choicesContainer select, #calcInput').forEach(function(el) {
+        document.querySelectorAll('#choicesContainer input, #choicesContainer select, #calcInput, .cloze-input').forEach(function(el) {
             el.disabled = true;
         });
         document.querySelectorAll('.choice-option').forEach(function(label) {
@@ -398,6 +670,12 @@
                 matchingAnswers[select.dataset.left] = select.value;
             });
             payload.matching_answers = matchingAnswers;
+        } else if (currentQuestion.question_type === 'cloze') {
+            var clozeAnswers = {};
+            document.querySelectorAll('.cloze-input').forEach(function(inp) {
+                clozeAnswers[inp.dataset.clozeId] = inp.value;
+            });
+            payload.cloze_answers = clozeAnswers;
         } else {
             payload.selected_ids = Array.from(document.querySelectorAll('#choicesContainer input:checked'))
                 .map(function(input) { return parseInt(input.value); });
@@ -429,6 +707,29 @@
                 resultSpan.style.cssText = 'margin-top: 10px; color: ' + (data.is_correct ? 'var(--color-success)' : 'var(--color-error)') + '; font-size: 0.9em;';
                 resultSpan.innerHTML = 'Oikea vastaus: <strong>' + c.correct_answer + ' ' + c.unit + '</strong>';
                 wrapper.after(resultSpan);
+            }
+        } else if (qtype === 'cloze') {
+            // Color each cloze input green/red based on correctness
+            data.choices.forEach(function(item) {
+                var input = document.querySelector('.cloze-input[data-cloze-id="' + item.id + '"]');
+                if (!input) return;
+                if (item.is_correct) {
+                    input.style.borderColor = 'var(--color-success)';
+                    input.style.background = 'rgba(52,211,153,0.15)';
+                    input.style.color = 'var(--color-success)';
+                } else {
+                    input.style.borderColor = 'var(--color-error)';
+                    input.style.background = 'rgba(248,113,113,0.15)';
+                    input.style.color = 'var(--color-error)';
+                    var hint = document.createElement('span');
+                    hint.style.cssText = 'color: var(--color-success); font-size: 0.83em; font-weight: 600; margin-left: 4px;';
+                    hint.textContent = '→ ' + item.correct_answer;
+                    input.after(hint);
+                }
+            });
+            var clozeWrap = document.getElementById('clozeWrap');
+            if (clozeWrap) {
+                clozeWrap.style.borderColor = data.is_correct ? 'var(--color-success)' : 'var(--color-error)';
             }
         } else if (qtype === 'matching') {
             data.choices.forEach(function(pair) {
@@ -489,15 +790,24 @@
             text.textContent = 'Vaarin';
         }
 
-        // SR schedule info
-        var days = data.next_review_days || 1;
-        var scheduleText;
-        if (data.is_correct) {
-            scheduleText = 'Seuraava kertaus: ' + days + ' paivan paasta';
-        } else {
-            scheduleText = 'Palautettu alkuun \u2014 seuraava kertaus huomenna';
-        }
-        document.getElementById('srScheduleText').textContent = scheduleText;
+        // FSRS: Populate predicted intervals on rating buttons
+        var intervals = data.predicted_intervals || {};
+        document.querySelectorAll('.fsrs-rate-btn').forEach(function(btn) {
+            var rating = parseInt(btn.dataset.rating);
+            var days = intervals[rating] || '?';
+            var intervalEl = btn.querySelector('.fsrs-interval');
+            if (intervalEl) {
+                intervalEl.textContent = days + ' pv';
+            }
+            // Highlight default: Again for wrong, Good for correct
+            if (data.is_correct && rating === 3) {
+                btn.style.borderWidth = '3px';
+                btn.style.fontWeight = '800';
+            } else if (!data.is_correct && rating === 1) {
+                btn.style.borderWidth = '3px';
+                btn.style.fontWeight = '800';
+            }
+        });
 
         // Explanation
         var expText = document.getElementById('explanationText');
@@ -508,7 +818,13 @@
             document.getElementById('generalExplanation').style.display = 'none';
         }
 
+        // Theory cross-reference link (wrong answers)
+        renderTheoryLink(data);
+
         document.getElementById('resultSection').style.display = 'block';
+
+        // Load comments for this question
+        if (currentQuestion) loadComments(currentQuestion.id);
 
         // Update remaining
         document.getElementById('remainingDisplay').textContent = data.remaining;
@@ -559,22 +875,134 @@
             });
     }
 
+    // FSRS rate and load next
+    function rateAndNext(rating) {
+        if (!currentQuestion) return;
+        // Disable all rating buttons
+        document.querySelectorAll('.fsrs-rate-btn').forEach(function(btn) {
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+            btn.style.cursor = 'default';
+        });
+        fetch('/quiz/api/review/rate/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': CSRF_TOKEN,
+            },
+            body: JSON.stringify({
+                question_id: currentQuestion.question_id,
+                rating: rating,
+            }),
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+            document.getElementById('remainingDisplay').textContent = data.remaining;
+            loadQuestion();
+        })
+        .catch(function(err) {
+            console.error('Rate error:', err);
+            loadQuestion();
+        });
+    }
+
     // Event listeners
     document.getElementById('submitAnswer').addEventListener('click', submitAnswer);
-    document.getElementById('nextQuestion').addEventListener('click', loadQuestion);
 
-    // Keyboard: Enter to submit/next
+    // FSRS rating buttons
+    document.querySelectorAll('.fsrs-rate-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            rateAndNext(parseInt(this.dataset.rating));
+        });
+    });
+
+    // Keyboard: Enter to submit, 1-4 to rate after answering
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') {
             e.preventDefault();
             if (answered) {
-                loadQuestion();
+                rateAndNext(3); // Default: Good
             } else {
                 var submitBtn = document.getElementById('submitAnswer');
                 if (!submitBtn.disabled) submitAnswer();
             }
+        } else if (answered && e.key >= '1' && e.key <= '4') {
+            e.preventDefault();
+            rateAndNext(parseInt(e.key));
         }
     });
+
+    // ==========================================
+    // COMMENTS FUNCTIONS
+    // ==========================================
+
+    function loadComments(questionId) {
+        var section = document.getElementById('commentsSection');
+        if (!section) return;
+        document.getElementById('commentsList').innerHTML = '';
+        document.getElementById('commentsToggleLabel').textContent = 'Kommentit';
+
+        fetch('/quiz/api/comments/' + questionId + '/')
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                var count = data.comments.length;
+                document.getElementById('commentsToggleLabel').textContent = count > 0 ? 'Kommentit (' + count + ')' : 'Kommentit';
+                renderComments(data.comments);
+            });
+    }
+
+    function renderComments(comments) {
+        var list = document.getElementById('commentsList');
+        if (!comments.length) {
+            list.innerHTML = '<p style="color: var(--text-disabled); font-size: 0.85em; margin: 0;">Ei kommentteja vielä.</p>';
+            return;
+        }
+        list.innerHTML = comments.map(function(c) {
+            var resolvedStyle = c.is_resolved ? 'opacity: 0.5;' : '';
+            var resolvedBadge = c.is_resolved ? ' <span style="color: #34d399; font-size: 0.75em;">[ratkaistu]</span>' : '';
+            var resolveBtn = IS_SUPERUSER
+                ? '<button onclick="resolveComment(' + c.id + ')" style="background: none; border: none; color: #34d399; font-size: 0.75em; cursor: pointer; padding: 0 4px;" title="Merkitse ratkaisuksi"><i class="fas fa-check"></i></button>'
+                : '';
+            return '<div style="border-top: 1px solid var(--border-default); padding: 8px 0; ' + resolvedStyle + '">' +
+                '<div style="display: flex; justify-content: space-between; align-items: baseline;">' +
+                '<span style="color: var(--color-primary); font-size: 0.8em; font-weight: 600;">' + c.username + resolvedBadge + '</span>' +
+                '<span style="color: var(--text-disabled); font-size: 0.75em;">' + c.created_at + resolveBtn + '</span>' +
+                '</div>' +
+                '<p style="color: var(--text-secondary); font-size: 0.88em; margin: 4px 0 0 0; white-space: pre-wrap;">' + c.text.replace(/</g, '&lt;') + '</p>' +
+                '</div>';
+        }).join('');
+    }
+
+    window.submitComment = function() {
+        var input = document.getElementById('commentInput');
+        var text = (input.value || '').trim();
+        if (!text || !currentQuestion) return;
+        var btn = document.getElementById('commentSubmitBtn');
+        btn.disabled = true;
+
+        fetch('/quiz/api/comments/add/', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json', 'X-CSRFToken': CSRF_TOKEN},
+            body: JSON.stringify({question_id: currentQuestion.id, text: text}),
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (data.error) { alert(data.error); return; }
+            input.value = '';
+            loadComments(currentQuestion.id);
+        })
+        .finally(function() { btn.disabled = false; });
+    };
+
+    window.resolveComment = function(commentId) {
+        fetch('/quiz/api/comments/resolve/', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json', 'X-CSRFToken': CSRF_TOKEN},
+            body: JSON.stringify({comment_id: commentId}),
+        })
+        .then(function(r) { return r.json(); })
+        .then(function() { if (currentQuestion) loadComments(currentQuestion.id); });
+    };
 
     // Initial load
     if (initialDueCount > 0) {

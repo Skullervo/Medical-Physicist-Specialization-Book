@@ -2989,6 +2989,21 @@
         }
     }
 
+    // ========== TAB QUESTION COUNT BADGES ==========
+    var TAB_QUESTION_COUNTS = {{ tab_question_counts|safe }};
+    Object.keys(TAB_QUESTION_COUNTS).forEach(function(tabId) {
+        var count = TAB_QUESTION_COUNTS[tabId];
+        if (count > 0) {
+            var tabBtn = document.querySelector('.theory-tab[data-tab="' + tabId + '"]');
+            if (tabBtn) {
+                var badge = document.createElement('span');
+                badge.style.cssText = 'background: rgba(96,165,250,0.15); color: var(--color-primary, #60a5fa); padding: 2px 8px; border-radius: 10px; font-size: 0.7em; margin-left: 6px; font-weight: 500;';
+                badge.textContent = count + ' kys.';
+                tabBtn.appendChild(badge);
+            }
+        }
+    });
+
     // ========== INLINE QUIZ ==========
     var TAB_EPA_MAP = {{ tab_epa_map|safe }};
     var quizState = {};
@@ -3055,6 +3070,8 @@
                 }
                 st.currentQuestionId = data.question_id;
                 st.currentQuestionType = data.question_type;
+                st.currentFlagType = data.flag_type || null;
+                st.currentNoteText = data.note_text || '';
 
                 var html = '';
                 html += '<div class="theory-quiz-scorebar">';
@@ -3069,13 +3086,16 @@
                     'multi_select': '<i class="fas fa-check-double"></i> Valitse kaikki oikeat vastaukset',
                     'true_false': '<i class="fas fa-balance-scale"></i> Oikein vai väärin?',
                     'calculation': '<i class="fas fa-calculator"></i> Laske oikea arvo',
-                    'matching': '<i class="fas fa-arrows-alt-h"></i> Yhdistä parit'
+                    'matching': '<i class="fas fa-arrows-alt-h"></i> Yhdistä parit',
+                    'cloze': '<i class="fas fa-pen-fancy"></i> Täydennä puuttuvat kohdat'
                 };
                 if (typeHints[data.question_type]) {
                     html += '<div class="theory-quiz-type-hint">' + typeHints[data.question_type] + '</div>';
                 }
 
-                html += '<div class="theory-quiz-question">' + data.text + '</div>';
+                if (data.question_type !== 'cloze') {
+                    html += '<div class="theory-quiz-question">' + data.text + '</div>';
+                }
 
                 // Render by question type
                 if (data.question_type === 'calculation') {
@@ -3100,7 +3120,17 @@
                         html += '</div>';
                     });
                     html += '</div>';
-
+                } else if (data.question_type === 'cloze' && data.cloze_segments) {
+                    html += '<div class="theory-quiz-cloze" id="tq-cloze-' + tabId + '" style="line-height: 2.2; font-size: 1.02em; color: var(--text-secondary, #b0b8c1);">';
+                    data.cloze_segments.forEach(function(seg, idx) {
+                        if (seg.type === 'text') {
+                            html += '<span>' + seg.value.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</span>';
+                        } else if (seg.type === 'blank') {
+                            var w = Math.max(80, Math.min(200, seg.length * 12 + 24));
+                            html += '<input type="text" class="tq-cloze-input" data-cloze-id="' + seg.id + '" placeholder="' + (seg.hint || '____') + '" autocomplete="off" style="background: var(--bg-base, #0f1a24); border: 2px solid var(--border-default, #4a6274); color: var(--text-primary, #ecf0f1); padding: 4px 10px; border-radius: 6px; font-size: 0.95em; font-weight: 600; width: ' + w + 'px; text-align: center; margin: 0 4px;">';
+                        }
+                    });
+                    html += '</div>';
                 } else {
                     // multiple_choice, multi_select, true_false
                     var isMulti = data.question_type === 'multi_select';
@@ -3137,6 +3167,16 @@
                             var allFilled = true;
                             document.querySelectorAll('#tq-matching-' + tabId + ' select').forEach(function(s) {
                                 if (!s.value) allFilled = false;
+                            });
+                            document.getElementById('tq-submit-' + tabId).classList.toggle('enabled', allFilled);
+                        });
+                    });
+                } else if (data.question_type === 'cloze') {
+                    document.querySelectorAll('#tq-cloze-' + tabId + ' .tq-cloze-input').forEach(function(inp) {
+                        inp.addEventListener('input', function() {
+                            var allFilled = true;
+                            document.querySelectorAll('#tq-cloze-' + tabId + ' .tq-cloze-input').forEach(function(i) {
+                                if (!i.value.trim()) allFilled = false;
                             });
                             document.getElementById('tq-submit-' + tabId).classList.toggle('enabled', allFilled);
                         });
@@ -3181,6 +3221,13 @@
                 sel.disabled = true;
             });
             body.matching_answers = answers;
+        } else if (st.currentQuestionType === 'cloze') {
+            var clozeAnswers = {};
+            document.querySelectorAll('#tq-cloze-' + tabId + ' .tq-cloze-input').forEach(function(inp) {
+                clozeAnswers[inp.dataset.clozeId] = inp.value;
+                inp.disabled = true;
+            });
+            body.cloze_answers = clozeAnswers;
         } else {
             var selected = [];
             document.querySelectorAll('#tq-choices-' + tabId + ' .theory-quiz-choice.selected').forEach(function(c) {
@@ -3215,7 +3262,24 @@
                     ? '<i class="fas fa-check-circle"></i> Oikein!'
                     : '<i class="fas fa-times-circle"></i> Oikea vastaus: ' + c.correct_answer + ' ' + c.unit;
                 calcEl.appendChild(feedback);
-
+            } else if (st.currentQuestionType === 'cloze') {
+                data.choices.forEach(function(item) {
+                    var input = document.querySelector('#tq-cloze-' + tabId + ' .tq-cloze-input[data-cloze-id="' + item.id + '"]');
+                    if (!input) return;
+                    if (item.is_correct) {
+                        input.style.borderColor = 'var(--color-success, #2ecc71)';
+                        input.style.background = 'rgba(52,211,153,0.15)';
+                        input.style.color = 'var(--color-success, #2ecc71)';
+                    } else {
+                        input.style.borderColor = 'var(--color-error, #e74c3c)';
+                        input.style.background = 'rgba(248,113,113,0.15)';
+                        input.style.color = 'var(--color-error, #e74c3c)';
+                        var fix = document.createElement('span');
+                        fix.style.cssText = 'color: var(--color-success, #2ecc71); font-size: 0.83em; font-weight: 600; margin-left: 4px;';
+                        fix.textContent = '→ ' + item.correct_answer;
+                        input.after(fix);
+                    }
+                });
             } else if (st.currentQuestionType === 'matching') {
                 data.choices.forEach(function(c) {
                     var selects = document.querySelectorAll('#tq-matching-' + tabId + ' select');
@@ -3267,11 +3331,33 @@
                 resultHtml += '<p>' + data.explanation + '</p>';
                 resultHtml += '</div>';
             }
+            {% if user.is_authenticated %}
+            resultHtml += '<div class="tq-flag-note-bar" style="display: flex; gap: 8px; margin: 12px 0; padding-top: 12px; border-top: 1px solid var(--border-default, #34495e);">';
+            resultHtml += '<button class="tq-flag-btn" id="tq-flag-' + tabId + '" onclick="toggleTheoryFlag(\'' + tabId + '\')" style="background: none; border: 1px solid var(--text-tertiary, #7f8c8d); color: var(--text-tertiary, #7f8c8d); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85em;">';
+            resultHtml += '<i class="fas fa-flag"></i> Merkitse</button>';
+            resultHtml += '<button class="tq-note-btn" onclick="showTheoryNote(\'' + tabId + '\')" style="background: none; border: 1px solid ' + (st.currentNoteText ? 'var(--color-success, #2ecc71)' : 'var(--text-tertiary, #7f8c8d)') + '; color: ' + (st.currentNoteText ? 'var(--color-success, #2ecc71)' : 'var(--text-tertiary, #7f8c8d)') + '; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85em;">';
+            resultHtml += '<i class="fas fa-sticky-note"></i> ' + (st.currentNoteText ? 'Muistiinpano' : 'Lisää muistiinpano') + '</button>';
+            resultHtml += '</div>';
+            {% endif %}
             resultHtml += '<button class="theory-quiz-next" onclick="nextQuestion(\'' + tabId + '\')">Seuraava kysymys <i class="fas fa-arrow-right"></i></button>';
 
             var resultEl = document.getElementById('tq-result-' + tabId);
             resultEl.innerHTML = resultHtml;
             resultEl.style.display = 'block';
+
+            {% if user.is_authenticated %}
+            // Update flag button state
+            if (st.currentFlagType) {
+                var flagBtnEl = document.getElementById('tq-flag-' + tabId);
+                var flagOpts = { wrong: {icon: 'fa-times-circle', color: '#e74c3c', label: 'Väärin'}, guess: {icon: 'fa-question-circle', color: '#f1c40f', label: 'Arvaus'}, important: {icon: 'fa-star', color: '#3498db', label: 'Tärkeä'} };
+                var fo = flagOpts[st.currentFlagType];
+                if (fo && flagBtnEl) {
+                    flagBtnEl.style.borderColor = fo.color;
+                    flagBtnEl.style.color = fo.color;
+                    flagBtnEl.innerHTML = '<i class="fas ' + fo.icon + '"></i> ' + fo.label;
+                }
+            }
+            {% endif %}
 
             if (window.MathJax && MathJax.typesetPromise) {
                 MathJax.typesetPromise([resultEl]);
@@ -3287,6 +3373,83 @@
     window.nextQuestion = function(tabId) {
         loadQuestion(tabId);
     };
+
+    {% if user.is_authenticated %}
+    // ========== THEORY QUIZ FLAG & NOTE ==========
+    window.toggleTheoryFlag = function(tabId) {
+        var st = quizState[tabId];
+        if (!st || !st.currentQuestionId) return;
+
+        var order = ['wrong', 'guess', 'important'];
+        var current = st.currentFlagType;
+        var nextIdx = current ? (order.indexOf(current) + 1) % (order.length + 1) : 0;
+        var nextType = nextIdx < order.length ? order[nextIdx] : order[0];
+        var flagType = current === nextType ? current : nextType;
+        if (!current) flagType = 'important';
+
+        fetch('/quiz/api/flag/toggle/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCSRF() },
+            body: JSON.stringify({ question_id: st.currentQuestionId, flag_type: flagType })
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(result) {
+            st.currentFlagType = result.flag_type;
+            var flagBtnEl = document.getElementById('tq-flag-' + tabId);
+            if (!flagBtnEl) return;
+            var flagOpts = { wrong: {icon: 'fa-times-circle', color: '#e74c3c', label: 'Väärin'}, guess: {icon: 'fa-question-circle', color: '#f1c40f', label: 'Arvaus'}, important: {icon: 'fa-star', color: '#3498db', label: 'Tärkeä'} };
+            if (result.flag_type && flagOpts[result.flag_type]) {
+                var fo = flagOpts[result.flag_type];
+                flagBtnEl.style.borderColor = fo.color;
+                flagBtnEl.style.color = fo.color;
+                flagBtnEl.innerHTML = '<i class="fas ' + fo.icon + '"></i> ' + fo.label;
+            } else {
+                flagBtnEl.style.borderColor = 'var(--text-tertiary, #7f8c8d)';
+                flagBtnEl.style.color = 'var(--text-tertiary, #7f8c8d)';
+                flagBtnEl.innerHTML = '<i class="fas fa-flag"></i> Merkitse';
+            }
+        });
+    };
+
+    window.showTheoryNote = function(tabId) {
+        var st = quizState[tabId];
+        if (!st || !st.currentQuestionId) return;
+
+        var oldModal = document.getElementById('noteModal');
+        if (oldModal) oldModal.remove();
+
+        var modal = document.createElement('div');
+        modal.id = 'noteModal';
+        modal.style.cssText = 'position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 1000;';
+        modal.innerHTML =
+            '<div style="background: var(--bg-surface, #2c3e50); border-radius: 12px; padding: 24px; width: 90%; max-width: 500px; border: 1px solid var(--border-default, #34495e);">' +
+                '<h3 style="color: var(--text-primary, #ecf0f1); margin: 0 0 16px;"><i class="fas fa-sticky-note" style="color: var(--color-success, #2ecc71); margin-right: 8px;"></i>Muistiinpano</h3>' +
+                '<textarea id="noteTextarea" style="width: 100%; height: 120px; background: var(--bg-raised, #1a252f); color: var(--text-primary, #ecf0f1); border: 1px solid var(--border-default, #4a6274); border-radius: 8px; padding: 12px; font-size: 0.95em; resize: vertical; box-sizing: border-box;">' + (st.currentNoteText || '') + '</textarea>' +
+                '<div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px;">' +
+                    '<button id="noteCancelBtn" style="background: var(--bg-overlay, #34495e); color: var(--text-primary, #ecf0f1); border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">Peruuta</button>' +
+                    '<button id="noteSaveBtn" style="background: var(--color-success, #2ecc71); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600;">Tallenna</button>' +
+                '</div>' +
+            '</div>';
+        document.body.appendChild(modal);
+
+        modal.addEventListener('click', function(e) { if (e.target === modal) modal.remove(); });
+        document.getElementById('noteCancelBtn').addEventListener('click', function() { modal.remove(); });
+        document.getElementById('noteSaveBtn').addEventListener('click', function() {
+            var text = document.getElementById('noteTextarea').value.trim();
+            fetch('/quiz/api/note/save/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCSRF() },
+                body: JSON.stringify({ question_id: st.currentQuestionId, note_text: text })
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(result) {
+                st.currentNoteText = result.note_text || '';
+                modal.remove();
+            });
+        });
+    };
+    {% endif %}
+
 })();
 </script>
 {% endblock %}

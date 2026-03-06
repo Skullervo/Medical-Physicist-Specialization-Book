@@ -41,14 +41,30 @@ class UserQuizAttempt(models.Model):
 
 
 class SpacedRepetitionCard(models.Model):
-    """SM-2 spaced repetition -tila per käyttäjä per kysymys"""
+    """FSRS spaced repetition -tila per käyttäjä per kysymys"""
+    FSRS_STATES = [
+        (0, 'New'),
+        (1, 'Learning'),
+        (2, 'Review'),
+        (3, 'Relearning'),
+    ]
+
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sr_cards')
     question = models.ForeignKey(
         'quiz.Question', on_delete=models.CASCADE, related_name='sr_cards'
     )
 
-    # SM-2 parameters
-    ease_factor = models.FloatField(default=2.5)
+    # FSRS parameters
+    stability = models.FloatField(default=0, help_text="FSRS: muistin vahvuus (päiviä)")
+    difficulty = models.FloatField(default=0, help_text="FSRS: vaikeusaste 1-10")
+    fsrs_state = models.IntegerField(
+        default=0, choices=FSRS_STATES, help_text="FSRS: kortin tila"
+    )
+    lapses = models.IntegerField(default=0, help_text="FSRS: unohduskerrat")
+    elapsed_days = models.IntegerField(default=0, help_text="FSRS: päiviä edellisestä kertauksesta")
+
+    # Kept from SM-2 (still used for display + mastery)
+    ease_factor = models.FloatField(default=2.5)  # Deprecated, kept for migration
     interval_days = models.IntegerField(default=0)
     repetitions = models.IntegerField(default=0)
 
@@ -62,38 +78,93 @@ class SpacedRepetitionCard(models.Model):
             models.Index(fields=['user', 'next_review']),
         ]
 
-    def update_after_review(self, quality: int) -> None:
-        """
-        SM-2 algoritmi. quality = 0-5
-        0: täysin väärin
-        1: väärin, mutta tunnisti vastauksen nähtyään
-        2: väärin, mutta muisti jotain
-        3: oikein, mutta vaikeaa
-        4: oikein, pieni epäröinti
-        5: oikein, täysin varma
-        """
-        if quality < 3:
-            # Wrong -> reset
-            self.repetitions = 0
-            self.interval_days = 1
-        else:
-            if self.repetitions == 0:
-                self.interval_days = 1
-            elif self.repetitions == 1:
-                self.interval_days = 3
-            else:
-                self.interval_days = round(self.interval_days * self.ease_factor)
-            self.repetitions += 1
+    def _build_fsrs_card(self):
+        """Reconstruct a py-fsrs Card object from DB fields."""
+        from fsrs import Card, State
+        from datetime import datetime, timezone as dt_tz
 
-        # Update ease factor
-        self.ease_factor = max(
-            1.3,
-            self.ease_factor + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02))
+        if self.fsrs_state == 0:
+            # Never reviewed — return a fresh card
+            return Card()
+
+        card = Card()
+        card.stability = self.stability
+        card.difficulty = self.difficulty
+        card.state = State(self.fsrs_state)
+        now = datetime.now(dt_tz.utc)
+        card.due = self.next_review.astimezone(dt_tz.utc) if self.next_review else now
+        card.last_review = (
+            self.last_reviewed.astimezone(dt_tz.utc) if self.last_reviewed else None
+        )
+        return card
+
+    def _get_scheduler(self):
+        """Return configured FSRS scheduler."""
+        from fsrs import Scheduler
+        from datetime import timedelta
+
+        return Scheduler(
+            desired_retention=0.9,
+            learning_steps=(timedelta(days=1),),
+            relearning_steps=(timedelta(days=1),),
+            maximum_interval=365,
         )
 
-        self.last_reviewed = timezone.now()
-        self.next_review = timezone.now() + timezone.timedelta(days=self.interval_days)
+    def update_after_review(self, rating: int) -> None:
+        """
+        FSRS algorithm. rating = 1-4:
+        1: Again (unohdin)
+        2: Hard (vaikea muistaa)
+        3: Good (muistin epäröiden)
+        4: Easy (helppo muistaa)
+        """
+        from fsrs import Rating as FSRSRating
+        from datetime import datetime, timezone as dt_tz
+
+        scheduler = self._get_scheduler()
+        card = self._build_fsrs_card()
+
+        fsrs_rating = FSRSRating(rating)
+        card, _review_log = scheduler.review_card(card, fsrs_rating)
+
+        now = datetime.now(dt_tz.utc)
+
+        # Write back to model
+        self.stability = card.stability or 0
+        self.difficulty = card.difficulty or 0
+        self.fsrs_state = card.state.value if hasattr(card.state, 'value') else card.state
+        self.repetitions += 1
+        if rating == 1:  # Again
+            self.lapses += 1
+        delta = (card.due - now).total_seconds() / 86400
+        self.interval_days = max(0, round(delta))
+        self.next_review = card.due
+        self.last_reviewed = now
         self.save()
+
+    def get_predicted_intervals(self) -> dict:
+        """Return predicted intervals (days) for all 4 ratings without updating."""
+        from fsrs import Card, Rating as FSRSRating
+
+        scheduler = self._get_scheduler()
+        card = self._build_fsrs_card()
+
+        from datetime import datetime, timezone as dt_tz
+
+        now = datetime.now(dt_tz.utc)
+        intervals = {}
+        for r in [FSRSRating.Again, FSRSRating.Hard, FSRSRating.Good, FSRSRating.Easy]:
+            card_copy = Card.from_json(card.to_json())
+            updated, _ = scheduler.review_card(card_copy, r)
+            delta = (updated.due - now).total_seconds() / 86400
+            intervals[r.value] = max(0, round(delta))
+        return intervals
+
+    def get_retrievability(self) -> float:
+        """Return current recall probability (0-100%)."""
+        scheduler = self._get_scheduler()
+        card = self._build_fsrs_card()
+        return round(scheduler.get_card_retrievability(card) * 100)
 
 
 class EPAProgress(models.Model):
@@ -141,17 +212,19 @@ class EPAProgress(models.Model):
             learning_objectives__level='B'
         ).distinct()
 
-        # Calculate based on SR cards
+        # Calculate based on SR cards — FSRS: stable Review cards
         a_mastered = SpacedRepetitionCard.objects.filter(
             user=self.user,
             question__in=a_questions,
-            repetitions__gte=3
+            stability__gte=14,
+            fsrs_state=2,  # Review state
         ).count()
 
         b_mastered = SpacedRepetitionCard.objects.filter(
             user=self.user,
             question__in=b_questions,
-            repetitions__gte=3
+            stability__gte=14,
+            fsrs_state=2,  # Review state
         ).count()
 
         a_total = a_questions.count()
@@ -209,3 +282,65 @@ class UserAchievement(models.Model):
 
     class Meta:
         unique_together = ['user', 'achievement']
+
+
+class FlaggedQuestion(models.Model):
+    """User-flagged question for later review."""
+    FLAG_TYPES = [
+        ('wrong', 'Väärin vastattu'),
+        ('guess', 'Arvaus'),
+        ('important', 'Tärkeä'),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='flagged_questions')
+    question = models.ForeignKey(
+        'quiz.Question', on_delete=models.CASCADE, related_name='flags'
+    )
+    flag_type = models.CharField(max_length=20, choices=FLAG_TYPES)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ['user', 'question']
+        indexes = [
+            models.Index(fields=['user', 'flag_type']),
+        ]
+
+    def __str__(self):
+        return f"{self.user.username} -> Q{self.question_id} ({self.flag_type})"
+
+
+class QuestionNote(models.Model):
+    """Personal note attached to a question."""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='question_notes')
+    question = models.ForeignKey(
+        'quiz.Question', on_delete=models.CASCADE, related_name='notes'
+    )
+    note_text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ['user', 'question']
+
+    def __str__(self):
+        return f"{self.user.username} note on Q{self.question_id}"
+
+
+class QuestionComment(models.Model):
+    """Public comment on a question, visible to all users."""
+    question = models.ForeignKey(
+        'quiz.Question', on_delete=models.CASCADE, related_name='comments'
+    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='question_comments')
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_resolved = models.BooleanField(default=False, help_text="Superuser marks as resolved")
+
+    class Meta:
+        ordering = ['created_at']
+        indexes = [
+            models.Index(fields=['question', 'is_resolved']),
+        ]
+
+    def __str__(self):
+        return f"{self.user.username} on Q{self.question_id}: {self.text[:50]}"

@@ -2,9 +2,10 @@ import json
 from datetime import timedelta
 
 from django.contrib.auth.decorators import login_required
-from django.db.models import Sum, Count, Q
+from django.db.models import Sum, Count, Q, F, IntegerField
+from django.db.models.functions import Cast
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 
 from progress.models import (
@@ -165,6 +166,52 @@ def progress_home(request):
 
     exam_readiness = round(total_readiness_score / total_readiness_weight) if total_readiness_weight > 0 else 0
 
+    # Learning paths summary for dashboard widget
+    paths_summary = []
+    for spec in specialties:
+        epas_list = list(spec.epas.order_by('order'))
+        total = len(epas_list)
+        mastered = sum(
+            1 for epa in epas_list
+            if (EPAProgress.objects.filter(user=user, epa=epa)
+                .values_list('overall_mastery', flat=True).first() or 0) >= 70
+        )
+        paths_summary.append({
+            'name': spec.name,
+            'slug': spec.slug,
+            'total': total,
+            'mastered': mastered,
+            'pct': round(mastered / total * 100) if total > 0 else 0,
+        })
+
+    # 30-day trend data (for CSS bar chart in template)
+    trend_data_list = []
+    for i in range(29, -1, -1):
+        d = today - timedelta(days=i)
+        stat = DailyStats.objects.filter(user=user, date=d).first()
+        answered = stat.questions_answered if stat else 0
+        correct = stat.questions_correct if stat else 0
+        day_accuracy = round(correct / answered * 100) if answered > 0 else None
+        trend_data_list.append({'date': d.strftime('%d.%m'), 'answered': answered, 'accuracy': day_accuracy})
+
+    # 90-day heatmap data
+    heatmap_data = []
+    for i in range(89, -1, -1):
+        d = today - timedelta(days=i)
+        stat = DailyStats.objects.filter(user=user, date=d).first()
+        count = stat.questions_answered if stat else 0
+        intensity = 0 if count == 0 else (1 if count < 5 else (2 if count < 15 else (3 if count < 30 else 4)))
+        heatmap_data.append({'date': d.strftime('%d.%m'), 'count': count, 'intensity': intensity})
+
+    # Hardest questions globally (top 10 lowest accuracy, min 5 answers)
+    hard_questions = list(
+        Question.objects
+        .filter(times_answered__gte=5, is_active=True)
+        .exclude(question_type='flashcard')
+        .annotate(accuracy=Cast(F('times_correct') * 100 / F('times_answered'), output_field=IntegerField()))
+        .order_by('accuracy')[:10]
+    )
+
     context = {
         'total_answered': total_answered,
         'total_correct': total_correct,
@@ -180,8 +227,66 @@ def progress_home(request):
         'weak_epas': weak_epas,
         'specialty_readiness': specialty_readiness,
         'exam_readiness': exam_readiness,
+        'trend_data_list': trend_data_list,
+        'heatmap_data': heatmap_data,
+        'hard_questions': hard_questions,
+        'paths_summary': paths_summary,
     }
     return render(request, 'progress/progress_home.html', context)
+
+
+@login_required
+def learning_paths(request):
+    """Overview of all learning paths (one per specialty)."""
+    specialties = Specialty.objects.prefetch_related('epas').order_by('order')
+    paths = []
+    for spec in specialties:
+        epas = spec.epas.order_by('order')
+        total_epas = epas.count()
+        mastered_count = 0
+        next_epa = None
+        for epa in epas:
+            progress = EPAProgress.objects.filter(user=request.user, epa=epa).first()
+            mastery = progress.overall_mastery if progress else 0
+            if mastery >= 70:
+                mastered_count += 1
+            elif next_epa is None:
+                next_epa = epa
+        paths.append({
+            'specialty': spec,
+            'total_epas': total_epas,
+            'mastered_count': mastered_count,
+            'progress_pct': round(mastered_count / total_epas * 100) if total_epas > 0 else 0,
+            'next_epa': next_epa,
+        })
+    return render(request, 'progress/learning_paths.html', {'paths': paths})
+
+
+@login_required
+def learning_path_detail(request, specialty_slug):
+    """Detailed EPA list for one specialty, ordered for progression."""
+    specialty = get_object_or_404(Specialty, slug=specialty_slug)
+    epas = EPA.objects.filter(specialty=specialty).order_by('order')
+    epa_data = []
+    for epa in epas:
+        progress = EPAProgress.objects.filter(user=request.user, epa=epa).first()
+        mastery = round(progress.overall_mastery) if progress else 0
+        answered = progress.a_level_questions_answered if progress else 0
+        correct = progress.a_level_questions_correct if progress else 0
+        q_count = Question.objects.filter(epa=epa, is_active=True).exclude(question_type='flashcard').count()
+        status = 'mastered' if mastery >= 70 else ('in_progress' if answered > 0 else 'not_started')
+        epa_data.append({
+            'epa': epa,
+            'mastery': mastery,
+            'answered': answered,
+            'correct': correct,
+            'q_count': q_count,
+            'status': status,
+        })
+    return render(request, 'progress/learning_path_detail.html', {
+        'specialty': specialty,
+        'epa_data': epa_data,
+    })
 
 
 @login_required

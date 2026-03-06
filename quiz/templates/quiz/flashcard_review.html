@@ -1,0 +1,487 @@
+{% extends "sisalto/base_summereditor.html" %}
+
+{% block title %}Muistikortit - Sairaalafyysikon erikoistumiskirja{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface); border-radius: 12px; padding: 16px 24px; margin-bottom: 24px; border: 1px solid var(--border-default);">
+    <div style="display: flex; align-items: center; gap: 16px;">
+        <a href="/quiz/" style="color: var(--color-primary); text-decoration: none; font-size: 0.95em;">
+            <i class="fas fa-arrow-left" style="margin-right: 6px;"></i>Kysymyspankki
+        </a>
+        <span style="background: rgba(251,146,60,0.15); color: var(--color-orange); padding: 4px 12px; border-radius: 12px; font-size: 0.8em;">
+            <i class="fas fa-layer-group" style="margin-right: 4px;"></i>Muistikortit
+        </span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 16px;">
+        <span style="color: var(--text-tertiary); font-size: 0.9em;">
+            Jaljella: <strong id="remainingDisplay" style="color: var(--color-orange);">{{ due_count }}</strong>
+        </span>
+        <a href="{% url 'quiz:flashcard_anki_export' %}"
+           style="display: inline-flex; align-items: center; gap: 6px; color: var(--text-tertiary); text-decoration: none; font-size: 0.82em; border: 1px solid var(--border-default); padding: 5px 12px; border-radius: 6px; transition: border-color 0.15s;"
+           title="Lataa kaikki muistikortit Anki-ohjelmaan">
+            <i class="fas fa-download"></i> Vie Ankiin
+        </a>
+    </div>
+</div>
+
+<div id="flashcardApp">
+    <!-- Loading state -->
+    <div id="loadingState" style="text-align: center; padding: 40px;">
+        <i class="fas fa-spinner fa-spin" style="font-size: 2em; color: var(--color-primary);"></i>
+        <p style="color: var(--text-tertiary); margin-top: 12px;">Ladataan muistikorttia...</p>
+    </div>
+
+    <!-- Card container -->
+    <div id="cardContent" style="display: none;">
+        <!-- EPA badge + SR info -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px;">
+            <span id="epaBadge" style="background: rgba(96,165,250,0.12); color: var(--color-primary); padding: 4px 12px; border-radius: 8px; font-size: 0.85em;">
+                <i class="fas fa-clipboard-list" style="margin-right: 4px;"></i><span></span>
+            </span>
+            <span id="srInfo" style="color: var(--text-disabled); font-size: 0.8em;"></span>
+        </div>
+
+        <!-- Flag & Note toolbar placeholder -->
+        <div id="flagNoteArea"></div>
+
+        <!-- Flashcard -->
+        <div style="perspective: 1200px; margin-bottom: 24px;">
+            <div id="flashcardInner" style="position: relative; min-height: 250px; transition: transform 0.5s; transform-style: preserve-3d; cursor: pointer;">
+                <!-- Front -->
+                <div id="flashcardFront" style="position: absolute; width: 100%; backface-visibility: hidden; background: var(--bg-surface); border: 2px solid var(--border-default); border-radius: 12px; padding: 40px 32px; box-sizing: border-box;">
+                    <div style="color: var(--text-disabled); font-size: 0.8em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;">
+                        <i class="fas fa-lightbulb" style="margin-right: 6px;"></i>Termi / Kysymys
+                    </div>
+                    <div id="frontText" style="color: var(--text-primary); font-size: 1.3em; font-weight: 600; line-height: 1.5; text-align: center; min-height: 60px; display: flex; align-items: center; justify-content: center;"></div>
+                    <div style="text-align: center; margin-top: 24px;">
+                        <button id="revealBtn" style="background: var(--color-orange); color: white; border: none; padding: 12px 32px; border-radius: 8px; cursor: pointer; font-size: 1em; font-weight: 600; transition: all 0.15s;">
+                            <i class="fas fa-eye" style="margin-right: 8px;"></i>Nayta vastaus
+                        </button>
+                        <div style="color: var(--text-disabled); font-size: 0.75em; margin-top: 8px;">tai paina valilyontia</div>
+                    </div>
+                </div>
+
+                <!-- Back -->
+                <div id="flashcardBack" style="position: absolute; width: 100%; backface-visibility: hidden; transform: rotateY(180deg); background: var(--bg-surface); border: 2px solid var(--color-orange); border-radius: 12px; padding: 40px 32px; box-sizing: border-box;">
+                    <div style="color: var(--text-disabled); font-size: 0.8em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;">
+                        <i class="fas fa-book-open" style="margin-right: 6px;"></i>Selitys / Vastaus
+                    </div>
+                    <div id="backText" style="color: var(--text-secondary); font-size: 1.1em; line-height: 1.7; text-align: center; min-height: 60px; display: flex; align-items: center; justify-content: center;"></div>
+
+                    <!-- FSRS rating buttons -->
+                    <div id="fsrsRatingSection" style="margin-top: 28px;">
+                        <div style="color: var(--text-tertiary); font-size: 0.85em; text-align: center; margin-bottom: 10px;">
+                            <i class="fas fa-brain" style="margin-right: 4px;"></i>Kuinka hyvin muistit?
+                        </div>
+                        <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+                            <button class="fsrs-rate-btn" data-rating="1"
+                                    style="flex: 1; min-width: 90px; max-width: 140px; background: rgba(248,113,113,0.12); color: var(--color-error); border: 2px solid rgba(248,113,113,0.3); padding: 12px 8px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.15s; font-weight: 600;">
+                                <div style="font-size: 0.95em;">Taas</div>
+                                <div class="fsrs-interval" style="font-size: 0.75em; opacity: 0.8; margin-top: 2px;"></div>
+                            </button>
+                            <button class="fsrs-rate-btn" data-rating="2"
+                                    style="flex: 1; min-width: 90px; max-width: 140px; background: rgba(251,146,60,0.12); color: var(--color-orange); border: 2px solid rgba(251,146,60,0.3); padding: 12px 8px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.15s; font-weight: 600;">
+                                <div style="font-size: 0.95em;">Vaikea</div>
+                                <div class="fsrs-interval" style="font-size: 0.75em; opacity: 0.8; margin-top: 2px;"></div>
+                            </button>
+                            <button class="fsrs-rate-btn" data-rating="3"
+                                    style="flex: 1; min-width: 90px; max-width: 140px; background: rgba(96,165,250,0.12); color: var(--color-primary); border: 2px solid rgba(96,165,250,0.3); padding: 12px 8px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.15s; font-weight: 600;">
+                                <div style="font-size: 0.95em;">Hyva</div>
+                                <div class="fsrs-interval" style="font-size: 0.75em; opacity: 0.8; margin-top: 2px;"></div>
+                            </button>
+                            <button class="fsrs-rate-btn" data-rating="4"
+                                    style="flex: 1; min-width: 90px; max-width: 140px; background: rgba(52,211,153,0.12); color: var(--color-success); border: 2px solid rgba(52,211,153,0.3); padding: 12px 8px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.15s; font-weight: 600;">
+                                <div style="font-size: 0.95em;">Helppo</div>
+                                <div class="fsrs-interval" style="font-size: 0.75em; opacity: 0.8; margin-top: 2px;"></div>
+                            </button>
+                        </div>
+                        <div style="color: var(--text-disabled); font-size: 0.75em; text-align: center; margin-top: 8px;">
+                            Pikanappaimet: 1-4 tai Enter = Hyva
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- All done state -->
+    <div id="allDoneState" style="display: none; text-align: center; padding: 60px 20px;">
+        <i class="fas fa-check-circle" style="font-size: 3em; color: var(--color-success); margin-bottom: 16px; display: block;"></i>
+        <h3 style="color: var(--text-primary); margin-bottom: 8px;">Kaikki muistikortit kerrattu!</h3>
+        <p style="color: var(--text-secondary); margin-bottom: 24px;">Palaa myohemmin kertaamaan uudelleen.</p>
+        <div style="display: flex; gap: 12px; justify-content: center;">
+            <a href="/quiz/" style="background: var(--color-primary); color: white; padding: 10px 24px; border-radius: 8px; text-decoration: none;">
+                <i class="fas fa-book" style="margin-right: 6px;"></i>Kysymyspankki
+            </a>
+        </div>
+    </div>
+
+    <!-- No cards state -->
+    <div id="noCardsState" style="display: none; text-align: center; padding: 60px 20px;">
+        <i class="fas fa-layer-group" style="font-size: 3em; color: var(--color-orange); margin-bottom: 16px; display: block;"></i>
+        <h3 style="color: var(--text-primary); margin-bottom: 8px;">Ei muistikortteja</h3>
+        <p style="color: var(--text-secondary); margin-bottom: 24px;">Muistikortteja ei ole viela generoitu. Pyyd&auml; yll&auml;pit&auml;j&auml;&auml; ajamaan generointi.</p>
+        <a href="/quiz/" style="display: inline-block; background: var(--color-primary); color: white; padding: 10px 24px; border-radius: 8px; text-decoration: none;">
+            <i class="fas fa-book" style="margin-right: 6px;"></i>Kysymyspankki
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function() {
+    var CSRF_TOKEN = getCookie('csrftoken');
+    var currentCard = null;
+    var isFlipped = false;
+    var initialDueCount = {{ due_count }};
+    var totalCount = {{ total_count }};
+
+    // ── Flag & Note ─────────────────────────────────
+
+    var FLAG_OPTIONS = {
+        wrong:     { icon: 'fa-times-circle', color: 'var(--color-error)', label: 'Vaikeaa' },
+        guess:     { icon: 'fa-question-circle', color: 'var(--color-warning)', label: 'Arvaus' },
+        important: { icon: 'fa-star', color: 'var(--color-primary)', label: 'Tarkea' },
+    };
+
+    function renderFlagNoteToolbar(data) {
+        var area = document.getElementById('flagNoteArea');
+        area.innerHTML = '';
+
+        var currentFlag = data.flag_type || null;
+        var currentNoteText = data.note_text || '';
+
+        var toolbar = document.createElement('div');
+        toolbar.style.cssText = 'display: flex; align-items: center; gap: 8px; margin-bottom: 12px;';
+
+        // Flag button
+        var flagWrap = document.createElement('div');
+        flagWrap.style.cssText = 'position: relative;';
+
+        var flagIcon = currentFlag ? FLAG_OPTIONS[currentFlag].icon : 'fa-flag';
+        var flagColor = currentFlag ? FLAG_OPTIONS[currentFlag].color : 'var(--text-tertiary)';
+        var flagLabel = currentFlag ? FLAG_OPTIONS[currentFlag].label : 'Merkitse';
+
+        var flagBtn = document.createElement('button');
+        flagBtn.style.cssText = 'background: none; border: 1px solid ' + flagColor + '; color: ' + flagColor + '; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85em;';
+        flagBtn.innerHTML = '<i class="fas ' + flagIcon + '"></i> ' + flagLabel;
+        flagBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            var menu = document.getElementById('fcFlagMenu');
+            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+        });
+
+        var menu = document.createElement('div');
+        menu.id = 'fcFlagMenu';
+        menu.style.cssText = 'display: none; position: absolute; top: 100%; left: 0; background: var(--bg-raised); border: 1px solid var(--border-default); border-radius: 8px; padding: 4px 0; z-index: 100; min-width: 160px; margin-top: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);';
+
+        Object.keys(FLAG_OPTIONS).forEach(function(type) {
+            var opt = FLAG_OPTIONS[type];
+            var btn = document.createElement('button');
+            btn.style.cssText = 'display: block; width: 100%; text-align: left; background: ' + (currentFlag === type ? 'rgba(96,165,250,0.15)' : 'none') + '; border: none; color: ' + opt.color + '; padding: 8px 14px; cursor: pointer; font-size: 0.9em;';
+            btn.innerHTML = '<i class="fas ' + opt.icon + '" style="width: 18px;"></i> ' + opt.label;
+            btn.addEventListener('click', function() {
+                toggleFlag(type);
+                menu.style.display = 'none';
+            });
+            menu.appendChild(btn);
+        });
+
+        if (currentFlag) {
+            var divider = document.createElement('div');
+            divider.style.cssText = 'border-top: 1px solid var(--border-default); margin: 2px 0;';
+            menu.appendChild(divider);
+            var removeBtn = document.createElement('button');
+            removeBtn.style.cssText = 'display: block; width: 100%; text-align: left; background: none; border: none; color: var(--text-tertiary); padding: 8px 14px; cursor: pointer; font-size: 0.9em;';
+            removeBtn.innerHTML = '<i class="fas fa-trash" style="width: 18px;"></i> Poista merkinta';
+            removeBtn.addEventListener('click', function() {
+                toggleFlag(currentFlag);
+                menu.style.display = 'none';
+            });
+            menu.appendChild(removeBtn);
+        }
+
+        flagWrap.appendChild(flagBtn);
+        flagWrap.appendChild(menu);
+
+        // Note button
+        var hasNote = currentNoteText.length > 0;
+        var noteBtn = document.createElement('button');
+        noteBtn.style.cssText = 'background: none; border: 1px solid ' + (hasNote ? 'var(--color-success)' : 'var(--text-tertiary)') + '; color: ' + (hasNote ? 'var(--color-success)' : 'var(--text-tertiary)') + '; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85em;';
+        noteBtn.innerHTML = '<i class="fas fa-sticky-note"></i> ' + (hasNote ? 'Muistiinpano' : 'Lisaa muistiinpano');
+        noteBtn.addEventListener('click', function() {
+            showNoteModal(currentCard.question_id, currentNoteText);
+        });
+
+        toolbar.appendChild(flagWrap);
+        toolbar.appendChild(noteBtn);
+        area.appendChild(toolbar);
+
+        document.addEventListener('click', function closeMenu(e) {
+            if (!flagWrap.contains(e.target)) {
+                menu.style.display = 'none';
+                document.removeEventListener('click', closeMenu);
+            }
+        });
+    }
+
+    function toggleFlag(flagType) {
+        if (!currentCard) return;
+        fetch('/quiz/api/flag/toggle/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': CSRF_TOKEN },
+            body: JSON.stringify({ question_id: currentCard.question_id, flag_type: flagType }),
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(result) {
+            currentCard.flag_type = result.flag_type;
+            renderFlagNoteToolbar(currentCard);
+        });
+    }
+
+    function showNoteModal(questionId, existingText) {
+        var oldModal = document.getElementById('noteModal');
+        if (oldModal) oldModal.remove();
+
+        var modal = document.createElement('div');
+        modal.id = 'noteModal';
+        modal.style.cssText = 'position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 1000;';
+        modal.innerHTML =
+            '<div style="background: var(--bg-surface); border-radius: 12px; padding: 24px; width: 90%; max-width: 500px; border: 1px solid var(--border-default);">' +
+                '<h3 style="color: var(--text-primary); margin: 0 0 16px;"><i class="fas fa-sticky-note" style="color: var(--color-success); margin-right: 8px;"></i>Muistiinpano</h3>' +
+                '<textarea id="noteTextarea" style="width: 100%; height: 120px; background: var(--bg-raised); color: var(--text-primary); border: 1px solid var(--border-default); border-radius: 8px; padding: 12px; font-size: 0.95em; resize: vertical; box-sizing: border-box;">' + (existingText || '') + '</textarea>' +
+                '<div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px;">' +
+                    '<button id="noteCancelBtn" style="background: var(--bg-overlay); color: var(--text-primary); border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">Peruuta</button>' +
+                    '<button id="noteSaveBtn" style="background: var(--color-success); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600;">Tallenna</button>' +
+                '</div>' +
+            '</div>';
+        document.body.appendChild(modal);
+
+        modal.addEventListener('click', function(e) { if (e.target === modal) modal.remove(); });
+        document.getElementById('noteCancelBtn').addEventListener('click', function() { modal.remove(); });
+        document.getElementById('noteSaveBtn').addEventListener('click', function() {
+            var text = document.getElementById('noteTextarea').value.trim();
+            fetch('/quiz/api/note/save/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': CSRF_TOKEN },
+                body: JSON.stringify({ question_id: questionId, note_text: text }),
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(result) {
+                currentCard.note_text = result.note_text || '';
+                renderFlagNoteToolbar(currentCard);
+                modal.remove();
+            });
+        });
+    }
+
+    // ── State management ─────────────────────────────
+
+    function showLoading() {
+        document.getElementById('loadingState').style.display = 'block';
+        document.getElementById('cardContent').style.display = 'none';
+        document.getElementById('allDoneState').style.display = 'none';
+        document.getElementById('noCardsState').style.display = 'none';
+    }
+
+    function showCard() {
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('cardContent').style.display = 'block';
+        document.getElementById('allDoneState').style.display = 'none';
+        document.getElementById('noCardsState').style.display = 'none';
+    }
+
+    function showAllDone() {
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('cardContent').style.display = 'none';
+        document.getElementById('allDoneState').style.display = 'block';
+        document.getElementById('noCardsState').style.display = 'none';
+    }
+
+    function showNoCards() {
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('cardContent').style.display = 'none';
+        document.getElementById('allDoneState').style.display = 'none';
+        document.getElementById('noCardsState').style.display = 'block';
+    }
+
+    // ── Card sizing ──────────────────────────────────
+
+    function adjustCardHeight() {
+        var inner = document.getElementById('flashcardInner');
+        var front = document.getElementById('flashcardFront');
+        var back = document.getElementById('flashcardBack');
+        var h = Math.max(front.scrollHeight, back.scrollHeight, 250);
+        inner.style.height = h + 'px';
+    }
+
+    // ── Load flashcard ───────────────────────────────
+
+    function loadFlashcard() {
+        showLoading();
+        isFlipped = false;
+        currentCard = null;
+
+        fetch('/quiz/api/flashcard/')
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                if (data.done) {
+                    if (totalCount === 0) {
+                        showNoCards();
+                    } else {
+                        showAllDone();
+                    }
+                    return;
+                }
+
+                currentCard = data;
+                document.getElementById('remainingDisplay').textContent = data.remaining;
+
+                // EPA badge
+                document.querySelector('#epaBadge span').textContent = data.epa_title;
+
+                // SR info
+                var stab = data.stability || 0;
+                var retr = data.retrievability || 0;
+                var srText = '';
+                if (stab > 0) {
+                    srText = 'Stabiilius: ' + stab + ' pv | Muistaminen: ' + retr + '%';
+                } else {
+                    srText = 'Uusi kortti';
+                }
+                document.getElementById('srInfo').textContent = srText;
+
+                // Front text
+                document.getElementById('frontText').textContent = data.front;
+                document.getElementById('backText').textContent = '';
+
+                // Reset flip
+                document.getElementById('flashcardInner').style.transform = '';
+
+                showCard();
+                adjustCardHeight();
+            })
+            .catch(function(err) {
+                console.error('Error loading flashcard:', err);
+                showNoCards();
+            });
+    }
+
+    // ── Reveal (flip) ────────────────────────────────
+
+    function revealFlashcard() {
+        if (!currentCard || isFlipped) return;
+        isFlipped = true;
+
+        // Fetch back + predicted intervals
+        fetch('/quiz/api/flashcard/reveal/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': CSRF_TOKEN },
+            body: JSON.stringify({ question_id: currentCard.question_id }),
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+            document.getElementById('backText').textContent = data.back;
+
+            // Populate predicted intervals
+            var intervals = data.predicted_intervals || {};
+            document.querySelectorAll('.fsrs-rate-btn').forEach(function(btn) {
+                var rating = parseInt(btn.dataset.rating);
+                var days = intervals[rating] || '?';
+                var intervalEl = btn.querySelector('.fsrs-interval');
+                if (intervalEl) intervalEl.textContent = days + ' pv';
+                btn.disabled = false;
+                btn.style.opacity = '1';
+                btn.style.borderWidth = '2px';
+                btn.style.fontWeight = '600';
+            });
+
+            // Flag/note data from reveal response
+            currentCard.flag_type = data.flag_type || '';
+            currentCard.note_text = data.note_text || '';
+            renderFlagNoteToolbar(currentCard);
+
+            // Do the flip
+            document.getElementById('flashcardInner').style.transform = 'rotateY(180deg)';
+            adjustCardHeight();
+        })
+        .catch(function(err) {
+            console.error('Reveal error:', err);
+        });
+    }
+
+    // ── Rate and next ────────────────────────────────
+
+    function rateAndNext(rating) {
+        if (!currentCard || !isFlipped) return;
+
+        // Disable buttons
+        document.querySelectorAll('.fsrs-rate-btn').forEach(function(btn) {
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+            btn.style.cursor = 'default';
+        });
+
+        fetch('/quiz/api/review/rate/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': CSRF_TOKEN },
+            body: JSON.stringify({ question_id: currentCard.question_id, rating: rating }),
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+            document.getElementById('remainingDisplay').textContent = data.remaining;
+            loadFlashcard();
+        })
+        .catch(function(err) {
+            console.error('Rate error:', err);
+            loadFlashcard();
+        });
+    }
+
+    // ── Event listeners ──────────────────────────────
+
+    document.getElementById('revealBtn').addEventListener('click', revealFlashcard);
+
+    document.querySelectorAll('.fsrs-rate-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            rateAndNext(parseInt(this.dataset.rating));
+        });
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        // Ignore if in a textarea/input
+        if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
+
+        if (e.key === ' ' || e.key === 'Spacebar') {
+            e.preventDefault();
+            if (!isFlipped) {
+                revealFlashcard();
+            }
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            if (isFlipped) {
+                rateAndNext(3); // Default: Good
+            } else {
+                revealFlashcard();
+            }
+        } else if (isFlipped && e.key >= '1' && e.key <= '4') {
+            e.preventDefault();
+            rateAndNext(parseInt(e.key));
+        }
+    });
+
+    // ── Initial load ─────────────────────────────────
+
+    if (initialDueCount > 0) {
+        loadFlashcard();
+    } else if (totalCount === 0) {
+        showNoCards();
+    } else {
+        showAllDone();
+    }
+})();
+</script>
+{% endblock %}
