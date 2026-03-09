@@ -259,4 +259,8 @@ urlpatterns = [
     path('modaliteetit/api/theory-images/upload/', views.theory_image_upload, name='theory_image_upload'),
     path('modaliteetit/api/theory-images/delete/', views.theory_image_delete, name='theory_image_delete'),
     path('modaliteetit/api/theory-images/<str:modality>/', views.theory_images_list, name='theory_images_list'),
+
+    # Theory content inline editing API
+    path('modaliteetit/api/theory-content/save/', views.theory_content_save, name='theory_content_save'),
+    path('modaliteetit/api/theory-content/<str:modality>/<str:tab_id>/', views.theory_content_get, name='theory_content_get'),
 ]

@@ -115,7 +115,7 @@
             <p>Diagnostisella energia-alueella röntgensäteily vuorovaikuttaa kudoksen kanssa kolmella päätavalla:</p>
             <ul>
                 <li><strong>Valosähköinen ilmiö (photoelectric effect)</strong>: Fotoni absorboituu kokonaan atomiin ja irrottaa sidotun elektronin. Todennäköisyys on verrannollinen \( Z^3/E^3 \), missä \( Z \) on järjestysluku ja \( E \) fotonin energia. Tämä on hallitseva vuorovaikutus matalilla energioilla ja suurilla järjestysluvuilla (esim. luu).</li>
-                <li><strong>Compton-sironta</strong>: Fotoni siroaa löyhästi sidotusta elektronista, luovuttaen osan energiastaan. Todennäköisyys riippuu elektronitiheydelstä mutta ei juurikaan fotonin energiasta diagnostisella alueella. Compton-sironta on hallitseva vuorovaikutus pehmytkudoksessa yli 30 keV:n energioilla.</li>
+                <li><strong>Compton-sironta</strong>: Fotoni siroaa löyhästi sidotusta elektronista, luovuttaen osan energiastaan. Todennäköisyys riippuu elektronitiheydestä mutta ei juurikaan fotonin energiasta diagnostisella alueella. Compton-sironta on hallitseva vuorovaikutus pehmytkudoksessa yli 30 keV:n energioilla.</li>
                 <li><strong>Koherentti sironta (Rayleigh)</strong>: Fotoni siroaa atomista suuntaa muuttaen mutta energiaa menettämättä. Osuus on pieni diagnostisella alueella (alle 5 %).</li>
             </ul>
 
@@ -261,7 +261,7 @@
             <ul>
                 <li><strong>Kuolleiden pikselien korjaus</strong>: Viallisten detektorielementtien signaalin interpolointi naapuripikselistä.</li>
                 <li><strong>Gain-korjaus (flat-field correction)</strong>: Detektorielementtien herkkyyserojen tasaaminen referenssikuvauksen perusteella.</li>
-                <li><strong>Offset-korjaus</strong>: Tummavirtasiignaalin (dark current) poisto.</li>
+                <li><strong>Offset-korjaus</strong>: Tummavirtasignaalin (dark current) poisto.</li>
                 <li><strong>Hajasäteilyn estimaatio ja korjaus</strong>: Ohjelmistopohjainen hajasäteilyn poisto ilman hilaa (software scatter correction) tai hilan artefaktien korjaus.</li>
             </ul>
 
@@ -406,6 +406,50 @@
                 <li><strong>Tomosyntees (digital tomosynthesis)</strong>: Sarja matalakulmaprojektioita, joista rekonstruoidaan ohuita leikkeitä. Vähentää rakenteiden päällekkäisyyttä. Käyttö: keuhkot (tuberkuloosi, keuhkosyövän seulonta), ortopedia (murtumat), mammografia.</li>
                 <li><strong>Dual-energy subtraktio</strong>: Kahdella eri energialla kuvattu projektio, joista voidaan erottaa luu ja pehmytkudos. Sovellus erityisesti thorax-kuvantamisessa (kalsifikaatioiden ja luun poisto).</li>
             </ul>
+
+            
+            <!-- EPA-koulutuskortti: Natiivikuvantaminen -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Natiivikuvantaminen</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tutustua kirjallisuuteen ja laitteistojen säteilyturvallisuusjärjestelyihin</li>
+                        <li>osata kirjallisuuden hyödyntäminen</li>
+                        <li>osata selittää laitteistojen yleisen teknisen rakenteen, toiminnan ja komponentit, detektorien rakenteet ja toimintaperiaatteet</li>
+                        <li>osata varmistaa annossuureiden oikeellisuuden, suorittaa laadunvarmistusmittaukset sekä analysoida ja tulkita tulokset</li>
+                        <li>tuntea natiivikuvien jälkikäsittelymenetelmät</li>
+                        <li>osata tunnistaa kuvausartefaktit ja niiden korjausmenetelmät</li>
+                        <li>hallita kuvausasetusten ja -parametrien vaikutus kuvanlaatuun ja potilasannokseen</li>
+                        <li>osata potilasaltistuksen määrittäminen</li>
+                        <li>osata ohjata henkilökuntaa säteilyturvallisessa työskentelyssä ja kommunikoida potilaan kanssa säteilyaltistukseen liittyvissä asioissa</li>
+                        <li>tuntea tutkimusten sähköisen tallentamisen järjestelmät sekä DICOM-tiedoston rakenne ja siihen tallennettavat tiedot</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>osata annokseen ja kuvanlaatuun liittyvän optimointiongelman itsenäinen ratkaisu</li>
+                        <li>osata hyvän kuvan kriteerit erilaisten kuvausindikaatioiden kohdalla</li>
+                        <li>osata laitteiden hyväksyttävyysvaatimusten mukaiset mittaukset</li>
+                        <li>tutustua yleisimpiin kliinisiin tutkimuksiin</li>
+                        <li>tutustua erikoistutkimuksiin (esim. skolioosi, lapset)</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
 
             <div class="theory-quiz-section" data-tab="natiivi">
                 <div class="theory-quiz-start">
@@ -585,7 +629,7 @@
             <ul>
                 <li><strong>Head-fantomi</strong>: PMMA-sylinteri, halkaisija 16 cm. Käytetään pään, lasten ja raajojen protokollien mittauksiin.</li>
                 <li><strong>Body-fantomi</strong>: PMMA-sylinteri, halkaisija 32 cm. Käytetään vartalon protokollien mittauksiin.</li>
-                <li><strong>Mittauspisteet</strong>: Keskipiste ja 4 perifeeristä (klo 12, 3, 6, 9). \( CTDI_{vol} = \frac{1}{3} \cdot CTDI_{100,center} + \frac{2}{3} \cdot CTDI_{100,periphery} \)</li>
+                <li><strong>Mittauspisteet</strong>: Keskipiste ja 4 perifeeristä (klo 12, 3, 6, 9). \( CTDI_{w} = \frac{1}{3} \cdot CTDI_{100,c} + \frac{2}{3} \cdot CTDI_{100,p} \), \( CTDI_{vol} = CTDI_{w} / pitch \)</li>
             </ul>
 
             <h3>10.2 SSDE (Size-Specific Dose Estimate)</h3>
@@ -677,7 +721,7 @@
             <h3>16.2 Kliiniset sovellukset</h3>
             <ul>
                 <li><strong>Virtuaalinen natiivikuva (VNC)</strong>: Jodin poisto → vastaa natiivikuvausta ilman erillistä natiivisarjaa. Annossäästö.</li>
-                <li><strong>Jodikvantiifiointi</strong>: Jodin pitoisuuden kartoittaminen (mg I/ml) kudoksissa. Tuumorin perfuusion arviointi.</li>
+                <li><strong>Jodikvantifiointi</strong>: Jodin pitoisuuden kartoittaminen (mg I/ml) kudoksissa. Tuumorin perfuusion arviointi.</li>
                 <li><strong>Uraatin tunnistus</strong>: Kihdin diagnostiikka — uraattikiteet erottuvat kalsiumista DECT:llä.</li>
                 <li><strong>Optimoidut keV-kuvat</strong>: Monoenergeettiset kuvat (40–190 keV) parantavat kontrastia tai vähentävät artefakteja tutkimuksen mukaan.</li>
             </ul>
@@ -687,6 +731,57 @@
                 <li><strong>Antropomorfinen fantomi</strong>: Ihmiskehoa simuloiva fantomi (esim. Kyoto Kagaku PBU-60), jolla voidaan arvioida kuvausprotokollien kliinistä kuvanlaatua ja mitata elinkohtaisia annoksia TLD/OSL-dosimetreillä.</li>
                 <li><strong>Hyvän kuvan kriteerit</strong>: Riippuvat tutkimuskohtaisesta kysymyksenasettelusta. Esim. pään TT: harmaan ja valkean aineen erottuminen, basaaligangliot näkyvissä; vatsa-TT: maksan, munuaisten ja verisuonten erottuminen; keuhko-TT: pienten keuhkorakenteiden (interlobulaarinen septat) erottuminen.</li>
             </ul>
+
+            
+            <!-- EPA-koulutuskortti: Tietokonetomografia -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Tietokonetomografia</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tutustua kirjallisuuteen ja laitteistojen säteilyturvallisuusjärjestelyihin</li>
+                        <li>osata kirjallisuuden hyödyntäminen</li>
+                        <li>osata selittää laitteistojen yleisen teknisen rakenteen, toiminnan ja komponentit, detektorien rakenteet ja toimintaperiaatteet</li>
+                        <li>osata varmistaa annossuureiden oikeellisuuden, suorittaa laadunvarmistusmittaukset sekä analysoida ja tulkita tulokset</li>
+                        <li>hallita leikekuvauksen, kontrastin syntymisen ja rekonstruktiomenetelmien matemaattinen perusta</li>
+                        <li>hallita kuvausasetusten ja -parametrien vaikutus kuvanlaatuun ja potilasannokseen</li>
+                        <li>osata annosmodulaatiotekniikat</li>
+                        <li>osata potilasannoksen määrittäminen</li>
+                        <li>osata tunnistaa kuvausartefaktit ja niiden korjausmenetelmät</li>
+                        <li>tuntea yleisimmät kuvausprotokollat ja tietää kuvausparametrien ja kuvan ominaisuuksien keskinäiset riippuvuudet niissä</li>
+                        <li>osata yleisimmät kuvauksen aikaan vaikuttavat menetelmät ja tahdistusmenetelmät</li>
+                        <li>tuntea röntgenvarjoaineiden käyttö tietokonetomografiassa</li>
+                        <li>tuntea digitaalisen kuvan peruskäsitteet: kuvalaatu, segmentointimenetelmät, osittaistilavuusilmiö, kuvakohdennus, jälkikäsittely</li>
+                        <li>osata ohjata henkilökuntaa säteilyturvallisessa työskentelyssä ja kommunikoida potilaan kanssa säteilyaltistukseen liittyvissä asioissa</li>
+                        <li>tuntea tutkimusten sähköisen tallentamisen järjestelmät sekä DICOM-tiedoston rakenne ja siihen tallennettavat tiedot</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tutustua yleisimpiin kliinisiin tutkimuksiin (pään TT, vartalon alueen TT, TT-angiografia, trauma-TT)</li>
+                        <li>osata laitteiden hyväksyttävyysvaatimusten mukaiset mittaukset</li>
+                        <li>osata annokseen ja kuvanlaatuun liittyvän optimointiongelman itsenäinen ratkaisu</li>
+                        <li>tuntea antropomorfinen fantomi, toteuttaa sillä kuvanlaadun tarkastelu ja potilasannoksen määritys</li>
+                        <li>tutustua erikoistutkimuksiin (pään perfuusiotutkimus, sydämen ja aortan tahdistettu tutkimus, lasten tutkimukset)</li>
+                        <li>osata hyvän kuvan kriteerit erilaisten kuvausindikaatioiden kohdalla</li>
+                        <li>osata kaksoisenergiatutkimusten tekniset toteutusvaihtoehdot ja datan prosessointi</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
 
             <div class="theory-quiz-section" data-tab="tt">
                 <div class="theory-quiz-start">
@@ -786,7 +881,7 @@
             <ul>
                 <li><strong>Body coil</strong>: Integroitu gantryyn, käytetään virityskelana (transmit) ja varaanottona suurissa FOV:ssa.</li>
                 <li><strong>Pintakelat (surface coils)</strong>: Paikallinen vastaanotto paremman SNR:n saamiseksi. Esimerkkejä: pääkela, selkäkela, olkapääkela, rannekela.</li>
-                <li><strong>Phased array -kelat</strong>: Useita keloja yhdistävä järjestely mahdollistaa rinnakkais kuvantamisen (SENSE, GRAPPA) ja suuremman alueen kattavuuden.</li>
+                <li><strong>Phased array -kelat</strong>: Useita keloja yhdistävä järjestely mahdollistaa rinnakkaiskuvantamisen (SENSE, GRAPPA) ja suuremman alueen kattavuuden.</li>
             </ul>
 
             <h2>4. Sekvenssit</h2>
@@ -1025,7 +1120,7 @@
 
             <p>MRI-kontrastiaineet muuttavat kudosten relaksaatioaikoja ja siten kuvan kontrastia. Toisin kuin röntgenkontrastiaineet, jotka absorboivat säteilyä suoraan, MRI-kontrastiaineet vaikuttavat epäsuorasti ympäröivien vesiprotonien relaksaatioon.</p>
 
-            <h3>11.1 Gadoliniumpohjaset kontrastiaineet (GBCA)</h3>
+            <h3>11.1 Gadoliniumpohjaiset kontrastiaineet (GBCA)</h3>
             <p>Gadolinium (Gd³⁺) on paramagneettinen maametalli-ioni, jolla on seitsemän paritonta elektronia. Vapaana ionina se on myrkyllistä, joten se sidotaan kelaattiligandin sisään.</p>
             <ul>
                 <li><strong>Vaikutusmekanismi</strong>: Gd³⁺ lyhentää ympäröivien vesiprotonien T1-relaksaatioaikaa merkittävästi (ja T2:ta vähemmässä määrin). Tämä johtuu Gd³⁺:n voimakkaasta paramagneettisesta dipoli-dipolivuorovaikutuksesta vesiprotonien kanssa.</li>
@@ -1086,7 +1181,7 @@
 
             <h3>11.6 Muut kontrastiaineet</h3>
             <ul>
-                <li><strong>Rautaoksidi-nanopartikkelit (SPIO/USPIO)</strong>: Superparamagneettiset partikkelit, jotka lyhentävät T2- ja T2*-aikaa voimakkaasti. Ferumoksiili (Endorem) on historiallis käytetty maksatuumoreiden diagnostiikassa (Kupffer-solut fagosytoivat). Nykyisin markkinoilta pääosin poistuneita, tutkimuskäytössä (lymfosolmudiagnostiikka, tulehduksen kuvantaminen).</li>
+                <li><strong>Rautaoksidi-nanopartikkelit (SPIO/USPIO)</strong>: Superparamagneettiset partikkelit, jotka lyhentävät T2- ja T2*-aikaa voimakkaasti. Ferumoksiili (Endorem) on historiallisesti käytetty maksatuumoreiden diagnostiikassa (Kupffer-solut fagosytoivat). Nykyisin markkinoilta pääosin poistuneita, tutkimuskäytössä (lymfosolmudiagnostiikka, tulehduksen kuvantaminen).</li>
                 <li><strong>Mangaanipohjaiset aineet</strong>: Mangafodipiri (Teslascan) — maksa-spesifinen, hepatosyyttien kuvantaminen. Käytöstä pääosin poistunut.</li>
                 <li><strong>Tulevaisuuden kontrastiaineet</strong>: CEST-aineet (chemical exchange saturation transfer), hyperpolarisoidut aineet (¹³C-pyruvaatti — metabolinen kuvantaminen), raudaaton Gd:n korvaajat</li>
             </ul>
@@ -1214,11 +1309,11 @@
                         <li>MR-yhteensopiva pulssioksimetri (valokuitukaapelilla)</li>
                         <li>MR-yhteensopiva EKG-monitorointi (vektori-EKG, lyhyet johtimet, ei silmukoita)</li>
                         <li>MR-yhteensopiva verenpainemittaus (noninvasiivinen, pitkä mansettiletku)</li>
-                        <li>MR-yhteensopiva kapnografia (pitkä näytelueetku magneetin ulkopuolelle)</li>
+                        <li>MR-yhteensopiva kapnografia (pitkä näyteletku magneetin ulkopuolelle)</li>
                         <li>Lämpötilaseuranta (valokuituanturi)</li>
                     </ul>
                 </li>
-                <li><strong>Infuusiopumput</strong>: MR Conditional -infuusiopumput tai pumiput sijoitetaan magneettihuoneen ulkopuolelle pitkillä letkuilla (huomioitava viive ja volyymi)</li>
+                <li><strong>Infuusiopumput</strong>: MR Conditional -infuusiopumput tai pumput sijoitetaan magneettihuoneen ulkopuolelle pitkillä letkuilla (huomioitava viive ja volyymi)</li>
                 <li><strong>Hengityskoneet</strong>: MR Conditional -ventilaattorit (esim. Aestiva MRI, Fabius MRI) ovat alumiinista valmistettuja. Sijoitetaan 5 gauss -linjan ulkopuolelle tai kauemmas. Pitkät hengitysletkut lisäävät kuollutta tilaa.</li>
             </ul>
 
@@ -1254,13 +1349,13 @@
 
             <h2>15. MRI muualla kuin diagnostiikassa</h2>
 
-            <p>MRI:n käyttö on laajentunut perinteisesta diagnostiikasta ohjaus- ja hoitomenetelmäksi. Sairaalafyysikon on tunnettava nämä sovellukset, sillä ne asettavat laitteille ja turvallisuuskäytännöille uusia vaatimuksia.</p>
+            <p>MRI:n käyttö on laajentunut perinteisestä diagnostiikasta ohjaus- ja hoitomenetelmäksi. Sairaalafyysikon on tunnettava nämä sovellukset, sillä ne asettavat laitteille ja turvallisuuskäytännöille uusia vaatimuksia.</p>
 
             <h3>15.1 MRI sädehoidossa</h3>
             <ul>
                 <li><strong>MR-Linac</strong>: Magneettikuvauslaite ja lineaarikiihdytin yhdistettynä samaan laitteeseen. Mahdollistaa reaaliaikaisen MRI-kuvanohjauksen sädehoidon aikana. Kaupallisia järjestelmiä: Elekta Unity (1,5 T MRI + 7 MV lineaarikiihdytin), ViewRay MRIdian (0,35 T + koboltti-60 tai 6 MV).
                     <ul>
-                        <li><strong>Fysiikan haasteet</strong>: Magneettikenttä vaikuttaa elektronien rataan (Lorenz-voima) → annosjakauman muuttuminen kudoksen rajapinnoissa (electron return effect, ERE). Vaatii Monte Carlo -pohjaista annostenan laskentaa.</li>
+                        <li><strong>Fysiikan haasteet</strong>: Magneettikenttä vaikuttaa elektronien rataan (Lorenz-voima) → annosjakauman muuttuminen kudoksen rajapinnoissa (electron return effect, ERE). Vaatii Monte Carlo -pohjaista annoslaskentaa.</li>
                         <li><strong>Edut</strong>: Erinomainen pehmytkudoskontrasti mahdollistaa tarkan kohdentamisen (esim. haima, maksa) ja adaptatiivisen sädehoidon (päivittäinen suunnitelman muokkaus anatomian mukaan)</li>
                     </ul>
                 </li>
@@ -1280,7 +1375,7 @@
                     <ul>
                         <li>Erillinen MRI leikkaussalissa (1,5 T tai 3 T), potilas siirretään magneetille</li>
                         <li>Leikkaussalin ja MRI-huoneen yhdistelmä liukuovella</li>
-                        <li>Matalkenttäinen avoin MRI (0,15–0,5 T) leikkaussalissa, mahdollistaa samanaikaisen kirurgian ja kuvauksen</li>
+                        <li>Matalakenttäinen avoin MRI (0,15–0,5 T) leikkaussalissa, mahdollistaa samanaikaisen kirurgian ja kuvauksen</li>
                     </ul>
                 </li>
                 <li><strong>Neuronavigaatio</strong>: Preoperatiivinen MRI rekisteröidään potilaan anatomiaan stereotaktisella kehyksellä tai pintarekisteröinnillä. Mahdollistaa kirurgisten instrumenttien reaaliaikaisen paikannuksen suhteessa MRI-kuviin. Haaste: brain shift -ilmiö (aivojen painuminen kraniotomian jälkeen) tekee preoperatiivisesta kuvasta epätarkan — iMRI korjaa tämän.</li>
@@ -1320,7 +1415,7 @@
                     <tr><th>Kuvaustyyppi</th><th>Tyypillinen SNR-vaatimus</th><th>Perustelu</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td>Neurokuvasukohteet (T1/T2)</td><td>&gt;20</td><td>Pienten leesioiden havaitseminen vaatii korkeaa SNR:ää</td></tr>
+                    <tr><td>Neurokuvauskohteet (T1/T2)</td><td>&gt;20</td><td>Pienten leesioiden havaitseminen vaatii korkeaa SNR:ää</td></tr>
                     <tr><td>MSK (PD fat-sat)</td><td>&gt;15–20</td><td>Ruston ja nivelsiteiden arviointi vaatii hyvää kontrastia</td></tr>
                     <tr><td>DWI</td><td>&gt;10–15</td><td>Korkeilla b-arvoilla SNR heikkenee merkittävästi</td></tr>
                     <tr><td>Abdomen (dynaaminen)</td><td>&gt;10–15</td><td>Nopeus priorisoidaan SNR:n kustannuksella</td></tr>
@@ -1376,6 +1471,54 @@
 
             <div class="theory-info">
                 <p><strong>Sairaalafyysikon rooli:</strong> Fyysikko vastaa MRI-protokollien teknisestä optimoinnista yhteistyössä radiologin kanssa. Käytännössä tämä tarkoittaa protokollakatselmusten tekemistä, laadunvarmistusmittausten tulosten analysointia, uusien sekvenssien käyttöönottoa ja henkilökunnan koulutusta kuvanlaatutekijöistä. Tavoitteena on diagnostisesti riittävä kuvanlaatu kohtuullisessa kuvausajassa potilasturvallisuus huomioiden.</p>
+            </div>
+
+            
+            <!-- EPA-koulutuskortti: Magneettikuvaus -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Magneettikuvaus</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tutustua kirjallisuuteen ja laitteistojen turvallisuusjärjestelyihin</li>
+                        <li>osata kirjallisuuden hyödyntäminen</li>
+                        <li>osata turvallisuusohjeet</li>
+                        <li>osata selittää laitteistojen yleisen teknisen rakenteen, toiminnan ja komponentit sekä yleisimmät oheislaitteet (mm. tahdistusanturit, varjoaineruisku)</li>
+                        <li>osata magneettikuvauksen signaalinmuodostuksen periaate ja tuntea kontrastin ja paikkakoodauksen käsitteet</li>
+                        <li>osata suorittaa laadunvarmistusmittaukset sekä analysoida ja tulkita tulokset</li>
+                        <li>tuntea yleisimmät kuvantamissekvenssit ja tietää kuvausparametrien ja kuvan ominaisuuksien keskinäiset riippuvuudet niissä, sekvenssien muokkaaminen</li>
+                        <li>osata tunnistaa kuvausartefaktit ja niiden korjausmenetelmät</li>
+                        <li>osata yleisimmät kuvauksen nopeutus- ja tahdistusmenetelmät</li>
+                        <li>tietää kontrastiaineiden toimintaperiaate ja yleisimmät käyttötavat</li>
+                        <li>osata ohjata henkilökuntaa tutkimusten turvallisessa suorittamisessa ja tarvittaessa potilasta tutkimustilanteessa</li>
+                        <li>tuntea tutkimusten sähköisen tallentamisen järjestelmät sekä DICOM-tiedoston rakenne ja siihen tallennettavat tiedot</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>osata kuvanlaatuun liittyvän optimointiongelman itsenäisen ratkaisun</li>
+                        <li>osata vierasesineiden kuvattavuuteen liittyvät järjestelyt, käsitteet ja optimointi</li>
+                        <li>tutustua yleisimpiin kliinisiin tutkimuksiin (lannerangan MK, pään MK, vartalon alueen MK, nivelten MK, sydämen MK, magneettiangiografia)</li>
+                        <li>tutustua erikoistutkimuksiin (aivojen perfuusiotutkimus, aivojen funktionaalinen magneettikuvaus, spektroskopia, traktografia, relaksaatioaika-analyysi, magneettikuvausohjatut toimenpiteet/biopsiat)</li>
+                        <li>erityistä valvontaa vaativien potilaiden tutkimuksiin tutustuminen (teho-osaston potilaat, anestesiassa tehtävät tutkimukset)</li>
+                        <li>tutustua magneettikuvien hyödyntämiseen muualla kuin diagnostiikassa (sädehoito, kirurgia)</li>
+                        <li>osata hyvän kuvan kriteerit erilaisten kuvausindikaatioiden kohdalla</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
             </div>
 
             <div class="theory-quiz-section" data-tab="mri">
@@ -1435,7 +1578,7 @@
             </ul>
 
             <h3>2.1 Digitaalinen subtraktioangiografia (DSA)</h3>
-            <p>DSA:ssa kuvataan ensin nollakuva (mask) ilman varjoainetta, sitten varjoainekuvia. Substrahing poistaa luiset rakenteet ja pehmytkudos, jolloin jäljelle jäävät vain varjoainetta sisältävät verisuonet. Logaritminen subtraktio tasaa vaimenemiserot eri kudosten läpi.</p>
+            <p>DSA:ssa kuvataan ensin nollakuva (mask) ilman varjoainetta, sitten varjoainekuvia. Subtraktio poistaa luiset rakenteet ja pehmytkudos, jolloin jäljelle jäävät vain varjoainetta sisältävät verisuonet. Logaritminen subtraktio tasaa vaimenemiserot eri kudosten läpi.</p>
 
             <h2>3. Laitteen rakenne</h2>
 
@@ -1603,7 +1746,7 @@
             </ul>
 
             <div class="theory-warning">
-                <p><strong>Kontraindikaatio:</strong> Bariumia ei saa käyttää, jos epäillään suolen perforaatiota. Barium peritoneaalitilassa aiheuttaa vakavan peritoniittiin. Perforaatioepäilyssä käytetään vesiliukoista jodivarjoainetta (esim. gastrografiini).</p>
+                <p><strong>Kontraindikaatio:</strong> Bariumia ei saa käyttää, jos epäillään suolen perforaatiota. Barium peritoneaalitilassa aiheuttaa vakavan peritoniitin. Perforaatioepäilyssä käytetään vesiliukoista jodivarjoainetta (esim. gastrografiini).</p>
             </div>
 
             <h3>9.3 Injektioprotokollat</h3>
@@ -1649,7 +1792,7 @@
             <h2>10. Henkilökunnan annosseuranta (A10)</h2>
 
             <h3>10.1 Henkilökohtaiset annosmittarit</h3>
-            <p>Interventioradiologiassa henkilökunnan säännöllinen annostarkkailuon välttämätöntä. Käytössä olevat mittarityypit:</p>
+            <p>Interventioradiologiassa henkilökunnan säännöllinen annostarkkailu on välttämätöntä. Käytössä olevat mittarityypit:</p>
             <table>
                 <thead>
                     <tr><th>Mittarityyppi</th><th>Materiaali</th><th>Lukutapa</th><th>Erityispiirteet</th></tr>
@@ -1811,7 +1954,7 @@
 
             <h3>12.5 Uudet teknologiat annosten optimoinnissa</h3>
             <ul>
-                <li><strong>Tekoälypohjainen annosoptimointi</strong>: Koneoppimisenalgoritmit analysoivat kuvaparametreja reaaliaikaisesti ja säätävät kV, mA, suodatusta ja frame rate -arvoja automaattisesti toimenpidevaiheen mukaan.</li>
+                <li><strong>Tekoälypohjainen annosoptimointi</strong>: Koneoppimisalgoritmit analysoivat kuvaparametreja reaaliaikaisesti ja säätävät kV, mA, suodatusta ja frame rate -arvoja automaattisesti toimenpidevaiheen mukaan.</li>
                 <li><strong>Automaattinen kollimaatio</strong>: AI tunnistaa kuvattavan alueen ja rajaa kenttäkoon automaattisesti, vähentäen turhaa altistusta ja hajasäteilyä.</li>
                 <li><strong>Edistyneet kohinanpoistoalgoritmit</strong>: Mahdollistavat alemman annostason käytön säilyttäen kuvanlaadun. Integroitu ADRC:hen → kokonaisannossäästö 30–50 % verrattuna konventionaaliseen käsittelyyn.</li>
             </ul>
@@ -1942,6 +2085,55 @@
                 <p><strong>Kokonaisvaltainen laadunhallinta:</strong> Hyvän kuvan kriteerit eivät ole pelkästään teknisiä mittaustuloksia — ne yhdistävät laitetekniikan, protokollaoptimoinnin, käyttäjän osaamisen ja kliinisen arvioinnin. Fyysikon tehtävänä on varmistaa, että tekniset edellytykset hyvälaatuiselle kuvalle täyttyvät, ja antaa suosituksia, kun kuvanlaatu ei vastaa vaatimuksia.</p>
             </div>
 
+            
+            <!-- EPA-koulutuskortti: Läpivalaisu- ja angiografia -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Läpivalaisu- ja angiografia</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tutustua kirjallisuuteen ja laitteistojen säteilyturvallisuusjärjestelyihin</li>
+                        <li>osata kirjallisuuden hyödyntäminen</li>
+                        <li>osata selittää läpivalaisulaitteistojen yleisen teknisen rakenteen, toiminnan ja komponentit, sekä detektorien rakenteet ja toimintaperiaatteet.</li>
+                        <li>osata kuvausasetusten ja -parametrien vaikutus kuvanlaatuun ja potilasannokseen</li>
+                        <li>osata tunnistaa kuvausartefaktit ja niiden korjausmenetelmät</li>
+                        <li>hallita KKTT-kuvauksen, kontrastin syntymisen ja rekonstruktiomenetelmien matemaattinen perusta</li>
+                        <li>tietää annossuureet sekä osata efektiivisen ja elinkohtaisen annoksen määrittäminen</li>
+                        <li>tuntea digitaalisen kuvan peruskäsitteet: kuvalaatu, kuvakohdennus, jälkikäsittely</li>
+                        <li>osata varmistaa annossuureiden oikeellisuuden, suorittaa laadunvarmistusmittaukset sekä analysoida ja tulkita tulokset</li>
+                        <li>tuntea röntgenvarjoaineet (jodi, barium), niiden ominaisuudet ja vaikutuksen kuvan kontrastiin</li>
+                        <li>osata menetelmät henkilökunnan annosseurantaan</li>
+                        <li>osata toimenpiteen aikainen toiminta ja potilaan sekä toimenpiteen tekijöiden säteilyturvallisuuteen vaikuttavat tekijät sekä niistä kommunikoiminen</li>
+                        <li>osata potilasaltistuksen määrittäminen</li>
+                        <li>tuntea tutkimusten sähköisen tallentamisen järjestelmät sekä DICOM-tiedoston rakenne ja siihen tallennettavat tiedot</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>osata annokseen ja kuvanlaatuun liittyvän optimointiongelman itsenäinen ratkaisu</li>
+                        <li>osata laitteiden hyväksyttävyysvaatimusten mukaiset mittaukset</li>
+                        <li>tutustua yleisimpiin kliinisiin tutkimuksiin (aivovaltimoiden varjoainetutkimus, sepelvaltimoiden röntgentutkimus/stenttaus, sappiteiden ja haimatiehyiden varjoainetutkimukset, hermojuurisalpaus, valtimon laajennushoito, hermojuurisalpaus, diskografia, aorttaläppäasennus, sydäntahdistimen asennus)</li>
+                        <li>tutustua erikoistutkimuksiin (esim. maksakasvaimen SIRT-hoito, magneettiavusteinen navigointi ja elektrofysiologinen tutkimus ja ablaatiohoito)</li>
+                        <li>osata hyvän kuvan kriteerit erilaisten kuvausindikaatioiden kohdalla</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-chart-line"></i> Johtamistaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
+
             <div class="theory-quiz-section" data-tab="lapivalaisu">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
@@ -1982,7 +2174,7 @@
         <div class="theory-content">
 
             <h2>1. Johdanto</h2>
-            <p>Mammografia on rintakuvantamismenetelmä, joka on perustyökalu rintasyövän diagnostiikassa ja seulonnassa. Suomessa kaikki 50–69-vuotiaat naiset kutsutaan mammografiaseulontaan 20 kuukauden välein. Mammografian fysiikka poikkeaa merkittävästi muusta röntgenkuvantamisesta: matalat energiat, rinnan puristus, erityisdetektorit ja erittäin korkeat kuvanlaatuvaa timukset.</p>
+            <p>Mammografia on rintakuvantamismenetelmä, joka on perustyökalu rintasyövän diagnostiikassa ja seulonnassa. Suomessa kaikki 50–69-vuotiaat naiset kutsutaan mammografiaseulontaan 20 kuukauden välein. Mammografian fysiikka poikkeaa merkittävästi muusta röntgenkuvantamisesta: matalat energiat, rinnan puristus, erityisdetektorit ja erittäin korkeat kuvanlaativaatimukset.</p>
 
             <h2>2. Fysikaaliset erityispiirteet</h2>
 
@@ -2036,7 +2228,7 @@
             <p>Mammografian laadunvarmistus on erityisen vaativaa seulontatoiminnassa (EUREF, STUK-opas):</p>
             <ul>
                 <li>AGD-mittaus standardifantomilla (PMMA 45 mm)</li>
-                <li>Kontrastiresoluutio (CDMAM-tyyppinen testikappal)</li>
+                <li>Kontrastiresoluutio (CDMAM-tyyppinen testikappale)</li>
                 <li>Geometrinen tarkkuus ja puristusvoiman mittaus</li>
                 <li>AEC-toiminnan tarkistus eri PMMA-paksuuksilla (20–70 mm)</li>
                 <li>Fantomikuvan pisteytys (viivaparit, mikrokalsifikaatiot, massat)</li>
@@ -2066,7 +2258,7 @@
             <tr>
             <td><strong>Dead pixel -kartoitus</strong></td>
             <td>Tunnistaa toimimattomat pikselit ja korvata ne interpoloiduilla arvoilla</td>
-            <td>Pimeä- ja valokuva ilman kohdetta; pikselit, joiden vaste poikkeaa > 20 % keskiarvosta, merkitaan kuolleiksi</td>
+            <td>Pimeä- ja valokuva ilman kohdetta; pikselit, joiden vaste poikkeaa > 20 % keskiarvosta, merkitään kuolleiksi</td>
             </tr>
             <tr>
             <td><strong>Gain correction (vahvistuskorjaus)</strong></td>
@@ -2126,7 +2318,7 @@
 
             <ul>
             <li><strong>Moire-kuvio:</strong> Syntyy, kun hilan viivataajuus on lähellä detektorin pikselitaajuutta. Ratkaisuna käytetään liikkuvaa hilaa tai hilan viivataajuuden sovittamista detektoriin (tyypillisesti 4&ndash;5 viivaa/mm mammografiassa).</li>
-            <li><strong>Hilan viivanaytot:</strong> Paikallaan oleva hila voi näkyä kuvassa tasaisesti jakautuneina viivoina. Liikkuva hila poistaa taman, mutta mekaaninen vika (esim. hilan pysähtyminen kesken kuvauksen) voi aiheuttaa osittaisen viiva-artefaktin.</li>
+            <li><strong>Hilan viivanäytöt:</strong> Paikallaan oleva hila voi näkyä kuvassa tasaisesti jakautuneina viivoina. Liikkuva hila poistaa tämän, mutta mekaaninen vika (esim. hilan pysähtyminen kesken kuvauksen) voi aiheuttaa osittaisen viiva-artefaktin.</li>
             <li><strong>Hilan kohdistusvirhe:</strong> Väärässä asennossa oleva hila aiheuttaa epäsymmetristä signaalin heikentymistä kuva-alueen reunoilla. Tarkistetaan kohdistustestilla.</li>
             </ul>
 
@@ -2136,7 +2328,7 @@
 
             <ul>
             <li><strong>Puristusvoima:</strong> Optimaalinen puristusvoima on <strong>100&ndash;200 N</strong> (EUREF-suositus). Riittävä puristus vähentää rinnan paksuutta, lyhentää valotusaikaa ja vähentää sirontaa.</li>
-            <li><strong>Valotusaika:</strong> Pitkä valotusaika (> 2 s) lisää liikeartefaktin riskia. W/Rh- ja W/Ag-yhdistelmät mahdollistavat lyhyemman valotusajan kuin Mo/Mo paksuilla rinnoilla.</li>
+            <li><strong>Valotusaika:</strong> Pitkä valotusaika (> 2 s) lisää liikeartefaktin riskiä. W/Rh- ja W/Ag-yhdistelmät mahdollistavat lyhyemmän valotusajan kuin Mo/Mo paksuilla rinnoilla.</li>
             <li><strong>Potilaan asettelu:</strong> Rinta asetetaan tukevasti detektorilevylle siten, että se ei pääse liikkumaan puristuksen aikana.</li>
             </ul>
 
@@ -2146,7 +2338,7 @@
 
             <h3>6.5 Sirontaperäisten artefaktien hallinta</h3>
 
-            <p>Sironta syntyy, kun roentgenfotoni vaihtaa suuntaa Compton-sironnan kautta rintakudoksessa. Sirontasäteilyn osuus detektorilla kasvaa rinnan paksuuden myötä:</p>
+            <p>Sironta syntyy, kun röntgenfotoni vaihtaa suuntaa Compton-sironnan kautta rintakudoksessa. Sirontasäteilyn osuus detektorilla kasvaa rinnan paksuuden myötä:</p>
 
             <table>
             <thead>
@@ -2191,7 +2383,7 @@
             </ul>
 
             <div class="theory-info">
-            <strong>Huom:</strong> Kuvankäsittelyparametrien (esim. MUSICA, UNIQUE, iDose) optimointi on sairaalafyysikon vastuulla ja tehdaan yhteistyossa radiologin kanssa kliinisen kuvanlaadun varmistamiseksi.
+            <strong>Huom:</strong> Kuvankäsittelyparametrien (esim. MUSICA, UNIQUE, iDose) optimointi on sairaalafyysikon vastuulla ja tehdään yhteistyössä radiologin kanssa kliinisen kuvanlaadun varmistamiseksi.
             </div>
 
             <h3>6.7 Vierasesineperäiset artefaktit</h3>
@@ -2253,7 +2445,7 @@
             \[ AGD = K \cdot g \cdot c \cdot s \]
             </div>
 
-            <p>missa:</p>
+            <p>missä:</p>
             <ul>
             <li><strong>\( K \)</strong> = mitattu ilmakerma (incident air kerma, mGy) rinnan pinnalla ilman takaisinsirontaa</li>
             <li><strong>\( g \)</strong> = muuntokerroin ilmakermasta glandulaariseen annokseen; riippuu rinnan paksuudesta ja HVL-arvosta; taulukoitu 50 % glandulaariselle koostumukselle</li>
@@ -2262,7 +2454,7 @@
             </ul>
 
             <div class="theory-info">
-            <strong>Huomio:</strong> Dance-mallin kertoimet on alunperin taulukoitu Mo/Mo-spektrille. Nykyisilla W/Rh- ja W/Ag-yhdistelmillä s-kertoimen käyttäminen on välttämätöntä. Uudemmissa julkaisuissa (Dance ym., 2000; 2009) s-kertoimet kattavat laajasti modernit anodi/suodatin-yhdistelmät.
+            <strong>Huomio:</strong> Dance-mallin kertoimet on alun perin taulukoitu Mo/Mo-spektrille. Nykyisillä W/Rh- ja W/Ag-yhdistelmillä s-kertoimen käyttäminen on välttämätöntä. Uudemmissa julkaisuissa (Dance ym., 2000; 2009) s-kertoimet kattavat laajasti modernit anodi/suodatin-yhdistelmät.
             </div>
 
             <h3>7.2 Konversiokertoimet g, c ja s</h3>
@@ -2336,7 +2528,7 @@
 
             <h3>c-kerroin (koostumuskorjaus)</h3>
 
-            <p>c-kerroin korjaa todellisen rinnan glandulaarisen osuuden suhteessa viitearvoon (50 %). Tyypillisia arvoja:</p>
+            <p>c-kerroin korjaa todellisen rinnan glandulaarisen osuuden suhteessa viitearvoon (50 %). Tyypillisiä arvoja:</p>
 
             <table>
             <thead>
@@ -2409,7 +2601,7 @@
             </table>
 
             <div class="theory-info">
-            <strong>Huom:</strong> s-kertoimen tarkat arvot riippuvat myös HVL:sta ja rinnan paksuudesta. Käytetään taulukoituja arvoja Dance ym. (2000) tai EUREF-liitteista.
+            <strong>Huom:</strong> s-kertoimen tarkat arvot riippuvat myös HVL:sta ja rinnan paksuudesta. Käytetään taulukoituja arvoja Dance ym. (2000) tai EUREF-liitteistä.
             </div>
 
             <h3>7.3 HVL-mittaus mammografiaspektreille</h3>
@@ -2417,8 +2609,8 @@
             <p>Puoliintumispaksuus (HVL, Half-Value Layer) on kriittinen parametri AGD-laskennassa. Mammografiaspektrien HVL mitataan seuraavasti:</p>
 
             <ul>
-            <li><strong>Mittausjärjestely:</strong> Ionisaatiokammio (tyypillisesti 6 cm3 mammografiakammio) sijoitetaan 4&ndash;5 cm puristuslevyn alapuolelle, fokus-detektori-etaisyys vakioitu.</li>
-            <li><strong>Alumiinisuodattimet:</strong> Käytetään korkean puhtauden (99.9 %) alumiinilehtia (0.1&ndash;0.5 mm) putken välittömään läheisyyteen asetettuna.</li>
+            <li><strong>Mittausjärjestely:</strong> Ionisaatiokammio (tyypillisesti 6 cm3 mammografiakammio) sijoitetaan 4&ndash;5 cm puristuslevyn alapuolelle, fokus-detektori-etäisyys vakioitu.</li>
+            <li><strong>Alumiinisuodattimet:</strong> Käytetään korkean puhtauden (99.9 %) alumiinilehtiä (0.1&ndash;0.5 mm) putken välittömään läheisyyteen asetettuna.</li>
             <li><strong>Mittaus:</strong> Mitataan ilmakerma ilman suodatinta ja kasvavilla alumiinipaksuuksilla. HVL saadaan interpoloimalla paksuus, jossa annos on puoliintunut.</li>
             </ul>
 
@@ -2458,7 +2650,7 @@
 
             <h3>7.4 Annoksen estimointi eri rinnan paksuuksille ja koostumuksille</h3>
 
-            <p>Käytännön AGD-laskentaesimerkki eri rinnan paksuuksille W/Rh-spektrilla (28 kV):</p>
+            <p>Käytännön AGD-laskentaesimerkki eri rinnan paksuuksille W/Rh-spektrillä (28 kV):</p>
 
             <div class="formula">
             \[ AGD = K \cdot g \cdot c \cdot s \]
@@ -2545,17 +2737,17 @@
             <li><strong>Synteettinen 2D (C-view / V-preview):</strong> Korvaa erillisen 2D-kuvan &rarr; kokonaisannos palautuu lähelle pelkän 2D:n tasoa. EUREF suosittelee synteettisen 2D:n käyttöä annoksen vähentämiseksi.</li>
             </ul>
 
-            <p>Tomosynteesin AGD lasketaan yksittaisten projektioiden annoksen summana:</p>
+            <p>Tomosynteesin AGD lasketaan yksittäisten projektioiden annoksen summana:</p>
 
             <div class="formula">
             \[ AGD_{\text{DBT}} = \sum_{i=1}^{N} K_i \cdot g_i \cdot c \cdot s \cdot T_i \]
             </div>
 
-            <p>missa \( N \) on projektioiden lukumäärä (9&ndash;25), \( K_i \) on yksittäisen projektion ilmakerma ja \( T_i \) on kulmakorjauskerroin. Käytännössä laitteet raportoivat DBT-annoksen suoraan DICOM-headerissa.</p>
+            <p>missä \( N \) on projektioiden lukumäärä (9&ndash;25), \( K_i \) on yksittäisen projektion ilmakerma ja \( T_i \) on kulmakorjauskerroin. Käytännössä laitteet raportoivat DBT-annoksen suoraan DICOM-headerissa.</p>
 
-            <h3>7.6 Annosrekisterointi ja kumulatiivinen annos</h3>
+            <h3>7.6 Annosrekisteröinti ja kumulatiivinen annos</h3>
 
-            <p>EU:n sateilysuojeludirektiivi (2013/59/Euratom) ja STUK edellyttävät systemaattista potilasannosseurantaa:</p>
+            <p>EU:n säteilysuojeludirektiivi (2013/59/Euratom) ja STUK edellyttävät systemaattista potilasannosseurantaa:</p>
 
             <ul>
             <li><strong>DICOM Dose Structured Report (SR):</strong> Jokainen mammografiakuvaus tallentaa annostiedot rakenteisessa muodossa PACS-järjestelmään.</li>
@@ -2565,7 +2757,7 @@
 
             <h3>7.7 Vertailu diagnostisiin vertailutasoihin (DRL)</h3>
 
-            <p>Vertailutasot eivat ole annosrajoja, vaan ohjearvoja, joiden ylitys tulee selvittää:</p>
+            <p>Vertailutasot eivät ole annosrajoja, vaan ohjearvoja, joiden ylitys tulee selvittää:</p>
 
             <table>
             <thead>
@@ -2600,14 +2792,14 @@
             </table>
 
             <div class="theory-warning">
-            <strong>Toimenpide DRL-ylityksessä:</strong> Jos osaston keskimääräinen AGD ylittää DRL-arvon, sairaalafyysikon tulee (1) selvittaa syy (laitevika, väärät parametrit, AEC-ongelma), (2) suorittaa korjaustoimet, (3) dokumentoida prosessi ja (4) ilmoittaa säteilysuojavastaavalle.
+            <strong>Toimenpide DRL-ylityksessä:</strong> Jos osaston keskimääräinen AGD ylittää DRL-arvon, sairaalafyysikon tulee (1) selvittää syy (laitevika, väärät parametrit, AEC-ongelma), (2) suorittaa korjaustoimet, (3) dokumentoida prosessi ja (4) ilmoittaa säteilysuojavastaavalle.
             </div>
             <!-- ============================================================ -->
             <!-- OSIO 8: Henkilökunnan ohjaus säteilyturvallisessa             -->
             <!-- työskentelyssä (A8)                                           -->
             <!-- ============================================================ -->
 
-            <h2>8. Henkilokunnan ohjaus säteilyturvallisessa työskentelyssä</h2>
+            <h2>8. Henkilökunnan ohjaus säteilyturvallisessa työskentelyssä</h2>
 
             <p>Sairaalafyysikko toimii mammografiayksikon säteilyturvallisuuden asiantuntijana ja vastaa henkilokunnan koulutuksen säteilysuojelullisesta sisällöstä. Osaaminen kattaa <strong>käyttäjäkoulutuksen, potilaskommunikaation, erityistilanteet ja asettelutekniikan vaikutuksen annokseen</strong>.</p>
             <h3>8.1 Käyttäjähenkilökunnan koulutusvaatimukset</h3>
@@ -2651,7 +2843,7 @@
 
             <h3>8.2 Asettelutekniikan vaikutus annokseen ja kuvanlaatuun</h3>
 
-            <p>Röntgenhoitajan asettelutekniikka vaikuttaa suoraan seka kuvan diagnostiseen arvoon etta potilasannokseen. Sairaalafyysikon tulee kommunikoida naihin tekijoihin liittyvat fysikaaliset perusteet:</p>
+            <p>Röntgenhoitajan asettelutekniikka vaikuttaa suoraan sekä kuvan diagnostiseen arvoon että potilasannokseen. Sairaalafyysikon tulee kommunikoida näihin tekijöihin liittyvät fysikaaliset perusteet:</p>
 
             <table>
             <thead>
@@ -2680,23 +2872,23 @@
             <tr>
             <td><strong>Puristuslevyn koko</strong></td>
             <td>Liian pieni levy &rarr; osa rinnasta kuvausalueen ulkopuolella &rarr; uusintakuvaus</td>
-            <td>Koko rinta kuvattuna oikean kokoisella levylla</td>
+            <td>Koko rinta kuvattuna oikean kokoisella levyllä</td>
             </tr>
             </tbody>
             </table>
 
             <h3>8.3 Potilaskommunikaatio säteilyä koskevissa asioissa</h3>
 
-            <p>Sairaalafyysikon tulee varmistaa, etta henkilokunta osaa kommunikoida potilaiden kanssa mammografian säteilyaltistuksesta:</p>
+            <p>Sairaalafyysikon tulee varmistaa, että henkilökunta osaa kommunikoida potilaiden kanssa mammografian säteilyaltistuksesta:</p>
 
             <ul>
             <li><strong>Annoksen suuruusluokka:</strong> Yhden mammografiakuvauksen (2 näkymää/rinta) efektiivinen annos on noin 0.4 mSv, mikka vastaa noin 7 viikon taustasäteilyannosta Suomessa.</li>
-            <li><strong>Seulonnan hyoty-haitta-suhde:</strong> Rintasyovan seulontamammografian havaitsemishyöty ylittää selkeästi sateilyriskin 50&ndash;69-vuotiailla naisilla. Riski/hyoty-suhde on noin 1:1000.</li>
-            <li><strong>Kumulatiivinen annos:</strong> Vuosittainen seulontamammografia 20 vuoden ajan tuottaa kokonais-AGD:n noin 40 mGy molempiin rintoihin, mika vastaa elinajanodotteeseen noin 0.1 % lisäriskiä rintasyövälle.</li>
+            <li><strong>Seulonnan hyöty-haitta-suhde:</strong> Rintasyövän seulontamammografian havaitsemishyöty ylittää selkeästi säteilyriskin 50&ndash;69-vuotiailla naisilla. Riski/hyöty-suhde on noin 1:1000.</li>
+            <li><strong>Kumulatiivinen annos:</strong> Vuosittainen seulontamammografia 20 vuoden ajan tuottaa kokonais-AGD:n noin 40 mGy molempiin rintoihin, mikä vastaa elinajanodotteeseen noin 0.1 % lisäriskiä rintasyövälle.</li>
             </ul>
 
             <div class="theory-info">
-            <strong>Viestintäohje:</strong> Potilaille tulee selittaa annokset ymmärrettavasti vertaamalla arkipäivän säteilyaltistuksiin. Vältetään turhaa huolestuttamista, mutta ei väheksytä potilaan huolta.
+            <strong>Viestintäohje:</strong> Potilaille tulee selittää annokset ymmärrettävästi vertaamalla arkipäivän säteilyaltistuksiin. Vältetään turhaa huolestuttamista, mutta ei väheksytä potilaan huolta.
             </div>
 
             <h3>8.4 Erityistilanteet: raskaana olevat ja nuoret potilaat</h3>
@@ -2712,17 +2904,17 @@
             <ul>
             <li>Nuorten naisten rintarauhaskudos on tiheämpi ja säteilyherkempi. Kudoksen säteily-painokerroin on sama (w_T = 0.12), mutta elinaikaisen riskin kerroin on suurempi nuoremmilla.</li>
             <li>Ensisijaisesti käytetään ultraääntä; mammografia vain perustellusta kliinisesta indikaatiosta.</li>
-            <li>Jos mammografia tehdaan, kiinnitetään erityistä huomiota annoksen minimointiin (optimoidut parametrit, yksi näkymäpari riittävän puristuksen kanssa).</li>
+            <li>Jos mammografia tehdään, kiinnitetään erityistä huomiota annoksen minimointiin (optimoidut parametrit, yksi näkymäpari riittävän puristuksen kanssa).</li>
             </ul>
 
             <h3>8.5 Puristustekniikan ohjaus</h3>
 
-            <p>Puristus on mammografian kriittisin potilaskontaktivaihe. Sairaalafyysikon tulee kouluttaa henkilokunta ymmärtämään puristuksen fysikaaliset perusteet:</p>
+            <p>Puristus on mammografian kriittisin potilaskontaktivaihe. Sairaalafyysikon tulee kouluttaa henkilökunta ymmärtämään puristuksen fysikaaliset perusteet:</p>
 
             <ul>
-            <li><strong>Annoksen vahennys:</strong> Jokainen 1 cm:n vähennys rinnan paksuudessa vähentää annosta noin 25&ndash;40 %.</li>
+            <li><strong>Annoksen vähennys:</strong> Jokainen 1 cm:n vähennys rinnan paksuudessa vähentää annosta noin 25&ndash;40 %.</li>
             <li><strong>Kontrastin paraneminen:</strong> Ohuempi rinta &rarr; vähemmän sirontaa &rarr; parempi kontrasti ilman annosnoston tarvetta.</li>
-            <li><strong>Liikeartefaktien valttaminen:</strong> Hyvä puristus immobilisoi rinnan ja lyhentää valotusaikaa.</li>
+            <li><strong>Liikeartefaktien välttäminen:</strong> Hyvä puristus immobilisoi rinnan ja lyhentää valotusaikaa.</li>
             <li><strong>Optimaalinen voima-alue:</strong> 100&ndash;200 N (EUREF). Laitteen puristusvoiman tulee olla mitattavissa ja kalibroitu.</li>
             </ul>
 
@@ -2755,10 +2947,10 @@
 
             <h2>9. DICOM ja sähköisen tallentamisen järjestelmät</h2>
 
-            <p>Mammografia tuottaa erityislaatuisia DICOM-objekteja, joissa on runsaasti modaliteettikohtaista metatietoa. Sairaalafyysikon tulee tuntea <strong>mammografian DICOM-objektityypit, mammografiakohtaiset DICOM-tagit, kuvankäsittelyn tallennusmuodot, PACS-integraation erityispiirteet</strong> seka <strong>tietokoneavusteisen havaitsemisen (CAD) liitännät</strong>.</p>
+            <p>Mammografia tuottaa erityislaatuisia DICOM-objekteja, joissa on runsaasti modaliteettikohtaista metatietoa. Sairaalafyysikon tulee tuntea <strong>mammografian DICOM-objektityypit, mammografiakohtaiset DICOM-tagit, kuvankäsittelyn tallennusmuodot, PACS-integraation erityispiirteet</strong> sekä <strong>tietokoneavusteisen havaitsemisen (CAD) liitännät</strong>.</p>
             <h3>9.1 DICOM-mammografiaobjektit</h3>
 
-            <p>Mammografia käyttää useita DICOM Information Object Definition (IOD) -tyyppeja:</p>
+            <p>Mammografia käyttää useita DICOM Information Object Definition (IOD) -tyyppejä:</p>
 
             <table>
             <thead>
@@ -2787,7 +2979,7 @@
             <tr>
             <td><strong>Digital X-Ray Image &ndash; For Presentation</strong></td>
             <td>1.2.840.10008.5.1.4.1.1.1.2</td>
-            <td>Käsitelty kuva diagnostiseen tarkasteluun; sisaltaa valmistajan kuvankäsittelyälgoritmit</td>
+            <td>Käsitelty kuva diagnostiseen tarkasteluun; sisältää valmistajan kuvankäsittelyalgoritmit</td>
             </tr>
             <tr>
             <td><strong>Secondary Capture (SC)</strong></td>
@@ -2837,7 +3029,7 @@
             </tr>
             <tr>
             <td><strong>(0018,0060) kVp</strong></td>
-            <td>Putkijannitteen huippuarvo</td>
+            <td>Putkijännitteen huippuarvo</td>
             <td>29</td>
             </tr>
             <tr>
@@ -2852,7 +3044,7 @@
             </tr>
             <tr>
             <td><strong>(0018,1110) Distance Source to Detector</strong></td>
-            <td>Fokus-detektori-etaisyys (mm)</td>
+            <td>Fokus-detektori-etäisyys (mm)</td>
             <td>660.0</td>
             </tr>
             <tr>
@@ -2884,7 +3076,7 @@
             <tr>
             <td><strong>Käyttötarkoitus</strong></td>
             <td>CAD-analyysi, jälkikäsittely, laadunvarmistus</td>
-            <td>Diagnostinen tulkinta naytolla</td>
+            <td>Diagnostinen tulkinta näytöllä</td>
             </tr>
             <tr>
             <td><strong>Pikseliarvojen tulkinta</strong></td>
@@ -2893,8 +3085,8 @@
             </tr>
             <tr>
             <td><strong>Bittisyvyys</strong></td>
-            <td>14 tai 16 bittia (12&ndash;16 bit raakadata)</td>
-            <td>12 tai 14 bittia (käsitelty)</td>
+            <td>14 tai 16 bittiä (12&ndash;16 bit raakadata)</td>
+            <td>12 tai 14 bittiä (käsitelty)</td>
             </tr>
             <tr>
             <td><strong>PACS-tallennus</strong></td>
@@ -2905,7 +3097,7 @@
             </table>
 
             <div class="theory-warning">
-            <strong>Varoitus:</strong> For Processing -kuvan näyttäminen diagnostisena kuvana johtaa virheelliseen tulkintaan, koska kuva näyttää "litteältä" ja kontrastittomalta. PACS-järjestelmässä tulee varmistaa, etta vain For Presentation -kuvat näkyvät radiologin työlistassa.
+            <strong>Varoitus:</strong> For Processing -kuvan näyttäminen diagnostisena kuvana johtaa virheelliseen tulkintaan, koska kuva näyttää "litteältä" ja kontrastittomalta. PACS-järjestelmässä tulee varmistaa, että vain For Presentation -kuvat näkyvät radiologin työlistassa.
             </div>
 
             <h3>9.4 PACS-integraatio mammografiassa</h3>
@@ -2913,10 +3105,10 @@
             <p>Mammografian PACS-integraatiossa on erityisvaatimuksia:</p>
 
             <ul>
-            <li><strong>Prior-kuvien haku:</strong> Mammografian tulkinnassa verrataan aina aikaisempiin tutkimuksiin (vähintaan 2 viimeisinta). PACS:n tulee hakea priorit automaattisesti.</li>
-            <li><strong>Hanging protocol:</strong> Mammografiakuvat näytetään standardoidussa järjestyksessä (tyypillisesti: nykyinen MLO + CC vasemmalla näytöllä, priorit oikealla). Hanging protocol -asetukset tulee konfiguroida yhdessa radiologin ja IT-henkilokunnan kanssa.</li>
+            <li><strong>Prior-kuvien haku:</strong> Mammografian tulkinnassa verrataan aina aikaisempiin tutkimuksiin (vähintään 2 viimeisintä). PACS:n tulee hakea priorit automaattisesti.</li>
+            <li><strong>Hanging protocol:</strong> Mammografiakuvat näytetään standardoidussa järjestyksessä (tyypillisesti: nykyinen MLO + CC vasemmalla näytöllä, priorit oikealla). Hanging protocol -asetukset tulee konfiguroida yhdessä radiologin ja IT-henkilokunnan kanssa.</li>
             <li><strong>Kuvan koko:</strong> Mammografiakuvat ovat suuria (tyypillisesti 3000&times;4000 pikselilla, ~24 MB/kuva). PACS:n siirtonopeus ja näytön resoluutio on mitoitettava vastaavasti.</li>
-            <li><strong>Mammography-specific workstation:</strong> Diagnostisten mammatyöasemien tulee tayttaa EUREF-näyttökriteerit (luminanssi, homogeenisuus, resoluutio).</li>
+            <li><strong>Mammography-specific workstation:</strong> Diagnostisten mammatyöasemien tulee täyttää EUREF-näyttökriteerit (luminanssi, homogeenisuus, resoluutio).</li>
             </ul>
 
             <h3>9.5 CAD-integraatio (Computer-Aided Detection)</h3>
@@ -2924,13 +3116,13 @@
             <p>Tietokoneavusteinen havaitseminen (CAD) analysoi mammografiakuvia automaattisesti ja merkitsee epäiltyjä leesioita:</p>
 
             <ul>
-            <li><strong>Toimintaperiaate:</strong> CAD-algoritmi analysoi For Processing -kuvan ja tuottaa merkkeja (marks) mahdollisista massista, kalkkeutumista ja arkkitehtuurisesta distortiosta.</li>
+            <li><strong>Toimintaperiaate:</strong> CAD-algoritmi analysoi For Processing -kuvan ja tuottaa merkkejä (marks) mahdollisista massista, kalkkeutumista ja arkkitehtuurisesta distortiosta.</li>
             <li><strong>DICOM-integraatio:</strong> CAD-tulokset tallennetaan omana DICOM-objektinaan (Mammography CAD SR, SOP Class 1.2.840.10008.5.1.4.1.1.88.50) ja näytetään kuvan päällä (overlay).</li>
             <li><strong>AI-pohjaiset CAD-järjestelmät:</strong> Uudemmat syväoppimisjärjestelmät (esim. Lunit INSIGHT, Transpara) tarjoavat paremman herkkyys/tarkkuus-suhteen ja antavat todennäköisyyspisteytetyn tuloksen (esim. 1&ndash;10 asteikko).</li>
             </ul>
 
             <div class="theory-info">
-            <strong>Sairaalafyysikon rooli CAD:ssa:</strong> Fyysikko vastaa CAD-järjestelmän vastaanottotestauksen suorittamisesta, herkkyys- ja tarkkuusarvojen validoinnista seka järjestelmän suorituskyvyn seurannasta (esim. merkittyjen leesioiden osuus ja väärien positiivisten taso).
+            <strong>Sairaalafyysikon rooli CAD:ssa:</strong> Fyysikko vastaa CAD-järjestelmän vastaanottotestauksen suorittamisesta, herkkyys- ja tarkkuusarvojen validoinnista sekä järjestelmän suorituskyvyn seurannasta (esim. merkittyjen leesioiden osuus ja väärien positiivisten taso).
             </div>
 
             <h3>9.6 IHE Mammography Integration Profile</h3>
@@ -2951,10 +3143,10 @@
 
             <h2>10. Optimointi ja hyväksyttävyysmittaukset</h2>
 
-            <p>Mammografian optimointi tarkoittaa <strong>parhaan mahdollisen kuvanlaadun saavuttamista pienimmalla mahdollisella annoksella</strong>. Hyväksyttävyysmittaukset varmistavat, etta laite täyttää käyttöönotto- ja määräaikaistarkastusten vaatimukset. Näihin osioihin kuuluu sekä B1 (annoksen ja kuvanlaadun optimointi) että B2 (hyväksyttävyysmittaukset).</p>
+            <p>Mammografian optimointi tarkoittaa <strong>parhaan mahdollisen kuvanlaadun saavuttamista pienimmällä mahdollisella annoksella</strong>. Hyväksyttävyysmittaukset varmistavat, että laite täyttää käyttöönotto- ja määräaikaistarkastusten vaatimukset. Näihin osioihin kuuluu sekä B1 (annoksen ja kuvanlaadun optimointi) että B2 (hyväksyttävyysmittaukset).</p>
             <h3>10.1 AEC:n optimointi eri rintatyypeille</h3>
 
-            <p>Automaattinen valotuksenohjaus (AEC, Automatic Exposure Control) on mammografian annos-laatu-tasapainon avaintekija. AEC:n optimointi tarkoittaa:</p>
+            <p>Automaattinen valotuksenohjaus (AEC, Automatic Exposure Control) on mammografian annos-laatu-tasapainon avaintekijä. AEC:n optimointi tarkoittaa:</p>
 
             <ul>
             <li><strong>Kohdesignaalitason säätö:</strong> Detektorille saapuvan signaalin tavoitetaso (target pixel value) säädettävä erikseen ohuesta, keskipaksuisesta ja paksuista rinnoista optimaalisen kohinatason saavuttamiseksi.</li>
@@ -2970,7 +3162,7 @@
 
             <h3>10.2 Anodi/suodatin-yhdistelman valinta</h3>
 
-            <p>Modernit mammografialaitteet kayttavat volframianodeja eri suodatinyhdistelmillä. Optimaalinen valinta riippuu rinnan paksuudesta:</p>
+            <p>Modernit mammografialaitteet käyttävät volframianodeja eri suodatinyhdistelmillä. Optimaalinen valinta riippuu rinnan paksuudesta:</p>
 
             <table>
             <thead>
@@ -3010,7 +3202,7 @@
             </table>
 
             <div class="theory-info">
-            <strong>Pääperiaate:</strong> Siirtyminen Mo/Mo:sta W/Rh:iin tai W/Ag:iin vahentaa annosta 15&ndash;35 % samalla kuvanlaadulla. Tama on ollut merkittavin mammografian annosoptimoinnin edistysaskel 2000-luvulla.
+            <strong>Pääperiaate:</strong> Siirtyminen Mo/Mo:sta W/Rh:iin tai W/Ag:iin vähentää annosta 15&ndash;35 % samalla kuvanlaadulla. Tämä on ollut merkittävin mammografian annosoptimoinnin edistysaskel 2000-luvulla.
             </div>
 
             <h3>10.3 Puristusvoiman optimointi</h3>
@@ -3029,7 +3221,7 @@
             \[ \frac{\Delta AGD}{\Delta d} \approx -0.3 \text{ mGy/cm} \]
             </div>
 
-            <p>Eli jokainen senttimetrin vahennys puristettuna rinnan paksuudessa vahentaa AGD:ta noin 0.3 mGy.</p>
+            <p>Eli jokainen senttimetrin vähennys puristettuna rinnan paksuudessa vähentää AGD:ta noin 0.3 mGy.</p>
 
             <h3>10.4 Kuvausparametrien optimointi: FFDM vs. tomosynteesi</h3>
 
@@ -3078,7 +3270,7 @@
 
             <h3>10.5 Kliininen kuvanlaatu vs. annos: optimointiperiaate</h3>
 
-            <p>Mammografian optimointi perustuu <strong>kuvanlaadun mittarin ja annoksen valisen suhteen maksimointiin</strong>. Keskeiset kuvanlaadun mittarit:</p>
+            <p>Mammografian optimointi perustuu <strong>kuvanlaadun mittarin ja annoksen välisen suhteen maksimointiin</strong>. Keskeiset kuvanlaadun mittarit:</p>
 
             <ul>
             <li><strong>CNR (Contrast-to-Noise Ratio):</strong> Yksinkertaisin kuvan laadun mittari. Lasketaan fantomikuvasta:
@@ -3126,8 +3318,8 @@
             </tr>
             <tr>
             <td><strong>Kuvankäsittely</strong></td>
-            <td>Vakioitu, tasalaatuinen kasittely</td>
-            <td>Voidaan saataa ongelman mukaan (esim. kalkkikohde: teravyyskorostus)</td>
+            <td>Vakioitu, tasalaatuinen käsittely</td>
+            <td>Voidaan säätää ongelman mukaan (esim. kalkkikohde: terävyyskorostus)</td>
             </tr>
             </tbody>
             </table>
@@ -3141,8 +3333,8 @@
             <p>MTF kuvaa järjestelmän kykyjä siirtää kontrastia eri paikkataajuuksilla:</p>
 
             <ul>
-            <li><strong>Reunamenetelma (edge method):</strong> Kuvataan teräväreuninen metallilaatta (esim. volframi tai teräs) vinosti detektorin pikselisuuntaan nähden (&sim;3&deg;). Reunasta mitataan ESF (Edge Spread Function) &rarr; derivoidaan LSF (Line Spread Function) &rarr; Fourier-muunnos antaa MTF:n.</li>
-            <li><strong>Viivakuvio (bar pattern):</strong> Kaytetaan testilevyä, jossa on ryhmät tunnettuja viivataajuuksia (esim. 1&ndash;20 lp/mm). Visuaalinen tai numeerinen erotuskyky määritetään.</li>
+            <li><strong>Reunamenetelmä (edge method):</strong> Kuvataan teräväreuninen metallilaatta (esim. volframi tai teräs) vinosti detektorin pikselisuuntaan nähden (&sim;3&deg;). Reunasta mitataan ESF (Edge Spread Function) &rarr; derivoidaan LSF (Line Spread Function) &rarr; Fourier-muunnos antaa MTF:n.</li>
+            <li><strong>Viivakuvio (bar pattern):</strong> Käytetään testilevyä, jossa on ryhmät tunnettuja viivataajuuksia (esim. 1&ndash;20 lp/mm). Visuaalinen tai numeerinen erotuskyky määritetään.</li>
             </ul>
 
             <p>EUREF-vaatimus: MTF &ge; 50 % taajuudella 5 lp/mm (tyypillinen suoran detektorin arvo).</p>
@@ -3218,13 +3410,13 @@
 
             <h3>10.11 Geometrinen vääristymämittaus</h3>
 
-            <p>Geometrinen vääristymä arvioidaan kuvaamalla testilevyä, jossa on tunnettu pistekuvio (esim. 10 mm ruudukko). Mitatun etaisyyden poikkeama todellisesta etaisyydesta tulee olla <strong>&lt; 3 %</strong> koko kuva-alueella.</p>
+            <p>Geometrinen vääristymä arvioidaan kuvaamalla testilevyä, jossa on tunnettu pistekuvio (esim. 10 mm ruudukko). Mitatun etäisyyden poikkeama todellisesta etäisyydestä tulee olla <strong>&lt; 3 %</strong> koko kuva-alueella.</p>
 
             <h3>10.12 Ghost image -arviointi</h3>
 
             <p>Ghost-artefaktin mittaus EUREF-protokollan mukaisesti:</p>
             <ol>
-            <li>Kuvataan korkea-annoksinen altistus (esim. 4&times; normaali mAs) pienella PMMA-levylla.</li>
+            <li>Kuvataan korkea-annoksinen altistus (esim. 4&times; normaali mAs) pienellä PMMA-levyllä.</li>
             <li>Odotetaan laitteen määrittämä aika (tyypillisesti &lt; 60 s).</li>
             <li>Kuvataan tasainen altistus koko detektorin alueella.</li>
             <li>Lasketaan ghost ratio edellisen kaavan mukaisesti.</li>
@@ -3283,7 +3475,7 @@
 
             <h2>11. Erikoistutkimukset ja hyvän kuvan kriteerit</h2>
 
-            <p>Tama osio yhdistaa mammografian <strong>erikoistutkimukset (B3)</strong> ja <strong>hyvän kuvan kriteerit (B4)</strong>. Sairaalafyysikon tulee tuntea erikoistekniikoiden fysikaaliset perusteet ja annosvaikutukset seka osata arvioida mammografiakuvan diagnostista laatua systemaattisesti.</p>
+            <p>Tämä osio yhdistää mammografian <strong>erikoistutkimukset (B3)</strong> ja <strong>hyvän kuvan kriteerit (B4)</strong>. Sairaalafyysikon tulee tuntea erikoistekniikoiden fysikaaliset perusteet ja annosvaikutukset sekä osata arvioida mammografiakuvan diagnostista laatua systemaattisesti.</p>
             <h3>11.1 Kontrastimammografia (CEM/CESM)</h3>
 
             <p><strong>Contrast-Enhanced Spectral Mammography (CESM)</strong> yhdistaa mammografian ja jodikontrastiaineen antaman vaskulaarisuustiedon. Tekniikka perustuu duaalienergia-subtraktioon:</p>
@@ -3291,7 +3483,7 @@
             <ul>
             <li><strong>Matalaenergia-kuva (LE):</strong> 26&ndash;32 kV, jodin K-reunan (33.2 keV) alapuolella. Vastaa tavallista mammografiakuvaa.</li>
             <li><strong>Korkeaenergia-kuva (HE):</strong> 45&ndash;49 kV, Cu-suodatus. Jodin K-reunan yläpuolella &rarr; jodi absorboi voimakkaasti.</li>
-            <li><strong>Rekombinoitu kuva:</strong> Painotettu subtraktio poistaa normaalin anatomian ja korostaa jodin kertymista.</li>
+            <li><strong>Rekombinoitu kuva:</strong> Painotettu subtraktio poistaa normaalin anatomian ja korostaa jodin kertymistä.</li>
             </ul>
 
             <p><strong>Annosnäkökulma:</strong></p>
@@ -3299,7 +3491,7 @@
             <li>LE-kuvan annos vastaa normaalia mammografiaa (~1.5 mGy AGD).</li>
             <li>HE-kuvan annos on pienempi (noin 0.5&ndash;1.0 mGy) korkeamman kV:n vuoksi.</li>
             <li>Kokonaisannos CEM-tutkimuksessa on noin <strong>2.0&ndash;3.0 mGy AGD/rinta</strong> eli noin 1.5&ndash;2-kertainen normaaliin mammografiaan verrattuna.</li>
-            <li>Hyoty-haitta-arvioinnissa CEM korvaa MRI:n useissa indikaatioissa (neoadjuvanttivaste, monilöydös) pienemmalla kustannuksella ja nopeammalla tutkimusajalla.</li>
+            <li>Hyöty-haitta-arvioinnissa CEM korvaa MRI:n useissa indikaatioissa (neoadjuvanttivaste, monilöydös) pienemmällä kustannuksella ja nopeammalla tutkimusajalla.</li>
             </ul>
 
             <h3>11.2 Stereotaktinen biopsiaohjaus</h3>
@@ -3319,11 +3511,11 @@
 
             <h3>11.3 Preparaattiradiografia (specimen radiography)</h3>
 
-            <p>Preparaattiradiografia kuvaa poistetun kudosnäytteen varmistamaan, etta biopsiassa saatu kohde (esim. mikrokalkkiryhma) on mukana näytteessä:</p>
+            <p>Preparaattiradiografia kuvaa poistetun kudosnäytteen varmistamaan, että biopsiassa saatu kohde (esim. mikrokalkkiryhmä) on mukana näytteessä:</p>
 
             <ul>
-            <li>Kaytetaan erillista preparaattiröntgenlaitetta (esim. Faxitron) tai mammografialaitteessa erikoistila.</li>
-            <li>Alhainen kV (20&ndash;25 kV) ja pienet mAs-arvot riittavat, koska nayte on ohut.</li>
+            <li>Käytetään erillistä preparaattiröntgenlaitetta (esim. Faxitron) tai mammografialaitteessa erikoistila.</li>
+            <li>Alhainen kV (20&ndash;25 kV) ja pienet mAs-arvot riittävät, koska näyte on ohut.</li>
             <li>Sairaalafyysikko vastaa preparaattilaitteen laadunvarmistuksesta (resoluutio, annos, kuvanlaatu).</li>
             </ul>
 
@@ -3346,11 +3538,11 @@
             <p>Tomosynteesiohjattu biopsia (tomobiopsia) on nouseva tekniikka, jossa leesio paikallistetaan suoraan tomosynteesin leikekuvista:</p>
 
             <ul>
-            <li>Ei vaadi erillista stereotaktista kulmakuvausta &rarr; nopeampi ja potilasystävällisempi.</li>
+            <li>Ei vaadi erillistä stereotaktista kulmakuvausta &rarr; nopeampi ja potilasystävällisempi.</li>
             <li>Erityisen hyödyllinen leesioille, jotka näkyvät vain tomosynteesissä (esim. arkkitehtuurinen distortio).</li>
             <li>Annos tomobiopsiassa on samaa suuruusluokkaa kuin stereotaktisessa biopsiassa.</li>
             </ul>
-            <h3>11.7 Hyvan mammografiakuvan kriteerit: asettelun arviointi</h3>
+            <h3>11.7 Hyvän mammografiakuvan kriteerit: asettelun arviointi</h3>
 
             <p>Kuvanlaadun arvioinnin perustana ovat <strong>anatomiset kriteerit</strong>, jotka määrittelevät, onko kuvaus teknisesti onnistunut:</p>
 
@@ -3373,7 +3565,7 @@
             <tr>
             <td><strong>Nänni profiilissa</strong></td>
             <td>Nänni projisoidaan rinnan reunaan, ei taittuneena kudokseen</td>
-            <td>Selkeasti erottuva profiili</td>
+            <td>Selkeästi erottuva profiili</td>
             </tr>
             <tr>
             <td><strong>Inframammaaripoimu (IMF)</strong></td>
@@ -3405,9 +3597,9 @@
             </thead>
             <tbody>
             <tr>
-            <td><strong>Nanni</strong></td>
-            <td>Profiilissa tai lahes profiilissa; keskilinjassa</td>
-            <td>Nannin sijainti kuvan etureunalla</td>
+            <td><strong>Nänni</strong></td>
+            <td>Profiilissa tai lähes profiilissa; keskilinjassa</td>
+            <td>Nännin sijainti kuvan etureunalla</td>
             </tr>
             <tr>
             <td><strong>Mediaalinen kudos</strong></td>
@@ -3417,7 +3609,7 @@
             <tr>
             <td><strong>Pectoralis-lihas</strong></td>
             <td>Näkyy noin 30&ndash;40 %:ssa kuvista (ei pakollinen)</td>
-            <td>Osoittaa riittavan syvan asettelun</td>
+            <td>Osoittaa riittävän syvän asettelun</td>
             </tr>
             <tr>
             <td><strong>Lateraalinen rauhaskudos</strong></td>
@@ -3452,12 +3644,12 @@
             </tr>
             <tr>
             <td><strong>Good (G)</strong></td>
-            <td>Pienet puutteet (esim. nanni hieman sisäänpäin kääntynyt), mutta diagnostisesti riittava</td>
-            <td>&ge; 50 % (P + G yhteensa &ge; 75 %)</td>
+            <td>Pienet puutteet (esim. nänni hieman sisäänpäin kääntynyt), mutta diagnostisesti riittävä</td>
+            <td>&ge; 50 % (P + G yhteensä &ge; 75 %)</td>
             </tr>
             <tr>
             <td><strong>Moderate (M)</strong></td>
-            <td>Selvat puutteet asettelussa tai laadussa, mutta kuva on viela diagnostisesti käyttökelpoinen</td>
+            <td>Selvät puutteet asettelussa tai laadussa, mutta kuva on vielä diagnostisesti käyttökelpoinen</td>
             <td>&lt; 22 %</td>
             </tr>
             <tr>
@@ -3469,12 +3661,12 @@
             </table>
 
             <div class="theory-info">
-            <strong>Tavoite:</strong> Seulontayksikössä P + G -osuuden tulee olla vahintaan <strong>75 %</strong> kaikista kuvista. Sairaalafyysikko osallistuu PGMI-arviointiin erityisesti teknisten kriteerien osalta (kontrasti, kohina, artefaktit).
+            <strong>Tavoite:</strong> Seulontayksikössä P + G -osuuden tulee olla vähintään <strong>75 %</strong> kaikista kuvista. Sairaalafyysikko osallistuu PGMI-arviointiin erityisesti teknisten kriteerien osalta (kontrasti, kohina, artefaktit).
             </div>
 
             <h3>11.9 Diagnostisen yksityiskohtien nähtävyys</h3>
 
-            <p>Hyvan mammografiakuvan tulee mahdollistaa seuraavien rakenteiden luotettava havaitseminen:</p>
+            <p>Hyvän mammografiakuvan tulee mahdollistaa seuraavien rakenteiden luotettava havaitseminen:</p>
 
             <table>
             <thead>
@@ -3487,12 +3679,12 @@
             <tbody>
             <tr>
             <td><strong>Mikrokalkit</strong></td>
-            <td>Yksittaiset kalkit (&ge; 0.2 mm) erottuvat selkeasti; ryhman luonne (hyvänlaatuinen vs. epäiltävä) arvioitavissa</td>
-            <td>Mikrokalkit ovat usein ainoa rintasyovan esiaste (DCIS) merkki</td>
+            <td>Yksittäiset kalkit (&ge; 0.2 mm) erottuvat selkeästi; ryhmän luonne (hyvänlaatuinen vs. epäiltävä) arvioitavissa</td>
+            <td>Mikrokalkit ovat usein ainoa rintasyövän esiaste (DCIS) merkki</td>
             </tr>
             <tr>
             <td><strong>Massat</strong></td>
-            <td>Reunan muoto ja tiheys arvioitavissa; vahintaan 5 mm massat näkyvissä</td>
+            <td>Reunan muoto ja tiheys arvioitavissa; vähintään 5 mm massat näkyvissä</td>
             <td>Massan reunan luonne (tasainen vs. spikuloitunut) on diagnostisesti ratkaiseva</td>
             </tr>
             <tr>
@@ -3520,7 +3712,7 @@
 
             <h3>11.11 Tekninen hylkäys- ja uusintakuvausanalyysi</h3>
 
-            <p>Hylkays- ja uusintakuvausanalyysi (reject/repeat analysis) on systemaattinen menetelma laadun seurantaan:</p>
+            <p>Hylkäys- ja uusintakuvausanalyysi (reject/repeat analysis) on systemaattinen menetelmä laadun seurantaan:</p>
 
             <ul>
             <li><strong>Uusintakuvausprosentti:</strong> Tavoite seulontamammografiassa <strong>&lt; 3 %</strong> (EUREF). Diagnostisessa mammografiassa hyväksyttävä taso on hieman korkeampi.</li>
@@ -3532,6 +3724,48 @@
 
             <div class="theory-info">
             <strong>Yhteenveto:</strong> Sairaalafyysikko yhdistää teknisen kuvanlaadun arvioinnin (MTF, CNR, SDNR, CDMAM) ja kliinisen kuvanlaadun arvioinnin (PGMI, anatomisten kriteerien täyttyminen) kokonaisvaltaiseksi laadunhallinnaksi. Optimoinnin tavoitteena on maksimaalinen diagnostinen informaatio minimoimalla potilasaltistus.
+            </div>
+
+            
+            <!-- EPA-koulutuskortti: Mammografia -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Mammografia</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tutustua kirjallisuuteen ja laitteistojen säteilyturvallisuusjärjestelyihin</li>
+                        <li>osata kirjallisuuden hyödyntäminen</li>
+                        <li>osata selittää mammografialaitteiston yleinen tekninen rakenne, toiminta ja komponentit, detektorimateriaalit ja rakenne</li>
+                        <li>hallita kuvausasetusten ja -parametrien vaikutus kuvanlaatuun ja potilasannokseen</li>
+                        <li>osata tunnistaa kuvausartefaktit ja niiden korjausmenetelmät</li>
+                        <li>osata varmistaa annossuureiden oikeellisuuden, suorittaa laadunvarmistusmittaukset sekä analysoida ja tulkita tulokset</li>
+                        <li>osata potilasaltistuksen määrittäminen</li>
+                        <li>osata ohjata henkilökuntaa säteilyturvallisessa työskentelyssä ja kommunikoida potilaan kanssa säteilyaltistukseen liittyvissä asioissa</li>
+                        <li>tuntea tutkimusten sähköisen tallentamisen järjestelmät sekä DICOM-tiedoston rakenne ja siihen tallennettavat tiedot</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>osata annokseen ja kuvanlaatuun liittyvän optimointiongelman itsenäinen ratkaisu</li>
+                        <li>osata laitteiden hyväksyttävyysvaatimusten mukaiset mittaukset</li>
+                        <li>tutustua erikoistutkimuksiin (tomosynteesi, stereotaktinen näytteenotto, preparaattikuvaus)</li>
+                        <li>osata hyvän kuvan kriteerit erilaisten kuvausindikaatioiden kohdalla</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
             </div>
 
             <div class="theory-quiz-section" data-tab="mammografia">
@@ -3757,7 +3991,7 @@
             <h3>10.2 Mittausprotokolla</h3>
             <p>Standardisoitu mittausprotokolla varmistaa tulosten vertailukelpoisuuden eri mittauskertojen välillä:</p>
             <ol>
-                <li><strong>Valmistelu</strong>: Fantomi lämpötasapainoon huoneenlämpötilaan (20–25 °C). Lämpötila vaikuttaa etenemnisnopeuteen (~+2 m/s/°C vedessä)</li>
+                <li><strong>Valmistelu</strong>: Fantomi lämpötasapainoon huoneenlämpötilaan (20–25 °C). Lämpötila vaikuttaa etenemisnopeuteen (~+2 m/s/°C vedessä)</li>
                 <li><strong>Laiteasetukset</strong>: Dokumentoi kaikki asetukset: taajuus, fokusointi, vahvistus (gain), TGC-säätö, dynaaminen alue, kuvamuoto, anturimalli</li>
                 <li><strong>Standardiasetukset</strong>: Käytä identtisiä asetuksia joka mittauskerralla. Tallenna asetukset preset-muistiin laitteelle</li>
                 <li><strong>Mittausten suoritus</strong>: Jokaisesta mitattavasta suureesta vähintään 3 toistomittausta. Anturi pidetään paikallaan fantomin päällä (ei käsipainetta, joka muuttaa kontaktia)</li>
@@ -3770,8 +4004,8 @@
                     <tr><th>Suure</th><th>Menetelmä</th><th>Tyypillinen arvo</th><th>Hyväksymisraja</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td>Aksiaaliresoluutio</td><td>Vaakasuuntaiset langat eri etäisyyksillä. Pienin erotettava lankavali</td><td>0,5–1,5 mm (taajuudesta riippuva)</td><td>±20 % referenssiarvosta</td></tr>
-                    <tr><td>Lateraaliresoluutio</td><td>Pystysuuntaiset langat rinnakkain. Pienin erotettava lankavali</td><td>1–3 mm (taajuudesta ja syvyydestä riippuva)</td><td>±20 % referenssiarvosta</td></tr>
+                    <tr><td>Aksiaaliresoluutio</td><td>Vaakasuuntaiset langat eri etäisyyksillä. Pienin erotettava lankaväli</td><td>0,5–1,5 mm (taajuudesta riippuva)</td><td>±20 % referenssiarvosta</td></tr>
+                    <tr><td>Lateraaliresoluutio</td><td>Pystysuuntaiset langat rinnakkain. Pienin erotettava lankaväli</td><td>1–3 mm (taajuudesta ja syvyydestä riippuva)</td><td>±20 % referenssiarvosta</td></tr>
                     <tr><td>Tunkeutumissyvyys</td><td>Syvimmän näkyvän kohteen syvyys fantomissa</td><td>5–25 cm (anturityypistä riippuva)</td><td>Ei saa heikentyä &gt;1 cm referenssistä</td></tr>
                     <tr><td>Kuolleen alueen paksuus</td><td>Lähin näkyvä lanka fantomin pinnasta</td><td>1–5 mm (anturityyppistä riippuva)</td><td>Ei saa kasvaa &gt;2 mm referenssistä</td></tr>
                     <tr><td>Harmaasävydynaaminen alue</td><td>Eri echogenisiteetin kohteet (anechoic, hypo-, iso-, hyperechoic). Erottuvatko toisistaan?</td><td>Kaikki kohteet selkeästi erotettavissa</td><td>Ei puuttuvia tai sulautuvia kohteita</td></tr>
@@ -3808,6 +4042,47 @@
                 <p><strong>Käytännön vinkki:</strong> Ilmakuvaus suositellaan tehtäväksi viikoittain tai vähintään kuukausittain osana käyttäjän tekemää laadunvalvontaa. Se ei vaadi fantomia eikä erikoisvälineitä, vain 30 sekuntia aikaa. Kuva tallennetaan PACS:iin seurantaa varten.</p>
             </div>
             <p>Elementtitestin kvantitatiivinen arviointi voidaan tehdä myös laitevalmistajan huolto-ohjelmiston avulla, jolloin saadaan numeerinen arvo jokaisen elementin herkkyydelle ja signaalitasolle. Tämä on tarkempi menetelmä kuin visuaalinen ilmakuva-arviointi.</p>
+
+            
+            <!-- EPA-koulutuskortti: Ultraäänikuvantaminen -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Ultraäänikuvantaminen</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tutustua kirjallisuuteen ja laitteistojen turvallisuusjärjestelyihin</li>
+                        <li>tuntea ultraäänilaitteen yleinen tekninen rakenne, toiminta ja komponentit</li>
+                        <li>osata ultraäänimenetelmien (A-, B- ja M- ja Doppler-menetelmät) periaate ja kontrastin syntyminen</li>
+                        <li>tuntea erilaiset anturit ja niiden käyttöalueet</li>
+                        <li>hallita laitteen laadunvarmistustoimet</li>
+                        <li>tuntee yleisimmät kuvavääristymät</li>
+                        <li>osata kuvanlaadun perusmittaus fantomia ja ilmakuvausta käyttäen ja tulosten analyysi</li>
+                        <li>tutustua yleisimpiin kliinisiin ultraäänitutkimuksiin (vatsa, ylävatsa, rintarauhanen, alaraajalaskimo, virtsaelimet, sydän, ultraääniohjattu toimepide)</li>
+                        <li>tuntea tutkimusten sähköisen tallentamisen järjestelmät sekä DICOM-tiedoston rakenne ja siihen tallennettavat tiedot</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tuntea ultraäänikontrastiaineiden käyttöaiheet</li>
+                        <li>tutustua erikoistutkimuksiin (laajat sydäntutkimukset ja lasten tutkimukset)</li>
+                        <li>tuntea ultraäänen erityistekniikat (elastografia-, kontrastiaine- ja fuusiokuvantaminen)</li>
+                        <li>osata hyödyntää kirjallisuutta</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
 
             <div class="theory-quiz-section" data-tab="ultraaani">
                 <div class="theory-quiz-start">
@@ -3849,7 +4124,7 @@
         <div class="theory-content">
 
             <h2>1. Johdanto</h2>
-            <p>Lääketieteellisen kuvantamisen koko diagnostinen ketju päättyy kuvankatselunäyttöön. Näytön laatu on yhtä tärkeää kuin kuvauslaitteen — huonolaatuinen näyttö voi tehdä hyvälaatui sesta kuvasta diagnostisesti hyödyttömän. Sairaalafyysikon vastuulla on näyttöjen laadunvarmistus ja kalibrointi.</p>
+            <p>Lääketieteellisen kuvantamisen koko diagnostinen ketju päättyy kuvankatselunäyttöön. Näytön laatu on yhtä tärkeää kuin kuvauslaitteen — huonolaatuinen näyttö voi tehdä hyvälaatuisesta kuvasta diagnostisesti hyödyttömän. Sairaalafyysikon vastuulla on näyttöjen laadunvarmistus ja kalibrointi.</p>
 
             <h2>2. Näyttötekniikka</h2>
 
@@ -3871,7 +4146,7 @@
             <h2>3. DICOM GSDF -kalibrointi</h2>
             <p>DICOM Part 14 Grayscale Standard Display Function (GSDF) määrittelee, miten harmaasävyt esitetään näytöllä siten, että ihmissilmän kontrastiherkkyys huomioidaan tasaisesti koko kirkkausskaalalla. Kalibrointi varmistaa, että:</p>
             <ul>
-                <li>Pienet kontrastierot näkyvät tasaisesti kaikissa harmaasvyissä</li>
+                <li>Pienet kontrastierot näkyvät tasaisesti kaikissa harmaasävyissä</li>
                 <li>Kuva näyttää samalta eri näytöillä ja eri sairaaloissa</li>
                 <li>Weber-kontrasti (JND, just noticeable difference) on vakio koko dynamiikka-alueella</li>
             </ul>
@@ -3889,7 +4164,7 @@
             <h2>5. Laadunvarmistus</h2>
 
             <h3>5.1 Päivittäinen tarkistus (radiologi)</h3>
-            <p>SMPTE- tai TG18-QC-testikuva: tarkistetaan visuaalisesti, että tummat ja kirkkaat harmaasvyt erottuvat, kontrasti on riittävä, ja artefakteja ei esiinny.</p>
+            <p>SMPTE- tai TG18-QC-testikuva: tarkistetaan visuaalisesti, että tummat ja kirkkaat harmaasävyt erottuvat, kontrasti on riittävä, ja artefakteja ei esiinny.</p>
 
             <div class="theory-image-slot" data-slot="naytot-qa-patterns" data-tab="naytot" data-default-caption="TG18-testikuvat näytön laadunvarmistuksessa: TG18-QC (yleistarkistus), TG18-LN (luminanssivaste), TG18-CX (resoluutio)."></div>
 
@@ -4029,6 +4304,40 @@
                 <p><strong>Käytännön huomio:</strong> Kirjaa jokaisen kalibrointimittauksen yhteydessä \( L_{max} \) ja \( L_{min} \) trenditaulukkoon. Kun \( L_{max} \) on laskenut 20 % alkuperäisestä, aloita näytön vaihdon suunnittelu. Äkillinen kirkkauden lasku viittaa taustavalon vikaan.</p>
             </div>
 
+            
+            <!-- EPA-koulutuskortti: Kuvankatselunäytöt -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Kuvankatselunäytöt</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tutustua kirjallisuuteen sekä näyttöjen ja näytönohjainten ominaisuuksiin ja käyttöohjeisiin</li>
+                        <li>osata kirjallisuuden hyödyntäminen</li>
+                        <li>tuntea lääketieteessä käytettävät eri näyttöteknologiat ja näytönohjaimet</li>
+                        <li>osata keskeisimmät kuvanlaatutekijät (mm. resoluutio, kohina, tasaisuus, kontrastivaste, heijastukset, virheelliset pikselit)</li>
+                        <li>osata suorittaa laadunvarmistusmittaukset sekä analysoida ja tulkita tulokset</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>osata optimoida kuvankatseluolosuhteet ja ymmärtää niiden vaikutus kuvanlaatuun</li>
+                        <li>tuntea DICOM-standardissa käytetty harmaasävynäyttöfunktio</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
+
             <div class="theory-quiz-section" data-tab="naytot">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
@@ -4067,7 +4376,7 @@
         <div class="theory-content">
 
             <h2>1. Johdanto</h2>
-            <p>Hammaskuvantaminen kattaa intraoraalikuvaukset, panoraamatomografian (OPG) ja kartiokeilatietokonetomografian (KKTT/CBCT). Hammaskuvantaminen on yleisin röntgentutkimustyyppi lukumäärältään ja liittyy sairaalafyysikon työhön erityisesti laadunvarmistuksen ja annos optimoinnin kautta.</p>
+            <p>Hammaskuvantaminen kattaa intraoraalikuvaukset, panoraamatomografian (OPG) ja kartiokeilatietokonetomografian (KKTT/CBCT). Hammaskuvantaminen on yleisin röntgentutkimustyyppi lukumäärältään ja liittyy sairaalafyysikon työhön erityisesti laadunvarmistuksen ja annosoptimoinnin kautta.</p>
 
             <h2>2. Intraoraalikuvantaminen</h2>
 
@@ -4121,7 +4430,7 @@
             <ul>
                 <li><strong>Intraoraalikuvaus</strong>: Säteilytuoton mittaus, puoliintumispaksuus, taimer tarkkuus, fokuskoon mittaus.</li>
                 <li><strong>OPG</strong>: Säteilytuotto, tasainen valotus panoraamakuvan laajuudella, focal trough -sijainnin tarkistus, AEC-toiminta.</li>
-                <li><strong>KKTT</strong>: CTDI-tyyppinen annosm ittaus (pieni fantomi), HU-tarkkuus (jos käytettävissä), geometrinen tarkkuus, homogeenisuus, artefaktien tarkistus.</li>
+                <li><strong>KKTT</strong>: CTDI-tyyppinen annosmittaus (pieni fantomi), HU-tarkkuus (jos käytettävissä), geometrinen tarkkuus, homogeenisuus, artefaktien tarkistus.</li>
             </ul>
 
             <h2>6. KKTT:n rekonstruktiomatematiikka (A7)</h2>
@@ -4155,7 +4464,7 @@
             <h3>6.3 Cone-beam-artefaktit</h3>
             <p>FDK-algoritmi on <strong>tarkka</strong> ainoastaan keskimmäiselle leikkeelle (midplane) ja approksimaatio muille leikeille. Tästä aiheutuu spesifisiä artefakteja:</p>
             <ul>
-                <li><strong>Feldkamp-artefakti (z-suunnassa)</strong>: Kartiekeilan reunaosissa (suurilla cone-kulmilla) rekonstruktio on epätarkka. Ilmenee tummentumina ja kirkkaina raitoina aksiaalileikkeiden reunoilla. Pahimmillaan suurilla FOV:lla ja laitteilla, joissa cone-kulma on suuri</li>
+                <li><strong>Feldkamp-artefakti (z-suunnassa)</strong>: Kartiokeilan reunaosissa (suurilla cone-kulmilla) rekonstruktio on epätarkka. Ilmenee tummentumina ja kirkkaina raitoina aksiaalileikkeiden reunoilla. Pahimmillaan suurilla FOV:lla ja laitteilla, joissa cone-kulma on suuri</li>
                 <li><strong>Kohinan kasaantuminen</strong>: FBP:n ramp-suodatin vahvistaa korkeataajuista kohinaa. KKTT:ssa kohina jakautuu koko volyymiin, ja erityisesti z-suunnassa kohina voi kasaantua</li>
                 <li><strong>Epätäydellinen datanäytteistys</strong>: Rajoitettu pyörähdyskulma (180°+keilan avauskulma vs täydet 360°) voi aiheuttaa lisäartefakteja</li>
             </ul>
@@ -4324,7 +4633,7 @@
             <ul>
                 <li><strong>Jatkuva säteilytys (continuous)</strong>: Röntgenputki on päällä koko pyörähdyksen ajan. Yksinkertaisempi elektroniikka. Suurempi annos, koska säteilyä tuotetaan myös detektorin luentahetkellä</li>
                 <li><strong>Pulssimainen säteilytys (pulsed)</strong>: Röntgenpulssit synkronoitu detektorin luentaan. Annos pienenee 30–50 %, koska säteilyä tuotetaan vain kun detektori vastaanottaa dataa. Liikeartefaktien väheneminen (lyhyempi efektiivinen altistusaika)</li>
-                <li><strong>Nykyaikaiset KKTT-laitteet</strong>: Lähes kaikki käyttävät pulssimasta säteilytystä annossäästön vuoksi</li>
+                <li><strong>Nykyaikaiset KKTT-laitteet</strong>: Lähes kaikki käyttävät pulssimaista säteilytystä annossäästön vuoksi</li>
             </ul>
 
             <h3>8.7 Annosten optimointistrategiat hammaskuvantamisessa (ALADAIP-periaate)</h3>
@@ -4416,6 +4725,47 @@
             </div>
             <div class="theory-info">
                 <p><strong>Esimerkki 3 — Intraoraalikuvauksen modernisointi:</strong> Vanha filmilaite (E-speed filmi) korvattu suoradigitaalisella sensorilla (CMOS). Annossäästö: ~50 % (digisensorin parempi DQE mahdollistaa pienemmän mAs-arvon). Lisähyöty: kuvan jälkikäsittely, PACS-arkistointi.</p>
+            </div>
+
+            
+            <!-- EPA-koulutuskortti: Hammaskuvantaminen -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Hammaskuvantaminen</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tutustua kirjallisuuteen ja laitteistojen säteilyturvallisuusjärjestelyihin</li>
+                        <li>osata kirjallisuuden hyödyntäminen</li>
+                        <li>osata selittää laitteistojen yleisen teknisen rakenteen, toiminnan ja komponentit, detektorien rakenteet ja toimintaperiaatteet</li>
+                        <li>osata varmistaa annossuureiden oikeellisuuden, suorittaa laadunvarmistusmittaukset sekä analysoida ja tulkita tulokset</li>
+                        <li>tuntea intraoraali- ja panoraamatutkimusten suorittamisen</li>
+                        <li>tuntea kartiokeilatutkimuksen suorittamisen</li>
+                        <li>hallita KKTT-leikekuvauksen, kontrastin syntymisen ja rekonstruktiomenetelmien matemaattinen perusta</li>
+                        <li>osata tunnistaa kuvausartefaktit ja niiden korjausmenetelmät</li>
+                        <li>hallita kuvausasetusten ja -parametrien vaikutus kuvanlaatuun ja potilasannokseen</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>osata laitteiden hyväksyttävyysvaatimusten mukaiset mittaukset</li>
+                        <li>osata annokseen ja kuvanlaatuun liittyvän optimointiongelman itsenäinen ratkaisu</li>
+                        <li>osata hyvän kuvan kriteerit erilaisten kuvausindikaatioiden kohdalla</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
             </div>
 
             <div class="theory-quiz-section" data-tab="hammas">
@@ -4602,7 +4952,7 @@
                 </thead>
                 <tbody>
                     <tr><td>DQE (Detective Quantum Efficiency)</td><td>Kuvailee detektorin kykyä muuntaa saapuvat röntgenfotonit hyödylliseksi kuvainformaatioksi. \( DQE(f) = \frac{SNR^2_{out}(f)}{SNR^2_{in}(f)} \)</td><td>Korkeampi on parempi (esim. 0,6–0,7 nollataajuudella)</td></tr>
-                    <tr><td>MTF (Modulation Transfer Function)</td><td>Spatiaalinen resoluutio taajuuden funktiona. Kuinka hyvin laite toistaa pieniä yksityiskohtia</td><td>Korkeampi MTF korkeil la taajuuksilla = parempi terävyys</td></tr>
+                    <tr><td>MTF (Modulation Transfer Function)</td><td>Spatiaalinen resoluutio taajuuden funktiona. Kuinka hyvin laite toistaa pieniä yksityiskohtia</td><td>Korkeampi MTF korkeilla taajuuksilla = parempi terävyys</td></tr>
                     <tr><td>NPS (Noise Power Spectrum)</td><td>Kohinan taajuusjakauma. Matala NPS = vähemmän kohinaa</td><td>Matalampi on parempi</td></tr>
                     <tr><td>Annos standarditutkimuksessa</td><td>DAP, CTDI, ESD tyypillisissä kliinisissä tutkimuksissa</td><td>Matalampi annos samalla kuvanlaadulla</td></tr>
                     <tr><td>AEC-suorituskyky</td><td>Automaattisen valotussäädön tasaisuus eri potilaskokoilla</td><td>Tasainen kuvanlaatu ilman ylimääräistä annosta</td></tr>
@@ -4872,7 +5222,7 @@
                 <li><strong>Vertailu taustasäteilyyn</strong>: Tutkimuksen annos ilmaistaan päivinä/viikkoina taustasäteilyä (Suomessa ~3,2 mSv/a). Esim. keuhkoröntgen ≈ 1 päivän taustasäteily, vatsan TT ≈ 2 vuoden taustasäteily</li>
                 <li><strong>Riskiarvio</strong>: Stokastisen riskin suuruusluokka. Esim. 10 mSv:n TT-tutkimus: ylimääräinen syöpäriski ~0,05 % (1:2000). Vertailu: Suomessa syöpäriski muutenkin ~30 %</li>
                 <li><strong>Oikeutuksen selittäminen</strong>: Tutkimuksen diagnostinen hyöty on arvioitu ylittävän pienen säteilyriskin</li>
-                <li><strong>Erityistilaneet</strong>: Raskaana olevien potilaiden informointi (sikiön annos ja riski), lasten tutkimusten erityiskysymykset</li>
+                <li><strong>Erityistilanteet</strong>: Raskaana olevien potilaiden informointi (sikiön annos ja riski), lasten tutkimusten erityiskysymykset</li>
             </ul>
 
             <h2>15. Menettelyjen kehittäminen (B4–B5)</h2>
@@ -5047,6 +5397,51 @@
             </ol>
             <div class="theory-info">
                 <p><strong>Fyysikon rooli auditoinnissa:</strong> Sairaalafyysikko on keskeinen henkilö auditoinnin valmistelussa (teknisten dokumenttien kokoaminen, annosdatan analyysi, laadunvarmistusdatan yhteenveto) ja auditoinnin aikana (tekniset selonteot, mittaustulosten esittely). Fyysikko myös johtaa auditoinnin jälkeisten teknisten kehittämis­toimenpiteiden toteutusta.</p>
+            </div>
+
+            
+            <!-- EPA-koulutuskortti: Sateilybiologia ja sateilysuojelu radiologiassa -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Sateilybiologia ja sateilysuojelu radiologiassa</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>hallita säteilysuojelun keskeiset periaatteet ja lainsäädännön sekä toiminnan harjoittamispaikalla tarvittavat säteilysuojelu- ja turvajärjestelyt</li>
+                        <li>hallita lääketieteellisen fysiikan ja säteilybiologian ja osata soveltaa tietoja työskentelyalallaan pystyäkseen ohjaamaan muita säteilyaltistuksen laadusta ja suuruudesta päivittäisessä työssä.</li>
+                        <li>osata arvioida ja tulkita säteilyriskejä</li>
+                        <li>osata opastaa laitteiden ja ohjelmistojen valinnassa ottaen huomioon kuvalaatuun ja säteilyaltistukseen liittyvät tekijät</li>
+                        <li>tietää annossuureet sekä osata efektiivisen ja elinkohtaisen annoksen määrittäminen radiologisissa tutkimuksissa ja toimenpideradiologiassa</li>
+                        <li>osata optimoida säteilyn lääketieteellisestä käytöstä aiheutuvaa työperäistä altistusta</li>
+                        <li>osata arvioida ja kehittää työskentelyalalle soveltuvia säteilysuojelumenettelyjä lääketieteellisen altistuksen optimoimiseksi sekä säteilyn lääketieteellisestä käytöstä aiheutuvan väestön ja työperäisen altistuksen optimoimiseksi</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>kyetä toimimaan osaamisalansa asiantuntijana, viestimään säteilysuojeluasioista ja opastamaan toiminnanharjoittajaa lakisääteisten vaatimusten noudattamisessa</li>
+                        <li>kyetä opastamaan toiminnanharjoittajaa toiminnasta aiheutuvan altistuksen arvioimisessa, suojelun optimoinnissa sekä ennaltaehkäisevässä suunnittelussa ja riskien kartoituksessa</li>
+                        <li>osata neuvoa toiminnanharjoittajaa koulutuksen ja opastuksen järjestämiseksi säteilytoimintaan osallistuvalle henkilöstölle säteilyturvalliseen työskentelyyn ja suunnitella tarvittavan säteilysuojelun täydennyskoulutuksen</li>
+                        <li>osaa arvioida säteilyriskejä uusimpaan tietoon perustuen ja ohjata muita terveydenhuollon ammattilaisia viestimään säteilyaltistuksen laadusta ja suuruudesta</li>
+                        <li>osata arvioida ja kehittää soveltuvia säteilysuojelumenettelyjä</li>
+                        <li>osata toteuttaa kuvantamishuoneen tilasuunnittelu säteilysuojauksen osalta</li>
+                        <li>osata raportoida säteilyturvallisuuspoikkeamista asianomaiselle taholle ja tuntea menettelyjä poikkeamien syiden selvittelyyn ja niistä oppimiseen</li>
+                        <li>tutustua kliiniseen auditointiin vähintään edellisen kliinisen auditoinnin dokumentaation kautta Tärkeimmät</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-chart-line"></i> Johtamistaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
             </div>
 
             <div class="theory-quiz-section" data-tab="sateilysuojelu">
@@ -5474,7 +5869,7 @@
             // Update flag button state
             if (st.currentFlagType) {
                 var flagBtnEl = document.getElementById('tq-flag-' + tabId);
-                var flagOpts = { wrong: {icon: 'fa-times-circle', color: '#e74c3c', label: 'Väärin'}, guess: {icon: 'fa-question-circle', color: '#f1c40f', label: 'Arvaus'}, important: {icon: 'fa-star', color: '#3498db', label: 'Tärkeä'} };
+                var flagOpts = { wrong: {icon: 'fa-times-circle', color: 'var(--color-error)', label: 'Väärin'}, guess: {icon: 'fa-question-circle', color: 'var(--color-warning)', label: 'Arvaus'}, important: {icon: 'fa-star', color: 'var(--color-primary)', label: 'Tärkeä'} };
                 var fo = flagOpts[st.currentFlagType];
                 if (fo && flagBtnEl) {
                     flagBtnEl.style.borderColor = fo.color;
@@ -5524,7 +5919,7 @@
             st.currentFlagType = result.flag_type;
             var flagBtnEl = document.getElementById('tq-flag-' + tabId);
             if (!flagBtnEl) return;
-            var flagOpts = { wrong: {icon: 'fa-times-circle', color: '#e74c3c', label: 'Väärin'}, guess: {icon: 'fa-question-circle', color: '#f1c40f', label: 'Arvaus'}, important: {icon: 'fa-star', color: '#3498db', label: 'Tärkeä'} };
+            var flagOpts = { wrong: {icon: 'fa-times-circle', color: 'var(--color-error)', label: 'Väärin'}, guess: {icon: 'fa-question-circle', color: 'var(--color-warning)', label: 'Arvaus'}, important: {icon: 'fa-star', color: 'var(--color-primary)', label: 'Tärkeä'} };
             if (result.flag_type && flagOpts[result.flag_type]) {
                 var fo = flagOpts[result.flag_type];
                 flagBtnEl.style.borderColor = fo.color;

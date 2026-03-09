@@ -20,7 +20,7 @@ from django.views.decorators.http import require_POST, require_GET
 from django.http import JsonResponse, HttpResponse
 from django.db.models import F, Max, Q
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Section, EPA, Specialty, ExamQuestion, TheoryImage
+from .models import Section, EPA, Specialty, ExamQuestion, TheoryImage, TheoryContent
 import json
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
@@ -3669,6 +3669,41 @@ def theory_image_delete(request):
         return JsonResponse({'ok': True})
     except TheoryImage.DoesNotExist:
         return JsonResponse({'error': 'Kuvapaikkaa ei löydy.'}, status=404)
+
+
+# =============================================================================
+# THEORY CONTENT INLINE EDITING
+# =============================================================================
+
+@require_POST
+def theory_content_save(request):
+    """Save inline-edited theory content for a modality tab."""
+    if not request.user.is_superuser:
+        return JsonResponse({'error': 'Ei oikeuksia.'}, status=403)
+    try:
+        data = json.loads(request.body)
+        modality = data.get('modality', '').strip()
+        tab_id = data.get('tab_id', '').strip()
+        content = data.get('content', '')
+        if not modality or not tab_id:
+            return JsonResponse({'error': 'modality ja tab_id vaaditaan.'}, status=400)
+        obj, created = TheoryContent.objects.update_or_create(
+            modality=modality,
+            tab_id=tab_id,
+            defaults={'content': content, 'updated_by': request.user},
+        )
+        return JsonResponse({'success': True, 'created': created})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+
+def theory_content_get(request, modality: str, tab_id: str):
+    """Get saved theory content for a modality tab (or 404 if not saved yet)."""
+    try:
+        obj = TheoryContent.objects.get(modality=modality, tab_id=tab_id)
+        return JsonResponse({'content': obj.content, 'updated_at': obj.updated_at.isoformat()})
+    except TheoryContent.DoesNotExist:
+        return JsonResponse({'error': 'Ei tallennettua sisältöä.'}, status=404)
 
 
 # =============================================================================

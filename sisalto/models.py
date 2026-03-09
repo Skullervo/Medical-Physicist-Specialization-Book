@@ -182,3 +182,24 @@ class TheoryImage(models.Model):
 
     def __str__(self):
         return f"{self.modality}/{self.tab_id}/{self.slot_id}"
+
+
+class TheoryContent(models.Model):
+    """Editable theory content for modality pages.
+    Stores the HTML content of each theory panel tab, allowing
+    superusers to edit content inline via CKEditor 5."""
+
+    modality = models.CharField(max_length=50, db_index=True)
+    tab_id = models.CharField(max_length=50)
+    content = models.TextField(blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    updated_by = models.ForeignKey(
+        'auth.User', on_delete=models.SET_NULL, null=True, blank=True
+    )
+
+    class Meta:
+        unique_together = ('modality', 'tab_id')
+        ordering = ['modality', 'tab_id']
+
+    def __str__(self):
+        return f"TheoryContent: {self.modality}/{self.tab_id}"
