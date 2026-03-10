@@ -1,4 +1,4 @@
-/* Theory Inline Editor — Native contenteditable + floating toolbar */
+/* Theory Inline Editor — Fixed dock toolbar at bottom of viewport */
 
 /* Toggle button in header */
 .theory-inline-edit-toggle {
@@ -25,30 +25,155 @@
     background: rgba(52, 211, 153, 0.08);
 }
 
-/* Save bar per panel */
-.theory-save-bar {
+/* ── Fixed dock toolbar at bottom of viewport ───────────────────────── */
+.theory-dock-toolbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
     display: flex;
-    justify-content: flex-end;
-    padding: 8px 16px;
-    margin-bottom: 12px;
-    border-bottom: 1px solid var(--border-default, #2d3748);
-}
-.theory-save-btn {
-    display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 8px 20px;
+    gap: 2px;
+    padding: 8px 16px;
+    background: var(--bg-overlay, #232b3e);
+    border-top: 1px solid var(--border-default, #2d3748);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+    z-index: 10010;
+    transform: translateY(100%);
+    opacity: 0;
+    transition: transform 0.25s ease, opacity 0.2s ease;
+}
+.theory-dock-toolbar.visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Add bottom padding to body so content isn't hidden behind dock */
+body.theory-inline-editing {
+    padding-bottom: 60px;
+}
+
+/* Button groups */
+.theory-dock-group {
+    display: flex;
+    align-items: center;
+    gap: 1px;
+    padding: 0 4px;
+    border-right: 1px solid var(--border-default, #2d3748);
+}
+.theory-dock-group:last-child {
+    border-right: none;
+}
+
+/* Push save button to the right */
+.theory-dock-right {
+    margin-left: auto;
+    border-right: none;
+    border-left: 1px solid var(--border-default, #2d3748);
+}
+
+/* Vertical separator */
+.theory-dock-sep {
+    width: 1px;
+    height: 28px;
+    background: var(--border-default, #2d3748);
+    margin: 0 6px;
+}
+
+/* Toolbar buttons */
+.theory-dock-toolbar button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    height: 34px;
     border: none;
     border-radius: 6px;
-    background: var(--color-primary, #60a5fa);
-    color: #fff;
-    font-size: 0.9rem;
-    font-weight: 600;
+    background: transparent;
+    color: var(--text-primary, #e2e8f0);
+    font-size: 0.85rem;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: background 0.15s, color 0.15s;
+    padding: 0 6px;
 }
-.theory-save-btn:hover {
-    background: #3b82f6;
+.theory-dock-toolbar button:hover {
+    background: var(--bg-raised, #1c2333);
+}
+.theory-dock-toolbar button b {
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+/* Accent button (insert image) */
+.theory-dock-accent {
+    color: var(--color-primary, #60a5fa) !important;
+    gap: 5px;
+    font-weight: 600;
+    font-size: 0.8rem !important;
+    padding: 0 12px !important;
+}
+.theory-dock-accent:hover {
+    background: rgba(96, 165, 250, 0.12) !important;
+}
+
+/* Save button */
+.theory-dock-save {
+    background: var(--color-primary, #60a5fa) !important;
+    color: #fff !important;
+    gap: 5px;
+    font-weight: 600;
+    font-size: 0.8rem !important;
+    padding: 0 16px !important;
+    border-radius: 6px !important;
+}
+.theory-dock-save:hover {
+    background: #3b82f6 !important;
+}
+
+/* ── Color picker ────────────────────────────────────────────────────── */
+.theory-dock-color-group {
+    position: relative;
+}
+.theory-color-picker {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-overlay, #232b3e);
+    border: 1px solid var(--border-default, #2d3748);
+    border-radius: 8px;
+    padding: 8px;
+    gap: 6px;
+    grid-template-columns: repeat(4, 1fr);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    z-index: 10020;
+}
+.theory-color-picker.open {
+    display: grid;
+}
+.theory-color-picker button {
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+    border-radius: 50% !important;
+    border: 2px solid transparent !important;
+    padding: 0 !important;
+    cursor: pointer;
+    transition: border-color 0.15s, transform 0.15s;
+}
+.theory-color-picker button:hover {
+    border-color: #fff !important;
+    transform: scale(1.15);
+    background: inherit !important;
+}
+.theory-color-reset {
+    background: var(--bg-raised, #1c2333) !important;
+    color: var(--text-tertiary, #718096) !important;
+    font-size: 0.7rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
 
 /* Visual indicator when editing is active */
@@ -64,60 +189,10 @@ body.theory-inline-editing .theory-panel.active .theory-content {
     outline-offset: 4px;
 }
 
-/* Floating toolbar */
-.theory-floating-toolbar {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    padding: 6px 8px;
-    background: var(--bg-overlay, #232b3e);
-    border: 1px solid var(--border-default, #2d3748);
-    border-radius: 8px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-    z-index: 10010;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.15s;
-}
-.theory-floating-toolbar.visible {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.theory-floating-toolbar button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border: none;
-    border-radius: 4px;
-    background: transparent;
-    color: var(--text-primary, #e2e8f0);
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: background 0.15s;
-}
-.theory-floating-toolbar button:hover {
-    background: var(--bg-raised, #1c2333);
-}
-.theory-floating-toolbar button b {
-    font-size: 0.75rem;
-    font-weight: 700;
-}
-
-.toolbar-sep {
-    width: 1px;
-    height: 20px;
-    background: var(--border-default, #2d3748);
-    margin: 0 4px;
-}
-
-/* Toast notification */
+/* ── Toast notification ─────────────────────────────────────────────── */
 .theory-edit-toast {
     position: fixed;
-    bottom: 24px;
+    bottom: 70px; /* Above the dock toolbar */
     right: 24px;
     padding: 12px 24px;
     border-radius: 8px;
@@ -139,4 +214,136 @@ body.theory-inline-editing .theory-panel.active .theory-content {
 }
 .theory-edit-toast.error {
     background: var(--color-red, #f87171);
+}
+
+/* ── Drag handle on image slots ─────────────────────────────────────── */
+.theory-drag-handle {
+    display: none;
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    padding: 4px 8px;
+    background: var(--bg-overlay, #232b3e);
+    border: 1px solid var(--border-default, #2d3748);
+    border-radius: 6px;
+    color: var(--text-tertiary, #718096);
+    font-size: 0.75rem;
+    cursor: grab;
+    z-index: 5;
+    gap: 4px;
+    align-items: center;
+    user-select: none;
+    transition: color 0.15s, border-color 0.15s;
+}
+.theory-drag-handle:hover {
+    color: var(--color-primary, #60a5fa);
+    border-color: var(--color-primary, #60a5fa);
+}
+.theory-drag-handle:active {
+    cursor: grabbing;
+}
+
+/* Show drag handles only in edit mode */
+body.theory-edit-mode .theory-drag-handle {
+    display: flex;
+}
+
+/* Dragging state */
+.theory-slot-dragging {
+    opacity: 0.35;
+    outline: 2px dashed var(--color-primary, #60a5fa) !important;
+    outline-offset: 2px;
+}
+
+/* Drop indicator line */
+.theory-drop-indicator {
+    height: 3px;
+    background: var(--color-primary, #60a5fa);
+    border-radius: 2px;
+    margin: 4px 0;
+    box-shadow: 0 0 8px rgba(96, 165, 250, 0.5);
+    animation: theory-drop-pulse 1s ease-in-out infinite;
+}
+@keyframes theory-drop-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* ── Caption inline editing ─────────────────────────────────────────── */
+body.theory-edit-mode .theory-caption-editable {
+    cursor: text;
+    border-bottom: 1px dashed var(--border-default, #2d3748);
+    transition: border-color 0.2s, background 0.2s;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+body.theory-edit-mode .theory-caption-editable:hover {
+    border-color: var(--color-primary, #60a5fa);
+    background: rgba(96, 165, 250, 0.05);
+}
+body.theory-edit-mode .theory-caption-editable:focus {
+    outline: none;
+    border-color: var(--color-primary, #60a5fa);
+    background: rgba(96, 165, 250, 0.08);
+    box-shadow: 0 1px 4px rgba(96, 165, 250, 0.2);
+}
+
+/* ── Delete slot button ────────────────────────────────────────────── */
+.btn-delete-slot {
+    background: rgba(248, 113, 113, 0.1) !important;
+    color: var(--color-red, #f87171) !important;
+    border: 1px solid rgba(248, 113, 113, 0.3) !important;
+    font-size: 0.75rem !important;
+    padding: 4px 10px !important;
+    border-radius: 4px !important;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+}
+.btn-delete-slot:hover {
+    background: rgba(248, 113, 113, 0.25) !important;
+    border-color: var(--color-red, #f87171) !important;
+}
+
+/* Delete bar under empty dynamic slots */
+.theory-slot-delete-bar {
+    display: flex;
+    justify-content: center;
+    padding: 6px 0;
+}
+
+/* Only show delete-slot buttons in edit mode */
+.btn-delete-slot {
+    display: none;
+}
+body.theory-edit-mode .btn-delete-slot {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+.theory-slot-delete-bar {
+    display: none;
+}
+body.theory-edit-mode .theory-slot-delete-bar {
+    display: flex;
+}
+
+/* ── Responsive: stack dock on narrow screens ───────────────────────── */
+@media (max-width: 768px) {
+    .theory-dock-toolbar {
+        flex-wrap: wrap;
+        gap: 4px;
+        padding: 6px 8px;
+    }
+    .theory-dock-group {
+        border-right: none;
+    }
+    .theory-dock-right {
+        margin-left: 0;
+        border-left: none;
+        width: 100%;
+        justify-content: flex-end;
+    }
+    body.theory-inline-editing {
+        padding-bottom: 100px;
+    }
 }

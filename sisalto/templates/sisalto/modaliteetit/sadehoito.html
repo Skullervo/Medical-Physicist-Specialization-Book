@@ -5,17 +5,18 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'sisalto/css/theory.css' %}?v=1">
+<link rel="stylesheet" href="{% static 'sisalto/css/theory-inline-editor.css' %}?v=1">
 {% endblock %}
 
 {% block content %}
 
-<div class="theory-container">
+<div class="theory-container" data-modality-id="sadehoito">
     <div class="theory-header">
         <h1><i class="fas fa-radiation" style="color: #34d399; margin-right: 8px;"></i> Sädehoidon teoria</h1>
         <p>Kattava teoriamateriaali sädehoidon fysikaalisista perusteista, hoitotekniikoista, dosimetriasta, laitteista ja säteilybiologiasta. Valitse aihealue alla olevista välilehdistä.</p>
         {% if is_superuser %}
-        <button class="theory-edit-toggle" id="editModeToggle" onclick="toggleEditMode()">
-            <i class="fas fa-images"></i> <span>Muokkaa kuvia</span>
+        <button class="theory-inline-edit-toggle" id="inlineEditToggle">
+            <i class="fas fa-pen"></i> <span>Muokkaa sisältöä</span>
         </button>
         {% endif %}
     </div>
@@ -85,6 +86,35 @@
          ================================================================ -->
     <div class="theory-panel active" id="panel-peruskasitteet" role="tabpanel">
         <div class="theory-content">
+
+            <!-- EPA-koulutuskortti: Sädehoidon peruskäsitteet -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Sädehoidon peruskäsitteet</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tuntea säteilylajien ja radioaktiivisten aineiden perusfysiikka, perehtyä osastolla käytössä olevien hoitolaitteiden säteilylajien ominaisuuksiin</li>
+                        <li>perehtyä sädehoitoketjun eri osiin: lähetteet ja lääkärin vastaanotto, asennonvarmistuksen apuvälineen valmistaminen ja käyttö, suunnittelukuvantaminen, kohdealueen ja riskielimien rajaus, hoidon määrääminen, annossuunnittelu, hoidon toteutus</li>
+                        <li>tuntea annossuunnittelun ja kohdealuemäärittelyn peruskäsitteet: GTV, CTV, ITV, PTV, OAR, kokonaisannos, kerta-annos, fraktiointi</li>
+                        <li>tuntea annosjakauman esitystavat: absoluuttiannos, suhteellinen annos, syväannos, pisteannos, kenttäannos, isodoosit, DVH, 2D ja 3D -visualisoinnit</li>
+                        <li>tuntea annosjakauman normittamisperiaatteet, annossuunnittelun keskeiset hyvyyskriteerit, keskeisten normaalikudosten sädetoleranssi ja sen esitystavat (maksimiannos, annos-tilavuusrajoitteet, keskimääräinen annos)</li>
+                        <li>osata sädehoidon annossuunnittelujärjestelmän ja tietojärjestelmien peruskäytön</li>
+                        <li>perehtyä sädehoitohuoneiden turvajärjestelmiin ja säteilyvaaramerkintöihin</li>
+                        <li>tutustua keskeiseen kirjallisuuteen, suosituksiin ja menetelmäohjeisiin</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
+
 
             <h2>1. Johdanto</h2>
             <p>Sädehoito (radiation therapy, radiotherapy) on yksi syövän kolmesta päähoidosta kirurgian ja lääkehoidon ohella. Noin puolet kaikista syöpäpotilaista saa sädehoitoa jossakin sairauden vaiheessa. Sädehoidon fysiikan ymmärtäminen on sairaalafyysikon ydinosaamisaluetta: fyysikko vastaa annossuunnittelun tarkkuudesta, laadunvarmistuksesta ja potilasturvallisuudesta.</p>
@@ -387,35 +417,6 @@
                 <li><strong>Henkilökohtainen dosimetria</strong>: TLD- tai OSL-dosimetrit kaikille säteilytyöntekijöille</li>
             </ul>
 
-            
-            <!-- EPA-koulutuskortti: Sädehoidon peruskäsitteet -->
-            <div class="theory-epa-card">
-                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Sädehoidon peruskäsitteet</h2>
-                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
-                <div class="theory-epa-section theory-epa-a">
-                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tuntea säteilylajien ja radioaktiivisten aineiden perusfysiikka, perehtyä osastolla käytössä olevien hoitolaitteiden säteilylajien ominaisuuksiin</li>
-                        <li>perehtyä sädehoitoketjun eri osiin: lähetteet ja lääkärin vastaanotto, asennonvarmistuksen apuvälineen valmistaminen ja käyttö, suunnittelukuvantaminen, kohdealueen ja riskielimien rajaus, hoidon määrääminen, annossuunnittelu, hoidon toteutus</li>
-                        <li>tuntea annossuunnittelun ja kohdealuemäärittelyn peruskäsitteet: GTV, CTV, ITV, PTV, OAR, kokonaisannos, kerta-annos, fraktiointi</li>
-                        <li>tuntea annosjakauman esitystavat: absoluuttiannos, suhteellinen annos, syväannos, pisteannos, kenttäannos, isodoosit, DVH, 2D ja 3D -visualisoinnit</li>
-                        <li>tuntea annosjakauman normittamisperiaatteet, annossuunnittelun keskeiset hyvyyskriteerit, keskeisten normaalikudosten sädetoleranssi ja sen esitystavat (maksimiannos, annos-tilavuusrajoitteet, keskimääräinen annos)</li>
-                        <li>osata sädehoidon annossuunnittelujärjestelmän ja tietojärjestelmien peruskäytön</li>
-                        <li>perehtyä sädehoitohuoneiden turvajärjestelmiin ja säteilyvaaramerkintöihin</li>
-                        <li>tutustua keskeiseen kirjallisuuteen, suosituksiin ja menetelmäohjeisiin</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-canmeds">
-                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
-                    <div class="theory-epa-canmeds-tags">
-                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
-                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
-                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
-                    </div>
-                </div>
-            </div>
-
             <div class="theory-quiz-section" data-tab="peruskasitteet">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
@@ -451,6 +452,48 @@
          ================================================================ -->
     <div class="theory-panel" id="panel-kuvantaminen" role="tabpanel">
         <div class="theory-content">
+
+            <!-- EPA-koulutuskortti: Kuvantaminen sädehoidon suunnittelua varten -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Kuvantaminen sädehoidon suunnittelua varten</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tuntea tietokonetomografian periaatteen ja käytön sädehoidon suunnittelussa ja osana sädehoitoketjun kokonaisuutta. tuntea TT-kuvan sisältämän tiedon käytön annoslaskennan perustana.</li>
+                        <li>tuntea TT-kuvista tuotettavat esitystavat annossuunnittelua ja kuvantamisohjausta varten: 2D / 3D / DRR-kuvat</li>
+                        <li>osata TT:n / TT-simulaattorin laadunvalvonnan perusteet: geometria, kohdistuslasereiden tarkkuus, elektronitiheyskalibraatio ja sen tarkistaminen annossuunnittelua varten, pöydän liiketarkkuus</li>
+                        <li>osata tunnistaa TT-kuvista erilaisia kuvausartefaktoja ja niiden eliminointimenetelmät (mm. implantit, riittämätön kuva-ala)</li>
+                        <li>tuntea perusteet TT-kuvien käsittelystä sädehoidon suunnittelussa: manuaalinen rakenteiden rajaus, puoliautomaattiset menetelmät, automaattiset menetelmät</li>
+                        <li>perehtyä työasematyöskentelyyn useiden kuvamodaliteettien kanssa, mm. kuvien rekisteröintiin ja kuvafuusiomenetelmiin</li>
+                        <li>tutustua keskeiseen kirjallisuuteen, suosituksiin ja menetelmäohjeisiin</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>ymmärtää diagnostiikan, sädehoidon annossuunnittelun ja kuvantamisohjauksen erilaiset tarpeet: kuvanlaatu, kuvausannoksen optimointi.</li>
+                        <li>tuntea perusteet hengitystahdistetuista ja aikariippuvista kuvauksista: 4D, hengityspidätys, ”hidas kuvaus”</li>
+                        <li>tuntea TT:n annoskäsitteet ja osaa tehdä annosmittauksen</li>
+                        <li>tuntea hengityspidätysjärjestelmien käyttö ja osata hengitystahdistettujen/aikariippuvien TT-kuvauksien kuvankäsittely</li>
+                        <li>perehtyä magneettikuvauksen periaatteeseen ja käyttöön sädehoidon suunnittelussa ja osana sädehoitoketjun kokonaisuutta</li>
+                        <li>perehtyä positroniemissiotomografiakuvauksen periaatteeseen ja käyttöön sädehoidon suunnittelussa ja osana sädehoitoketjun kokonaisuutta</li>
+                        <li>perehtyä kuvatiedon käsittelyä koskeviin tietosuojamääräyksiin ja kuvasiirtoihin</li>
+                        <li>osata käyttää kirjallisuutta uuden tiedon ja näytön hakemiseen</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
+
 
             <h2>1. Johdanto</h2>
             <p>Kuvantaminen on sädehoidon suunnittelun ja toteutuksen perusta. Nykyaikainen sädehoito on kuvantamisohjattua (image-guided radiation therapy, IGRT), ja kuvantamisen laatu vaikuttaa suoraan hoidon tarkkuuteen ja turvallisuuteen. Sairaalafyysikon on hallittava kuvantamismenetelmien fysikaaliset perusteet, niiden rajoitukset ja merkitys annossuunnitteluprosessissa.</p>
@@ -739,48 +782,6 @@
                 <p><strong>Huom:</strong> QUANTEC-rajoitukset perustuvat konventionaaliseen fraktiointiin (1,8&ndash;2,0 Gy/fr). Hypofraktioiduissa ja SBRT-hoidoissa on käytettävä EQD2-muunnettuja rajoituksia tai SBRT-spesifisiä rajoituksia (esim. AAPM TG-101).</p>
             </div>
 
-            
-            <!-- EPA-koulutuskortti: Kuvantaminen sädehoidon suunnittelua varten -->
-            <div class="theory-epa-card">
-                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Kuvantaminen sädehoidon suunnittelua varten</h2>
-                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
-                <div class="theory-epa-section theory-epa-a">
-                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tuntea tietokonetomografian periaatteen ja käytön sädehoidon suunnittelussa ja osana sädehoitoketjun kokonaisuutta. tuntea TT-kuvan sisältämän tiedon käytön annoslaskennan perustana.</li>
-                        <li>tuntea TT-kuvista tuotettavat esitystavat annossuunnittelua ja kuvantamisohjausta varten: 2D / 3D / DRR-kuvat</li>
-                        <li>osata TT:n / TT-simulaattorin laadunvalvonnan perusteet: geometria, kohdistuslasereiden tarkkuus, elektronitiheyskalibraatio ja sen tarkistaminen annossuunnittelua varten, pöydän liiketarkkuus</li>
-                        <li>osata tunnistaa TT-kuvista erilaisia kuvausartefaktoja ja niiden eliminointimenetelmät (mm. implantit, riittämätön kuva-ala)</li>
-                        <li>tuntea perusteet TT-kuvien käsittelystä sädehoidon suunnittelussa: manuaalinen rakenteiden rajaus, puoliautomaattiset menetelmät, automaattiset menetelmät</li>
-                        <li>perehtyä työasematyöskentelyyn useiden kuvamodaliteettien kanssa, mm. kuvien rekisteröintiin ja kuvafuusiomenetelmiin</li>
-                        <li>tutustua keskeiseen kirjallisuuteen, suosituksiin ja menetelmäohjeisiin</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-section theory-epa-b">
-                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>ymmärtää diagnostiikan, sädehoidon annossuunnittelun ja kuvantamisohjauksen erilaiset tarpeet: kuvanlaatu, kuvausannoksen optimointi.</li>
-                        <li>tuntea perusteet hengitystahdistetuista ja aikariippuvista kuvauksista: 4D, hengityspidätys, ”hidas kuvaus”</li>
-                        <li>tuntea TT:n annoskäsitteet ja osaa tehdä annosmittauksen</li>
-                        <li>tuntea hengityspidätysjärjestelmien käyttö ja osata hengitystahdistettujen/aikariippuvien TT-kuvauksien kuvankäsittely</li>
-                        <li>perehtyä magneettikuvauksen periaatteeseen ja käyttöön sädehoidon suunnittelussa ja osana sädehoitoketjun kokonaisuutta</li>
-                        <li>perehtyä positroniemissiotomografiakuvauksen periaatteeseen ja käyttöön sädehoidon suunnittelussa ja osana sädehoitoketjun kokonaisuutta</li>
-                        <li>perehtyä kuvatiedon käsittelyä koskeviin tietosuojamääräyksiin ja kuvasiirtoihin</li>
-                        <li>osata käyttää kirjallisuutta uuden tiedon ja näytön hakemiseen</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-canmeds">
-                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
-                    <div class="theory-epa-canmeds-tags">
-                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
-                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
-                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
-                    </div>
-                </div>
-            </div>
-
             <div class="theory-quiz-section" data-tab="kuvantaminen">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
@@ -818,6 +819,54 @@
          ================================================================ -->
     <div class="theory-panel" id="panel-ulkoinen" role="tabpanel">
         <div class="theory-content">
+
+            <!-- EPA-koulutuskortti: Ulkoinen sädehoito -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Ulkoinen sädehoito</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tuntea ulkoisen sädehoidon periaate ja peruskäyttöalueet</li>
+                        <li>perehtyä asennonvarmistuksen apuvälineisiin: vakiotelineet, tyhjiötyynyt, termoplastiset maskit ja osata ottaa ne huomioon annossuunnittelussa</li>
+                        <li>osata arvioida, onko kuvantamisen tuottama tieto riittävä ja laadukas sädehoidon suunnittelua varten</li>
+                        <li>osata ulkoisen sädehoidon annoslaskennan peruskäsitteet, suhteellinen syväannos, monitoriyksikkö, fotoni- ja elektronikeilojen mallinnus, annoslaskenta potilaassa. Osaa laskea annoksen kentän keskiakselilla taulukkotietoa käyttäen.</li>
+                        <li>osata ilman leikekuvapohjaista annossuunnitelmaa annettavien sädehoitojen annoslaskennan (mm. yksittäiset elektronikentät)</li>
+                        <li>osata säteilykeilojen muokkausmenetelmät: kiilat, MLC, IMRT, VMAT, valusuojat</li>
+                        <li>tuntea annossuunnittelun käänteismenetelmät IMRT/VMAT sekä käänteisen annossuunnittelun haasteet</li>
+                        <li>osata kliinisten annossuunnittelumenetelmien perusteet, sädehoidon annosmäärittelyn ja osata arvioida annossuunnitelmia yleisten hyvyyskriteereiden perusteella sekä osata laatia perustyyppisiä annossuunnitelmia (konformaalinen-3D fotonein ja elektronein, IMRT, VMAT) osaston toimintaohjeita soveltaen eri hoitokohteisiin (aivot, pään ja kaulan alue, keuhkot, rinta, kohdunkaulakanava)</li>
+                        <li>tuntea kuvantamisohjauksen laitteet ulkoisessa sädehoidossa: kV-laitteet, 2D/3D sekä osaa tuottaa näille referenssikuvat sekä arvioida kohdennuksen tarkkuutta suhteessa tarkkuusvaatimuksiin</li>
+                        <li>tuntea CBCT:n perusidea ja eri ”moodit” (puolikaari, koko kaari, eri FOV:t), annostaso (myös kV ja MV kuvantamisen osalta), rajoitukset (HU, FOV:n koko)</li>
+                        <li>osata kuvantamisohjauslaitteiden laadunvalvonta</li>
+                        <li>tuntea kohdistusmenetelmien perusteet, pintatunnistus, jyvät, hoidonaikaisen liikkeen seuranta</li>
+                        <li>tutustua keskeiseen kirjallisuuteen, suositukseen ja menetelmäohjeisiin.</li>
+                        <li>tuntea fotoni- ja elektroniannoslaskennan algoritmit ja suorituskyvyn eri olosuhteissa (vesiekvivalentti materiaali, epähomogeenisuudet, kenttäkoon vaikutus). Mahdollisuuksien mukaan tutustuu annoslaskentamallin konfiguroinnin työvaiheisiin ja mallinnuksen tarkkuuskriteeristöön.</li>
+                        <li>tuntea automaattisen annossuunnittelun periaatteet</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>seurata ulkoisen sädehoidon erikoistekniikoiden suunnittelua ja toteuttamista (mm. stereotaktiset kertahoidot, kraniospinaalisädehoito, kokokehon sädehoito, koko ihon elektronihoito)</li>
+                        <li>osata ottaa huomioon sädehoitofraktioinnin muutokset ja tehdä arvion aikaisemmin sädehoidetun kohteen uusintasädetysmahdollisuudesta</li>
+                        <li>osata ohjata henkilökuntaa ulkoisen sädehoidon toteuttamisessa ja siihen liittyvissä ongelmatilanteissa</li>
+                        <li>osata käyttää kirjallisuutta uuden tiedon ja näytön hakemiseen</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-chart-line"></i> Johtamistaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
+
 
             <h2>1. Johdanto</h2>
             <p>Ulkoinen sädehoito (external beam radiation therapy, EBRT) on sädehoidon yleisin muoto. Siinä säteilykeila tuotetaan potilaan ulkopuolella olevalla laitteella (lineaarikiihdytin, Co-60-laite) ja kohdistetaan kasvaimeen yhden tai useamman keilan avulla. Nykyaikainen ulkoinen sädehoito on erittäin konformaalista: annos mukautuu kohteen muotoon ja minimoi terveen kudoksen altistuksen.</p>
@@ -1128,54 +1177,6 @@
             </ul>
             <p>Protonien RBE on ~1,1 kliinisessä käytössä (kiinteä arvo), mutta todellisuudessa RBE vaihtelee energian, kudoksen ja biologisen päätepisteen mukaan. Tämä on aktiivisen tutkimuksen kohde.</p>
 
-            
-            <!-- EPA-koulutuskortti: Ulkoinen sädehoito -->
-            <div class="theory-epa-card">
-                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Ulkoinen sädehoito</h2>
-                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
-                <div class="theory-epa-section theory-epa-a">
-                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tuntea ulkoisen sädehoidon periaate ja peruskäyttöalueet</li>
-                        <li>perehtyä asennonvarmistuksen apuvälineisiin: vakiotelineet, tyhjiötyynyt, termoplastiset maskit ja osata ottaa ne huomioon annossuunnittelussa</li>
-                        <li>osata arvioida, onko kuvantamisen tuottama tieto riittävä ja laadukas sädehoidon suunnittelua varten</li>
-                        <li>osata ulkoisen sädehoidon annoslaskennan peruskäsitteet, suhteellinen syväannos, monitoriyksikkö, fotoni- ja elektronikeilojen mallinnus, annoslaskenta potilaassa. Osaa laskea annoksen kentän keskiakselilla taulukkotietoa käyttäen.</li>
-                        <li>osata ilman leikekuvapohjaista annossuunnitelmaa annettavien sädehoitojen annoslaskennan (mm. yksittäiset elektronikentät)</li>
-                        <li>osata säteilykeilojen muokkausmenetelmät: kiilat, MLC, IMRT, VMAT, valusuojat</li>
-                        <li>tuntea annossuunnittelun käänteismenetelmät IMRT/VMAT sekä käänteisen annossuunnittelun haasteet</li>
-                        <li>osata kliinisten annossuunnittelumenetelmien perusteet, sädehoidon annosmäärittelyn ja osata arvioida annossuunnitelmia yleisten hyvyyskriteereiden perusteella sekä osata laatia perustyyppisiä annossuunnitelmia (konformaalinen-3D fotonein ja elektronein, IMRT, VMAT) osaston toimintaohjeita soveltaen eri hoitokohteisiin (aivot, pään ja kaulan alue, keuhkot, rinta, kohdunkaulakanava)</li>
-                        <li>tuntea kuvantamisohjauksen laitteet ulkoisessa sädehoidossa: kV-laitteet, 2D/3D sekä osaa tuottaa näille referenssikuvat sekä arvioida kohdennuksen tarkkuutta suhteessa tarkkuusvaatimuksiin</li>
-                        <li>tuntea CBCT:n perusidea ja eri ”moodit” (puolikaari, koko kaari, eri FOV:t), annostaso (myös kV ja MV kuvantamisen osalta), rajoitukset (HU, FOV:n koko)</li>
-                        <li>osata kuvantamisohjauslaitteiden laadunvalvonta</li>
-                        <li>tuntea kohdistusmenetelmien perusteet, pintatunnistus, jyvät, hoidonaikaisen liikkeen seuranta</li>
-                        <li>tutustua keskeiseen kirjallisuuteen, suositukseen ja menetelmäohjeisiin.</li>
-                        <li>tuntea fotoni- ja elektroniannoslaskennan algoritmit ja suorituskyvyn eri olosuhteissa (vesiekvivalentti materiaali, epähomogeenisuudet, kenttäkoon vaikutus). Mahdollisuuksien mukaan tutustuu annoslaskentamallin konfiguroinnin työvaiheisiin ja mallinnuksen tarkkuuskriteeristöön.</li>
-                        <li>tuntea automaattisen annossuunnittelun periaatteet</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-section theory-epa-b">
-                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>seurata ulkoisen sädehoidon erikoistekniikoiden suunnittelua ja toteuttamista (mm. stereotaktiset kertahoidot, kraniospinaalisädehoito, kokokehon sädehoito, koko ihon elektronihoito)</li>
-                        <li>osata ottaa huomioon sädehoitofraktioinnin muutokset ja tehdä arvion aikaisemmin sädehoidetun kohteen uusintasädetysmahdollisuudesta</li>
-                        <li>osata ohjata henkilökuntaa ulkoisen sädehoidon toteuttamisessa ja siihen liittyvissä ongelmatilanteissa</li>
-                        <li>osata käyttää kirjallisuutta uuden tiedon ja näytön hakemiseen</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-canmeds">
-                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
-                    <div class="theory-epa-canmeds-tags">
-                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
-                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
-                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-chart-line"></i> Johtamistaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
-                    </div>
-                </div>
-            </div>
-
             <div class="theory-quiz-section" data-tab="ulkoinen">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
@@ -1212,6 +1213,47 @@
          ================================================================ -->
     <div class="theory-panel" id="panel-sisainen" role="tabpanel">
         <div class="theory-content">
+
+            <!-- EPA-koulutuskortti: Sisäinen sädehoito -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Sisäinen sädehoito</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tuntea kudoksen- ja ontelonsisäisen sädehoidon periaate ja käyttöalueet</li>
+                        <li>tuntea jälkilatauslaitteen toimintaperiaate ja Ir-192 –säteilylähde</li>
+                        <li>tuntea sisäisen sädehoidon annossuunnittelun prosessi ja erityispiirteet, kuten normeeraus ja keskeiset sädetoleranssit</li>
+                        <li>ymmärtää jälkilataushoidon säteilyturvallisuuden perusteet ja mm. osata toimia ja ohjata toimintaa jälkilatauslaitteen käyttöhäiriön yhteydessä, kun säteilylähde ei palaa suojaan (koulutukseen osallistuminen)</li>
+                        <li>tutustua keskeiseen kirjallisuuteen ja menetelmäohjeisiin</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tuntea sisäisen sädehoidon säteilybiologian perusteet suhteessa ulkoiseen sädehoitoon: eri annosnopeudet / kokonaisannos</li>
+                        <li>perehtyä sisäisen sädehoidon laitteistoon ja suunnittelukuvantamiseen</li>
+                        <li>osallistua sisäisen sädehoidon annoslaskentaan ja hoidon toteutukseen</li>
+                        <li>osallistua sisäisen sädehoidon Ir-192 –lähteen vaihtoon, laadunvalvontaan sekä annoslaskennan konfiguroimiseen</li>
+                        <li>tutustua silmäapplikaattorien valmistuksen ja laadunvalvonnan periaatteisiin sekä manuaalisen latauksen säteilyturvallisuusnäkökohtiin (kirjallisuus)</li>
+                        <li>osata ohjata henkilökuntaa sisäisen sädehoidon toteutuksessa ja sen ongelmatilanteissa</li>
+                        <li>osata käyttää kirjallisuutta uuden tiedon ja näytön hakemiseen</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-chart-line"></i> Johtamistaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
+
 
             <h2>1. Johdanto</h2>
             <p>Brakyterapia (brachytherapy, kreik. brachys = lähellä) on sädehoidon muoto, jossa säteilylähde sijoitetaan suoraan kasvaimen sisälle tai sen välittömään läheisyyteen. Brakyterapian fysikaaliset perusperiaatteet eroavat merkittävästi ulkoisesta sädehoidosta:</p>
@@ -1464,47 +1506,6 @@
             <h3>10.4 STUK-laitetarkastukset</h3>
             <p>STUK suorittaa brakyterapialaitteiden tarkastukset säännöllisin väliajoin. Tarkastukseen kuuluu lähteen aktiivisuusmittaus, asemointitarkkuus, turvallisuusjärjestelmien testaus ja dokumentaation auditointi. Sairaalafyysikon on valmisteltava tarkastus ja oltava läsnä tarkastuksen aikana.</p>
 
-            
-            <!-- EPA-koulutuskortti: Sisäinen sädehoito -->
-            <div class="theory-epa-card">
-                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Sisäinen sädehoito</h2>
-                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
-                <div class="theory-epa-section theory-epa-a">
-                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tuntea kudoksen- ja ontelonsisäisen sädehoidon periaate ja käyttöalueet</li>
-                        <li>tuntea jälkilatauslaitteen toimintaperiaate ja Ir-192 –säteilylähde</li>
-                        <li>tuntea sisäisen sädehoidon annossuunnittelun prosessi ja erityispiirteet, kuten normeeraus ja keskeiset sädetoleranssit</li>
-                        <li>ymmärtää jälkilataushoidon säteilyturvallisuuden perusteet ja mm. osata toimia ja ohjata toimintaa jälkilatauslaitteen käyttöhäiriön yhteydessä, kun säteilylähde ei palaa suojaan (koulutukseen osallistuminen)</li>
-                        <li>tutustua keskeiseen kirjallisuuteen ja menetelmäohjeisiin</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-section theory-epa-b">
-                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tuntea sisäisen sädehoidon säteilybiologian perusteet suhteessa ulkoiseen sädehoitoon: eri annosnopeudet / kokonaisannos</li>
-                        <li>perehtyä sisäisen sädehoidon laitteistoon ja suunnittelukuvantamiseen</li>
-                        <li>osallistua sisäisen sädehoidon annoslaskentaan ja hoidon toteutukseen</li>
-                        <li>osallistua sisäisen sädehoidon Ir-192 –lähteen vaihtoon, laadunvalvontaan sekä annoslaskennan konfiguroimiseen</li>
-                        <li>tutustua silmäapplikaattorien valmistuksen ja laadunvalvonnan periaatteisiin sekä manuaalisen latauksen säteilyturvallisuusnäkökohtiin (kirjallisuus)</li>
-                        <li>osata ohjata henkilökuntaa sisäisen sädehoidon toteutuksessa ja sen ongelmatilanteissa</li>
-                        <li>osata käyttää kirjallisuutta uuden tiedon ja näytön hakemiseen</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-canmeds">
-                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
-                    <div class="theory-epa-canmeds-tags">
-                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
-                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
-                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-chart-line"></i> Johtamistaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
-                    </div>
-                </div>
-            </div>
-
             <div class="theory-quiz-section" data-tab="sisainen">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
@@ -1542,6 +1543,47 @@
          ================================================================ -->
     <div class="theory-panel" id="panel-dosimetria" role="tabpanel">
         <div class="theory-content">
+
+            <!-- EPA-koulutuskortti: Sädehoidon dosimetria -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Sädehoidon dosimetria</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tuntea laadunvalvontaohjelman ja sädehoitolaitteiden suorituskykyvaatimusten kliinisbiologinen perusta</li>
+                        <li>tuntea ionisaatiokammion ja elektrometrin toimintaperiaate ja käyttö ulkoisen sädehoidon fotoni- ja elektronikeilassa: vesifantomi, absoluuttidosimetria</li>
+                        <li>tuntea hoidossa käytettyjen umpi- ja avolähteiden aktiivisuusmittauksen / ilmakermamittauksen instrumentit ja dosimetrian periaatteet</li>
+                        <li>ymmärtää annosmittauksen ja –laskennan välinen yhteys</li>
+                        <li>tutustua keskeiseen kirjallisuuteen, suosituksiin ja menetelmäohjeisiin</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tuntea ja osata käyttää suhteellisen dosimetrian menetelmiä: matriisi-ilmaisimet, in vivo –mittauksien käyttö, diodit</li>
+                        <li>tuntea menetelmätasolla radiokrominen filmi, TLD/OSLD, Mosfetin käyttö dosimetriassa</li>
+                        <li>tuntea dosimetrisen tarkkuuden merkityksen sädehoidossa ja sen fysikaaliset varmistusmenetelmät</li>
+                        <li>osata mitata sädehoidon lineaarikiihdyttimen tuottamat energia ja profiilit, määrittää absoluuttiannoksen sekä suorittaa laitteen mekaanisen laadunvarmistuksen</li>
+                        <li>osata suorittaa moduloitujen kenttien potilasannoksen verifioinnin mittauksin sekä tuntea end-to-end mittausten periaate</li>
+                        <li>tuntea potilasannoksen riippumattoman tarkistuksen periaatteet</li>
+                        <li>osallistua STUKin suorittamaan ulkoisen sädehoidon laitetarkastukseen ja sen valmisteluihin</li>
+                        <li>osallistua sisäisen sädehoidon lähteen lähdevoimakkuuden määrittämiseen sekä laadunvalvontaan</li>
+                        <li>osata käyttää kirjallisuutta uuden tiedon ja näytön hakemiseen</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
+
 
             <h2>1. Johdanto</h2>
             <p>Dosimetria (dosimetry) on sädehoidon fysiikan ydinosa-alue, joka käsittelee absorboituneen annoksen mittaamista ja määrittämistä. Sairaalafyysikon ensisijainen tehtävä on varmistaa, että potilaaseen kohdistuva annos vastaa hoitosuunnitelmaa tarkasti ja toistettavasti. Dosimetrian perusteet ulottuvat ionisaatiokammioiden fysiikasta kaviteettiteorioihin, kalibrointiprotokoliin ja laadunvarmistuskäytäntöihin.</p>
@@ -1927,47 +1969,6 @@
                 <p><strong>K&auml;yt&auml;nn&ouml;n vinkki:</strong> Gamma-analyysin tulos riippuu merkittävästi low-dose threshold -asetuksesta (tyypillisesti 10 %): alueet, joissa annos on alle kynnysarvon, jätetään analyysistä pois. Myös normalisointitapa (global vs. local) vaikuttaa tulokseen. Aina ilmoita käytetyt parametrit tulosten yhteydessä.</p>
             </div>
 
-            
-            <!-- EPA-koulutuskortti: Sädehoidon dosimetria -->
-            <div class="theory-epa-card">
-                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Sädehoidon dosimetria</h2>
-                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
-                <div class="theory-epa-section theory-epa-a">
-                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tuntea laadunvalvontaohjelman ja sädehoitolaitteiden suorituskykyvaatimusten kliinisbiologinen perusta</li>
-                        <li>tuntea ionisaatiokammion ja elektrometrin toimintaperiaate ja käyttö ulkoisen sädehoidon fotoni- ja elektronikeilassa: vesifantomi, absoluuttidosimetria</li>
-                        <li>tuntea hoidossa käytettyjen umpi- ja avolähteiden aktiivisuusmittauksen / ilmakermamittauksen instrumentit ja dosimetrian periaatteet</li>
-                        <li>ymmärtää annosmittauksen ja –laskennan välinen yhteys</li>
-                        <li>tutustua keskeiseen kirjallisuuteen, suosituksiin ja menetelmäohjeisiin</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-section theory-epa-b">
-                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tuntea ja osata käyttää suhteellisen dosimetrian menetelmiä: matriisi-ilmaisimet, in vivo –mittauksien käyttö, diodit</li>
-                        <li>tuntea menetelmätasolla radiokrominen filmi, TLD/OSLD, Mosfetin käyttö dosimetriassa</li>
-                        <li>tuntea dosimetrisen tarkkuuden merkityksen sädehoidossa ja sen fysikaaliset varmistusmenetelmät</li>
-                        <li>osata mitata sädehoidon lineaarikiihdyttimen tuottamat energia ja profiilit, määrittää absoluuttiannoksen sekä suorittaa laitteen mekaanisen laadunvarmistuksen</li>
-                        <li>osata suorittaa moduloitujen kenttien potilasannoksen verifioinnin mittauksin sekä tuntea end-to-end mittausten periaate</li>
-                        <li>tuntea potilasannoksen riippumattoman tarkistuksen periaatteet</li>
-                        <li>osallistua STUKin suorittamaan ulkoisen sädehoidon laitetarkastukseen ja sen valmisteluihin</li>
-                        <li>osallistua sisäisen sädehoidon lähteen lähdevoimakkuuden määrittämiseen sekä laadunvalvontaan</li>
-                        <li>osata käyttää kirjallisuutta uuden tiedon ja näytön hakemiseen</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-canmeds">
-                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
-                    <div class="theory-epa-canmeds-tags">
-                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
-                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
-                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
-                    </div>
-                </div>
-            </div>
-
             <div class="theory-quiz-section" data-tab="dosimetria">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
@@ -2006,6 +2007,43 @@
          ================================================================ -->
     <div class="theory-panel" id="panel-laitteet" role="tabpanel">
         <div class="theory-content">
+
+            <!-- EPA-koulutuskortti: Säteilyä tuottavat laitteet sädehoidossa -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Säteilyä tuottavat laitteet sädehoidossa</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tuntea lineaarikiihdyttimen periaate ja toiminta</li>
+                        <li>perehtyä lineaarikiihdyttimen toimintaan ja yksinkertaisten ongelmatilanteiden ratkaisuun, tuntea turvalukitusten (interlock) toiminta sekä perehtyä laitehuollon toimintaan ja viankorjaukseen</li>
+                        <li>tuntea lineaarikiihdyttimen annosmonitorin rakenteen ja toimintaperiaatteen sekä keilanmuotoilutekniikoiden toteutustavat: MLC, valusuojat fotoneilla (mikäli käytössä) ja elektroneilla</li>
+                        <li>osata käyttää lineaarikiihdytintä laadunvalvontatilanteessa</li>
+                        <li>tuntea lineaarikiihdyttimen oheislaitteiden periaatteen ja toiminnan (hoitopöytä, turvajärjestelmät, kohdistuslaserit, kuvantamisohjauksen laitteet, pintatunnistuksen laitteet, hengitystahdistuksen laitteet) ja osata käyttää niitä laadunvalvontatilanteessa sekä tunnistaa näiden yksinkertaiset vikatilanteet</li>
+                        <li>tutustua keskeiseen kirjallisuuteen, suosituksiin ja menetelmäohjeisiin</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tuntea kobolttihoitolaitteen, röntgenhoitolaitteen, protonihoitolaitteen ja BNCT-hoitolaitteen periaatteen</li>
+                        <li>tuntea sisäisen sädehoidon jälkilatauslaitteen periaatteen ja toiminnan</li>
+                        <li>osata käyttää kirjallisuutta uuden tiedon ja näytön hakemiseen</li>
+                        <li>tutustua laitehankintaprosessiin</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
+
 
             <h2>1. Johdanto</h2>
             <p>Sädehoidon laitteet ovat monimutkaisia kokonaisuuksia, joiden toiminnan ymmärtäminen on sairaalafyysikon ydinosaamisaluetta. Lineaarikiihdytin (linear accelerator, linac) on modernin sädehoidon keskeisin laite, mutta erikoislaitteilla &mdash; kuten Gamma Knife, CyberKnife, protonilaitteistot ja MR-linac &mdash; on kasvava rooli. Sairaalafyysikko vastaa laitteiden käyttöönotosta (commissioning), laadunvarmistuksesta ja teknisestä ohjeistuksesta.</p>
@@ -2354,43 +2392,6 @@
                 </tbody>
             </table>
 
-            
-            <!-- EPA-koulutuskortti: Säteilyä tuottavat laitteet sädehoidossa -->
-            <div class="theory-epa-card">
-                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Säteilyä tuottavat laitteet sädehoidossa</h2>
-                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
-                <div class="theory-epa-section theory-epa-a">
-                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tuntea lineaarikiihdyttimen periaate ja toiminta</li>
-                        <li>perehtyä lineaarikiihdyttimen toimintaan ja yksinkertaisten ongelmatilanteiden ratkaisuun, tuntea turvalukitusten (interlock) toiminta sekä perehtyä laitehuollon toimintaan ja viankorjaukseen</li>
-                        <li>tuntea lineaarikiihdyttimen annosmonitorin rakenteen ja toimintaperiaatteen sekä keilanmuotoilutekniikoiden toteutustavat: MLC, valusuojat fotoneilla (mikäli käytössä) ja elektroneilla</li>
-                        <li>osata käyttää lineaarikiihdytintä laadunvalvontatilanteessa</li>
-                        <li>tuntea lineaarikiihdyttimen oheislaitteiden periaatteen ja toiminnan (hoitopöytä, turvajärjestelmät, kohdistuslaserit, kuvantamisohjauksen laitteet, pintatunnistuksen laitteet, hengitystahdistuksen laitteet) ja osata käyttää niitä laadunvalvontatilanteessa sekä tunnistaa näiden yksinkertaiset vikatilanteet</li>
-                        <li>tutustua keskeiseen kirjallisuuteen, suosituksiin ja menetelmäohjeisiin</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-section theory-epa-b">
-                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tuntea kobolttihoitolaitteen, röntgenhoitolaitteen, protonihoitolaitteen ja BNCT-hoitolaitteen periaatteen</li>
-                        <li>tuntea sisäisen sädehoidon jälkilatauslaitteen periaatteen ja toiminnan</li>
-                        <li>osata käyttää kirjallisuutta uuden tiedon ja näytön hakemiseen</li>
-                        <li>tutustua laitehankintaprosessiin</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-canmeds">
-                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
-                    <div class="theory-epa-canmeds-tags">
-                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
-                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
-                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
-                    </div>
-                </div>
-            </div>
-
             <div class="theory-quiz-section" data-tab="laitteet">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
@@ -2427,6 +2428,52 @@
          ================================================================ -->
     <div class="theory-panel" id="panel-sateilybiologia" role="tabpanel">
         <div class="theory-content">
+
+            <!-- EPA-koulutuskortti: Säteilybiologia ja säteilysuojelu sädehoidossa -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Säteilybiologia ja säteilysuojelu sädehoidossa</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tuntea säteilyn biologisen vaikutuksen yleispiirteet: sädehoidon annosvaste kasvaimessa ja normaalikudoksessa</li>
+                        <li>osata soveltaa säteilybiologista LQ-fraktiointimallia fraktiokoon, kokonaisannoksen, kudostyypin, hoitoajan, hoitotaukojen ja fraktioiden väliajan mukaisella tavalla, EQD2-käsite</li>
+                        <li>osata perustella sädehoidon tarkkuusvaatimus biologisesti</li>
+                        <li>tuntea keskeisten normaalikudosten sädetoleranssi ja sen esitystavat (maksimiannos, annos-tilavuusrajoitteet, keskimääräinen annos)</li>
+                        <li>perehtyä sädehoidon säteilysuojelun kolmeen näkökulmaan: potilas, henkilökunta, väestö</li>
+                        <li>perehtyä sädehoitohuoneiden turvajärjestelmiin ja säteilyvaaramerkintöihin</li>
+                        <li>osata tunnistaa säteilysuojelulliset erityistilanteet sädehoidossa: lapsipotilas, raskaana oleva potilas, potilaalla sädeherkkä apuväline (esim. sydämentahdistin) ja hakea näistä tietoa</li>
+                        <li>osata ohjata henkilökuntaa säteilyturvalliseen työskentelyyn</li>
+                        <li>osata kommunikoida potilaan ja tukihenkilön kanssa säteilysuojelukysymyksistä</li>
+                        <li>tutustua keskeiseen kirjallisuuteen ja säteilysuojelusäädöksiin.</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tuntea ulkoisen, sisäisen ja radionuklidisädehoidon erot säteilybiologiselta kannalta (mm. annosnopeuden merkitys) ja osata tehdä arvion näiden yhteisvaikutuksesta.</li>
+                        <li>osata arvioida annosnopeuden ja kertyneen annoksen sädehoitolaitteen keilassa tai jälkilatauslaitteen lähteen läheisyydessä ja muualla sädehoitohuoneessa säteilysuojelutarkoituksia varten</li>
+                        <li>tuntea sädehoitohuoneiden säteilysuojauksen mitoitusperiaatteet</li>
+                        <li>osata käyttää kirjallisuutta uuden tiedon ja näytön hakemiseen.</li>
+                        <li>osata raportoida säteilyturvallisuuspoikkeamista asianomaiselle taholle ja tuntea menettelyjä poikkeamien syiden selvittelyyn ja niistä oppimiseen</li>
+                        <li>tutustua kliiniseen auditointiin vähintään edellisen kliinisen auditoinnin dokumentaation kautta</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-chart-line"></i> Johtamistaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
+
 
             <h2>1. Johdanto</h2>
             <p>Säteilybiologia (radiobiology) tutkii ionisoivan säteilyn biologisia vaikutuksia solu-, kudos- ja organismitasolla. Säteilysuojelu (radiation protection) puolestaan soveltaa säteilybiologian tietoa henkilökunnan, potilaiden ja väestön suojelemiseksi säteilyn haitallisilta vaikutuksilta. Nämä kaksi osa-aluetta muodostavat yhdessä perustan sädehoidon fraktiointiskeemojen suunnittelulle, kudostoleransseille ja turvallisuuskäytännöille.</p>
@@ -2947,52 +2994,6 @@
                 <p><strong>Kliininen merkitys:</strong> Kliininen auditointi ei ole pelkkä muodollisuus, vaan olennainen osa sädehoidon turvallisuuskulttuuria. Auditoinnit ovat paljastaneet merkittäviä virheitä kalibroinneissa, hoitoprosesseissa ja turvallisuusjärjestelyissä. Sairaalafyysikon on suhtauduttava auditointeihin oppimismahdollisuuksina ja ylläpidettävä dokumentaatiota, joka mahdollistaa tehokkaan auditoinnin.</p>
             </div>
 
-            
-            <!-- EPA-koulutuskortti: Säteilybiologia ja säteilysuojelu sädehoidossa -->
-            <div class="theory-epa-card">
-                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Säteilybiologia ja säteilysuojelu sädehoidossa</h2>
-                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
-                <div class="theory-epa-section theory-epa-a">
-                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tuntea säteilyn biologisen vaikutuksen yleispiirteet: sädehoidon annosvaste kasvaimessa ja normaalikudoksessa</li>
-                        <li>osata soveltaa säteilybiologista LQ-fraktiointimallia fraktiokoon, kokonaisannoksen, kudostyypin, hoitoajan, hoitotaukojen ja fraktioiden väliajan mukaisella tavalla, EQD2-käsite</li>
-                        <li>osata perustella sädehoidon tarkkuusvaatimus biologisesti</li>
-                        <li>tuntea keskeisten normaalikudosten sädetoleranssi ja sen esitystavat (maksimiannos, annos-tilavuusrajoitteet, keskimääräinen annos)</li>
-                        <li>perehtyä sädehoidon säteilysuojelun kolmeen näkökulmaan: potilas, henkilökunta, väestö</li>
-                        <li>perehtyä sädehoitohuoneiden turvajärjestelmiin ja säteilyvaaramerkintöihin</li>
-                        <li>osata tunnistaa säteilysuojelulliset erityistilanteet sädehoidossa: lapsipotilas, raskaana oleva potilas, potilaalla sädeherkkä apuväline (esim. sydämentahdistin) ja hakea näistä tietoa</li>
-                        <li>osata ohjata henkilökuntaa säteilyturvalliseen työskentelyyn</li>
-                        <li>osata kommunikoida potilaan ja tukihenkilön kanssa säteilysuojelukysymyksistä</li>
-                        <li>tutustua keskeiseen kirjallisuuteen ja säteilysuojelusäädöksiin.</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-section theory-epa-b">
-                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tuntea ulkoisen, sisäisen ja radionuklidisädehoidon erot säteilybiologiselta kannalta (mm. annosnopeuden merkitys) ja osata tehdä arvion näiden yhteisvaikutuksesta.</li>
-                        <li>osata arvioida annosnopeuden ja kertyneen annoksen sädehoitolaitteen keilassa tai jälkilatauslaitteen lähteen läheisyydessä ja muualla sädehoitohuoneessa säteilysuojelutarkoituksia varten</li>
-                        <li>tuntea sädehoitohuoneiden säteilysuojauksen mitoitusperiaatteet</li>
-                        <li>osata käyttää kirjallisuutta uuden tiedon ja näytön hakemiseen.</li>
-                        <li>osata raportoida säteilyturvallisuuspoikkeamista asianomaiselle taholle ja tuntea menettelyjä poikkeamien syiden selvittelyyn ja niistä oppimiseen</li>
-                        <li>tutustua kliiniseen auditointiin vähintään edellisen kliinisen auditoinnin dokumentaation kautta</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-canmeds">
-                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
-                    <div class="theory-epa-canmeds-tags">
-                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
-                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
-                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-chart-line"></i> Johtamistaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
-                    </div>
-                </div>
-            </div>
-
             <div class="theory-quiz-section" data-tab="sateilybiologia">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
@@ -3059,17 +3060,21 @@
             .catch(function() {});
     }
 
+    window.renderAllSlots = renderAllSlots;
     function renderAllSlots() {
         document.querySelectorAll('.theory-image-slot').forEach(function(slot) {
             var slotId = slot.dataset.slot;
             var info = imageData[slotId];
+            var isDynamic = slot.dataset.dynamic === 'true';
+            var deleteSlotBtn = isDynamic ? '<button class="btn-delete-slot" onclick="deleteImageSlot(\'' + slotId + '\', \'' + slot.dataset.tab + '\')"><i class="fas fa-times-circle"></i> Poista kuvaikkunaa</button>' : '';
             if (info && info.url) {
                 slot.className = 'theory-image-slot has-image size-' + (info.display_size || 'medium');
                 slot.innerHTML =
                     '<figure>' +
                         '<div class="theory-image-actions">' +
                             '<button class="btn-replace" onclick="openUploadModal(\'' + slotId + '\', \'' + slot.dataset.tab + '\')"><i class="fas fa-exchange-alt"></i> Vaihda</button>' +
-                            '<button class="btn-delete" onclick="deleteSlotImage(\'' + slotId + '\', \'' + slot.dataset.tab + '\')"><i class="fas fa-trash"></i> Poista</button>' +
+                            '<button class="btn-delete" onclick="deleteSlotImage(\'' + slotId + '\', \'' + slot.dataset.tab + '\')"><i class="fas fa-trash"></i> Poista kuva</button>' +
+                            deleteSlotBtn +
                         '</div>' +
                         '<img src="' + info.url + '" alt="' + (info.alt_text || '') + '">' +
                         '<figcaption>' + (info.caption || '') + '</figcaption>' +
@@ -3083,18 +3088,12 @@
                         '<span>Lisää kuva</span>' +
                         '<span class="slot-label">' + slotId + '</span>' +
                         '<span style="font-size:0.75rem;max-width:400px;text-align:center;">' + defaultCaption + '</span>' +
-                    '</div>';
+                    '</div>' +
+                    (isDynamic ? '<div class="theory-slot-delete-bar">' + deleteSlotBtn + '</div>' : '');
             }
         });
     }
 
-    window.toggleEditMode = function() {
-        var btn = document.getElementById('editModeToggle');
-        document.body.classList.toggle('theory-edit-mode');
-        btn.classList.toggle('active');
-        var isActive = document.body.classList.contains('theory-edit-mode');
-        btn.querySelector('span').textContent = isActive ? 'Lopeta muokkaus' : 'Muokkaa kuvia';
-    };
 
     window.openUploadModal = function(slotId, tabId) {
         if (!IS_SUPERUSER || !document.body.classList.contains('theory-edit-mode')) return;
@@ -3719,4 +3718,5 @@
 
 })();
 </script>
+<script src="{% static 'sisalto/js/theory-inline-editor.js' %}"></script>
 {% endblock %}

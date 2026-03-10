@@ -5,17 +5,18 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'sisalto/css/theory.css' %}?v=7">
+<link rel="stylesheet" href="{% static 'sisalto/css/theory-inline-editor.css' %}?v=1">
 {% endblock %}
 
 {% block content %}
 
-<div class="theory-container">
+<div class="theory-container" data-modality-id="radiologia">
     <div class="theory-header">
         <h1><i class="fas fa-x-ray" style="color: #60a5fa; margin-right: 8px;"></i> Radiologian teoria</h1>
         <p>Kattava teoriamateriaali radiologisen kuvantamisen fysikaalisista perusteista, laitteista, kuvausparametreista, annossuurista ja laadunvarmistuksesta. Valitse alimodaliteetti alla olevista välilehdistä.</p>
         {% if is_superuser %}
-        <button class="theory-edit-toggle" id="editModeToggle" onclick="toggleEditMode()">
-            <i class="fas fa-images"></i> <span>Muokkaa kuvia</span>
+        <button class="theory-inline-edit-toggle" id="inlineEditToggle">
+            <i class="fas fa-pen"></i> <span>Muokkaa sisältöä</span>
         </button>
         {% endif %}
     </div>
@@ -91,6 +92,50 @@
          ================================================================ -->
     <div class="theory-panel active" id="panel-natiivi" role="tabpanel">
         <div class="theory-content">
+
+            <!-- EPA-koulutuskortti: Natiivikuvantaminen -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Natiivikuvantaminen</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tutustua kirjallisuuteen ja laitteistojen säteilyturvallisuusjärjestelyihin</li>
+                        <li>osata kirjallisuuden hyödyntäminen</li>
+                        <li>osata selittää laitteistojen yleisen teknisen rakenteen, toiminnan ja komponentit, detektorien rakenteet ja toimintaperiaatteet</li>
+                        <li>osata varmistaa annossuureiden oikeellisuuden, suorittaa laadunvarmistusmittaukset sekä analysoida ja tulkita tulokset</li>
+                        <li>tuntea natiivikuvien jälkikäsittelymenetelmät</li>
+                        <li>osata tunnistaa kuvausartefaktit ja niiden korjausmenetelmät</li>
+                        <li>hallita kuvausasetusten ja -parametrien vaikutus kuvanlaatuun ja potilasannokseen</li>
+                        <li>osata potilasaltistuksen määrittäminen</li>
+                        <li>osata ohjata henkilökuntaa säteilyturvallisessa työskentelyssä ja kommunikoida potilaan kanssa säteilyaltistukseen liittyvissä asioissa</li>
+                        <li>tuntea tutkimusten sähköisen tallentamisen järjestelmät sekä DICOM-tiedoston rakenne ja siihen tallennettavat tiedot</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>osata annokseen ja kuvanlaatuun liittyvän optimointiongelman itsenäinen ratkaisu</li>
+                        <li>osata hyvän kuvan kriteerit erilaisten kuvausindikaatioiden kohdalla</li>
+                        <li>osata laitteiden hyväksyttävyysvaatimusten mukaiset mittaukset</li>
+                        <li>tutustua yleisimpiin kliinisiin tutkimuksiin</li>
+                        <li>tutustua erikoistutkimuksiin (esim. skolioosi, lapset)</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
+
 
             <h2>1. Johdanto</h2>
             <p>Natiivikuvantaminen (conventional radiography, plain radiography) on vanhin ja edelleen yleisin lääketieteellinen kuvantamismenetelmä. Se perustuu röntgensäteilyn ominaisuuteen läpäistä kudoksia eri tavoin riippuen niiden tiheydestä ja paksuudesta. Natiivikuvantaminen tuottaa kaksiulotteisen projektioikuvan kolmiulotteisesta kohteesta.</p>
@@ -407,50 +452,6 @@
                 <li><strong>Dual-energy subtraktio</strong>: Kahdella eri energialla kuvattu projektio, joista voidaan erottaa luu ja pehmytkudos. Sovellus erityisesti thorax-kuvantamisessa (kalsifikaatioiden ja luun poisto).</li>
             </ul>
 
-            
-            <!-- EPA-koulutuskortti: Natiivikuvantaminen -->
-            <div class="theory-epa-card">
-                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Natiivikuvantaminen</h2>
-                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
-                <div class="theory-epa-section theory-epa-a">
-                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tutustua kirjallisuuteen ja laitteistojen säteilyturvallisuusjärjestelyihin</li>
-                        <li>osata kirjallisuuden hyödyntäminen</li>
-                        <li>osata selittää laitteistojen yleisen teknisen rakenteen, toiminnan ja komponentit, detektorien rakenteet ja toimintaperiaatteet</li>
-                        <li>osata varmistaa annossuureiden oikeellisuuden, suorittaa laadunvarmistusmittaukset sekä analysoida ja tulkita tulokset</li>
-                        <li>tuntea natiivikuvien jälkikäsittelymenetelmät</li>
-                        <li>osata tunnistaa kuvausartefaktit ja niiden korjausmenetelmät</li>
-                        <li>hallita kuvausasetusten ja -parametrien vaikutus kuvanlaatuun ja potilasannokseen</li>
-                        <li>osata potilasaltistuksen määrittäminen</li>
-                        <li>osata ohjata henkilökuntaa säteilyturvallisessa työskentelyssä ja kommunikoida potilaan kanssa säteilyaltistukseen liittyvissä asioissa</li>
-                        <li>tuntea tutkimusten sähköisen tallentamisen järjestelmät sekä DICOM-tiedoston rakenne ja siihen tallennettavat tiedot</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-section theory-epa-b">
-                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>osata annokseen ja kuvanlaatuun liittyvän optimointiongelman itsenäinen ratkaisu</li>
-                        <li>osata hyvän kuvan kriteerit erilaisten kuvausindikaatioiden kohdalla</li>
-                        <li>osata laitteiden hyväksyttävyysvaatimusten mukaiset mittaukset</li>
-                        <li>tutustua yleisimpiin kliinisiin tutkimuksiin</li>
-                        <li>tutustua erikoistutkimuksiin (esim. skolioosi, lapset)</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-canmeds">
-                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
-                    <div class="theory-epa-canmeds-tags">
-                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
-                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
-                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
-                    </div>
-                </div>
-            </div>
-
             <div class="theory-quiz-section" data-tab="natiivi">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
@@ -486,6 +487,57 @@
          ================================================================ -->
     <div class="theory-panel" id="panel-tt" role="tabpanel">
         <div class="theory-content">
+
+            <!-- EPA-koulutuskortti: Tietokonetomografia -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Tietokonetomografia</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tutustua kirjallisuuteen ja laitteistojen säteilyturvallisuusjärjestelyihin</li>
+                        <li>osata kirjallisuuden hyödyntäminen</li>
+                        <li>osata selittää laitteistojen yleisen teknisen rakenteen, toiminnan ja komponentit, detektorien rakenteet ja toimintaperiaatteet</li>
+                        <li>osata varmistaa annossuureiden oikeellisuuden, suorittaa laadunvarmistusmittaukset sekä analysoida ja tulkita tulokset</li>
+                        <li>hallita leikekuvauksen, kontrastin syntymisen ja rekonstruktiomenetelmien matemaattinen perusta</li>
+                        <li>hallita kuvausasetusten ja -parametrien vaikutus kuvanlaatuun ja potilasannokseen</li>
+                        <li>osata annosmodulaatiotekniikat</li>
+                        <li>osata potilasannoksen määrittäminen</li>
+                        <li>osata tunnistaa kuvausartefaktit ja niiden korjausmenetelmät</li>
+                        <li>tuntea yleisimmät kuvausprotokollat ja tietää kuvausparametrien ja kuvan ominaisuuksien keskinäiset riippuvuudet niissä</li>
+                        <li>osata yleisimmät kuvauksen aikaan vaikuttavat menetelmät ja tahdistusmenetelmät</li>
+                        <li>tuntea röntgenvarjoaineiden käyttö tietokonetomografiassa</li>
+                        <li>tuntea digitaalisen kuvan peruskäsitteet: kuvalaatu, segmentointimenetelmät, osittaistilavuusilmiö, kuvakohdennus, jälkikäsittely</li>
+                        <li>osata ohjata henkilökuntaa säteilyturvallisessa työskentelyssä ja kommunikoida potilaan kanssa säteilyaltistukseen liittyvissä asioissa</li>
+                        <li>tuntea tutkimusten sähköisen tallentamisen järjestelmät sekä DICOM-tiedoston rakenne ja siihen tallennettavat tiedot</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tutustua yleisimpiin kliinisiin tutkimuksiin (pään TT, vartalon alueen TT, TT-angiografia, trauma-TT)</li>
+                        <li>osata laitteiden hyväksyttävyysvaatimusten mukaiset mittaukset</li>
+                        <li>osata annokseen ja kuvanlaatuun liittyvän optimointiongelman itsenäinen ratkaisu</li>
+                        <li>tuntea antropomorfinen fantomi, toteuttaa sillä kuvanlaadun tarkastelu ja potilasannoksen määritys</li>
+                        <li>tutustua erikoistutkimuksiin (pään perfuusiotutkimus, sydämen ja aortan tahdistettu tutkimus, lasten tutkimukset)</li>
+                        <li>osata hyvän kuvan kriteerit erilaisten kuvausindikaatioiden kohdalla</li>
+                        <li>osata kaksoisenergiatutkimusten tekniset toteutusvaihtoehdot ja datan prosessointi</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
+
 
             <h2>1. Johdanto</h2>
             <p>Tietokonetomografia (TT, computed tomography, CT) on röntgensäteilyyn perustuva poikkileikekuvausmenetelmä, joka tuottaa kolmiulotteista kuvadataa kehon rakenteista. Sir Godfrey Hounsfield ja Allan Cormack kehittivät menetelmän 1970-luvulla, mistä heille myönnettiin Nobelin fysiologian ja lääketieteen palkinto 1979. TT on yksi tärkeimmistä diagnostisista kuvantamismenetelmistä ja edustaa merkittävää osuutta väestön säteilyaltistuksesta.</p>
@@ -732,57 +784,6 @@
                 <li><strong>Hyvän kuvan kriteerit</strong>: Riippuvat tutkimuskohtaisesta kysymyksenasettelusta. Esim. pään TT: harmaan ja valkean aineen erottuminen, basaaligangliot näkyvissä; vatsa-TT: maksan, munuaisten ja verisuonten erottuminen; keuhko-TT: pienten keuhkorakenteiden (interlobulaarinen septat) erottuminen.</li>
             </ul>
 
-            
-            <!-- EPA-koulutuskortti: Tietokonetomografia -->
-            <div class="theory-epa-card">
-                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Tietokonetomografia</h2>
-                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
-                <div class="theory-epa-section theory-epa-a">
-                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tutustua kirjallisuuteen ja laitteistojen säteilyturvallisuusjärjestelyihin</li>
-                        <li>osata kirjallisuuden hyödyntäminen</li>
-                        <li>osata selittää laitteistojen yleisen teknisen rakenteen, toiminnan ja komponentit, detektorien rakenteet ja toimintaperiaatteet</li>
-                        <li>osata varmistaa annossuureiden oikeellisuuden, suorittaa laadunvarmistusmittaukset sekä analysoida ja tulkita tulokset</li>
-                        <li>hallita leikekuvauksen, kontrastin syntymisen ja rekonstruktiomenetelmien matemaattinen perusta</li>
-                        <li>hallita kuvausasetusten ja -parametrien vaikutus kuvanlaatuun ja potilasannokseen</li>
-                        <li>osata annosmodulaatiotekniikat</li>
-                        <li>osata potilasannoksen määrittäminen</li>
-                        <li>osata tunnistaa kuvausartefaktit ja niiden korjausmenetelmät</li>
-                        <li>tuntea yleisimmät kuvausprotokollat ja tietää kuvausparametrien ja kuvan ominaisuuksien keskinäiset riippuvuudet niissä</li>
-                        <li>osata yleisimmät kuvauksen aikaan vaikuttavat menetelmät ja tahdistusmenetelmät</li>
-                        <li>tuntea röntgenvarjoaineiden käyttö tietokonetomografiassa</li>
-                        <li>tuntea digitaalisen kuvan peruskäsitteet: kuvalaatu, segmentointimenetelmät, osittaistilavuusilmiö, kuvakohdennus, jälkikäsittely</li>
-                        <li>osata ohjata henkilökuntaa säteilyturvallisessa työskentelyssä ja kommunikoida potilaan kanssa säteilyaltistukseen liittyvissä asioissa</li>
-                        <li>tuntea tutkimusten sähköisen tallentamisen järjestelmät sekä DICOM-tiedoston rakenne ja siihen tallennettavat tiedot</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-section theory-epa-b">
-                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tutustua yleisimpiin kliinisiin tutkimuksiin (pään TT, vartalon alueen TT, TT-angiografia, trauma-TT)</li>
-                        <li>osata laitteiden hyväksyttävyysvaatimusten mukaiset mittaukset</li>
-                        <li>osata annokseen ja kuvanlaatuun liittyvän optimointiongelman itsenäinen ratkaisu</li>
-                        <li>tuntea antropomorfinen fantomi, toteuttaa sillä kuvanlaadun tarkastelu ja potilasannoksen määritys</li>
-                        <li>tutustua erikoistutkimuksiin (pään perfuusiotutkimus, sydämen ja aortan tahdistettu tutkimus, lasten tutkimukset)</li>
-                        <li>osata hyvän kuvan kriteerit erilaisten kuvausindikaatioiden kohdalla</li>
-                        <li>osata kaksoisenergiatutkimusten tekniset toteutusvaihtoehdot ja datan prosessointi</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-canmeds">
-                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
-                    <div class="theory-epa-canmeds-tags">
-                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
-                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
-                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
-                    </div>
-                </div>
-            </div>
-
             <div class="theory-quiz-section" data-tab="tt">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
@@ -820,6 +821,54 @@
          ================================================================ -->
     <div class="theory-panel" id="panel-mri" role="tabpanel">
         <div class="theory-content">
+
+            <!-- EPA-koulutuskortti: Magneettikuvaus -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Magneettikuvaus</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tutustua kirjallisuuteen ja laitteistojen turvallisuusjärjestelyihin</li>
+                        <li>osata kirjallisuuden hyödyntäminen</li>
+                        <li>osata turvallisuusohjeet</li>
+                        <li>osata selittää laitteistojen yleisen teknisen rakenteen, toiminnan ja komponentit sekä yleisimmät oheislaitteet (mm. tahdistusanturit, varjoaineruisku)</li>
+                        <li>osata magneettikuvauksen signaalinmuodostuksen periaate ja tuntea kontrastin ja paikkakoodauksen käsitteet</li>
+                        <li>osata suorittaa laadunvarmistusmittaukset sekä analysoida ja tulkita tulokset</li>
+                        <li>tuntea yleisimmät kuvantamissekvenssit ja tietää kuvausparametrien ja kuvan ominaisuuksien keskinäiset riippuvuudet niissä, sekvenssien muokkaaminen</li>
+                        <li>osata tunnistaa kuvausartefaktit ja niiden korjausmenetelmät</li>
+                        <li>osata yleisimmät kuvauksen nopeutus- ja tahdistusmenetelmät</li>
+                        <li>tietää kontrastiaineiden toimintaperiaate ja yleisimmät käyttötavat</li>
+                        <li>osata ohjata henkilökuntaa tutkimusten turvallisessa suorittamisessa ja tarvittaessa potilasta tutkimustilanteessa</li>
+                        <li>tuntea tutkimusten sähköisen tallentamisen järjestelmät sekä DICOM-tiedoston rakenne ja siihen tallennettavat tiedot</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>osata kuvanlaatuun liittyvän optimointiongelman itsenäisen ratkaisun</li>
+                        <li>osata vierasesineiden kuvattavuuteen liittyvät järjestelyt, käsitteet ja optimointi</li>
+                        <li>tutustua yleisimpiin kliinisiin tutkimuksiin (lannerangan MK, pään MK, vartalon alueen MK, nivelten MK, sydämen MK, magneettiangiografia)</li>
+                        <li>tutustua erikoistutkimuksiin (aivojen perfuusiotutkimus, aivojen funktionaalinen magneettikuvaus, spektroskopia, traktografia, relaksaatioaika-analyysi, magneettikuvausohjatut toimenpiteet/biopsiat)</li>
+                        <li>erityistä valvontaa vaativien potilaiden tutkimuksiin tutustuminen (teho-osaston potilaat, anestesiassa tehtävät tutkimukset)</li>
+                        <li>tutustua magneettikuvien hyödyntämiseen muualla kuin diagnostiikassa (sädehoito, kirurgia)</li>
+                        <li>osata hyvän kuvan kriteerit erilaisten kuvausindikaatioiden kohdalla</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
+
 
             <h2>1. Johdanto</h2>
             <p>Magneettikuvaus (magnetic resonance imaging, MRI) perustuu ydinmagneettiseen resonanssiin (NMR) ja tuottaa poikkileikekuvia ilman ionisoivaa säteilyä. Menetelmä tarjoaa erinomaisen pehmytkudoskontrastin ja monipuoliset kuvausmahdollisuudet eri kudosominaisuuksien visualisointiin. MRI on korvaamaton menetelmä erityisesti neurologia-, muskuloskeletaaliradiologian ja onkologian diagnostiikassa.</p>
@@ -1473,54 +1522,6 @@
                 <p><strong>Sairaalafyysikon rooli:</strong> Fyysikko vastaa MRI-protokollien teknisestä optimoinnista yhteistyössä radiologin kanssa. Käytännössä tämä tarkoittaa protokollakatselmusten tekemistä, laadunvarmistusmittausten tulosten analysointia, uusien sekvenssien käyttöönottoa ja henkilökunnan koulutusta kuvanlaatutekijöistä. Tavoitteena on diagnostisesti riittävä kuvanlaatu kohtuullisessa kuvausajassa potilasturvallisuus huomioiden.</p>
             </div>
 
-            
-            <!-- EPA-koulutuskortti: Magneettikuvaus -->
-            <div class="theory-epa-card">
-                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Magneettikuvaus</h2>
-                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
-                <div class="theory-epa-section theory-epa-a">
-                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tutustua kirjallisuuteen ja laitteistojen turvallisuusjärjestelyihin</li>
-                        <li>osata kirjallisuuden hyödyntäminen</li>
-                        <li>osata turvallisuusohjeet</li>
-                        <li>osata selittää laitteistojen yleisen teknisen rakenteen, toiminnan ja komponentit sekä yleisimmät oheislaitteet (mm. tahdistusanturit, varjoaineruisku)</li>
-                        <li>osata magneettikuvauksen signaalinmuodostuksen periaate ja tuntea kontrastin ja paikkakoodauksen käsitteet</li>
-                        <li>osata suorittaa laadunvarmistusmittaukset sekä analysoida ja tulkita tulokset</li>
-                        <li>tuntea yleisimmät kuvantamissekvenssit ja tietää kuvausparametrien ja kuvan ominaisuuksien keskinäiset riippuvuudet niissä, sekvenssien muokkaaminen</li>
-                        <li>osata tunnistaa kuvausartefaktit ja niiden korjausmenetelmät</li>
-                        <li>osata yleisimmät kuvauksen nopeutus- ja tahdistusmenetelmät</li>
-                        <li>tietää kontrastiaineiden toimintaperiaate ja yleisimmät käyttötavat</li>
-                        <li>osata ohjata henkilökuntaa tutkimusten turvallisessa suorittamisessa ja tarvittaessa potilasta tutkimustilanteessa</li>
-                        <li>tuntea tutkimusten sähköisen tallentamisen järjestelmät sekä DICOM-tiedoston rakenne ja siihen tallennettavat tiedot</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-section theory-epa-b">
-                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>osata kuvanlaatuun liittyvän optimointiongelman itsenäisen ratkaisun</li>
-                        <li>osata vierasesineiden kuvattavuuteen liittyvät järjestelyt, käsitteet ja optimointi</li>
-                        <li>tutustua yleisimpiin kliinisiin tutkimuksiin (lannerangan MK, pään MK, vartalon alueen MK, nivelten MK, sydämen MK, magneettiangiografia)</li>
-                        <li>tutustua erikoistutkimuksiin (aivojen perfuusiotutkimus, aivojen funktionaalinen magneettikuvaus, spektroskopia, traktografia, relaksaatioaika-analyysi, magneettikuvausohjatut toimenpiteet/biopsiat)</li>
-                        <li>erityistä valvontaa vaativien potilaiden tutkimuksiin tutustuminen (teho-osaston potilaat, anestesiassa tehtävät tutkimukset)</li>
-                        <li>tutustua magneettikuvien hyödyntämiseen muualla kuin diagnostiikassa (sädehoito, kirurgia)</li>
-                        <li>osata hyvän kuvan kriteerit erilaisten kuvausindikaatioiden kohdalla</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-canmeds">
-                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
-                    <div class="theory-epa-canmeds-tags">
-                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
-                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
-                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
-                    </div>
-                </div>
-            </div>
-
             <div class="theory-quiz-section" data-tab="mri">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
@@ -1566,6 +1567,55 @@
          ================================================================ -->
     <div class="theory-panel" id="panel-lapivalaisu" role="tabpanel">
         <div class="theory-content">
+
+            <!-- EPA-koulutuskortti: Läpivalaisu- ja angiografia -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Läpivalaisu- ja angiografia</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tutustua kirjallisuuteen ja laitteistojen säteilyturvallisuusjärjestelyihin</li>
+                        <li>osata kirjallisuuden hyödyntäminen</li>
+                        <li>osata selittää läpivalaisulaitteistojen yleisen teknisen rakenteen, toiminnan ja komponentit, sekä detektorien rakenteet ja toimintaperiaatteet.</li>
+                        <li>osata kuvausasetusten ja -parametrien vaikutus kuvanlaatuun ja potilasannokseen</li>
+                        <li>osata tunnistaa kuvausartefaktit ja niiden korjausmenetelmät</li>
+                        <li>hallita KKTT-kuvauksen, kontrastin syntymisen ja rekonstruktiomenetelmien matemaattinen perusta</li>
+                        <li>tietää annossuureet sekä osata efektiivisen ja elinkohtaisen annoksen määrittäminen</li>
+                        <li>tuntea digitaalisen kuvan peruskäsitteet: kuvalaatu, kuvakohdennus, jälkikäsittely</li>
+                        <li>osata varmistaa annossuureiden oikeellisuuden, suorittaa laadunvarmistusmittaukset sekä analysoida ja tulkita tulokset</li>
+                        <li>tuntea röntgenvarjoaineet (jodi, barium), niiden ominaisuudet ja vaikutuksen kuvan kontrastiin</li>
+                        <li>osata menetelmät henkilökunnan annosseurantaan</li>
+                        <li>osata toimenpiteen aikainen toiminta ja potilaan sekä toimenpiteen tekijöiden säteilyturvallisuuteen vaikuttavat tekijät sekä niistä kommunikoiminen</li>
+                        <li>osata potilasaltistuksen määrittäminen</li>
+                        <li>tuntea tutkimusten sähköisen tallentamisen järjestelmät sekä DICOM-tiedoston rakenne ja siihen tallennettavat tiedot</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>osata annokseen ja kuvanlaatuun liittyvän optimointiongelman itsenäinen ratkaisu</li>
+                        <li>osata laitteiden hyväksyttävyysvaatimusten mukaiset mittaukset</li>
+                        <li>tutustua yleisimpiin kliinisiin tutkimuksiin (aivovaltimoiden varjoainetutkimus, sepelvaltimoiden röntgentutkimus/stenttaus, sappiteiden ja haimatiehyiden varjoainetutkimukset, hermojuurisalpaus, valtimon laajennushoito, hermojuurisalpaus, diskografia, aorttaläppäasennus, sydäntahdistimen asennus)</li>
+                        <li>tutustua erikoistutkimuksiin (esim. maksakasvaimen SIRT-hoito, magneettiavusteinen navigointi ja elektrofysiologinen tutkimus ja ablaatiohoito)</li>
+                        <li>osata hyvän kuvan kriteerit erilaisten kuvausindikaatioiden kohdalla</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-chart-line"></i> Johtamistaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
+
 
             <h2>1. Johdanto</h2>
             <p>Läpivalaisu (fluoroscopy) on reaaliaikainen röntgenkuvausmenetelmä, joka mahdollistaa liikkuvien kohteiden kuvantamisen ja ohjatut toimenpiteet. Angiografia on erityinen läpivalaisusovellus, jossa verisuonia kuvataan varjoaineen avulla. Interventioradiologia hyödyntää näitä tekniikoita verisuoni- ja muissa pientoimenpiteissä.</p>
@@ -2085,55 +2135,6 @@
                 <p><strong>Kokonaisvaltainen laadunhallinta:</strong> Hyvän kuvan kriteerit eivät ole pelkästään teknisiä mittaustuloksia — ne yhdistävät laitetekniikan, protokollaoptimoinnin, käyttäjän osaamisen ja kliinisen arvioinnin. Fyysikon tehtävänä on varmistaa, että tekniset edellytykset hyvälaatuiselle kuvalle täyttyvät, ja antaa suosituksia, kun kuvanlaatu ei vastaa vaatimuksia.</p>
             </div>
 
-            
-            <!-- EPA-koulutuskortti: Läpivalaisu- ja angiografia -->
-            <div class="theory-epa-card">
-                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Läpivalaisu- ja angiografia</h2>
-                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
-                <div class="theory-epa-section theory-epa-a">
-                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tutustua kirjallisuuteen ja laitteistojen säteilyturvallisuusjärjestelyihin</li>
-                        <li>osata kirjallisuuden hyödyntäminen</li>
-                        <li>osata selittää läpivalaisulaitteistojen yleisen teknisen rakenteen, toiminnan ja komponentit, sekä detektorien rakenteet ja toimintaperiaatteet.</li>
-                        <li>osata kuvausasetusten ja -parametrien vaikutus kuvanlaatuun ja potilasannokseen</li>
-                        <li>osata tunnistaa kuvausartefaktit ja niiden korjausmenetelmät</li>
-                        <li>hallita KKTT-kuvauksen, kontrastin syntymisen ja rekonstruktiomenetelmien matemaattinen perusta</li>
-                        <li>tietää annossuureet sekä osata efektiivisen ja elinkohtaisen annoksen määrittäminen</li>
-                        <li>tuntea digitaalisen kuvan peruskäsitteet: kuvalaatu, kuvakohdennus, jälkikäsittely</li>
-                        <li>osata varmistaa annossuureiden oikeellisuuden, suorittaa laadunvarmistusmittaukset sekä analysoida ja tulkita tulokset</li>
-                        <li>tuntea röntgenvarjoaineet (jodi, barium), niiden ominaisuudet ja vaikutuksen kuvan kontrastiin</li>
-                        <li>osata menetelmät henkilökunnan annosseurantaan</li>
-                        <li>osata toimenpiteen aikainen toiminta ja potilaan sekä toimenpiteen tekijöiden säteilyturvallisuuteen vaikuttavat tekijät sekä niistä kommunikoiminen</li>
-                        <li>osata potilasaltistuksen määrittäminen</li>
-                        <li>tuntea tutkimusten sähköisen tallentamisen järjestelmät sekä DICOM-tiedoston rakenne ja siihen tallennettavat tiedot</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-section theory-epa-b">
-                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>osata annokseen ja kuvanlaatuun liittyvän optimointiongelman itsenäinen ratkaisu</li>
-                        <li>osata laitteiden hyväksyttävyysvaatimusten mukaiset mittaukset</li>
-                        <li>tutustua yleisimpiin kliinisiin tutkimuksiin (aivovaltimoiden varjoainetutkimus, sepelvaltimoiden röntgentutkimus/stenttaus, sappiteiden ja haimatiehyiden varjoainetutkimukset, hermojuurisalpaus, valtimon laajennushoito, hermojuurisalpaus, diskografia, aorttaläppäasennus, sydäntahdistimen asennus)</li>
-                        <li>tutustua erikoistutkimuksiin (esim. maksakasvaimen SIRT-hoito, magneettiavusteinen navigointi ja elektrofysiologinen tutkimus ja ablaatiohoito)</li>
-                        <li>osata hyvän kuvan kriteerit erilaisten kuvausindikaatioiden kohdalla</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-canmeds">
-                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
-                    <div class="theory-epa-canmeds-tags">
-                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
-                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
-                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-chart-line"></i> Johtamistaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
-                    </div>
-                </div>
-            </div>
-
             <div class="theory-quiz-section" data-tab="lapivalaisu">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
@@ -2172,6 +2173,48 @@
          ================================================================ -->
     <div class="theory-panel" id="panel-mammografia" role="tabpanel">
         <div class="theory-content">
+
+            <!-- EPA-koulutuskortti: Mammografia -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Mammografia</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tutustua kirjallisuuteen ja laitteistojen säteilyturvallisuusjärjestelyihin</li>
+                        <li>osata kirjallisuuden hyödyntäminen</li>
+                        <li>osata selittää mammografialaitteiston yleinen tekninen rakenne, toiminta ja komponentit, detektorimateriaalit ja rakenne</li>
+                        <li>hallita kuvausasetusten ja -parametrien vaikutus kuvanlaatuun ja potilasannokseen</li>
+                        <li>osata tunnistaa kuvausartefaktit ja niiden korjausmenetelmät</li>
+                        <li>osata varmistaa annossuureiden oikeellisuuden, suorittaa laadunvarmistusmittaukset sekä analysoida ja tulkita tulokset</li>
+                        <li>osata potilasaltistuksen määrittäminen</li>
+                        <li>osata ohjata henkilökuntaa säteilyturvallisessa työskentelyssä ja kommunikoida potilaan kanssa säteilyaltistukseen liittyvissä asioissa</li>
+                        <li>tuntea tutkimusten sähköisen tallentamisen järjestelmät sekä DICOM-tiedoston rakenne ja siihen tallennettavat tiedot</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>osata annokseen ja kuvanlaatuun liittyvän optimointiongelman itsenäinen ratkaisu</li>
+                        <li>osata laitteiden hyväksyttävyysvaatimusten mukaiset mittaukset</li>
+                        <li>tutustua erikoistutkimuksiin (tomosynteesi, stereotaktinen näytteenotto, preparaattikuvaus)</li>
+                        <li>osata hyvän kuvan kriteerit erilaisten kuvausindikaatioiden kohdalla</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
+
 
             <h2>1. Johdanto</h2>
             <p>Mammografia on rintakuvantamismenetelmä, joka on perustyökalu rintasyövän diagnostiikassa ja seulonnassa. Suomessa kaikki 50–69-vuotiaat naiset kutsutaan mammografiaseulontaan 20 kuukauden välein. Mammografian fysiikka poikkeaa merkittävästi muusta röntgenkuvantamisesta: matalat energiat, rinnan puristus, erityisdetektorit ja erittäin korkeat kuvanlaativaatimukset.</p>
@@ -3726,48 +3769,6 @@
             <strong>Yhteenveto:</strong> Sairaalafyysikko yhdistää teknisen kuvanlaadun arvioinnin (MTF, CNR, SDNR, CDMAM) ja kliinisen kuvanlaadun arvioinnin (PGMI, anatomisten kriteerien täyttyminen) kokonaisvaltaiseksi laadunhallinnaksi. Optimoinnin tavoitteena on maksimaalinen diagnostinen informaatio minimoimalla potilasaltistus.
             </div>
 
-            
-            <!-- EPA-koulutuskortti: Mammografia -->
-            <div class="theory-epa-card">
-                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Mammografia</h2>
-                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
-                <div class="theory-epa-section theory-epa-a">
-                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tutustua kirjallisuuteen ja laitteistojen säteilyturvallisuusjärjestelyihin</li>
-                        <li>osata kirjallisuuden hyödyntäminen</li>
-                        <li>osata selittää mammografialaitteiston yleinen tekninen rakenne, toiminta ja komponentit, detektorimateriaalit ja rakenne</li>
-                        <li>hallita kuvausasetusten ja -parametrien vaikutus kuvanlaatuun ja potilasannokseen</li>
-                        <li>osata tunnistaa kuvausartefaktit ja niiden korjausmenetelmät</li>
-                        <li>osata varmistaa annossuureiden oikeellisuuden, suorittaa laadunvarmistusmittaukset sekä analysoida ja tulkita tulokset</li>
-                        <li>osata potilasaltistuksen määrittäminen</li>
-                        <li>osata ohjata henkilökuntaa säteilyturvallisessa työskentelyssä ja kommunikoida potilaan kanssa säteilyaltistukseen liittyvissä asioissa</li>
-                        <li>tuntea tutkimusten sähköisen tallentamisen järjestelmät sekä DICOM-tiedoston rakenne ja siihen tallennettavat tiedot</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-section theory-epa-b">
-                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>osata annokseen ja kuvanlaatuun liittyvän optimointiongelman itsenäinen ratkaisu</li>
-                        <li>osata laitteiden hyväksyttävyysvaatimusten mukaiset mittaukset</li>
-                        <li>tutustua erikoistutkimuksiin (tomosynteesi, stereotaktinen näytteenotto, preparaattikuvaus)</li>
-                        <li>osata hyvän kuvan kriteerit erilaisten kuvausindikaatioiden kohdalla</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-canmeds">
-                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
-                    <div class="theory-epa-canmeds-tags">
-                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
-                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
-                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
-                    </div>
-                </div>
-            </div>
-
             <div class="theory-quiz-section" data-tab="mammografia">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
@@ -3802,6 +3803,47 @@
          ================================================================ -->
     <div class="theory-panel" id="panel-ultraaani" role="tabpanel">
         <div class="theory-content">
+
+            <!-- EPA-koulutuskortti: Ultraäänikuvantaminen -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Ultraäänikuvantaminen</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tutustua kirjallisuuteen ja laitteistojen turvallisuusjärjestelyihin</li>
+                        <li>tuntea ultraäänilaitteen yleinen tekninen rakenne, toiminta ja komponentit</li>
+                        <li>osata ultraäänimenetelmien (A-, B- ja M- ja Doppler-menetelmät) periaate ja kontrastin syntyminen</li>
+                        <li>tuntea erilaiset anturit ja niiden käyttöalueet</li>
+                        <li>hallita laitteen laadunvarmistustoimet</li>
+                        <li>tuntee yleisimmät kuvavääristymät</li>
+                        <li>osata kuvanlaadun perusmittaus fantomia ja ilmakuvausta käyttäen ja tulosten analyysi</li>
+                        <li>tutustua yleisimpiin kliinisiin ultraäänitutkimuksiin (vatsa, ylävatsa, rintarauhanen, alaraajalaskimo, virtsaelimet, sydän, ultraääniohjattu toimepide)</li>
+                        <li>tuntea tutkimusten sähköisen tallentamisen järjestelmät sekä DICOM-tiedoston rakenne ja siihen tallennettavat tiedot</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tuntea ultraäänikontrastiaineiden käyttöaiheet</li>
+                        <li>tutustua erikoistutkimuksiin (laajat sydäntutkimukset ja lasten tutkimukset)</li>
+                        <li>tuntea ultraäänen erityistekniikat (elastografia-, kontrastiaine- ja fuusiokuvantaminen)</li>
+                        <li>osata hyödyntää kirjallisuutta</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
+
 
             <h2>1. Johdanto</h2>
             <p>Ultraäänikuvantaminen (ultrasonography) perustuu ääniaaltoihin, joiden taajuus on ihmisen kuuloalueen yläpuolella (>20 kHz). Lääketieteellisessä kuvantamisessa käytetään taajuuksia 1–20 MHz. Ultraääni ei käytä ionisoivaa säteilyä, on reaaliaikainen, liikuteltava ja edullinen, minkä vuoksi se on yksi käytetyimmistä kuvantamismenetelmistä.</p>
@@ -4043,47 +4085,6 @@
             </div>
             <p>Elementtitestin kvantitatiivinen arviointi voidaan tehdä myös laitevalmistajan huolto-ohjelmiston avulla, jolloin saadaan numeerinen arvo jokaisen elementin herkkyydelle ja signaalitasolle. Tämä on tarkempi menetelmä kuin visuaalinen ilmakuva-arviointi.</p>
 
-            
-            <!-- EPA-koulutuskortti: Ultraäänikuvantaminen -->
-            <div class="theory-epa-card">
-                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Ultraäänikuvantaminen</h2>
-                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
-                <div class="theory-epa-section theory-epa-a">
-                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tutustua kirjallisuuteen ja laitteistojen turvallisuusjärjestelyihin</li>
-                        <li>tuntea ultraäänilaitteen yleinen tekninen rakenne, toiminta ja komponentit</li>
-                        <li>osata ultraäänimenetelmien (A-, B- ja M- ja Doppler-menetelmät) periaate ja kontrastin syntyminen</li>
-                        <li>tuntea erilaiset anturit ja niiden käyttöalueet</li>
-                        <li>hallita laitteen laadunvarmistustoimet</li>
-                        <li>tuntee yleisimmät kuvavääristymät</li>
-                        <li>osata kuvanlaadun perusmittaus fantomia ja ilmakuvausta käyttäen ja tulosten analyysi</li>
-                        <li>tutustua yleisimpiin kliinisiin ultraäänitutkimuksiin (vatsa, ylävatsa, rintarauhanen, alaraajalaskimo, virtsaelimet, sydän, ultraääniohjattu toimepide)</li>
-                        <li>tuntea tutkimusten sähköisen tallentamisen järjestelmät sekä DICOM-tiedoston rakenne ja siihen tallennettavat tiedot</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-section theory-epa-b">
-                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tuntea ultraäänikontrastiaineiden käyttöaiheet</li>
-                        <li>tutustua erikoistutkimuksiin (laajat sydäntutkimukset ja lasten tutkimukset)</li>
-                        <li>tuntea ultraäänen erityistekniikat (elastografia-, kontrastiaine- ja fuusiokuvantaminen)</li>
-                        <li>osata hyödyntää kirjallisuutta</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-canmeds">
-                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
-                    <div class="theory-epa-canmeds-tags">
-                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
-                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
-                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
-                    </div>
-                </div>
-            </div>
-
             <div class="theory-quiz-section" data-tab="ultraaani">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
@@ -4122,6 +4123,40 @@
          ================================================================ -->
     <div class="theory-panel" id="panel-naytot" role="tabpanel">
         <div class="theory-content">
+
+            <!-- EPA-koulutuskortti: Kuvankatselunäytöt -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Kuvankatselunäytöt</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tutustua kirjallisuuteen sekä näyttöjen ja näytönohjainten ominaisuuksiin ja käyttöohjeisiin</li>
+                        <li>osata kirjallisuuden hyödyntäminen</li>
+                        <li>tuntea lääketieteessä käytettävät eri näyttöteknologiat ja näytönohjaimet</li>
+                        <li>osata keskeisimmät kuvanlaatutekijät (mm. resoluutio, kohina, tasaisuus, kontrastivaste, heijastukset, virheelliset pikselit)</li>
+                        <li>osata suorittaa laadunvarmistusmittaukset sekä analysoida ja tulkita tulokset</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>osata optimoida kuvankatseluolosuhteet ja ymmärtää niiden vaikutus kuvanlaatuun</li>
+                        <li>tuntea DICOM-standardissa käytetty harmaasävynäyttöfunktio</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
+
 
             <h2>1. Johdanto</h2>
             <p>Lääketieteellisen kuvantamisen koko diagnostinen ketju päättyy kuvankatselunäyttöön. Näytön laatu on yhtä tärkeää kuin kuvauslaitteen — huonolaatuinen näyttö voi tehdä hyvälaatuisesta kuvasta diagnostisesti hyödyttömän. Sairaalafyysikon vastuulla on näyttöjen laadunvarmistus ja kalibrointi.</p>
@@ -4304,40 +4339,6 @@
                 <p><strong>Käytännön huomio:</strong> Kirjaa jokaisen kalibrointimittauksen yhteydessä \( L_{max} \) ja \( L_{min} \) trenditaulukkoon. Kun \( L_{max} \) on laskenut 20 % alkuperäisestä, aloita näytön vaihdon suunnittelu. Äkillinen kirkkauden lasku viittaa taustavalon vikaan.</p>
             </div>
 
-            
-            <!-- EPA-koulutuskortti: Kuvankatselunäytöt -->
-            <div class="theory-epa-card">
-                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Kuvankatselunäytöt</h2>
-                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
-                <div class="theory-epa-section theory-epa-a">
-                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tutustua kirjallisuuteen sekä näyttöjen ja näytönohjainten ominaisuuksiin ja käyttöohjeisiin</li>
-                        <li>osata kirjallisuuden hyödyntäminen</li>
-                        <li>tuntea lääketieteessä käytettävät eri näyttöteknologiat ja näytönohjaimet</li>
-                        <li>osata keskeisimmät kuvanlaatutekijät (mm. resoluutio, kohina, tasaisuus, kontrastivaste, heijastukset, virheelliset pikselit)</li>
-                        <li>osata suorittaa laadunvarmistusmittaukset sekä analysoida ja tulkita tulokset</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-section theory-epa-b">
-                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>osata optimoida kuvankatseluolosuhteet ja ymmärtää niiden vaikutus kuvanlaatuun</li>
-                        <li>tuntea DICOM-standardissa käytetty harmaasävynäyttöfunktio</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-canmeds">
-                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
-                    <div class="theory-epa-canmeds-tags">
-                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
-                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
-                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
-                    </div>
-                </div>
-            </div>
-
             <div class="theory-quiz-section" data-tab="naytot">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
@@ -4374,6 +4375,47 @@
          ================================================================ -->
     <div class="theory-panel" id="panel-hammas" role="tabpanel">
         <div class="theory-content">
+
+            <!-- EPA-koulutuskortti: Hammaskuvantaminen -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Hammaskuvantaminen</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tutustua kirjallisuuteen ja laitteistojen säteilyturvallisuusjärjestelyihin</li>
+                        <li>osata kirjallisuuden hyödyntäminen</li>
+                        <li>osata selittää laitteistojen yleisen teknisen rakenteen, toiminnan ja komponentit, detektorien rakenteet ja toimintaperiaatteet</li>
+                        <li>osata varmistaa annossuureiden oikeellisuuden, suorittaa laadunvarmistusmittaukset sekä analysoida ja tulkita tulokset</li>
+                        <li>tuntea intraoraali- ja panoraamatutkimusten suorittamisen</li>
+                        <li>tuntea kartiokeilatutkimuksen suorittamisen</li>
+                        <li>hallita KKTT-leikekuvauksen, kontrastin syntymisen ja rekonstruktiomenetelmien matemaattinen perusta</li>
+                        <li>osata tunnistaa kuvausartefaktit ja niiden korjausmenetelmät</li>
+                        <li>hallita kuvausasetusten ja -parametrien vaikutus kuvanlaatuun ja potilasannokseen</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>osata laitteiden hyväksyttävyysvaatimusten mukaiset mittaukset</li>
+                        <li>osata annokseen ja kuvanlaatuun liittyvän optimointiongelman itsenäinen ratkaisu</li>
+                        <li>osata hyvän kuvan kriteerit erilaisten kuvausindikaatioiden kohdalla</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
+
 
             <h2>1. Johdanto</h2>
             <p>Hammaskuvantaminen kattaa intraoraalikuvaukset, panoraamatomografian (OPG) ja kartiokeilatietokonetomografian (KKTT/CBCT). Hammaskuvantaminen on yleisin röntgentutkimustyyppi lukumäärältään ja liittyy sairaalafyysikon työhön erityisesti laadunvarmistuksen ja annosoptimoinnin kautta.</p>
@@ -4727,47 +4769,6 @@
                 <p><strong>Esimerkki 3 — Intraoraalikuvauksen modernisointi:</strong> Vanha filmilaite (E-speed filmi) korvattu suoradigitaalisella sensorilla (CMOS). Annossäästö: ~50 % (digisensorin parempi DQE mahdollistaa pienemmän mAs-arvon). Lisähyöty: kuvan jälkikäsittely, PACS-arkistointi.</p>
             </div>
 
-            
-            <!-- EPA-koulutuskortti: Hammaskuvantaminen -->
-            <div class="theory-epa-card">
-                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Hammaskuvantaminen</h2>
-                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
-                <div class="theory-epa-section theory-epa-a">
-                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tutustua kirjallisuuteen ja laitteistojen säteilyturvallisuusjärjestelyihin</li>
-                        <li>osata kirjallisuuden hyödyntäminen</li>
-                        <li>osata selittää laitteistojen yleisen teknisen rakenteen, toiminnan ja komponentit, detektorien rakenteet ja toimintaperiaatteet</li>
-                        <li>osata varmistaa annossuureiden oikeellisuuden, suorittaa laadunvarmistusmittaukset sekä analysoida ja tulkita tulokset</li>
-                        <li>tuntea intraoraali- ja panoraamatutkimusten suorittamisen</li>
-                        <li>tuntea kartiokeilatutkimuksen suorittamisen</li>
-                        <li>hallita KKTT-leikekuvauksen, kontrastin syntymisen ja rekonstruktiomenetelmien matemaattinen perusta</li>
-                        <li>osata tunnistaa kuvausartefaktit ja niiden korjausmenetelmät</li>
-                        <li>hallita kuvausasetusten ja -parametrien vaikutus kuvanlaatuun ja potilasannokseen</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-section theory-epa-b">
-                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>osata laitteiden hyväksyttävyysvaatimusten mukaiset mittaukset</li>
-                        <li>osata annokseen ja kuvanlaatuun liittyvän optimointiongelman itsenäinen ratkaisu</li>
-                        <li>osata hyvän kuvan kriteerit erilaisten kuvausindikaatioiden kohdalla</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-canmeds">
-                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
-                    <div class="theory-epa-canmeds-tags">
-                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
-                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
-                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
-                    </div>
-                </div>
-            </div>
-
             <div class="theory-quiz-section" data-tab="hammas">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
@@ -4807,6 +4808,51 @@
          ================================================================ -->
     <div class="theory-panel" id="panel-sateilysuojelu" role="tabpanel">
         <div class="theory-content">
+
+            <!-- EPA-koulutuskortti: Sateilybiologia ja sateilysuojelu radiologiassa -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Sateilybiologia ja sateilysuojelu radiologiassa</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>hallita säteilysuojelun keskeiset periaatteet ja lainsäädännön sekä toiminnan harjoittamispaikalla tarvittavat säteilysuojelu- ja turvajärjestelyt</li>
+                        <li>hallita lääketieteellisen fysiikan ja säteilybiologian ja osata soveltaa tietoja työskentelyalallaan pystyäkseen ohjaamaan muita säteilyaltistuksen laadusta ja suuruudesta päivittäisessä työssä.</li>
+                        <li>osata arvioida ja tulkita säteilyriskejä</li>
+                        <li>osata opastaa laitteiden ja ohjelmistojen valinnassa ottaen huomioon kuvalaatuun ja säteilyaltistukseen liittyvät tekijät</li>
+                        <li>tietää annossuureet sekä osata efektiivisen ja elinkohtaisen annoksen määrittäminen radiologisissa tutkimuksissa ja toimenpideradiologiassa</li>
+                        <li>osata optimoida säteilyn lääketieteellisestä käytöstä aiheutuvaa työperäistä altistusta</li>
+                        <li>osata arvioida ja kehittää työskentelyalalle soveltuvia säteilysuojelumenettelyjä lääketieteellisen altistuksen optimoimiseksi sekä säteilyn lääketieteellisestä käytöstä aiheutuvan väestön ja työperäisen altistuksen optimoimiseksi</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>kyetä toimimaan osaamisalansa asiantuntijana, viestimään säteilysuojeluasioista ja opastamaan toiminnanharjoittajaa lakisääteisten vaatimusten noudattamisessa</li>
+                        <li>kyetä opastamaan toiminnanharjoittajaa toiminnasta aiheutuvan altistuksen arvioimisessa, suojelun optimoinnissa sekä ennaltaehkäisevässä suunnittelussa ja riskien kartoituksessa</li>
+                        <li>osata neuvoa toiminnanharjoittajaa koulutuksen ja opastuksen järjestämiseksi säteilytoimintaan osallistuvalle henkilöstölle säteilyturvalliseen työskentelyyn ja suunnitella tarvittavan säteilysuojelun täydennyskoulutuksen</li>
+                        <li>osaa arvioida säteilyriskejä uusimpaan tietoon perustuen ja ohjata muita terveydenhuollon ammattilaisia viestimään säteilyaltistuksen laadusta ja suuruudesta</li>
+                        <li>osata arvioida ja kehittää soveltuvia säteilysuojelumenettelyjä</li>
+                        <li>osata toteuttaa kuvantamishuoneen tilasuunnittelu säteilysuojauksen osalta</li>
+                        <li>osata raportoida säteilyturvallisuuspoikkeamista asianomaiselle taholle ja tuntea menettelyjä poikkeamien syiden selvittelyyn ja niistä oppimiseen</li>
+                        <li>tutustua kliiniseen auditointiin vähintään edellisen kliinisen auditoinnin dokumentaation kautta Tärkeimmät</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-chart-line"></i> Johtamistaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
+
 
             <h2>1. Johdanto</h2>
             <p>Säteilybiologia tutkii ionisoivan säteilyn biologisia vaikutuksia. Säteilysuojelu (radiation protection) pyrkii minimoimaan säteilyn haittavaikutukset sekä potilaille, henkilökunnalle että väestölle. Sairaalafyysikolla on keskeinen rooli säteilysuojelun toteuttamisessa diagnostisessa radiologiassa.</p>
@@ -5399,51 +5445,6 @@
                 <p><strong>Fyysikon rooli auditoinnissa:</strong> Sairaalafyysikko on keskeinen henkilö auditoinnin valmistelussa (teknisten dokumenttien kokoaminen, annosdatan analyysi, laadunvarmistusdatan yhteenveto) ja auditoinnin aikana (tekniset selonteot, mittaustulosten esittely). Fyysikko myös johtaa auditoinnin jälkeisten teknisten kehittämis­toimenpiteiden toteutusta.</p>
             </div>
 
-            
-            <!-- EPA-koulutuskortti: Sateilybiologia ja sateilysuojelu radiologiassa -->
-            <div class="theory-epa-card">
-                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Sateilybiologia ja sateilysuojelu radiologiassa</h2>
-                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
-                <div class="theory-epa-section theory-epa-a">
-                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>hallita säteilysuojelun keskeiset periaatteet ja lainsäädännön sekä toiminnan harjoittamispaikalla tarvittavat säteilysuojelu- ja turvajärjestelyt</li>
-                        <li>hallita lääketieteellisen fysiikan ja säteilybiologian ja osata soveltaa tietoja työskentelyalallaan pystyäkseen ohjaamaan muita säteilyaltistuksen laadusta ja suuruudesta päivittäisessä työssä.</li>
-                        <li>osata arvioida ja tulkita säteilyriskejä</li>
-                        <li>osata opastaa laitteiden ja ohjelmistojen valinnassa ottaen huomioon kuvalaatuun ja säteilyaltistukseen liittyvät tekijät</li>
-                        <li>tietää annossuureet sekä osata efektiivisen ja elinkohtaisen annoksen määrittäminen radiologisissa tutkimuksissa ja toimenpideradiologiassa</li>
-                        <li>osata optimoida säteilyn lääketieteellisestä käytöstä aiheutuvaa työperäistä altistusta</li>
-                        <li>osata arvioida ja kehittää työskentelyalalle soveltuvia säteilysuojelumenettelyjä lääketieteellisen altistuksen optimoimiseksi sekä säteilyn lääketieteellisestä käytöstä aiheutuvan väestön ja työperäisen altistuksen optimoimiseksi</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-section theory-epa-b">
-                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>kyetä toimimaan osaamisalansa asiantuntijana, viestimään säteilysuojeluasioista ja opastamaan toiminnanharjoittajaa lakisääteisten vaatimusten noudattamisessa</li>
-                        <li>kyetä opastamaan toiminnanharjoittajaa toiminnasta aiheutuvan altistuksen arvioimisessa, suojelun optimoinnissa sekä ennaltaehkäisevässä suunnittelussa ja riskien kartoituksessa</li>
-                        <li>osata neuvoa toiminnanharjoittajaa koulutuksen ja opastuksen järjestämiseksi säteilytoimintaan osallistuvalle henkilöstölle säteilyturvalliseen työskentelyyn ja suunnitella tarvittavan säteilysuojelun täydennyskoulutuksen</li>
-                        <li>osaa arvioida säteilyriskejä uusimpaan tietoon perustuen ja ohjata muita terveydenhuollon ammattilaisia viestimään säteilyaltistuksen laadusta ja suuruudesta</li>
-                        <li>osata arvioida ja kehittää soveltuvia säteilysuojelumenettelyjä</li>
-                        <li>osata toteuttaa kuvantamishuoneen tilasuunnittelu säteilysuojauksen osalta</li>
-                        <li>osata raportoida säteilyturvallisuuspoikkeamista asianomaiselle taholle ja tuntea menettelyjä poikkeamien syiden selvittelyyn ja niistä oppimiseen</li>
-                        <li>tutustua kliiniseen auditointiin vähintään edellisen kliinisen auditoinnin dokumentaation kautta Tärkeimmät</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-canmeds">
-                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
-                    <div class="theory-epa-canmeds-tags">
-                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
-                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
-                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-chart-line"></i> Johtamistaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
-                    </div>
-                </div>
-            </div>
-
             <div class="theory-quiz-section" data-tab="sateilysuojelu">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
@@ -5995,25 +5996,27 @@
             .catch(function() {});
     }
 
+    window.renderAllSlots = renderAllSlots;
     function renderAllSlots() {
         document.querySelectorAll('.theory-image-slot').forEach(function(slot) {
             var slotId = slot.dataset.slot;
             var info = imageData[slotId];
+            var isDynamic = slot.dataset.dynamic === 'true';
+            var deleteSlotBtn = isDynamic ? '<button class="btn-delete-slot" onclick="deleteImageSlot(\'' + slotId + '\', \'' + slot.dataset.tab + '\')"><i class="fas fa-times-circle"></i> Poista kuvaikkunaa</button>' : '';
 
             if (info && info.url) {
-                // Has image — render figure
                 slot.className = 'theory-image-slot has-image size-' + (info.display_size || 'medium');
                 slot.innerHTML =
                     '<figure>' +
                         '<div class="theory-image-actions">' +
                             '<button class="btn-replace" onclick="openUploadModal(\'' + slotId + '\', \'' + slot.dataset.tab + '\')"><i class="fas fa-exchange-alt"></i> Vaihda</button>' +
-                            '<button class="btn-delete" onclick="deleteSlotImage(\'' + slotId + '\', \'' + slot.dataset.tab + '\')"><i class="fas fa-trash"></i> Poista</button>' +
+                            '<button class="btn-delete" onclick="deleteSlotImage(\'' + slotId + '\', \'' + slot.dataset.tab + '\')"><i class="fas fa-trash"></i> Poista kuva</button>' +
+                            deleteSlotBtn +
                         '</div>' +
                         '<img src="' + info.url + '" alt="' + (info.alt_text || '') + '">' +
                         '<figcaption>' + (info.caption || '') + '</figcaption>' +
                     '</figure>';
             } else {
-                // Empty slot — show placeholder in edit mode only
                 slot.classList.remove('has-image');
                 var defaultCaption = slot.dataset.defaultCaption || '';
                 slot.innerHTML =
@@ -6022,19 +6025,13 @@
                         '<span>Lisää kuva</span>' +
                         '<span class="slot-label">' + slotId + '</span>' +
                         '<span style="font-size:0.75rem;max-width:400px;text-align:center;">' + defaultCaption + '</span>' +
-                    '</div>';
+                    '</div>' +
+                    (isDynamic ? '<div class="theory-slot-delete-bar">' + deleteSlotBtn + '</div>' : '');
             }
         });
     }
 
     // Toggle edit mode
-    window.toggleEditMode = function() {
-        var btn = document.getElementById('editModeToggle');
-        document.body.classList.toggle('theory-edit-mode');
-        btn.classList.toggle('active');
-        var isActive = document.body.classList.contains('theory-edit-mode');
-        btn.querySelector('span').textContent = isActive ? 'Lopeta muokkaus' : 'Muokkaa kuvia';
-    };
 
     // Upload modal
     window.openUploadModal = function(slotId, tabId) {
@@ -6208,4 +6205,5 @@
 
 })();
 </script>
+<script src="{% static 'sisalto/js/theory-inline-editor.js' %}"></script>
 {% endblock %}

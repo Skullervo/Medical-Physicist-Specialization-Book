@@ -5,17 +5,18 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'sisalto/css/theory.css' %}?v=1">
+<link rel="stylesheet" href="{% static 'sisalto/css/theory-inline-editor.css' %}?v=1">
 {% endblock %}
 
 {% block content %}
 
-<div class="theory-container">
+<div class="theory-container" data-modality-id="fysiologia">
     <div class="theory-header">
         <h1><i class="fas fa-heartbeat" style="color: #f87171; margin-right: 8px;"></i> Kliinisen fysiologian teoria</h1>
         <p>Kattava teoriamateriaali kliinisen fysiologian mittausmenetelmistä, laitteista ja signaalinkäsittelystä. Valitse aihealue alla olevista välilehdistä.</p>
         {% if is_superuser %}
-        <button class="theory-edit-toggle" id="editModeToggle" onclick="toggleEditMode()">
-            <i class="fas fa-images"></i> <span>Muokkaa kuvia</span>
+        <button class="theory-inline-edit-toggle" id="inlineEditToggle">
+            <i class="fas fa-pen"></i> <span>Muokkaa sisältöä</span>
         </button>
         {% endif %}
     </div>
@@ -79,6 +80,50 @@
          ================================================================ -->
     <div class="theory-panel active" id="panel-ekg" role="tabpanel">
         <div class="theory-content">
+
+            <!-- EPA-koulutuskortti: EKG-tutkimukset -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: EKG-tutkimukset</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tutustua keskeiseen kirjallisuuteen, suosituksiin ja menetelmäohjeisiin</li>
+                        <li>tietää tavallisimmat tutkimuksiin lähettämisen syyt, tutkimusten kulku ja tyypilliset löydökset</li>
+                        <li>tuntea EKG:n synty, normaali johtuminen ja tavallisimmat poikkeavat johtumiset ja rytmihäiriöt pääpiirteissään sekä osata nimetä EKG:n aaltomuodot ja aikaintervallit</li>
+                        <li>tuntea lepo-EKG:ssä, rasituskokeessa ja EKG:n pitkäaikaisrekisteröinnissä käytetyt kytkennät</li>
+                        <li>tuntea lepo-EKG:n esitystavat: perinteinen ja luonnollinen (Cabrera) kytkentäjärjestys</li>
+                        <li>tuntea tavallisimmat suodatukset ja niiden käyttötarkoitus</li>
+                        <li>osata tuottaa tutkimuksen loppuraportointi ja tuntea sen sähköisen tallentamisen järjestelmät</li>
+                        <li>osata kommunikoida henkilökunnan ja potilaan kanssa tutkimustilanteessa</li>
+                        <li>osata tutkimuslaitteiden ja ohjelmistojen käyttö</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tuntea QT-ajan automaattitunnistuksen ja korjatun QT-ajan laskemisen keskeiset menetelmät</li>
+                        <li>tuntea tyypillisimmät häiriöt ja artefaktat ja osata eliminoida niitä käytännön mittauksissa ja analyyseissä</li>
+                        <li>osata laitteiden ja ohjelmistojen asetusten ja ylläpidon periaatteet</li>
+                        <li>osata ohjata henkilökuntaa laitteiden käytössä, tutkimusten analysoinnissa ja ongelmatilanteiden selvittelyssä</li>
+                        <li>osata EKG-tahdistuksen periaatteet EKG-signaalin näkökulmasta</li>
+                        <li>osata käyttää kirjallisuutta uuden tiedon ja näytön hakemiseen</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-chart-line"></i> Johtamistaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
 
             <h2>1. EKG:n synty ja biofysiikka</h2>
 
@@ -429,50 +474,6 @@
     <strong>Vuosittain:</strong> Täydellinen tekninen tarkistus IEC 60601-2-25 mukaisesti</p>
 </div>
 
-            
-            <!-- EPA-koulutuskortti: EKG-tutkimukset -->
-            <div class="theory-epa-card">
-                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: EKG-tutkimukset</h2>
-                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
-                <div class="theory-epa-section theory-epa-a">
-                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tutustua keskeiseen kirjallisuuteen, suosituksiin ja menetelmäohjeisiin</li>
-                        <li>tietää tavallisimmat tutkimuksiin lähettämisen syyt, tutkimusten kulku ja tyypilliset löydökset</li>
-                        <li>tuntea EKG:n synty, normaali johtuminen ja tavallisimmat poikkeavat johtumiset ja rytmihäiriöt pääpiirteissään sekä osata nimetä EKG:n aaltomuodot ja aikaintervallit</li>
-                        <li>tuntea lepo-EKG:ssä, rasituskokeessa ja EKG:n pitkäaikaisrekisteröinnissä käytetyt kytkennät</li>
-                        <li>tuntea lepo-EKG:n esitystavat: perinteinen ja luonnollinen (Cabrera) kytkentäjärjestys</li>
-                        <li>tuntea tavallisimmat suodatukset ja niiden käyttötarkoitus</li>
-                        <li>osata tuottaa tutkimuksen loppuraportointi ja tuntea sen sähköisen tallentamisen järjestelmät</li>
-                        <li>osata kommunikoida henkilökunnan ja potilaan kanssa tutkimustilanteessa</li>
-                        <li>osata tutkimuslaitteiden ja ohjelmistojen käyttö</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-section theory-epa-b">
-                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tuntea QT-ajan automaattitunnistuksen ja korjatun QT-ajan laskemisen keskeiset menetelmät</li>
-                        <li>tuntea tyypillisimmät häiriöt ja artefaktat ja osata eliminoida niitä käytännön mittauksissa ja analyyseissä</li>
-                        <li>osata laitteiden ja ohjelmistojen asetusten ja ylläpidon periaatteet</li>
-                        <li>osata ohjata henkilökuntaa laitteiden käytössä, tutkimusten analysoinnissa ja ongelmatilanteiden selvittelyssä</li>
-                        <li>osata EKG-tahdistuksen periaatteet EKG-signaalin näkökulmasta</li>
-                        <li>osata käyttää kirjallisuutta uuden tiedon ja näytön hakemiseen</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-canmeds">
-                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
-                    <div class="theory-epa-canmeds-tags">
-                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
-                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
-                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-chart-line"></i> Johtamistaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
-                    </div>
-                </div>
-            </div>
 
             <div class="theory-quiz-section" data-tab="ekg">
                 <div class="theory-quiz-start">
@@ -510,6 +511,49 @@
          ================================================================ -->
     <div class="theory-panel" id="panel-verenkierto" role="tabpanel">
         <div class="theory-content">
+
+            <!-- EPA-koulutuskortti: Verenkiertotutkimukset -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Verenkiertotutkimukset</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tutustua keskeiseen kirjallisuuteen, suosituksiin ja menetelmäohjeisiin</li>
+                        <li>tietää tavallisimmat tutkimuksiin lähettämisen syyt, tutkimusten kulku ja tyypilliset löydökset</li>
+                        <li>tuntea pääpiirteissään verenpaineen ja sen säätelyn normaali fysiologian ja tavallisin patofysiologia</li>
+                        <li>tuntea olkavarsiverenpaineen automaattimittauksen auskultatorinen ja oskillometrinen tekniikka</li>
+                        <li>tuntea jatkuvan ei-invasiivisen verenpainemittauksen jokin tekniikka (esim. volume-clamp, Colinin tonometria)</li>
+                        <li>tuntea systolisen verenpaineen mittaus fotopletysmografia-anturia, kynä-doppleria tai vastaavaa käyttäen</li>
+                        <li>osata tehdä tutkimuksiin liittyvät laitteiden alkuvalmistelut ja kalibraatiot</li>
+                        <li>osata tuottaa tutkimuksen loppuraportointi ja tuntea sen sähköisen tallentamisen järjestelmät</li>
+                        <li>osata kommunikoida henkilökunnan ja potilaan kanssa tutkimustilanteessa</li>
+                        <li>osata tutkimuslaitteiden ja ohjelmistojen käyttö</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tuntea automaattimittauksiin liittyvät tavallisimmat virhelähteet ja osata eliminoida niitä käytännön mittauksissa</li>
+                        <li>tuntea automaattiverenpainemittareiden kliinisen validoinnin periaatteet</li>
+                        <li>osata ohjata henkilökuntaa laitteiden käytössä, tutkimusten analysoinnissa ja ongelmatilanteiden selvittelyssä</li>
+                        <li>osata käyttää kirjallisuutta uuden tiedon ja näytön hakemiseen</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-chart-line"></i> Johtamistaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
 
             <h2>1. Verenpaineen fysiologia ja mittauksen perusteet</h2>
 
@@ -824,49 +868,6 @@ $$\text{RMSSD} = \sqrt{\frac{1}{N-1} \sum_{i=1}^{N-1}(\text{RR}_{i+1} - \text{RR
 </tbody>
 </table>
 
-            
-            <!-- EPA-koulutuskortti: Verenkiertotutkimukset -->
-            <div class="theory-epa-card">
-                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Verenkiertotutkimukset</h2>
-                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
-                <div class="theory-epa-section theory-epa-a">
-                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tutustua keskeiseen kirjallisuuteen, suosituksiin ja menetelmäohjeisiin</li>
-                        <li>tietää tavallisimmat tutkimuksiin lähettämisen syyt, tutkimusten kulku ja tyypilliset löydökset</li>
-                        <li>tuntea pääpiirteissään verenpaineen ja sen säätelyn normaali fysiologian ja tavallisin patofysiologia</li>
-                        <li>tuntea olkavarsiverenpaineen automaattimittauksen auskultatorinen ja oskillometrinen tekniikka</li>
-                        <li>tuntea jatkuvan ei-invasiivisen verenpainemittauksen jokin tekniikka (esim. volume-clamp, Colinin tonometria)</li>
-                        <li>tuntea systolisen verenpaineen mittaus fotopletysmografia-anturia, kynä-doppleria tai vastaavaa käyttäen</li>
-                        <li>osata tehdä tutkimuksiin liittyvät laitteiden alkuvalmistelut ja kalibraatiot</li>
-                        <li>osata tuottaa tutkimuksen loppuraportointi ja tuntea sen sähköisen tallentamisen järjestelmät</li>
-                        <li>osata kommunikoida henkilökunnan ja potilaan kanssa tutkimustilanteessa</li>
-                        <li>osata tutkimuslaitteiden ja ohjelmistojen käyttö</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-section theory-epa-b">
-                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tuntea automaattimittauksiin liittyvät tavallisimmat virhelähteet ja osata eliminoida niitä käytännön mittauksissa</li>
-                        <li>tuntea automaattiverenpainemittareiden kliinisen validoinnin periaatteet</li>
-                        <li>osata ohjata henkilökuntaa laitteiden käytössä, tutkimusten analysoinnissa ja ongelmatilanteiden selvittelyssä</li>
-                        <li>osata käyttää kirjallisuutta uuden tiedon ja näytön hakemiseen</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-canmeds">
-                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
-                    <div class="theory-epa-canmeds-tags">
-                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
-                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
-                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-chart-line"></i> Johtamistaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
-                    </div>
-                </div>
-            </div>
 
             <div class="theory-quiz-section" data-tab="verenkierto">
                 <div class="theory-quiz-start">
@@ -903,6 +904,51 @@ $$\text{RMSSD} = \sqrt{\frac{1}{N-1} \sum_{i=1}^{N-1}(\text{RR}_{i+1} - \text{RR
          ================================================================ -->
     <div class="theory-panel" id="panel-keuhkofunktio" role="tabpanel">
         <div class="theory-content">
+
+            <!-- EPA-koulutuskortti: Keuhkofunktiotutkimukset -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Keuhkofunktiotutkimukset</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tutustua keskeiseen kirjallisuuteen, suosituksiin ja menetelmäohjeisiin</li>
+                        <li>tietää tavallisimmat tutkimuksiin lähettämisen syyt, tutkimusten kulku ja tyypilliset löydökset</li>
+                        <li>tuntea pääpiirteissään keuhkojen ventilaation ja kaasujenvaihdon normaali fysiologia ja tavallisin patofysiologia</li>
+                        <li>tuntea virtausantureiden toiminta (vähintään pneumotakometri ja turbiinianturi) ja kaasuanalysaattoreiden mittausperiaatteet</li>
+                        <li>tuntea keuhkofunktiotutkimuksissa mitattavat suureet</li>
+                        <li>tuntea puhallusten onnistumis- ja toistettavuuskriteerit spirometriassa ja diffuusiokapasiteettitutkimuksessa</li>
+                        <li>osata tutkimuslaitteiden ja ohjelmistojen käyttö</li>
+                        <li>osata tehdä tutkimuksiin liittyvät laitteiden alkuvalmistelut ja kalibraatiot</li>
+                        <li>osata tuottaa tutkimuksen loppuraportointi ja tuntea sen sähköisen tallentamisen järjestelmät</li>
+                        <li>osata kommunikoida henkilökunnan ja potilaan kanssa tutkimustilanteessa</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tuntea biologisten kontrollien käyttö laitteiden laadunvarmistuksessa</li>
+                        <li>tuntea spirometrian ja diffuusiokapasiteettitutkimuksen viitearvokäytännöt suomalaisessa ja ulkomaalaisessa väestössä ja niiden asetukset tutkimuslaitteilla</li>
+                        <li>osata laitteiden ja ohjelmistojen asetusten ja ylläpidon periaatteet</li>
+                        <li>osata ohjata henkilökuntaa laitteiden käytössä, tutkimusten analysoinnissa ja ongelmatilanteiden selvittelyssä</li>
+                        <li>osata hengitystahdistetun tutkimuksen tai hoidon periaatteet hengitysfysiologian näkökulmasta</li>
+                        <li>osata käyttää kirjallisuutta uuden tiedon ja näytön hakemiseen Tärkeimmät</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-chart-line"></i> Johtamistaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
 
             <h2>1. Spirometria &mdash; fysiologinen perusta ja virtaus-tilavuuskäyrä</h2>
 
@@ -1207,51 +1253,6 @@ $$\text{RMSSD} = \sqrt{\frac{1}{N-1} \sum_{i=1}^{N-1}(\text{RR}_{i+1} - \text{RR
     </tbody>
 </table>
 
-            
-            <!-- EPA-koulutuskortti: Keuhkofunktiotutkimukset -->
-            <div class="theory-epa-card">
-                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Keuhkofunktiotutkimukset</h2>
-                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
-                <div class="theory-epa-section theory-epa-a">
-                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tutustua keskeiseen kirjallisuuteen, suosituksiin ja menetelmäohjeisiin</li>
-                        <li>tietää tavallisimmat tutkimuksiin lähettämisen syyt, tutkimusten kulku ja tyypilliset löydökset</li>
-                        <li>tuntea pääpiirteissään keuhkojen ventilaation ja kaasujenvaihdon normaali fysiologia ja tavallisin patofysiologia</li>
-                        <li>tuntea virtausantureiden toiminta (vähintään pneumotakometri ja turbiinianturi) ja kaasuanalysaattoreiden mittausperiaatteet</li>
-                        <li>tuntea keuhkofunktiotutkimuksissa mitattavat suureet</li>
-                        <li>tuntea puhallusten onnistumis- ja toistettavuuskriteerit spirometriassa ja diffuusiokapasiteettitutkimuksessa</li>
-                        <li>osata tutkimuslaitteiden ja ohjelmistojen käyttö</li>
-                        <li>osata tehdä tutkimuksiin liittyvät laitteiden alkuvalmistelut ja kalibraatiot</li>
-                        <li>osata tuottaa tutkimuksen loppuraportointi ja tuntea sen sähköisen tallentamisen järjestelmät</li>
-                        <li>osata kommunikoida henkilökunnan ja potilaan kanssa tutkimustilanteessa</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-section theory-epa-b">
-                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tuntea biologisten kontrollien käyttö laitteiden laadunvarmistuksessa</li>
-                        <li>tuntea spirometrian ja diffuusiokapasiteettitutkimuksen viitearvokäytännöt suomalaisessa ja ulkomaalaisessa väestössä ja niiden asetukset tutkimuslaitteilla</li>
-                        <li>osata laitteiden ja ohjelmistojen asetusten ja ylläpidon periaatteet</li>
-                        <li>osata ohjata henkilökuntaa laitteiden käytössä, tutkimusten analysoinnissa ja ongelmatilanteiden selvittelyssä</li>
-                        <li>osata hengitystahdistetun tutkimuksen tai hoidon periaatteet hengitysfysiologian näkökulmasta</li>
-                        <li>osata käyttää kirjallisuutta uuden tiedon ja näytön hakemiseen Tärkeimmät</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-canmeds">
-                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
-                    <div class="theory-epa-canmeds-tags">
-                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
-                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
-                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-chart-line"></i> Johtamistaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
-                    </div>
-                </div>
-            </div>
 
             <div class="theory-quiz-section" data-tab="keuhkofunktio">
                 <div class="theory-quiz-start">
@@ -1288,6 +1289,48 @@ $$\text{RMSSD} = \sqrt{\frac{1}{N-1} \sum_{i=1}^{N-1}(\text{RR}_{i+1} - \text{RR
          ================================================================ -->
     <div class="theory-panel" id="panel-gi" role="tabpanel">
         <div class="theory-content">
+
+            <!-- EPA-koulutuskortti: GI-kanavan tutkimukset -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: GI-kanavan tutkimukset</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tutustua keskeiseen kirjallisuuteen, suosituksiin ja menetelmäohjeisiin</li>
+                        <li>tietää tavallisimmat tutkimuksiin lähettämisen syyt, tutkimusten kulku ja tyypilliset löydökset</li>
+                        <li>tuntea pääpiirteissään ruokatorven alasulkijan, ruokatorven motiliteetin ja anorektaalialueen normaali fysiologia sekä tavallisin patofysiologia</li>
+                        <li>tuntea paineantureiden, pH-antureiden ja impedanssiantureiden mittausperiaatteet</li>
+                        <li>tuntea GI-kanavan tutkimuksissa mitattavat suureet</li>
+                        <li>osata tutkimuslaitteiden ja ohjelmistojen käyttö</li>
+                        <li>osata tehdä tutkimuksiin liittyvät laitteiden alkuvalmistelut ja kalibraatiot</li>
+                        <li>osata tuottaa tutkimuksen loppuraportointi ja tuntea sen sähköisen tallentamisen järjestelmät</li>
+                        <li>osata kommunikoida henkilökunnan ja potilaan kanssa tutkimustilanteessa</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>osata laitteiden ja ohjelmistojen asetusten ja ylläpidon periaatteet</li>
+                        <li>tuntea tyypillisiä mittauksiin liittyviä häiriöitä ja osata keinoja niiden eliminoimiseksi</li>
+                        <li>osata ohjata henkilökuntaa laitteiden käytössä, tutkimusten analysoinnissa ja ongelmatilanteiden selvittelyssä</li>
+                        <li>osata käyttää kirjallisuutta uuden tiedon ja näytön hakemiseen</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-chart-line"></i> Johtamistaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
 
             <h2>1. Ruokatorven manometria &mdash; korkean resoluution manometria (HRM)</h2>
 
@@ -1533,48 +1576,6 @@ $$\text{RMSSD} = \sqrt{\frac{1}{N-1} \sum_{i=1}^{N-1}(\text{RR}_{i+1} - \text{RR
     </tbody>
 </table>
 
-            
-            <!-- EPA-koulutuskortti: GI-kanavan tutkimukset -->
-            <div class="theory-epa-card">
-                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: GI-kanavan tutkimukset</h2>
-                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
-                <div class="theory-epa-section theory-epa-a">
-                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tutustua keskeiseen kirjallisuuteen, suosituksiin ja menetelmäohjeisiin</li>
-                        <li>tietää tavallisimmat tutkimuksiin lähettämisen syyt, tutkimusten kulku ja tyypilliset löydökset</li>
-                        <li>tuntea pääpiirteissään ruokatorven alasulkijan, ruokatorven motiliteetin ja anorektaalialueen normaali fysiologia sekä tavallisin patofysiologia</li>
-                        <li>tuntea paineantureiden, pH-antureiden ja impedanssiantureiden mittausperiaatteet</li>
-                        <li>tuntea GI-kanavan tutkimuksissa mitattavat suureet</li>
-                        <li>osata tutkimuslaitteiden ja ohjelmistojen käyttö</li>
-                        <li>osata tehdä tutkimuksiin liittyvät laitteiden alkuvalmistelut ja kalibraatiot</li>
-                        <li>osata tuottaa tutkimuksen loppuraportointi ja tuntea sen sähköisen tallentamisen järjestelmät</li>
-                        <li>osata kommunikoida henkilökunnan ja potilaan kanssa tutkimustilanteessa</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-section theory-epa-b">
-                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>osata laitteiden ja ohjelmistojen asetusten ja ylläpidon periaatteet</li>
-                        <li>tuntea tyypillisiä mittauksiin liittyviä häiriöitä ja osata keinoja niiden eliminoimiseksi</li>
-                        <li>osata ohjata henkilökuntaa laitteiden käytössä, tutkimusten analysoinnissa ja ongelmatilanteiden selvittelyssä</li>
-                        <li>osata käyttää kirjallisuutta uuden tiedon ja näytön hakemiseen</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-canmeds">
-                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
-                    <div class="theory-epa-canmeds-tags">
-                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
-                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
-                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-chart-line"></i> Johtamistaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
-                    </div>
-                </div>
-            </div>
 
             <div class="theory-quiz-section" data-tab="gi">
                 <div class="theory-quiz-start">
@@ -1611,6 +1612,49 @@ $$\text{RMSSD} = \sqrt{\frac{1}{N-1} \sum_{i=1}^{N-1}(\text{RR}_{i+1} - \text{RR
          ================================================================ -->
     <div class="theory-panel" id="panel-dxa" role="tabpanel">
         <div class="theory-content">
+
+            <!-- EPA-koulutuskortti: Luuston mineraalitiheyden mittaus (DXA) -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Luuston mineraalitiheyden mittaus (DXA)</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tutustua keskeiseen kirjallisuuteen, suosituksiin ja menetelmäohjeisiin</li>
+                        <li>tietää tavallisimmat tutkimuksiin lähettämisen syyt, tutkimusten kulku ja tyypilliset löydökset</li>
+                        <li>tuntea kaksoisenergia röntgensäteilyn tuottamisen tekniikka ja mineraalitiheyden mittausmenetelmä</li>
+                        <li>osata tutkimuslaitteiden ja ohjelmistojen käyttö</li>
+                        <li>osata tehdä tutkimuksiin liittyvät laitteiden alkuvalmistelut ja kalibraatiot</li>
+                        <li>osata asetella analyysin mielenkiintoalueet lonkan ja lannerangan mittauksissa</li>
+                        <li>osata tuottaa tutkimuksen loppuraportointi ja tuntea sen sähköisen tallentamisen järjestelmät</li>
+                        <li>osata kommunikoida henkilökunnan ja potilaan kanssa tutkimustilanteessa</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tuntea kokokehomittauksen periaate</li>
+                        <li>tuntea mittauksiin liittyvät tavallisimmat virhelähteet ja osata eliminoida niitä käytännön mittauksissa</li>
+                        <li>osata laitteiden ja ohjelmistojen asetusten ja ylläpidon periaatteet</li>
+                        <li>osata tavallisimmat laadunvalvontamittaukset</li>
+                        <li>osata ohjata henkilökuntaa laitteiden käytössä, tutkimusten analysoinnissa ja ongelmatilanteiden selvittelyssä</li>
+                        <li>osata käyttää kirjallisuutta uuden tiedon ja näytön hakemiseen</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-chart-line"></i> Johtamistaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
 
             <h2>1. DXA-mittauksen fysikaaliset perusteet</h2>
 
@@ -1673,49 +1717,6 @@ $$\text{RMSSD} = \sqrt{\frac{1}{N-1} \sum_{i=1}^{N-1}(\text{RR}_{i+1} - \text{RR
     </tbody>
 </table>
 
-            
-            <!-- EPA-koulutuskortti: Luuston mineraalitiheyden mittaus (DXA) -->
-            <div class="theory-epa-card">
-                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Luuston mineraalitiheyden mittaus (DXA)</h2>
-                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
-                <div class="theory-epa-section theory-epa-a">
-                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tutustua keskeiseen kirjallisuuteen, suosituksiin ja menetelmäohjeisiin</li>
-                        <li>tietää tavallisimmat tutkimuksiin lähettämisen syyt, tutkimusten kulku ja tyypilliset löydökset</li>
-                        <li>tuntea kaksoisenergia röntgensäteilyn tuottamisen tekniikka ja mineraalitiheyden mittausmenetelmä</li>
-                        <li>osata tutkimuslaitteiden ja ohjelmistojen käyttö</li>
-                        <li>osata tehdä tutkimuksiin liittyvät laitteiden alkuvalmistelut ja kalibraatiot</li>
-                        <li>osata asetella analyysin mielenkiintoalueet lonkan ja lannerangan mittauksissa</li>
-                        <li>osata tuottaa tutkimuksen loppuraportointi ja tuntea sen sähköisen tallentamisen järjestelmät</li>
-                        <li>osata kommunikoida henkilökunnan ja potilaan kanssa tutkimustilanteessa</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-section theory-epa-b">
-                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tuntea kokokehomittauksen periaate</li>
-                        <li>tuntea mittauksiin liittyvät tavallisimmat virhelähteet ja osata eliminoida niitä käytännön mittauksissa</li>
-                        <li>osata laitteiden ja ohjelmistojen asetusten ja ylläpidon periaatteet</li>
-                        <li>osata tavallisimmat laadunvalvontamittaukset</li>
-                        <li>osata ohjata henkilökuntaa laitteiden käytössä, tutkimusten analysoinnissa ja ongelmatilanteiden selvittelyssä</li>
-                        <li>osata käyttää kirjallisuutta uuden tiedon ja näytön hakemiseen</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-canmeds">
-                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
-                    <div class="theory-epa-canmeds-tags">
-                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
-                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
-                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-chart-line"></i> Johtamistaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
-                    </div>
-                </div>
-            </div>
 
             <div class="theory-quiz-section" data-tab="dxa">
                 <div class="theory-quiz-start">
@@ -1776,17 +1777,21 @@ $$\text{RMSSD} = \sqrt{\frac{1}{N-1} \sum_{i=1}^{N-1}(\text{RR}_{i+1} - \text{RR
             .catch(function() {});
     }
 
+    window.renderAllSlots = renderAllSlots;
     function renderAllSlots() {
         document.querySelectorAll('.theory-image-slot').forEach(function(slot) {
             var slotId = slot.dataset.slot;
             var info = imageData[slotId];
+            var isDynamic = slot.dataset.dynamic === 'true';
+            var deleteSlotBtn = isDynamic ? '<button class="btn-delete-slot" onclick="deleteImageSlot(\'' + slotId + '\', \'' + slot.dataset.tab + '\')"><i class="fas fa-times-circle"></i> Poista kuvaikkunaa</button>' : '';
             if (info && info.url) {
                 slot.className = 'theory-image-slot has-image size-' + (info.display_size || 'medium');
                 slot.innerHTML =
                     '<figure>' +
                         '<div class="theory-image-actions">' +
                             '<button class="btn-replace" onclick="openUploadModal(\'' + slotId + '\', \'' + slot.dataset.tab + '\')"><i class="fas fa-exchange-alt"></i> Vaihda</button>' +
-                            '<button class="btn-delete" onclick="deleteSlotImage(\'' + slotId + '\', \'' + slot.dataset.tab + '\')"><i class="fas fa-trash"></i> Poista</button>' +
+                            '<button class="btn-delete" onclick="deleteSlotImage(\'' + slotId + '\', \'' + slot.dataset.tab + '\')"><i class="fas fa-trash"></i> Poista kuva</button>' +
+                            deleteSlotBtn +
                         '</div>' +
                         '<img src="' + info.url + '" alt="' + (info.alt_text || '') + '">' +
                         '<figcaption>' + (info.caption || '') + '</figcaption>' +
@@ -1800,18 +1805,12 @@ $$\text{RMSSD} = \sqrt{\frac{1}{N-1} \sum_{i=1}^{N-1}(\text{RR}_{i+1} - \text{RR
                         '<span>Lisää kuva</span>' +
                         '<span class="slot-label">' + slotId + '</span>' +
                         '<span style="font-size:0.75rem;max-width:400px;text-align:center;">' + defaultCaption + '</span>' +
-                    '</div>';
+                    '</div>' +
+                    (isDynamic ? '<div class="theory-slot-delete-bar">' + deleteSlotBtn + '</div>' : '');
             }
         });
     }
 
-    window.toggleEditMode = function() {
-        var btn = document.getElementById('editModeToggle');
-        document.body.classList.toggle('theory-edit-mode');
-        btn.classList.toggle('active');
-        var isActive = document.body.classList.contains('theory-edit-mode');
-        btn.querySelector('span').textContent = isActive ? 'Lopeta muokkaus' : 'Muokkaa kuvia';
-    };
 
     window.openUploadModal = function(slotId, tabId) {
         if (!IS_SUPERUSER || !document.body.classList.contains('theory-edit-mode')) return;
@@ -2436,4 +2435,5 @@ $$\text{RMSSD} = \sqrt{\frac{1}{N-1} \sum_{i=1}^{N-1}(\text{RR}_{i+1} - \text{RR
 
 })();
 </script>
+<script src="{% static 'sisalto/js/theory-inline-editor.js' %}"></script>
 {% endblock %}

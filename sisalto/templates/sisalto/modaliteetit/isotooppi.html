@@ -15,9 +15,6 @@
         <h1><i class="fas fa-atom" style="color: #a78bfa; margin-right: 8px;"></i> Isotooppilääketieteen teoria</h1>
         <p>Kattava teoriamateriaali isotooppilääketieteen fysikaalisista perusteista, kuvantamislaitteista, radiofarmasiasta, tutkimuksista, hoidoista ja säteilysuojelusta. Valitse aihealue alla olevista välilehdistä.</p>
         {% if is_superuser %}
-        <button class="theory-edit-toggle" id="editModeToggle" onclick="toggleEditMode()">
-            <i class="fas fa-images"></i> <span>Muokkaa kuvia</span>
-        </button>
         <button class="theory-inline-edit-toggle" id="inlineEditToggle">
             <i class="fas fa-pen"></i> <span>Muokkaa sisältöä</span>
         </button>
@@ -89,6 +86,51 @@
          ================================================================ -->
     <div class="theory-panel active" id="panel-gammakamera" role="tabpanel">
         <div class="theory-content">
+
+            <!-- EPA-koulutuskortti: Gammakamerateknologia -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Gammakamerateknologia</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tutustua kirjallisuuteen, suosituksiin ja menetelmäohjeisiin</li>
+                        <li>tietää gammakameran osat, niiden toiminta ja tehtävä: kollimaatori, kide elektroniikka</li>
+                        <li>ymmärtää fotonin ilmaisuun liittyvät käsitteet: fotopiikki, sironta, vaimennus, signaalin käsittely</li>
+                        <li>osata eri kuvaukset: projektio- vs. tomografiakuvaus; staattinen, dynaaminen ja tahdistettu kuvaus</li>
+                        <li>ymmärtää kuvausparametrien vaikutus kuvaan ja kuvanlaatuun: matriisikoko, energiaikkunan valinta,</li>
+                        <li>projektioiden lukumäärä, kulma-aika, kollimaattorin valinta</li>
+                        <li>osata vaimennuskorjaustekniikat ja kvantitaation perusteet signaalinkäsittelyn osalta</li>
+                        <li>tietää rekonstruktiomenetelmät sekä kuvan prosessoinnin eri vaiheet</li>
+                        <li>tietää perustutkimusten analyysin perusteet ja tulkinnat</li>
+                        <li>ymmärtää kaksoisisotooppitutkimuksen periaatteen</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tuntee artefaktat ja erottaa ne tyypillisistä löydöksistä</li>
+                        <li>osata laadunvalvontamittaukset, sekä tuntea suorituskykymittaukset (NEMA standardi)</li>
+                        <li>ymmärtää ja osata ohjata säteilysuojeluasioissa</li>
+                        <li>osata ohjata henkilökuntaa laitteiden käytössä, tutkimusten analysoinnissa ja ongelmatilanteiden selvittelyssä</li>
+                        <li>osata kommunikoida potilaan kanssa tutkimustilanteessa erityisesti säteilyturvallisuusasioista</li>
+                        <li>osata hakea näyttöä kirjallisuudesta</li>
+                        <li>tutustua laitehankintaprosessiin</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminenAmmatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
+
 
             <h2>1. Johdanto</h2>
             <p>Gammakamera (Anger-kamera) on isotooppilääketieteen perusilmaisinlaite, joka tuottaa kaksiulotteisia kuvia radioaktiivisen merkkiaineen jakautumisesta potilaan kehossa. Laite perustuu Hal Angerin vuonna 1958 kehittämään periaatteeseen: gammasäteilyn kollimointi, tuikekideilmaisu ja paikannus Anger-logiikalla. Gammakamera on edelleen isotooppilääketieteen yleisimmin käytetty kuvantamislaite, ja sairaalafyysikon on hallittava sen rakenne, toiminta, kuvanlaatuparametrit ja laadunvarmistus.</p>
@@ -420,51 +462,6 @@
                 </ol>
             </div>
 
-            
-            <!-- EPA-koulutuskortti: Gammakamerateknologia -->
-            <div class="theory-epa-card">
-                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Gammakamerateknologia</h2>
-                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
-                <div class="theory-epa-section theory-epa-a">
-                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tutustua kirjallisuuteen, suosituksiin ja menetelmäohjeisiin</li>
-                        <li>tietää gammakameran osat, niiden toiminta ja tehtävä: kollimaatori, kide elektroniikka</li>
-                        <li>ymmärtää fotonin ilmaisuun liittyvät käsitteet: fotopiikki, sironta, vaimennus, signaalin käsittely</li>
-                        <li>osata eri kuvaukset: projektio- vs. tomografiakuvaus; staattinen, dynaaminen ja tahdistettu kuvaus</li>
-                        <li>ymmärtää kuvausparametrien vaikutus kuvaan ja kuvanlaatuun: matriisikoko, energiaikkunan valinta,</li>
-                        <li>projektioiden lukumäärä, kulma-aika, kollimaattorin valinta</li>
-                        <li>osata vaimennuskorjaustekniikat ja kvantitaation perusteet signaalinkäsittelyn osalta</li>
-                        <li>tietää rekonstruktiomenetelmät sekä kuvan prosessoinnin eri vaiheet</li>
-                        <li>tietää perustutkimusten analyysin perusteet ja tulkinnat</li>
-                        <li>ymmärtää kaksoisisotooppitutkimuksen periaatteen</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-section theory-epa-b">
-                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tuntee artefaktat ja erottaa ne tyypillisistä löydöksistä</li>
-                        <li>osata laadunvalvontamittaukset, sekä tuntea suorituskykymittaukset (NEMA standardi)</li>
-                        <li>ymmärtää ja osata ohjata säteilysuojeluasioissa</li>
-                        <li>osata ohjata henkilökuntaa laitteiden käytössä, tutkimusten analysoinnissa ja ongelmatilanteiden selvittelyssä</li>
-                        <li>osata kommunikoida potilaan kanssa tutkimustilanteessa erityisesti säteilyturvallisuusasioista</li>
-                        <li>osata hakea näyttöä kirjallisuudesta</li>
-                        <li>tutustua laitehankintaprosessiin</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-canmeds">
-                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
-                    <div class="theory-epa-canmeds-tags">
-                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminenAmmatillisuus</span>
-                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
-                    </div>
-                </div>
-            </div>
-
             <div class="theory-quiz-section" data-tab="gammakamera">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
@@ -489,6 +486,50 @@
          ================================================================ -->
     <div class="theory-panel" id="panel-pet" role="tabpanel">
         <div class="theory-content">
+
+            <!-- EPA-koulutuskortti: PET-kamerateknologia -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: PET-kamerateknologia</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tutustua kirjallisuuteen, suosituksiin ja menetelmäohjeisiin</li>
+                        <li>tietää PET-kameran osat, niiden toiminta ja tehtävä: kide, ilmaisu, elektroniikka</li>
+                        <li>ymmärtää fotonin ilmaisuun liittyvät käsitteet: paikka, energia, sironta, vaimennus, signaalin käsittely</li>
+                        <li>osata eri kuvantamistavat: Listamuotoinen, staattinen (ml Kokokeho), dynaaminen ja tahdistettu kuvaus.</li>
+                        <li>tuntea oheislaitteet: EKG, Hengitystahdistus, Varjoaine, sädehoidon suunnittelu (pöytä, fiksaatio)</li>
+                        <li>osata vaimennuskorjaustekniikat ja kvantitaation perusteet signaalinkäsittelyn osalta</li>
+                        <li>tietää rekonstruktiomenetelmät sekä kuvan prosessoinnin eri vaiheet</li>
+                        <li>tietää perustutkimusten analyysin perusteet ja tulkinnat</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tuntea artefaktat ja tyypillisimmät löydökset</li>
+                        <li>osata laadunvalvontamittaukset, sekä tuntea suorituskykymittaukset (NEMA standardi)</li>
+                        <li>tuntea yleisesti raakadatan rakenne ja talletusmenetelmät</li>
+                        <li>ymmärtää ja osata ohjata säteilysuojeluasioissa</li>
+                        <li>osata ohjata henkilökuntaa laitteiden käytössä, tutkimusten analysoinnissa ja ongelmatilanteiden selvittelyssä</li>
+                        <li>osata kommunikoida potilaan kanssa tutkimustilanteessa erityisesti säteilyturvallisuusasioista</li>
+                        <li>tutustua laitehankintaprosessiin</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-chart-line"></i> Johtamistaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
+
 
             <h2>1. Johdanto</h2>
             <p>PET (positroniemissiotomografia) perustuu positroni&shy;emitterin hajoamisessa syntyvien annihilaatiofotonien (511 keV) koinsidenssimittaukseen. PET tarjoaa merkittävästi paremman herkkyyden ja spatiaalisen resoluution kuin SPET, sekä luontaisesti kvantitatiivisen kuvantamisen. PET/TT on nykyisin standardilaite, ja PET/MRI on kasvava modaliteetti.</p>
@@ -728,50 +769,6 @@
                 </ol>
             </div>
 
-            
-            <!-- EPA-koulutuskortti: PET-kamerateknologia -->
-            <div class="theory-epa-card">
-                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: PET-kamerateknologia</h2>
-                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
-                <div class="theory-epa-section theory-epa-a">
-                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tutustua kirjallisuuteen, suosituksiin ja menetelmäohjeisiin</li>
-                        <li>tietää PET-kameran osat, niiden toiminta ja tehtävä: kide, ilmaisu, elektroniikka</li>
-                        <li>ymmärtää fotonin ilmaisuun liittyvät käsitteet: paikka, energia, sironta, vaimennus, signaalin käsittely</li>
-                        <li>osata eri kuvantamistavat: Listamuotoinen, staattinen (ml Kokokeho), dynaaminen ja tahdistettu kuvaus.</li>
-                        <li>tuntea oheislaitteet: EKG, Hengitystahdistus, Varjoaine, sädehoidon suunnittelu (pöytä, fiksaatio)</li>
-                        <li>osata vaimennuskorjaustekniikat ja kvantitaation perusteet signaalinkäsittelyn osalta</li>
-                        <li>tietää rekonstruktiomenetelmät sekä kuvan prosessoinnin eri vaiheet</li>
-                        <li>tietää perustutkimusten analyysin perusteet ja tulkinnat</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-section theory-epa-b">
-                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tuntea artefaktat ja tyypillisimmät löydökset</li>
-                        <li>osata laadunvalvontamittaukset, sekä tuntea suorituskykymittaukset (NEMA standardi)</li>
-                        <li>tuntea yleisesti raakadatan rakenne ja talletusmenetelmät</li>
-                        <li>ymmärtää ja osata ohjata säteilysuojeluasioissa</li>
-                        <li>osata ohjata henkilökuntaa laitteiden käytössä, tutkimusten analysoinnissa ja ongelmatilanteiden selvittelyssä</li>
-                        <li>osata kommunikoida potilaan kanssa tutkimustilanteessa erityisesti säteilyturvallisuusasioista</li>
-                        <li>tutustua laitehankintaprosessiin</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-canmeds">
-                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
-                    <div class="theory-epa-canmeds-tags">
-                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
-                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
-                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-chart-line"></i> Johtamistaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
-                    </div>
-                </div>
-            </div>
-
             <div class="theory-quiz-section" data-tab="pet">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
@@ -796,6 +793,45 @@
          ================================================================ -->
     <div class="theory-panel" id="panel-radiofarmasia" role="tabpanel">
         <div class="theory-content">
+
+            <!-- EPA-koulutuskortti: Annostelu- ja radiofarmasiatoiminta -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Annostelu- ja radiofarmasiatoiminta</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tutustua kirjallisuuteen, suosituksiin ja menetelmäohjeisiin</li>
+                        <li>tuntea radioisotooppien tuotantotavat, Ydinreaktori, syklotroni (teoriatiedot)</li>
+                        <li>hallita säteilyfysiikan perusteet, isotooppien hajoaminen (alfa- beta- ja gammahajoaminen)</li>
+                        <li>osata yleisimpien generaattoreiden toimintaperiaatteet (ainakin Tc-, mutta myös Ga-)</li>
+                        <li>tuntea radiolääkkeen valmistuksen vaiheet (gamma vs. PET)  leimaus  laadunvalvonta  puhtaus vs. säteilysuojelu (GMP)</li>
+                        <li>tuntea potilasannostelumenetelmät  injektio, automatiikka (isotooppi ja PET)  inhalaatio, automatiikka  kapselit (nuklidihoidot)</li>
+                        <li>osata annoksen mittaamisen  annos/Isotooppikalibraattorin toiminta ja laadunvalvonta  potilasannoksen määrittäminen, kvantitaatio (spesifinen aktiivisuus vs. SUV)</li>
+                        <li>tuntea säteilyturvallisuuden erityispiirteet isotooppitoiminnassa  akuutti toiminta kontaminaatiotilanteissa</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>osata johtaa akuuttia toimintaa kontaminaatiotilanteessa</li>
+                        <li>osata tehdä kontaminaatiotilanteiden selvitystyötä ja raportointia</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-chart-line"></i> Johtamistaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
+
 
             <h2>1. Johdanto</h2>
             <p>Radiofarmasia on isotooppilääketieteen osa-alue, joka käsittelee radioaktiivisten lääkeaineiden (radiolääkkeiden) tuotantoa, valmistusta, laadunvalvontaa ja annostelua. Sairaalafyysikon on tunnettava radioisotooppien tuotantotavat, generaattoreiden toiminta, radiolääkkeen valmistuksen periaatteet ja aktiivisuusmittauksen menetelmät.</p>
@@ -1022,45 +1058,6 @@
                 </ol>
             </div>
 
-            
-            <!-- EPA-koulutuskortti: Annostelu- ja radiofarmasiatoiminta -->
-            <div class="theory-epa-card">
-                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Annostelu- ja radiofarmasiatoiminta</h2>
-                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
-                <div class="theory-epa-section theory-epa-a">
-                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tutustua kirjallisuuteen, suosituksiin ja menetelmäohjeisiin</li>
-                        <li>tuntea radioisotooppien tuotantotavat, Ydinreaktori, syklotroni (teoriatiedot)</li>
-                        <li>hallita säteilyfysiikan perusteet, isotooppien hajoaminen (alfa- beta- ja gammahajoaminen)</li>
-                        <li>osata yleisimpien generaattoreiden toimintaperiaatteet (ainakin Tc-, mutta myös Ga-)</li>
-                        <li>tuntea radiolääkkeen valmistuksen vaiheet (gamma vs. PET)  leimaus  laadunvalvonta  puhtaus vs. säteilysuojelu (GMP)</li>
-                        <li>tuntea potilasannostelumenetelmät  injektio, automatiikka (isotooppi ja PET)  inhalaatio, automatiikka  kapselit (nuklidihoidot)</li>
-                        <li>osata annoksen mittaamisen  annos/Isotooppikalibraattorin toiminta ja laadunvalvonta  potilasannoksen määrittäminen, kvantitaatio (spesifinen aktiivisuus vs. SUV)</li>
-                        <li>tuntea säteilyturvallisuuden erityispiirteet isotooppitoiminnassa  akuutti toiminta kontaminaatiotilanteissa</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-section theory-epa-b">
-                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>osata johtaa akuuttia toimintaa kontaminaatiotilanteessa</li>
-                        <li>osata tehdä kontaminaatiotilanteiden selvitystyötä ja raportointia</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-canmeds">
-                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
-                    <div class="theory-epa-canmeds-tags">
-                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
-                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
-                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-chart-line"></i> Johtamistaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
-                    </div>
-                </div>
-            </div>
-
             <div class="theory-quiz-section" data-tab="radiofarmasia">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
@@ -1085,6 +1082,48 @@
          ================================================================ -->
     <div class="theory-panel" id="panel-spet" role="tabpanel">
         <div class="theory-content">
+
+            <!-- EPA-koulutuskortti: Gammakuvaus ja SPET-tutkimukset -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Gammakuvaus ja SPET-tutkimukset</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tutustua kirjallisuuteen, EANM-suosituksiin ja tutkimusten menetelmä- ja säteilysuojeluohjeisiin</li>
+                        <li>osata perusosaamisen tutkimukset (keuhkoperfuusion ja –ventilaation tutkimus, sydänlihasperfuusion SPET-tutkimus, munuaistoiminnan gammakuvaus, glomerulusten suodatusnopeus, dopamiinitransporttereiden SPET-kuvaus, vartijaimusolmukkeen gammakuvaus, lisäkilpirauhasen SPET- tutkimus, luuston gammakuvaus)   tietää tutkimuksessa käytettävä radiolääke ja sen kertymämekanismi  aiheutunut säteilyaltistus  tietää tyypilliset kuvausparametrit, tutkimuksen kulku ja tyypilliset virhelähteet  datan käsittelyt  tallennettavat tiedot  tietää tyypilliset kuvantamislöydökset ja osata erottaa ne artefaktoista   tutkimuksen jälkeen tarvittavat säteilysuojelutoimet
+                            <ul>
+                                <li>osata nimetä tavallisimmat lähettämisen syyt</li>
+                                <li>osata selvittää tutkimuksessa käytettävät injisoidut aktiivisuudet, kertymäaika ja tutkimuksesta</li>
+                                <li>osata käyttää tietojärjestelmiä ja ohjelmia sekä tehdä kuvarekonstruktiot, kvantitaatiot ja muut</li>
+                                <li>tuntea tutkimusten sähköisen tallentamisen järjestelmät sekä DICOM-tiedoston rakenne ja siihen</li>
+                                <li>tuntea tyypillisten tutkimusten hyvän kuvan kriteerit</li>
+                                <li>osata kertoa potilaalle ymmärrettävästi tutkimuksesta aiheutuvasta säteilyaltistuksesta ja neuvoa</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tietää täydentävän osaamisen tutkimukset (virtsan refluksin gammakuvaus, tulehduspesäkkeen gammakuvaus, munuaiskuorikerroksen gammakuvaus,sappihappojen imeytymiskoe, kilpirauhasmetastaasin gammakuvaus ablaatioannoksen jälkeen)  tietää pääpiirteet tutkimuksen yleisimmistä käyttöaiheista  tietää radiolääketyypit ja niiden kinetiikan pääpiirteet  tietää tutkimuksen kulun  tietää pääpiirteet säteilyaltistuksesta</li>
+                        <li>osata hakea näyttöä kirjallisuudesta</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
+
 
             <h2>1. Johdanto</h2>
             <p>Gammakuvaus ja SPET muodostavat isotooppilääketieteen kliinisen tutkimuskäytännön ytimen. Tässä osassa käsitellään tärkeimmät kliiniset tutkimukset, niiden fysikaaliset perusteet, protokollat ja tulkinnan periaatteet.</p>
@@ -1716,48 +1755,6 @@
                 </ol>
             </div>
 
-            
-            <!-- EPA-koulutuskortti: Gammakuvaus ja SPET-tutkimukset -->
-            <div class="theory-epa-card">
-                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Gammakuvaus ja SPET-tutkimukset</h2>
-                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
-                <div class="theory-epa-section theory-epa-a">
-                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tutustua kirjallisuuteen, EANM-suosituksiin ja tutkimusten menetelmä- ja säteilysuojeluohjeisiin</li>
-                        <li>osata perusosaamisen tutkimukset (keuhkoperfuusion ja –ventilaation tutkimus, sydänlihasperfuusion SPET-tutkimus, munuaistoiminnan gammakuvaus, glomerulusten suodatusnopeus, dopamiinitransporttereiden SPET-kuvaus, vartijaimusolmukkeen gammakuvaus, lisäkilpirauhasen SPET- tutkimus, luuston gammakuvaus)   tietää tutkimuksessa käytettävä radiolääke ja sen kertymämekanismi  aiheutunut säteilyaltistus  tietää tyypilliset kuvausparametrit, tutkimuksen kulku ja tyypilliset virhelähteet  datan käsittelyt  tallennettavat tiedot  tietää tyypilliset kuvantamislöydökset ja osata erottaa ne artefaktoista   tutkimuksen jälkeen tarvittavat säteilysuojelutoimet
-                            <ul>
-                                <li>osata nimetä tavallisimmat lähettämisen syyt</li>
-                                <li>osata selvittää tutkimuksessa käytettävät injisoidut aktiivisuudet, kertymäaika ja tutkimuksesta</li>
-                                <li>osata käyttää tietojärjestelmiä ja ohjelmia sekä tehdä kuvarekonstruktiot, kvantitaatiot ja muut</li>
-                                <li>tuntea tutkimusten sähköisen tallentamisen järjestelmät sekä DICOM-tiedoston rakenne ja siihen</li>
-                                <li>tuntea tyypillisten tutkimusten hyvän kuvan kriteerit</li>
-                                <li>osata kertoa potilaalle ymmärrettävästi tutkimuksesta aiheutuvasta säteilyaltistuksesta ja neuvoa</li>
-                            </ul>
-                        </li>
-                    </ol>
-                </div>
-                <div class="theory-epa-section theory-epa-b">
-                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tietää täydentävän osaamisen tutkimukset (virtsan refluksin gammakuvaus, tulehduspesäkkeen gammakuvaus, munuaiskuorikerroksen gammakuvaus,sappihappojen imeytymiskoe, kilpirauhasmetastaasin gammakuvaus ablaatioannoksen jälkeen)  tietää pääpiirteet tutkimuksen yleisimmistä käyttöaiheista  tietää radiolääketyypit ja niiden kinetiikan pääpiirteet  tietää tutkimuksen kulun  tietää pääpiirteet säteilyaltistuksesta</li>
-                        <li>osata hakea näyttöä kirjallisuudesta</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-canmeds">
-                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
-                    <div class="theory-epa-canmeds-tags">
-                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
-                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
-                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
-                    </div>
-                </div>
-            </div>
-
             <div class="theory-quiz-section" data-tab="spet">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
@@ -1782,6 +1779,48 @@
          ================================================================ -->
     <div class="theory-panel" id="panel-pet-tutkimukset" role="tabpanel">
         <div class="theory-content">
+
+            <!-- EPA-koulutuskortti: PET-tutkimukset -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: PET-tutkimukset</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tutustua kirjallisuuteen, EANM-suosituksiin ja tutkimusten menetelmä- ja säteilysuojeluohjeisiin</li>
+                        <li>osata perusosaamisen tutkimukset (kokokehon FDG, Eturauhasen kuvaus: Ga/F-PSMA, sädehoidon suunnittelukuvaus, dynaaminen kuvaus: esim. aivot, tahdistettu kuvaus (ekg tai hengitystahdistus))   tietää tutkimuksessa käytettävä radiolääke ja sen kertymämekanismi  aiheutunut säteilyaltistus  tietää potilaan esivalmistelun tärkeyden (ravitsemus, liikunta, lääkitys)  tietää tyypilliset kuvausparametrit, tutkimuksen kulku ja tyypilliset virhelähteet  datan käsittelyt  tallennettavat tiedot  ymmärtää, mikä on SUV ja miten se määritetään  tietää tyypilliset kuvantamislöydökset ja osata erottaa ne artefaktoista   tutkimuksen jälkeen tarvittavat säteilysuojelutoimet
+                            <ul>
+                                <li>osata nimetä tavallisimmat lähettämisen syyt</li>
+                                <li>osata selvittää tutkimuksessa käytettävät injisoidut aktiivisuudet, kertymäaika ja tutkimuksesta</li>
+                                <li>osata käyttää tietojärjestelmiä ja ohjelmia sekä tehdä kuvarekonstruktiot, kvantitaatiot ja muut</li>
+                                <li>tuntea tutkimusten sähköisen tallentamisen järjestelmät sekä DICOM-tiedoston rakenne ja siihen</li>
+                                <li>tuntea tyypillisten tutkimusten hyvän kuvan kriteerit</li>
+                                <li>osata kertoa potilaalle ymmärrettävästi tutkimuksesta aiheutuvasta säteilyaltistuksesta ja neuvoa</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>osata täydentävän osaamisen tutkimukset, joista riittää teoreettinen osaaminen (dynaaminen aivojen reseptoritutkimus, perfuusiokuvaus, PET/MR fuusiokuvaus)  tietää pääpiirteet tutkimuksen yleisimmistä käyttöaiheista  tietää radiolääketyypit ja niiden kinetiikan pääpiirteet  tietää tutkimuksen kulun  tietää pääpiirteet säteilyaltistuksesta</li>
+                        <li>osata hakea näyttöä kirjallisuudesta</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
+
 
             <h2>1. Johdanto</h2>
             <p>PET-tutkimukset tarjoavat herkkää, kvantitatiivista tietoa aineenvaihdunnasta, reseptorisitoutumisesta ja geeniekspressiosta in vivo. Tärkein kliininen sovellus on [<sup>18</sup>F]FDG-PET/TT syövän diagnostiikassa ja seurannassa, mutta PET:n käyttöalue laajenee jatkuvasti uusien merkkiaineiden myötä.</p>
@@ -2208,48 +2247,6 @@
                 </ol>
             </div>
 
-            
-            <!-- EPA-koulutuskortti: PET-tutkimukset -->
-            <div class="theory-epa-card">
-                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: PET-tutkimukset</h2>
-                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
-                <div class="theory-epa-section theory-epa-a">
-                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tutustua kirjallisuuteen, EANM-suosituksiin ja tutkimusten menetelmä- ja säteilysuojeluohjeisiin</li>
-                        <li>osata perusosaamisen tutkimukset (kokokehon FDG, Eturauhasen kuvaus: Ga/F-PSMA, sädehoidon suunnittelukuvaus, dynaaminen kuvaus: esim. aivot, tahdistettu kuvaus (ekg tai hengitystahdistus))   tietää tutkimuksessa käytettävä radiolääke ja sen kertymämekanismi  aiheutunut säteilyaltistus  tietää potilaan esivalmistelun tärkeyden (ravitsemus, liikunta, lääkitys)  tietää tyypilliset kuvausparametrit, tutkimuksen kulku ja tyypilliset virhelähteet  datan käsittelyt  tallennettavat tiedot  ymmärtää, mikä on SUV ja miten se määritetään  tietää tyypilliset kuvantamislöydökset ja osata erottaa ne artefaktoista   tutkimuksen jälkeen tarvittavat säteilysuojelutoimet
-                            <ul>
-                                <li>osata nimetä tavallisimmat lähettämisen syyt</li>
-                                <li>osata selvittää tutkimuksessa käytettävät injisoidut aktiivisuudet, kertymäaika ja tutkimuksesta</li>
-                                <li>osata käyttää tietojärjestelmiä ja ohjelmia sekä tehdä kuvarekonstruktiot, kvantitaatiot ja muut</li>
-                                <li>tuntea tutkimusten sähköisen tallentamisen järjestelmät sekä DICOM-tiedoston rakenne ja siihen</li>
-                                <li>tuntea tyypillisten tutkimusten hyvän kuvan kriteerit</li>
-                                <li>osata kertoa potilaalle ymmärrettävästi tutkimuksesta aiheutuvasta säteilyaltistuksesta ja neuvoa</li>
-                            </ul>
-                        </li>
-                    </ol>
-                </div>
-                <div class="theory-epa-section theory-epa-b">
-                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>osata täydentävän osaamisen tutkimukset, joista riittää teoreettinen osaaminen (dynaaminen aivojen reseptoritutkimus, perfuusiokuvaus, PET/MR fuusiokuvaus)  tietää pääpiirteet tutkimuksen yleisimmistä käyttöaiheista  tietää radiolääketyypit ja niiden kinetiikan pääpiirteet  tietää tutkimuksen kulun  tietää pääpiirteet säteilyaltistuksesta</li>
-                        <li>osata hakea näyttöä kirjallisuudesta</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-canmeds">
-                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
-                    <div class="theory-epa-canmeds-tags">
-                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
-                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
-                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
-                    </div>
-                </div>
-            </div>
-
             <div class="theory-quiz-section" data-tab="pet-tutkimukset">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
@@ -2274,6 +2271,46 @@
          ================================================================ -->
     <div class="theory-panel" id="panel-radionuklidihoidot" role="tabpanel">
         <div class="theory-content">
+
+            <!-- EPA-koulutuskortti: Radionuklidihoidot -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Radionuklidihoidot</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>tutustua kirjallisuuteen, suosituksiin ja menetelmäohjeisiin</li>
+                        <li>ymmärtää säteilylajit ja niiden vuorovaikutusmuodot sekä säteilybiologian perusteet</li>
+                        <li>tietää tavallisimmat hoidot ja niihin lähettämisen syyt</li>
+                        <li>tietää perusosaamistasolla jodihoidot (kilpirauhassyöpä, kilpirauhasen liikatoiminta)</li>
+                        <li>tuntea alfahoitojen erityispiirteet (annostelu, kontaminaatio)</li>
+                        <li>tietää säteilysuojeluperiaatteet potilaan, henkilökunnan ja väestön tasolla</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>osata ohjata säteilysuojelutoimia  hoidon antaminen  eristys  kotiutus (mittaukset ohjeet)  (kontaminaatio, siivous, exitus)</li>
+                        <li>osata annosdosimetria formalismi (MIRD/Olinda)</li>
+                        <li>tuntea elinkohtaisen annoksen laskemisen periaatteet</li>
+                        <li>tietää uudempia hoitomuotoja (esim. Lutetium-PSMA, Yttrium-SIRT)</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-chart-line"></i> Johtamistaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
+
 
             <h2>1. Johdanto</h2>
             <p>Radionuklidihoidot (radioligand therapy, RLT; molecular radiotherapy, MRT) käyttävät radioaktiivisia aineita kasvainten tai toimintahäiriöisten kudosten hoitoon. Radionuklidi kohdentuu kasvaimeen joko fysiologisen kertymän (jodihoito) tai spesifisen ligandi-reseptori-sitoutumisen (PSMA, somatostatiinireseptori) kautta. Sairaalafyysikko vastaa annos&shy;dosimetriasta, säteilysuojelusta ja laadunvarmistuksesta.</p>
@@ -2660,46 +2697,6 @@
                 </ol>
             </div>
 
-            
-            <!-- EPA-koulutuskortti: Radionuklidihoidot -->
-            <div class="theory-epa-card">
-                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Radionuklidihoidot</h2>
-                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
-                <div class="theory-epa-section theory-epa-a">
-                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>tutustua kirjallisuuteen, suosituksiin ja menetelmäohjeisiin</li>
-                        <li>ymmärtää säteilylajit ja niiden vuorovaikutusmuodot sekä säteilybiologian perusteet</li>
-                        <li>tietää tavallisimmat hoidot ja niihin lähettämisen syyt</li>
-                        <li>tietää perusosaamistasolla jodihoidot (kilpirauhassyöpä, kilpirauhasen liikatoiminta)</li>
-                        <li>tuntea alfahoitojen erityispiirteet (annostelu, kontaminaatio)</li>
-                        <li>tietää säteilysuojeluperiaatteet potilaan, henkilökunnan ja väestön tasolla</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-section theory-epa-b">
-                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>osata ohjata säteilysuojelutoimia  hoidon antaminen  eristys  kotiutus (mittaukset ohjeet)  (kontaminaatio, siivous, exitus)</li>
-                        <li>osata annosdosimetria formalismi (MIRD/Olinda)</li>
-                        <li>tuntea elinkohtaisen annoksen laskemisen periaatteet</li>
-                        <li>tietää uudempia hoitomuotoja (esim. Lutetium-PSMA, Yttrium-SIRT)</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-canmeds">
-                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
-                    <div class="theory-epa-canmeds-tags">
-                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
-                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
-                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-chart-line"></i> Johtamistaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
-                    </div>
-                </div>
-            </div>
-
             <div class="theory-quiz-section" data-tab="radionuklidihoidot">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
@@ -2724,6 +2721,53 @@
          ================================================================ -->
     <div class="theory-panel" id="panel-sateilybiologia" role="tabpanel">
         <div class="theory-content">
+
+            <!-- EPA-koulutuskortti: Säteilybiologia ja säteilysuojelu isotooppitoiminnassa -->
+            <div class="theory-epa-card">
+                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Säteilybiologia ja säteilysuojelu isotooppitoiminnassa</h2>
+                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
+                <div class="theory-epa-section theory-epa-a">
+                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>hallita säteilysuojelun keskeiset periaatteet ja lainsäädännön sekä toiminnan harjoittamispaikalla tarvittavat säteilysuojelu- ja turvajärjestelyt</li>
+                        <li>hallita säteilyfysiikan perusteet, isotooppien hajoaminen (alfa-, beta- ja gammahajoaminen)</li>
+                        <li>tuntea säteilyn biologisen vaikutuksen yleispiirteet</li>
+                        <li>tuntea kontaminaation käsite ja toimintatavat kontaminaatiotilanteessa</li>
+                        <li>osata arvioida ja tulkita säteilyriskejä</li>
+                        <li>osata optimoida säteilyn lääketieteellisestä käytöstä aiheutuvaa työperäistä altistusta</li>
+                        <li>osata arvioida ja kehittää työskentelyalalle soveltuvia säteilysuojelumenettelyjä säteilyaltistuksen optimoimiseksi</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-section theory-epa-b">
+                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
+                    <ol class="theory-epa-list">
+                        <li>kyetä toimimaan osaamisalansa asiantuntijana, viestimään säteilysuojeluasioista ja opastamaan toiminnanharjoittajaa lakisääteisten vaatimusten noudattamisessa</li>
+                        <li>osata ohjata henkilökuntaa turvallisessa työskentelyssä</li>
+                        <li>kyetä opastamaan toiminnanharjoittajaa toiminnasta aiheutuvan altistuksen arvioimisessa, suojelun optimoinnissa sekä ennaltaehkäisevässä suunnittelussa ja riskien kartoituksessa</li>
+                        <li>osata kertoa potilaalle ymmärrettävästi hoidosta/tutkimuksesta aiheutuvasta säteilyaltistuksesta ja neuvoa kotiutuksen jälkeen tarvittavista säteilysuojelutoimista</li>
+                        <li>osata jätteiden ja päästöjen käsittelyn</li>
+                        <li>tuntea rakenteellisen säteilysuojelun vaatimukset ja toteutustapoja</li>
+                        <li>osata raportoida säteilyturvallisuuspoikkeamista asianomaiselle taholle</li>
+                        <li>tuntea menettelyjä poikkeamien syiden selvittelyyn ja niistä oppimiseen</li>
+                        <li>osata tehdä tavallisimpia säteilysuojelumittauksia ja niihin liittyviä epävarmuusarvioita</li>
+                        <li>tutustua kliiniseen auditointiin vähintään edellisen kliinisen auditoinnin dokumentaation kautta</li>
+                    </ol>
+                </div>
+                <div class="theory-epa-canmeds">
+                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
+                    <div class="theory-epa-canmeds-tags">
+                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
+                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
+                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-chart-line"></i> Johtamistaidot</span>
+                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
+                    </div>
+                </div>
+            </div>
+
 
             <h2>1. Johdanto</h2>
             <p>Isotooppilääketieteen säteilybiologia ja säteilysuojelu eroavat merkittävästi sädehoidon vastaavista: altistus tulee avoimista lähteistä potilaan sisältä, annokset ovat tyypillisesti pienempiä ja jakautuvat laajemmin, mutta kontaminaatioriski on ainutlaatuinen. Sairaalafyysikon on hallittava sekä henkilökunnan ja potilaan säteilysuojelu että lainsäädännölliset vaatimukset.</p>
@@ -2988,53 +3032,6 @@
                 </ol>
             </div>
 
-            
-            <!-- EPA-koulutuskortti: Säteilybiologia ja säteilysuojelu isotooppitoiminnassa -->
-            <div class="theory-epa-card">
-                <h2><i class="fas fa-id-card" style="color: var(--color-primary); margin-right: 8px;"></i> Koulutuskortti: Säteilybiologia ja säteilysuojelu isotooppitoiminnassa</h2>
-                <p class="theory-epa-intro">Erikoistuvan sairaalafyysikon koulutuskortti (Neuvottelukunta 2021). A-tason osaaminen mahdollistaa epäsuoran ohjauksen alaisen työskentelyn, B-tason osaaminen täydentää kohti itsenäistä työskentelyä.</p>
-                <div class="theory-epa-section theory-epa-a">
-                    <h3><i class="fas fa-star" style="color: var(--color-primary); margin-right: 6px;"></i> A-taso: Perusosaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Suoran ohjauksen alaisesta → epäsuoran ohjauksen alaiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>hallita säteilysuojelun keskeiset periaatteet ja lainsäädännön sekä toiminnan harjoittamispaikalla tarvittavat säteilysuojelu- ja turvajärjestelyt</li>
-                        <li>hallita säteilyfysiikan perusteet, isotooppien hajoaminen (alfa-, beta- ja gammahajoaminen)</li>
-                        <li>tuntea säteilyn biologisen vaikutuksen yleispiirteet</li>
-                        <li>tuntea kontaminaation käsite ja toimintatavat kontaminaatiotilanteessa</li>
-                        <li>osata arvioida ja tulkita säteilyriskejä</li>
-                        <li>osata optimoida säteilyn lääketieteellisestä käytöstä aiheutuvaa työperäistä altistusta</li>
-                        <li>osata arvioida ja kehittää työskentelyalalle soveltuvia säteilysuojelumenettelyjä säteilyaltistuksen optimoimiseksi</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-section theory-epa-b">
-                    <h3><i class="fas fa-trophy" style="color: var(--color-orange); margin-right: 6px;"></i> B-taso: Täydentävä osaaminen</h3>
-                    <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: var(--space-3);">Epäsuoran ohjauksen alaisesta → itsenäiseen työskentelyyn</p>
-                    <ol class="theory-epa-list">
-                        <li>kyetä toimimaan osaamisalansa asiantuntijana, viestimään säteilysuojeluasioista ja opastamaan toiminnanharjoittajaa lakisääteisten vaatimusten noudattamisessa</li>
-                        <li>osata ohjata henkilökuntaa turvallisessa työskentelyssä</li>
-                        <li>kyetä opastamaan toiminnanharjoittajaa toiminnasta aiheutuvan altistuksen arvioimisessa, suojelun optimoinnissa sekä ennaltaehkäisevässä suunnittelussa ja riskien kartoituksessa</li>
-                        <li>osata kertoa potilaalle ymmärrettävästi hoidosta/tutkimuksesta aiheutuvasta säteilyaltistuksesta ja neuvoa kotiutuksen jälkeen tarvittavista säteilysuojelutoimista</li>
-                        <li>osata jätteiden ja päästöjen käsittelyn</li>
-                        <li>tuntea rakenteellisen säteilysuojelun vaatimukset ja toteutustapoja</li>
-                        <li>osata raportoida säteilyturvallisuuspoikkeamista asianomaiselle taholle</li>
-                        <li>tuntea menettelyjä poikkeamien syiden selvittelyyn ja niistä oppimiseen</li>
-                        <li>osata tehdä tavallisimpia säteilysuojelumittauksia ja niihin liittyviä epävarmuusarvioita</li>
-                        <li>tutustua kliiniseen auditointiin vähintään edellisen kliinisen auditoinnin dokumentaation kautta</li>
-                    </ol>
-                </div>
-                <div class="theory-epa-canmeds">
-                    <h4><i class="fas fa-th-large" style="color: var(--color-violet); margin-right: 6px;"></i> CanMEDS-osaamisalueet</h4>
-                    <div class="theory-epa-canmeds-tags">
-                        <span class="canmeds-tag"><i class="fas fa-atom"></i> Lääketieteellisen fysiikan osaaminen</span>
-                        <span class="canmeds-tag"><i class="fas fa-user-md"></i> Ammatillisuus</span>
-                        <span class="canmeds-tag"><i class="fas fa-users"></i> Yhteistyötaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-comments"></i> Vuorovaikutustaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-chart-line"></i> Johtamistaidot</span>
-                        <span class="canmeds-tag"><i class="fas fa-book-open"></i> Osaaminen ja tiedonhallinta</span>
-                    </div>
-                </div>
-            </div>
-
             <div class="theory-quiz-section" data-tab="sateilybiologia">
                 <div class="theory-quiz-start">
                     <h2><i class="fas fa-question-circle"></i> Testaa tietosi</h2>
@@ -3083,17 +3080,21 @@
             .catch(function() {});
     }
 
+    window.renderAllSlots = renderAllSlots;
     function renderAllSlots() {
         document.querySelectorAll('.theory-image-slot').forEach(function(slot) {
             var slotId = slot.dataset.slot;
             var info = imageData[slotId];
+            var isDynamic = slot.dataset.dynamic === 'true';
+            var deleteSlotBtn = isDynamic ? '<button class="btn-delete-slot" onclick="deleteImageSlot(\'' + slotId + '\', \'' + slot.dataset.tab + '\')"><i class="fas fa-times-circle"></i> Poista kuvaikkunaa</button>' : '';
             if (info && info.url) {
                 slot.className = 'theory-image-slot has-image size-' + (info.display_size || 'medium');
                 slot.innerHTML =
                     '<figure>' +
                         '<div class="theory-image-actions">' +
                             '<button class="btn-replace" onclick="openUploadModal(\'' + slotId + '\', \'' + slot.dataset.tab + '\')"><i class="fas fa-exchange-alt"></i> Vaihda</button>' +
-                            '<button class="btn-delete" onclick="deleteSlotImage(\'' + slotId + '\', \'' + slot.dataset.tab + '\')"><i class="fas fa-trash"></i> Poista</button>' +
+                            '<button class="btn-delete" onclick="deleteSlotImage(\'' + slotId + '\', \'' + slot.dataset.tab + '\')"><i class="fas fa-trash"></i> Poista kuva</button>' +
+                            deleteSlotBtn +
                         '</div>' +
                         '<img src="' + info.url + '" alt="' + (info.alt_text || '') + '">' +
                         '<figcaption>' + (info.caption || '') + '</figcaption>' +
@@ -3107,18 +3108,12 @@
                         '<span>Lisää kuva</span>' +
                         '<span class="slot-label">' + slotId + '</span>' +
                         '<span style="font-size:0.75rem;max-width:400px;text-align:center;">' + defaultCaption + '</span>' +
-                    '</div>';
+                    '</div>' +
+                    (isDynamic ? '<div class="theory-slot-delete-bar">' + deleteSlotBtn + '</div>' : '');
             }
         });
     }
 
-    window.toggleEditMode = function() {
-        var btn = document.getElementById('editModeToggle');
-        document.body.classList.toggle('theory-edit-mode');
-        btn.classList.toggle('active');
-        var isActive = document.body.classList.contains('theory-edit-mode');
-        btn.querySelector('span').textContent = isActive ? 'Lopeta muokkaus' : 'Muokkaa kuvia';
-    };
 
     window.openUploadModal = function(slotId, tabId) {
         if (!IS_SUPERUSER || !document.body.classList.contains('theory-edit-mode')) return;
