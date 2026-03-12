@@ -4,8 +4,8 @@
 {% block title %}Kliinisen neurofysiologian teoria - Fyysikkoportti{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'sisalto/css/theory.css' %}?v=1">
-<link rel="stylesheet" href="{% static 'sisalto/css/theory-inline-editor.css' %}?v=1">
+<link rel="stylesheet" href="{% static 'sisalto/css/theory.css' %}?v=11">
+<link rel="stylesheet" href="{% static 'sisalto/css/theory-inline-editor.css' %}?v=2">
 {% endblock %}
 
 {% block content %}
@@ -81,7 +81,7 @@
     <!-- ================================================================
          VÄLILEHTI 1: EEG
          ================================================================ -->
-    <div class="theory-panel active" id="panel-eeg" role="tabpanel">
+    <div class="theory-panel active" id="panel-eeg" role="tabpanel" data-epa-map='{"A1":[1,2,3,4,5],"A2":[2,5],"A3":[2,3,4,5],"A4":[4,5],"A5":[6],"A6":[12],"A7":[7,8,9],"A8":[7,8],"A9":[8],"A10":[9],"A11":[11],"A12":[11],"B1":[3],"B2":[8],"B3":[10],"B4":[12],"B5":[7,9],"B6":[10,13],"B7":[13],"B8":[13]}'>
         <div class="theory-content">
 
             <!-- EPA-koulutuskortti: EEG-tutkimukset -->
@@ -445,7 +445,7 @@
     <!-- ================================================================
          VÄLILEHTI 2: HERÄTEPOTENTIAALI JA ENMG
          ================================================================ -->
-    <div class="theory-panel" id="panel-heratepotentiaali" role="tabpanel">
+    <div class="theory-panel" id="panel-heratepotentiaali" role="tabpanel" data-epa-map='{"A1":[1,2,3,4,5],"A2":[1,2],"A3":[2,3],"A4":[3],"A5":[2],"A6":[4],"A7":[5],"A8":[5],"A9":[7],"A10":[6],"A11":[8],"B1":[3],"B2":[7],"B3":[5],"B4":[5],"B5":[8],"B6":[3],"B7":[9],"B8":[9],"B9":[9]}'>
         <div class="theory-content">
 
             <!-- EPA-koulutuskortti: Herätepotentiaali ja ENMG-tutkimukset -->
@@ -657,7 +657,7 @@
     <!-- ================================================================
          VÄLILEHTI 3: IOM JA DBS
          ================================================================ -->
-    <div class="theory-panel" id="panel-iom" role="tabpanel">
+    <div class="theory-panel" id="panel-iom" role="tabpanel" data-epa-map='{"A1":[1,2,3],"A2":[1],"A3":[2,3],"A4":[2,3],"A5":[2,3],"A6":[2],"A7":[4],"A8":[5],"A9":[5],"A10":[7],"B1":[2,3],"B2":[2,3,7],"B3":[4],"B4":[5],"B5":[5],"B6":[2,3],"B7":[3],"B8":[4],"B9":[4],"B10":[4]}'>
         <div class="theory-content">
 
             <!-- EPA-koulutuskortti: Intraoperatiivinen monitorointi (IOM, DBS) -->
@@ -822,7 +822,7 @@
     <!-- ================================================================
          VÄLILEHTI 4: UNITUTKIMUKSET
          ================================================================ -->
-    <div class="theory-panel" id="panel-uni" role="tabpanel">
+    <div class="theory-panel" id="panel-uni" role="tabpanel" data-epa-map='{"A1":[1,2,3],"A2":[1,3],"A3":[2],"A4":[1,3],"A5":[2,6],"A6":[4,5],"A7":[7],"A8":[6,7],"A9":[3],"A10":[8],"A11":[6],"B1":[2],"B2":[8],"B3":[6],"B4":[3],"B5":[7,8],"B6":[6],"B7":[6],"B8":[6]}'>
         <div class="theory-content">
 
             <!-- EPA-koulutuskortti: Uni-tutkimukset -->
@@ -1014,7 +1014,7 @@
     <!-- ================================================================
          VÄLILEHTI 5: TMS JA NEURONAVIGAATIO
          ================================================================ -->
-    <div class="theory-panel" id="panel-tms" role="tabpanel">
+    <div class="theory-panel" id="panel-tms" role="tabpanel" data-epa-map='{"A1":[1,2],"A2":[2],"A3":[1,3],"A4":[2],"A5":[4],"A6":[5],"A7":[7],"A8":[6],"A9":[8],"A10":[8],"B1":[1,2,3],"B2":[2,3],"B3":[8],"B4":[5],"B5":[2],"B6":[2],"B7":[2]}'>
         <div class="theory-content">
 
             <!-- EPA-koulutuskortti: Sarja-TMS-hoidot ja navigoidut TMS-tutkimukset -->
@@ -1193,7 +1193,7 @@
     <!-- ================================================================
          VÄLILEHTI 6: LAITE- JA SÄHKÖTURVALLISUUS
          ================================================================ -->
-    <div class="theory-panel" id="panel-laiteturvallisuus" role="tabpanel">
+    <div class="theory-panel" id="panel-laiteturvallisuus" role="tabpanel" data-epa-map='{"A1":[1],"A2":[1],"A3":[1],"A4":[1],"A5":[1],"A6":[2,3,4],"B1":[2,3,4],"B2":[1]}'>
         <div class="theory-content">
 
             <h2>1. Lääkinnällisten laitteiden lainsäädäntö</h2>
@@ -1339,6 +1339,7 @@
 {% endblock %}
 
 {% block extra_js %}
+<script src="{% static 'sisalto/js/theory-epa-links.js' %}"></script>
 <script src="{% static 'sisalto/js/tts-player.js' %}"></script>
 <script>
 (function() {

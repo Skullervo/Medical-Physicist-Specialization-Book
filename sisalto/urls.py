@@ -247,6 +247,9 @@ urlpatterns = [
     path('fysiologia/verenkierto/delete_section/', views.delete_fysiologia_verenkierto_section_view, name='delete_fysiologia_verenkierto_section_view'),
     path('fysiologia/verenkierto/update_proficiency/', views.update_fysiologia_verenkierto_proficiency_view, name='update_fysiologia_verenkierto_proficiency_view'),
 
+    # Viitteet
+    path('viitteet/', views.viitteet_view, name='viitteet'),
+
     # Raportoi ongelmasta sivu
     path('raportoi-ongelma/', views.raportoi_ongelma_view, name='raportoi_ongelma'),
     path('raportoi-ongelma/edit_section/', views.edit_raportoi_ongelma_section_view, name='edit_raportoi_ongelma_section_view'),

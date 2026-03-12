@@ -4,7 +4,7 @@
 
 ---
 
-## Edistymisen yhteenveto (päivitetty 2026-03-05)
+## Edistymisen yhteenveto (päivitetty 2026-03-12)
 
 | Tehtävä | Kuvaus | Tila |
 |---------|--------|------|
@@ -21,7 +21,7 @@
 | Tehtävä 11 | Heikkojen alueiden tunnistus + tenttivalmius | ✅ Valmis (2026-02-19) |
 | Tehtävä 12 | Tenttisimulaatio (aikarajalla + AI-arviointi) | ✅ Valmis (2026-02-19) |
 | Tehtävä 13 | Teoriakuvien lisääminen modaliteettisivuille | ✅ Valmis (2026-03-02) — 99 slottia 5 modaliteetissa |
-| Tehtävä 14 | Isotooppi.html teoriasisällön laajennus Duodecim-lähteistä | 🔄 Kesken — suunnitelma valmis, toteutus tekemättä |
+| Tehtävä 14 | Isotooppi.html teoriasisällön laajennus Duodecim-lähteistä | ✅ Valmis (2026-03-09) — Sisältö jo kattava: SPET (sydän, kilpirauhanen, keuhkot, aivot, DAT, vartijaimusolmuke, lisäkilpirauhaset), PET (sydän, aivot FDG/amyloidi, eturauhassyöpä), radionuklidihoidot (jodi, PRRT, PSMA, SIRT, radiosynoviorthesis) |
 | Tehtävä 15 | Usean kysymystyypin tuki teoriaquiziin | ✅ Valmis (2026-03-04) — MC, TF, calculation, matching kaikilla modaliteettisivuilla |
 | Tehtävä 16 | Text-to-Speech (kuuntele-ominaisuus) | ✅ Valmis (2026-03-04) — OpenAI TTS, 5 modaliteettia, välimuisti |
 | Tehtävä 17 | KNF-sivun quiz-osiot | ✅ Valmis (2026-03-04) — 6 välilehteä + tyyppivalitsimet |
@@ -39,6 +39,15 @@
 | Tehtävä 29 | Anki-vienti — Flashcardien vienti .apkg-muotoon | ✅ Valmis (2026-03-06) |
 | Tehtävä 30 | Kysymyskohtaiset kommentit — Käyttäjien kommentit ja keskustelu per kysymys | ✅ Valmis (2026-03-06) |
 | Tehtävä 31 | Adaptiivinen vaikeus — Automaattinen vaikeustason säätö suorituksen mukaan | ✅ Valmis (2026-03-06) |
+| Tehtävä 32 | CKEditor-kuvien lataus inline-editoriin | ✅ Valmis (2026-03-12) — CKEditor integraatio teoria-inline-editoriin, kuvien upload/poisto |
+| Tehtävä 33 | Inline-editorin auto-tallennuksen korjaus | ✅ Valmis (2026-03-12) — Auto-tallentaa kaikki avoimet välilehdet kun painetaan "Lopeta muokkaus" |
+| Tehtävä 34 | TTS-äänivalinta | ✅ Valmis (2026-03-12) — 5 ääntä (nova♀, shimmer♀, echo♂, onyx♂, fable♂), localStorage-tallennus, äänenvaihto pysäyttää toiston |
+| Tehtävä 35 | AI-chatbot-virheenkorjaus | ✅ Valmis (2026-03-12) — Lisätty puuttuva chatbot-status -elementti, korjattu ReferenceErrorit, chatbot toimii nyt luotettavasti |
+| Tehtävä 36 | AI-chatbot laajennusmoodi | ✅ Valmis (2026-03-12) — Expand-painike laajentaa chatbotin 680px leveäksi (80vh), puristetaan takaisin samalla painikkeella |
+| Tehtävä 37 | AI-chatbot äänikeskustelu | ✅ Valmis (2026-03-12) — Mikrofoninappi (Web Speech API STT fi-FI), botti vastaa Onyx-äänellä (TTS), mikrofonipainike pysäyttää botin puheen |
+| Tehtävä 38 | Otsikoiden AI-kyselypainikkeet | ✅ Valmis (2026-03-12) — Kaksi robotti-painiketta jokaisessa h2/h3-otsikossa teoriastivuilla: teksti- ja äänivastausversio, kontekstina modaliteetti+välilehti+yläotsikko+tekstikatkelma |
+| Tehtävä 39 | Sädehoito-sivun teoria Sädehoito-kansion PDF-materiaalista | ✅ Valmis (2026-03-12) — IMRT (sliding window/dMLC vs step-and-shoot), VMAT (jaw tracking, coplanar/non-coplanar), SRS/SBRT, fiducial markerit, IORT, BNCT, FLASH RT, Paddick CI + GI-kaavat, käyttötekijätaulukko NCRP 151 |
+| Tehtävä 40 | Virheellisten erikoisalatietojen poistaminen | ✅ Valmis (2026-03-12) — Poistettu 4 virheellistä Specialty-tietuetta (Yleiset, raportoi_ongelma, Isotooppi, Yleinen) + niiden EPAt ja 10 kysymystä tietokannasta |
 
 ---
 
@@ -689,34 +698,22 @@ return render(request, 'sisalto/modaliteetit/X.html', {
 
 ---
 
-## Tehtävä 14: Isotooppi.html teoriasisällön laajennus Duodecim-lähteistä (🔄 Kesken)
+## Tehtävä 14: Isotooppi.html teoriasisällön laajennus Duodecim-lähteistä (✅ Valmis — 2026-03-09)
 
 ### Tavoite
 Laajenna `isotooppi.html`:n kolmen välilehden (SPET, PET-tutkimukset, Radionuklidihoidot) teoriasisältöä käyttäen 7 Duodecim-kirjasta kopioitua tekstitiedostoa projektin juuressa.
 
-### Lähtötiedostot
-- `sydän.txt` — sydänperfuusio SPET ja PET
-- `vartijaimusolmuke.txt` — vartijaimusolmukekuvaus
-- `radionuklidihoidot.txt` — kaikki radionuklidihoidot
-- `kilpirauhanen_lisäkilpirauhanen.txt` — kilpirauhanen ja lisäkilpirauhaset
-- `keuhko.txt` — keuhkoperfuusio- ja ventilaatiokuvaus
-- `Eturauhanen.txt` — eturauhassyövän PET-kuvaukset (PSMA)
-- `Aivot.txt` — aivoperfuusio SPET, DAT-SPET, FDG-PET, amyloidikuvaus
+### Tila
+Isotooppi.html (3455 riviä) sisältää jo kattavasti kaiken oleellisen sisällön 7 Duodecim-lähteestä. Kaikki suunnitellut operaatiot A–F oli jo toteutettu aiemmissa sessioissa.
 
-### Muutettava tiedosto
-`sisalto/templates/sisalto/modaliteetit/isotooppi.html`
-- `panel-spet` (n. 256 riviä, rivit ~845–1100)
-- `panel-pet-tutkimukset` (n. 149 riviä, rivit ~1105–1253)
-- `panel-radionuklidihoidot` (n. 199 riviä, rivit ~1258–1456)
+### Toteutettu sisältö (6 operaatiota — kaikki valmiit)
 
-### Suunniteltu toteutus (6 operaatiota)
-
-- [ ] **A** — SPET: 2.2 Sydänperfuusio (merkkiaineet, protokolla, bull's eye, MUGA, MIBG) + 2.3 Kilpirauhaskuvaus (123I/perteknetaatti, esivalmistelut, tulkinta)
-- [ ] **B** — SPET: 2.5 Keuhkot (MAA, Technegas vs DTPA, PISA-PED-kriteerit taulukko, preop FEV1)
-- [ ] **C** — SPET: 3.1 Aivoperfuusio + uusi 3.1b DAT-SPET ([123I]FP-CIT, Parkinson/LBD, tauotukset) + 3.2 Vartijaimusolmuke + 3.4 Lisäkilpirauhaset
-- [ ] **D** — PET: 2.2 Sydän (Rb-82/N-13/O-15, kvantifiointi ml/g/min, viabiliteetti FDG, sarkoidoosi/endokardiitti) + 2.3 Aivot FDG-PET + amyloidikuvaus taulukko
-- [ ] **E** — PET: 3.1 Eturauhassyöpä (koliini/flusikloviini/68Ga-PSMA-11/18F-PSMA-1007/Na18F, PSA-relapsi, staging)
-- [ ] **F** — Radionuklidihoidot: päivitä 3.1/3.2/4/5 + lisää radiosynovektomia + SIRT-päivitys + lymfooma-immunosädehoito
+- [x] **A** — SPET: 2.2 Sydänperfuusio (merkkiaineet, protokolla, bull's eye, MUGA, MIBG) + 2.3 Kilpirauhaskuvaus (123I/perteknetaatti, esivalmistelut, tulkinta)
+- [x] **B** — SPET: 2.5 Keuhkot (MAA, Technegas vs DTPA, PISA-PED-kriteerit taulukko, preop FEV1)
+- [x] **C** — SPET: 3.1 Aivoperfuusio + 3.1b DAT-SPET ([123I]FP-CIT, Parkinson/LBD, tauotukset) + 3.2 Vartijaimusolmuke + 3.7 Lisäkilpirauhaset
+- [x] **D** — PET: 2.2 Sydän (Rb-82/N-13/O-15, kvantifiointi ml/g/min, viabiliteetti FDG, sarkoidoosi/endokardiitti) + 2.3 Aivot FDG-PET + amyloidikuvaus taulukko
+- [x] **E** — PET: 3.1 Eturauhassyöpä (koliini/flusikloviini/68Ga-PSMA-11/18F-PSMA-1007/Na18F, PSA-relapsi, staging)
+- [x] **F** — Radionuklidihoidot: jodihoidot, PRRT, PSMA-PRLT, radiosynoviorthesis, SIRT, lymfooma-immunosädehoito
 
 ### HTML-konventiot
 

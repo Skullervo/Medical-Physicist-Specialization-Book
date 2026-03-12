@@ -327,6 +327,86 @@ body.theory-edit-mode .theory-slot-delete-bar {
     display: flex;
 }
 
+/* ── Font size picker ───────────────────────────────────────────────── */
+.theory-dock-fontsize-group,
+.theory-dock-lineheight-group {
+    position: relative;
+}
+.theory-fontsize-picker,
+.theory-lineheight-picker {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-overlay, #232b3e);
+    border: 1px solid var(--border-default, #2d3748);
+    border-radius: 8px;
+    padding: 6px;
+    gap: 4px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    z-index: 10020;
+    flex-direction: column;
+    min-width: 110px;
+}
+.theory-fontsize-picker.open,
+.theory-lineheight-picker.open {
+    display: flex;
+}
+.theory-fontsize-picker button,
+.theory-lineheight-picker button {
+    width: 100% !important;
+    height: auto !important;
+    min-width: auto !important;
+    padding: 6px 12px !important;
+    border-radius: 6px !important;
+    text-align: left !important;
+    justify-content: flex-start !important;
+    font-size: 0.82rem !important;
+    gap: 6px !important;
+    border: 1px solid transparent !important;
+}
+.theory-fontsize-picker button:hover,
+.theory-lineheight-picker button:hover {
+    background: var(--bg-raised, #1c2333) !important;
+    border-color: var(--border-default, #2d3748) !important;
+}
+.theory-fontsize-picker button small,
+.theory-lineheight-picker button small {
+    color: var(--text-tertiary, #718096);
+    font-size: 0.7rem;
+    margin-left: auto;
+}
+.theory-fs-active,
+.theory-lh-active {
+    color: var(--color-primary, #60a5fa) !important;
+    font-weight: 600;
+}
+.theory-fs-reset,
+.theory-lh-reset {
+    border-top: 1px solid var(--border-default, #2d3748) !important;
+    margin-top: 2px;
+    padding-top: 6px !important;
+    color: var(--text-tertiary, #718096) !important;
+    justify-content: center !important;
+    font-size: 0.75rem !important;
+}
+
+/* ── Horizontal rule in theory content ─────────────────────────────── */
+.theory-content hr,
+.theory-content hr.theory-hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        var(--border-default, #2d3748) 10%,
+        var(--border-default, #2d3748) 90%,
+        transparent 100%
+    );
+    margin: 1.5rem 0;
+    opacity: 0.6;
+}
+
 /* ── Responsive: stack dock on narrow screens ───────────────────────── */
 @media (max-width: 768px) {
     .theory-dock-toolbar {

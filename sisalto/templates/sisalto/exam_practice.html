@@ -3,28 +3,29 @@
 {% block title %}Tenttikysymys harjoittelu - Sairaalafyysikon erikoistumiskirja{% endblock %}
 
 {% block content %}
+<style>
+.nav-btn:hover { filter: brightness(1.15); }
+.eval-btn { transition: border-color 0.15s, font-weight 0.15s; }
+</style>
 <!-- Header -->
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
-    <a href="/examquestions/" style="color: #3498db; text-decoration: none; font-size: 0.95em;">
+    <a href="/examquestions/" style="color: var(--color-primary); text-decoration: none; font-size: 0.95em;">
         <i class="fas fa-arrow-left" style="margin-right: 6px;"></i>Takaisin tenttikysymyksiin
     </a>
     <div style="display: flex; gap: 10px;">
         {% if prev_q %}
-        <a href="/exam/practice/?question={{ prev_q.id }}"
-           style="background: #34495e; color: #ecf0f1; border: 1px solid #4a6785; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 0.9em; transition: background 0.2s;"
-           onmouseover="this.style.background='#3d566e'" onmouseout="this.style.background='#34495e'">
+        <a href="/exam/practice/?question={{ prev_q.id }}" class="nav-btn"
+           style="background: var(--bg-raised); color: var(--text-primary); border: 1px solid var(--border-default); padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 0.9em; transition: filter 0.15s;">
             <i class="fas fa-chevron-left" style="margin-right: 4px;"></i>Edellinen
         </a>
         {% endif %}
-        <a href="/exam/practice/"
-           style="background: #34495e; color: #ecf0f1; border: 1px solid #4a6785; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 0.9em; transition: background 0.2s;"
-           onmouseover="this.style.background='#3d566e'" onmouseout="this.style.background='#34495e'">
+        <a href="/exam/practice/" class="nav-btn"
+           style="background: var(--bg-raised); color: var(--text-primary); border: 1px solid var(--border-default); padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 0.9em; transition: filter 0.15s;">
             <i class="fas fa-random" style="margin-right: 4px;"></i>Satunnainen
         </a>
         {% if next_q %}
-        <a href="/exam/practice/?question={{ next_q.id }}"
-           style="background: #34495e; color: #ecf0f1; border: 1px solid #4a6785; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 0.9em; transition: background 0.2s;"
-           onmouseover="this.style.background='#3d566e'" onmouseout="this.style.background='#34495e'">
+        <a href="/exam/practice/?question={{ next_q.id }}" class="nav-btn"
+           style="background: var(--bg-raised); color: var(--text-primary); border: 1px solid var(--border-default); padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 0.9em; transition: filter 0.15s;">
             Seuraava<i class="fas fa-chevron-right" style="margin-left: 4px;"></i>
         </a>
         {% endif %}
@@ -33,64 +34,61 @@
 
 {% if question %}
 <!-- Question card -->
-<div style="background: #2c3e50; border-radius: 12px; padding: 32px; border: 1px solid #34495e; margin-bottom: 24px;">
+<div style="background: var(--bg-surface); border-radius: 12px; padding: 32px; border: 1px solid var(--border-default); margin-bottom: 24px;">
     <!-- Metadata badges -->
     <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;">
         {% if question.subject_area %}
-        <span style="background: rgba(155,89,182,0.15); color: #9b59b6; padding: 5px 14px; border-radius: 12px; font-size: 0.85em; font-weight: 600;">
+        <span style="background: rgba(167,139,250,0.15); color: var(--color-violet); padding: 5px 14px; border-radius: 12px; font-size: 0.85em; font-weight: 600;">
             <i class="fas fa-tag" style="margin-right: 4px;"></i>{{ question.subject_area }}
         </span>
         {% endif %}
         {% if question.year %}
-        <span style="background: rgba(241,196,15,0.15); color: #f1c40f; padding: 5px 14px; border-radius: 12px; font-size: 0.85em;">
+        <span style="background: rgba(241,196,15,0.15); color: var(--color-warning); padding: 5px 14px; border-radius: 12px; font-size: 0.85em;">
             <i class="fas fa-calendar" style="margin-right: 4px;"></i>{{ question.year }}
         </span>
         {% endif %}
         {% if question.exam_date %}
-        <span style="background: rgba(52,152,219,0.15); color: #3498db; padding: 5px 14px; border-radius: 12px; font-size: 0.85em;">
+        <span style="background: rgba(96,165,250,0.15); color: var(--color-primary); padding: 5px 14px; border-radius: 12px; font-size: 0.85em;">
             {{ question.exam_date }}
         </span>
         {% endif %}
-        <span style="background: #34495e; color: #95a5a6; padding: 5px 14px; border-radius: 12px; font-size: 0.85em;">
+        <span style="background: var(--bg-raised); color: var(--text-tertiary); padding: 5px 14px; border-radius: 12px; font-size: 0.85em;">
             Q{{ question.question_number }}
         </span>
     </div>
 
     <!-- Question text -->
-    <h2 style="color: #ecf0f1; font-size: 1.25em; line-height: 1.7; font-weight: 500; margin: 0;">
+    <h2 style="color: var(--text-primary); font-size: 1.25em; line-height: 1.7; font-weight: 500; margin: 0;">
         {{ question.question_text }}
     </h2>
 </div>
 
 <!-- Answer area -->
-<div style="background: #2c3e50; border-radius: 12px; padding: 24px; border: 1px solid #34495e; margin-bottom: 24px;">
-    <h3 style="color: #ecf0f1; font-size: 1em; margin: 0 0 14px 0;">
-        <i class="fas fa-pen" style="color: #3498db; margin-right: 8px;"></i>Kirjoita vastauksesi
+<div style="background: var(--bg-surface); border-radius: 12px; padding: 24px; border: 1px solid var(--border-default); margin-bottom: 24px;">
+    <h3 style="color: var(--text-primary); font-size: 1em; margin: 0 0 14px 0;">
+        <i class="fas fa-pen" style="color: var(--color-primary); margin-right: 8px;"></i>Kirjoita vastauksesi
     </h3>
     <textarea id="answerArea"
         placeholder="Kirjoita vastauksesi tahan... Pohdi kysymysta ja yrita vastata mahdollisimman kattavasti."
-        style="width: 100%; min-height: 200px; padding: 16px; background: #1a252f; border: 1px solid #34495e; border-radius: 8px; color: #ecf0f1; font-size: 0.95em; line-height: 1.6; resize: vertical; outline: none; font-family: inherit; box-sizing: border-box;"
-        onfocus="this.style.borderColor='#3498db'" onblur="this.style.borderColor='#34495e'"></textarea>
+        style="width: 100%; min-height: 200px; padding: 16px; background: var(--bg-overlay); border: 1px solid var(--border-default); border-radius: 8px; color: var(--text-primary); font-size: 0.95em; line-height: 1.6; resize: vertical; outline: none; font-family: inherit; box-sizing: border-box; transition: border-color 0.15s;"
+        onfocus="this.style.borderColor='var(--color-primary)'" onblur="this.style.borderColor='var(--border-default)'"></textarea>
 
     <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; flex-wrap: wrap; gap: 10px;">
-        <div style="color: #7f8c8d; font-size: 0.85em;">
+        <div style="color: var(--text-disabled); font-size: 0.85em;">
             <span id="charCount">0</span> merkkia
         </div>
         <div style="display: flex; gap: 10px;">
-            <button type="button" id="clearBtn"
-                style="background: #34495e; color: #95a5a6; border: 1px solid #4a6785; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 0.9em; transition: all 0.2s;"
-                onmouseover="this.style.background='#3d566e'" onmouseout="this.style.background='#34495e'">
+            <button type="button" id="clearBtn" class="nav-btn"
+                style="background: var(--bg-raised); color: var(--text-tertiary); border: 1px solid var(--border-default); padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 0.9em; transition: filter 0.15s;">
                 <i class="fas fa-eraser" style="margin-right: 6px;"></i>Tyhjenna
             </button>
-            <button type="button" id="doneBtn"
-                style="background: #2ecc71; color: white; border: none; padding: 10px 24px; border-radius: 8px; cursor: pointer; font-size: 0.95em; font-weight: 600; transition: all 0.2s;"
-                onmouseover="this.style.background='#27ae60'" onmouseout="this.style.background='#2ecc71'">
+            <button type="button" id="doneBtn" class="nav-btn"
+                style="background: var(--color-success); color: white; border: none; padding: 10px 24px; border-radius: 8px; cursor: pointer; font-size: 0.95em; font-weight: 600; transition: filter 0.15s;">
                 <i class="fas fa-check" style="margin-right: 6px;"></i>Valmis
             </button>
             {% if question.model_answer %}
             <button type="button" id="aiEvalBtn"
-                style="background: rgba(155,89,182,0.2); color: #9b59b6; border: 2px solid #9b59b6; padding: 10px 24px; border-radius: 8px; cursor: pointer; font-size: 0.95em; font-weight: 600; transition: all 0.2s;"
-                onmouseover="this.style.background='rgba(155,89,182,0.3)'" onmouseout="this.style.background='rgba(155,89,182,0.2)'">
+                style="background: rgba(167,139,250,0.2); color: var(--color-violet); border: 2px solid var(--color-violet); padding: 10px 24px; border-radius: 8px; cursor: pointer; font-size: 0.95em; font-weight: 600; transition: filter 0.15s;">
                 <i class="fas fa-robot" style="margin-right: 6px;"></i>AI-arviointi
             </button>
             {% endif %}
@@ -99,92 +97,92 @@
 </div>
 
 <!-- AI Loading spinner -->
-<div id="aiLoading" style="display: none; text-align: center; padding: 32px; background: #2c3e50; border-radius: 12px; border: 1px solid #34495e; margin-bottom: 24px;">
-    <i class="fas fa-spinner fa-spin" style="font-size: 2.5em; color: #9b59b6; margin-bottom: 16px; display: block;"></i>
-    <p style="color: #b0b8c1; font-size: 1em;">AI arvioi vastaustasi...</p>
-    <p style="color: #7f8c8d; font-size: 0.85em;">Tämä voi kestää 10-20 sekuntia.</p>
+<div id="aiLoading" style="display: none; text-align: center; padding: 32px; background: var(--bg-surface); border-radius: 12px; border: 1px solid var(--border-default); margin-bottom: 24px;">
+    <i class="fas fa-spinner fa-spin" style="font-size: 2.5em; color: var(--color-violet); margin-bottom: 16px; display: block;"></i>
+    <p style="color: var(--text-secondary); font-size: 1em;">AI arvioi vastaustasi...</p>
+    <p style="color: var(--text-disabled); font-size: 0.85em;">Tämä voi kestää 10-20 sekuntia.</p>
 </div>
 
 <!-- AI Results section -->
-<div id="aiResultSection" style="display: none; background: #2c3e50; border-radius: 12px; padding: 24px; border: 1px solid #34495e; margin-bottom: 24px;">
+<div id="aiResultSection" style="display: none; background: var(--bg-surface); border-radius: 12px; padding: 24px; border: 1px solid var(--border-default); margin-bottom: 24px;">
     <!-- Score -->
     <div style="text-align: center; margin-bottom: 24px;">
         <div id="aiScoreValue" style="font-size: 3em; font-weight: 700; font-family: var(--font-display, 'Outfit');"></div>
-        <div style="color: #7f8c8d; font-size: 0.9em;">/ 5 pistettä</div>
+        <div style="color: var(--text-disabled); font-size: 0.9em;">/ 5 pistettä</div>
     </div>
     <!-- Feedback -->
-    <div id="aiFeedbackSection" style="background: #1a252f; border-radius: 8px; padding: 16px; border-left: 3px solid #3498db; margin-bottom: 16px;">
-        <div style="color: #3498db; font-weight: 600; margin-bottom: 8px; font-size: 0.9em;">
+    <div id="aiFeedbackSection" style="background: var(--bg-overlay); border-radius: 8px; padding: 16px; border-left: 3px solid var(--color-primary); margin-bottom: 16px;">
+        <div style="color: var(--color-primary); font-weight: 600; margin-bottom: 8px; font-size: 0.9em;">
             <i class="fas fa-comment-dots" style="margin-right: 6px;"></i>Palaute
         </div>
-        <p id="aiFeedbackText" style="color: #b0b8c1; line-height: 1.6; margin: 0;"></p>
+        <p id="aiFeedbackText" style="color: var(--text-secondary); line-height: 1.6; margin: 0;"></p>
     </div>
     <!-- Strengths -->
-    <div id="aiStrengthsSection" style="background: #1a252f; border-radius: 8px; padding: 16px; border-left: 3px solid #2ecc71; margin-bottom: 16px;">
-        <div style="color: #2ecc71; font-weight: 600; margin-bottom: 8px; font-size: 0.9em;">
+    <div id="aiStrengthsSection" style="background: var(--bg-overlay); border-radius: 8px; padding: 16px; border-left: 3px solid var(--color-success); margin-bottom: 16px;">
+        <div style="color: var(--color-success); font-weight: 600; margin-bottom: 8px; font-size: 0.9em;">
             <i class="fas fa-check-circle" style="margin-right: 6px;"></i>Vahvuudet
         </div>
-        <ul id="aiStrengthsList" style="color: #b0b8c1; line-height: 1.6; margin: 0; padding-left: 20px;"></ul>
+        <ul id="aiStrengthsList" style="color: var(--text-secondary); line-height: 1.6; margin: 0; padding-left: 20px;"></ul>
     </div>
     <!-- Weaknesses -->
-    <div id="aiWeaknessesSection" style="background: #1a252f; border-radius: 8px; padding: 16px; border-left: 3px solid #e74c3c; margin-bottom: 16px;">
-        <div style="color: #e74c3c; font-weight: 600; margin-bottom: 8px; font-size: 0.9em;">
+    <div id="aiWeaknessesSection" style="background: var(--bg-overlay); border-radius: 8px; padding: 16px; border-left: 3px solid var(--color-error); margin-bottom: 16px;">
+        <div style="color: var(--color-error); font-weight: 600; margin-bottom: 8px; font-size: 0.9em;">
             <i class="fas fa-times-circle" style="margin-right: 6px;"></i>Puutteet
         </div>
-        <ul id="aiWeaknessesList" style="color: #b0b8c1; line-height: 1.6; margin: 0; padding-left: 20px;"></ul>
+        <ul id="aiWeaknessesList" style="color: var(--text-secondary); line-height: 1.6; margin: 0; padding-left: 20px;"></ul>
     </div>
     <!-- Suggestions -->
-    <div id="aiSuggestionsSection" style="background: #1a252f; border-radius: 8px; padding: 16px; border-left: 3px solid #f1c40f;">
-        <div style="color: #f1c40f; font-weight: 600; margin-bottom: 8px; font-size: 0.9em;">
+    <div id="aiSuggestionsSection" style="background: var(--bg-overlay); border-radius: 8px; padding: 16px; border-left: 3px solid var(--color-warning);">
+        <div style="color: var(--color-warning); font-weight: 600; margin-bottom: 8px; font-size: 0.9em;">
             <i class="fas fa-lightbulb" style="margin-right: 6px;"></i>Parannusehdotukset
         </div>
-        <ul id="aiSuggestionsList" style="color: #b0b8c1; line-height: 1.6; margin: 0; padding-left: 20px;"></ul>
+        <ul id="aiSuggestionsList" style="color: var(--text-secondary); line-height: 1.6; margin: 0; padding-left: 20px;"></ul>
     </div>
 </div>
 
 <!-- Summary section (hidden initially) -->
-<div id="summarySection" style="display: none; background: #2c3e50; border-radius: 12px; padding: 24px; border: 1px solid #34495e; margin-bottom: 24px;">
-    <h3 style="color: #ecf0f1; font-size: 1em; margin: 0 0 16px 0;">
-        <i class="fas fa-clipboard-check" style="color: #f1c40f; margin-right: 8px;"></i>Yhteenveto
+<div id="summarySection" style="display: none; background: var(--bg-surface); border-radius: 12px; padding: 24px; border: 1px solid var(--border-default); margin-bottom: 24px;">
+    <h3 style="color: var(--text-primary); font-size: 1em; margin: 0 0 16px 0;">
+        <i class="fas fa-clipboard-check" style="color: var(--color-warning); margin-right: 8px;"></i>Yhteenveto
     </h3>
 
     <!-- Self-evaluation -->
     <div style="margin-bottom: 20px;">
-        <p style="color: #b0b8c1; margin-bottom: 12px;">Miten arvioisit vastauksesi?</p>
+        <p style="color: var(--text-secondary); margin-bottom: 12px;">Miten arvioisit vastauksesi?</p>
         <div style="display: flex; gap: 10px; flex-wrap: wrap;" id="selfEval">
             <button type="button" class="eval-btn" data-score="1"
-                style="background: rgba(231,76,60,0.15); color: #e74c3c; border: 2px solid transparent; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-size: 0.9em; transition: all 0.2s;">
+                style="background: rgba(248,113,113,0.15); color: var(--color-error); border: 2px solid transparent; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-size: 0.9em;">
                 <i class="fas fa-times-circle" style="margin-right: 4px;"></i>En osannut
             </button>
             <button type="button" class="eval-btn" data-score="2"
-                style="background: rgba(230,126,34,0.15); color: #e67e22; border: 2px solid transparent; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-size: 0.9em; transition: all 0.2s;">
+                style="background: rgba(251,146,60,0.15); color: var(--color-orange); border: 2px solid transparent; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-size: 0.9em;">
                 <i class="fas fa-minus-circle" style="margin-right: 4px;"></i>Osittain
             </button>
             <button type="button" class="eval-btn" data-score="3"
-                style="background: rgba(241,196,15,0.15); color: #f1c40f; border: 2px solid transparent; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-size: 0.9em; transition: all 0.2s;">
+                style="background: rgba(241,196,15,0.15); color: var(--color-warning); border: 2px solid transparent; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-size: 0.9em;">
                 <i class="fas fa-check-circle" style="margin-right: 4px;"></i>Kohtalaisesti
             </button>
             <button type="button" class="eval-btn" data-score="4"
-                style="background: rgba(46,204,113,0.15); color: #2ecc71; border: 2px solid transparent; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-size: 0.9em; transition: all 0.2s;">
+                style="background: rgba(52,211,153,0.15); color: var(--color-success); border: 2px solid transparent; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-size: 0.9em;">
                 <i class="fas fa-star" style="margin-right: 4px;"></i>Hyvin
             </button>
         </div>
     </div>
 
     <!-- Your answer review -->
-    <div style="background: #1a252f; border-radius: 8px; padding: 16px; border-left: 3px solid #3498db; margin-bottom: 16px;">
-        <div style="color: #3498db; font-weight: 600; margin-bottom: 8px; font-size: 0.9em;">
+    <div style="background: var(--bg-overlay); border-radius: 8px; padding: 16px; border-left: 3px solid var(--color-primary); margin-bottom: 16px;">
+        <div style="color: var(--color-primary); font-weight: 600; margin-bottom: 8px; font-size: 0.9em;">
             <i class="fas fa-user" style="margin-right: 6px;"></i>Sinun vastauksesi
         </div>
-        <p id="yourAnswer" style="color: #b0b8c1; line-height: 1.6; margin: 0; white-space: pre-wrap;"></p>
+        <p id="yourAnswer" style="color: var(--text-secondary); line-height: 1.6; margin: 0; white-space: pre-wrap;"></p>
     </div>
 
     <!-- Question info -->
-    <div style="background: #1a252f; border-radius: 8px; padding: 16px; border-left: 3px solid #f1c40f;">
-        <div style="color: #f1c40f; font-weight: 600; margin-bottom: 8px; font-size: 0.9em;">
+    <div style="background: var(--bg-overlay); border-radius: 8px; padding: 16px; border-left: 3px solid var(--color-warning);">
+        <div style="color: var(--color-warning); font-weight: 600; margin-bottom: 8px; font-size: 0.9em;">
             <i class="fas fa-info-circle" style="margin-right: 6px;"></i>Tietoa kysymyksesta
         </div>
-        <p style="color: #b0b8c1; line-height: 1.6; margin: 0;">
+        <p style="color: var(--text-secondary); line-height: 1.6; margin: 0;">
             {% if question.subject_area %}Aihealue: <strong>{{ question.subject_area }}</strong><br>{% endif %}
             {% if question.year %}Vuosi: <strong>{{ question.year }}</strong><br>{% endif %}
             {% if question.exam_date %}Tenttipvm: <strong>{{ question.exam_date }}</strong><br>{% endif %}
@@ -196,47 +194,43 @@
     {% if question.model_answer %}
     <div style="margin-top: 16px;">
         <button type="button" id="toggleModelAnswer"
-            style="background: rgba(155,89,182,0.15); color: #9b59b6; border: 2px solid #9b59b6; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-size: 0.9em; font-weight: 600; transition: all 0.2s; width: 100%;"
-            onmouseover="this.style.background='rgba(155,89,182,0.25)'" onmouseout="this.style.background='rgba(155,89,182,0.15)'">
+            style="background: rgba(167,139,250,0.15); color: var(--color-violet); border: 2px solid var(--color-violet); padding: 10px 18px; border-radius: 8px; cursor: pointer; font-size: 0.9em; font-weight: 600; transition: filter 0.15s; width: 100%;">
             <i class="fas fa-eye" style="margin-right: 6px;"></i>Nayta mallivastaus
         </button>
-        <div id="modelAnswerSection" style="display: none; background: #1a252f; border-radius: 8px; padding: 16px; border-left: 3px solid #9b59b6; margin-top: 12px;">
-            <div style="color: #9b59b6; font-weight: 600; margin-bottom: 8px; font-size: 0.9em;">
+        <div id="modelAnswerSection" style="display: none; background: var(--bg-overlay); border-radius: 8px; padding: 16px; border-left: 3px solid var(--color-violet); margin-top: 12px;">
+            <div style="color: var(--color-violet); font-weight: 600; margin-bottom: 8px; font-size: 0.9em;">
                 <i class="fas fa-graduation-cap" style="margin-right: 6px;"></i>Mallivastaus
             </div>
-            <p style="color: #b0b8c1; line-height: 1.6; margin: 0; white-space: pre-wrap;">{{ question.model_answer }}</p>
+            <p style="color: var(--text-secondary); line-height: 1.6; margin: 0; white-space: pre-wrap;">{{ question.model_answer }}</p>
         </div>
     </div>
     {% endif %}
 
     <!-- Next actions -->
     <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
-        <a href="/exam/practice/"
-           style="background: #3498db; color: white; border: none; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-size: 0.95em; font-weight: 600; transition: background 0.2s;"
-           onmouseover="this.style.background='#2980b9'" onmouseout="this.style.background='#3498db'">
+        <a href="/exam/practice/" class="nav-btn"
+           style="background: var(--color-primary); color: white; border: none; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-size: 0.95em; font-weight: 600; transition: filter 0.15s;">
             <i class="fas fa-random" style="margin-right: 6px;"></i>Satunnainen kysymys
         </a>
         {% if next_q %}
-        <a href="/exam/practice/?question={{ next_q.id }}"
-           style="background: #2ecc71; color: white; border: none; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-size: 0.95em; font-weight: 600; transition: background 0.2s;"
-           onmouseover="this.style.background='#27ae60'" onmouseout="this.style.background='#2ecc71'">
+        <a href="/exam/practice/?question={{ next_q.id }}" class="nav-btn"
+           style="background: var(--color-success); color: white; border: none; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-size: 0.95em; font-weight: 600; transition: filter 0.15s;">
             Seuraava kysymys<i class="fas fa-arrow-right" style="margin-left: 6px;"></i>
         </a>
         {% endif %}
-        <a href="/examquestions/"
-           style="background: #34495e; color: #ecf0f1; border: 1px solid #4a6785; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-size: 0.95em; transition: background 0.2s;"
-           onmouseover="this.style.background='#3d566e'" onmouseout="this.style.background='#34495e'">
+        <a href="/examquestions/" class="nav-btn"
+           style="background: var(--bg-raised); color: var(--text-primary); border: 1px solid var(--border-default); padding: 12px 24px; border-radius: 8px; text-decoration: none; font-size: 0.95em; transition: filter 0.15s;">
             <i class="fas fa-list" style="margin-right: 6px;"></i>Kysymyslista
         </a>
     </div>
 </div>
 
 {% else %}
-<div style="text-align: center; padding: 60px 20px; color: #7f8c8d; background: #2c3e50; border-radius: 12px; border: 1px solid #34495e;">
+<div style="text-align: center; padding: 60px 20px; color: var(--text-disabled); background: var(--bg-surface); border-radius: 12px; border: 1px solid var(--border-default);">
     <i class="fas fa-inbox" style="font-size: 3em; margin-bottom: 20px; display: block;"></i>
-    <h3 style="color: #ecf0f1;">Kysymysta ei loydy</h3>
+    <h3 style="color: var(--text-primary);">Kysymysta ei loydy</h3>
     <p>Palaa takaisin kysymyslistaan.</p>
-    <a href="/examquestions/" style="display: inline-block; margin-top: 16px; background: #3498db; color: white; padding: 10px 24px; border-radius: 8px; text-decoration: none;">
+    <a href="/examquestions/" style="display: inline-block; margin-top: 16px; background: var(--color-primary); color: white; padding: 10px 24px; border-radius: 8px; text-decoration: none;">
         <i class="fas fa-arrow-left" style="margin-right: 8px;"></i>Takaisin
     </a>
 </div>
@@ -347,9 +341,16 @@
 
                 // Render score
                 const scoreEl = document.getElementById('aiScoreValue');
-                const scoreColors = {0:'#e74c3c', 1:'#e74c3c', 2:'#e67e22', 3:'#f1c40f', 4:'#2ecc71', 5:'#2ecc71'};
+                const scoreColors = {
+                    0: 'var(--color-error)',
+                    1: 'var(--color-error)',
+                    2: 'var(--color-orange)',
+                    3: 'var(--color-warning)',
+                    4: 'var(--color-success)',
+                    5: 'var(--color-success)',
+                };
                 scoreEl.textContent = data.score;
-                scoreEl.style.color = scoreColors[data.score] || '#f1c40f';
+                scoreEl.style.color = scoreColors[data.score] || 'var(--color-warning)';
 
                 // Render feedback
                 document.getElementById('aiFeedbackText').textContent = data.feedback;
@@ -400,14 +401,15 @@
             });
         });
     }
+
     function showAchievementToast(achievement) {
         var toast = document.createElement('div');
-        toast.style.cssText = 'position: fixed; top: 20px; right: 20px; background: var(--bg-surface, #161b26); border: 1px solid var(--color-success, #34d399); border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; gap: 12px; z-index: 9999; box-shadow: 0 8px 24px rgba(0,0,0,0.4); max-width: 340px;';
+        toast.style.cssText = 'position: fixed; top: 20px; right: 20px; background: var(--bg-surface); border: 1px solid var(--color-success); border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; gap: 12px; z-index: 9999; box-shadow: 0 8px 24px rgba(0,0,0,0.4); max-width: 340px;';
         toast.innerHTML = '<div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(52,211,153,0.15); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">' +
-            '<i class="fas ' + achievement.icon + '" style="color: var(--color-success, #34d399); font-size: 1.1em;"></i></div>' +
-            '<div><div style="color: var(--color-success, #34d399); font-size: 0.8em; font-weight: 600; margin-bottom: 2px;">Saavutus ansaittu!</div>' +
-            '<div style="color: var(--text-primary, #e2e8f0); font-weight: 600; font-size: 0.95em;">' + achievement.name + '</div>' +
-            '<div style="color: var(--text-tertiary, #64748b); font-size: 0.8em;">+' + achievement.xp_reward + ' XP</div></div>';
+            '<i class="fas ' + achievement.icon + '" style="color: var(--color-success); font-size: 1.1em;"></i></div>' +
+            '<div><div style="color: var(--color-success); font-size: 0.8em; font-weight: 600; margin-bottom: 2px;">Saavutus ansaittu!</div>' +
+            '<div style="color: var(--text-primary); font-weight: 600; font-size: 0.95em;">' + achievement.name + '</div>' +
+            '<div style="color: var(--text-tertiary); font-size: 0.8em;">+' + achievement.xp_reward + ' XP</div></div>';
         document.body.appendChild(toast);
         setTimeout(function() {
             toast.style.transition = 'opacity 0.5s, transform 0.5s';

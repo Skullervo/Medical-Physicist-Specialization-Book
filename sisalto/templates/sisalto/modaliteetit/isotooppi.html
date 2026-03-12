@@ -4,8 +4,8 @@
 {% block title %}Isotooppilääketieteen teoria - Fyysikkoportti{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'sisalto/css/theory.css' %}?v=1">
-<link rel="stylesheet" href="{% static 'sisalto/css/theory-inline-editor.css' %}?v=1">
+<link rel="stylesheet" href="{% static 'sisalto/css/theory.css' %}?v=11">
+<link rel="stylesheet" href="{% static 'sisalto/css/theory-inline-editor.css' %}?v=2">
 {% endblock %}
 
 {% block content %}
@@ -57,34 +57,50 @@
     {% endif %}
 
     <!-- Tab navigation -->
-    <div class="theory-tabs" role="tablist">
-        <button class="theory-tab active" role="tab" data-tab="gammakamera" aria-selected="true">
-            <i class="fas fa-camera"></i> Gammakamera
-        </button>
-        <button class="theory-tab" role="tab" data-tab="pet">
-            <i class="fas fa-circle-notch"></i> PET-kamera
-        </button>
-        <button class="theory-tab" role="tab" data-tab="radiofarmasia">
-            <i class="fas fa-flask"></i> Radiofarmasia
-        </button>
-        <button class="theory-tab" role="tab" data-tab="spet">
-            <i class="fas fa-x-ray"></i> Gammakuvaus ja SPET
-        </button>
-        <button class="theory-tab" role="tab" data-tab="pet-tutkimukset">
-            <i class="fas fa-search"></i> PET-tutkimukset
-        </button>
-        <button class="theory-tab" role="tab" data-tab="radionuklidihoidot">
-            <i class="fas fa-prescription-bottle-alt"></i> Radionuklidihoidot
-        </button>
-        <button class="theory-tab" role="tab" data-tab="sateilybiologia">
-            <i class="fas fa-shield-alt"></i> Säteilybiologia
-        </button>
+    <div class="theory-tabs-grouped" role="tablist">
+        <div class="theory-tab-group">
+            <span class="theory-tab-group-label">EPA-kortit</span>
+            <div class="theory-tab-group-buttons">
+                <button class="theory-tab active" role="tab" data-tab="gammakamera" aria-selected="true">
+                    <i class="fas fa-camera"></i> Gammakamera
+                </button>
+                <button class="theory-tab" role="tab" data-tab="pet">
+                    <i class="fas fa-circle-notch"></i> PET-kamera
+                </button>
+                <button class="theory-tab" role="tab" data-tab="radiofarmasia">
+                    <i class="fas fa-flask"></i> Radiofarmasia
+                </button>
+                <button class="theory-tab" role="tab" data-tab="spet">
+                    <i class="fas fa-x-ray"></i> Gammakuvaus ja SPET
+                </button>
+                <button class="theory-tab" role="tab" data-tab="pet-tutkimukset">
+                    <i class="fas fa-search"></i> PET-tutkimukset
+                </button>
+                <button class="theory-tab" role="tab" data-tab="radionuklidihoidot">
+                    <i class="fas fa-prescription-bottle-alt"></i> Radionuklidihoidot
+                </button>
+                <button class="theory-tab" role="tab" data-tab="sateilybiologia">
+                    <i class="fas fa-shield-alt"></i> Säteilybiologia
+                </button>
+            </div>
+        </div>
+        <div class="theory-tab-group">
+            <span class="theory-tab-group-label">Muu teoria</span>
+            <div class="theory-tab-group-buttons">
+                <button class="theory-tab" role="tab" data-tab="analysointiohjeet">
+                    <i class="fas fa-microscope"></i> Analysointiohjeet
+                </button>
+                <button class="theory-tab" role="tab" data-tab="isotooppihoidot-ohjeet">
+                    <i class="fas fa-notes-medical"></i> Isotooppihoitojen ohjeet
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- ================================================================
          VÄLILEHTI 1: GAMMAKAMERA
          ================================================================ -->
-    <div class="theory-panel active" id="panel-gammakamera" role="tabpanel">
+    <div class="theory-panel active" id="panel-gammakamera" role="tabpanel" data-epa-map='{"A1":[1,2],"A2":[2],"A3":[3],"A4":[4],"A5":[5],"A6":[5],"A7":[6,7],"A8":[7],"A9":[10],"A10":[10],"B1":[9],"B2":[8],"B3":[11],"B4":[11],"B5":[11],"B6":[12],"B7":[12]}'>
         <div class="theory-content">
 
             <!-- EPA-koulutuskortti: Gammakamerateknologia -->
@@ -150,6 +166,7 @@
                     <tr><td>LEGP (low-energy general-purpose)</td><td>Yhdensuuntaiset rei&auml;t, suuremmat rei&auml;t</td><td>Tc-99m yleistutkimukset</td><td>Kompromissi resoluutio/herkkyys</td></tr>
                     <tr><td>LEHS (low-energy high-sensitivity)</td><td>Yhdensuuntaiset rei&auml;t, isot rei&auml;t</td><td>Dynaamiset tutkimukset</td><td>Korkea herkkyys, heikompi resoluutio</td></tr>
                     <tr><td>MEGP (medium-energy)</td><td>Paksummat septat</td><td>Ga-67 (93&ndash;300 keV), In-111 (171, 245 keV)</td><td>Paksummat septat estävät septapenetraation</td></tr>
+                    <tr><td>MELP (medium-energy low-penetration)</td><td>Optimoidut septat keskienergiaisille</td><td>Lu-177 (208 keV), In-111</td><td>Parempi septapenetraation hallinta kuin MEGP:ssä Lu-177-kuvantamisessa</td></tr>
                     <tr><td>HEGP (high-energy)</td><td>Paksut septat</td><td>I-131 (364 keV)</td><td>Korkea septan paksuus, matala resoluutio</td></tr>
                     <tr><td>Pinhole</td><td>Yksi kartiomainen aukko</td><td>Kilpirauhas, pienet eläimet</td><td>Suurennettu kuva, korkea resoluutio lähellä</td></tr>
                     <tr><td>Fan-beam / Cone-beam</td><td>Fokusoidut reiät</td><td>Aivot (SPET)</td><td>Parempi herkkyys kohdealueelle</td></tr>
@@ -207,6 +224,17 @@
 
             <div class="theory-info">
                 <p><strong>Kliininen merkitys:</strong> CZT-sydänkamerat (esim. GE Discovery NM 530c) mahdollistavat sydänperfuusio-SPET:n merkittävästi pienemmällä aktiivisuudella (jopa 50 % vähennys) tai lyhyemmällä kuvausajalla (2&ndash;5 min vs. 15&ndash;20 min perinteisellä kameralla) säilyttäen diagnostisen kuvanlaadun. Tämä hyödyttää erityisesti potilaan säteilyannoksen optimointia.</p>
+            </div>
+
+            <h3>2.5 Korrektiokartat ja kalibrointi</h3>
+            <p>Gammakameran signaaliketjussa raakadata korjataan kolmella peräkkäisellä korjauskartalla ennen kuvan muodostusta:</p>
+            <ol>
+                <li><strong>Energiakorjaus (energy correction)</strong>: Korjaa PMT:iden välisen vasteen vaihtelun niin, että fotopiikin sijainti on yhtenäinen koko ilmaisinalueen yli. Ilman energiakorjausta eri kiteen kohdissa mitattu sama energia näkyy eri kanavissa &rarr; energiaikkunointi ei toimi homogeenisesti. Toteutetaan pikselihistogrammipohjaisella kalibrointikartalla (lookup table).</li>
+                <li><strong>Lineaarisuuskorjaus (linearity correction)</strong>: Korjaa Anger-logiikan aiheuttaman paikan systemaattisen virheen. Ilman korjausta suorat viivat vääristyvät erityisesti PMT:iden rajoilla (pincushion-vääristymä). Korjauskartta muodostetaan kuvaamalla tunnettu viivalähdefantooma (bar phantom) ja laskemalla poikkeama ideaalista ristikosta. Differentiaalinen lineaarisuusvirhe tyypillisesti &lt; 0,5 mm korjauksen jälkeen.</li>
+                <li><strong>Tasaisuuskorjaus (uniformity correction)</strong>: Korjaa jäljelle jäävät herkkyyserot kiteen eri kohdissa sen jälkeen, kun energia- ja lineaarisuuskorjaukset on tehty. Korjauskartta muodostetaan tasalähteestä (flood source) vähintään 30 miljoonalla laskennalla. Integraalinen tasaisuus korjauksen jälkeen &lt; 2,5 %, differentiaalinen &lt; 2,0 %. Korjauskartta päivitettävä vähintään viikoittain tai aina PMT-kalibraation jälkeen.</li>
+            </ol>
+            <div class="theory-info">
+                <p><strong>Korjausjärjestys:</strong> Energia &rarr; lineaarisuus &rarr; tasaisuus. Tämä järjestys on kriittinen: lineaarisuuskorjaus edellyttää oikeaa energiakorjausta, ja tasaisuuskorjaus edellyttää molempia edeltäviä korjauksia. Virhe jossakin korjausvaiheessa propagoituu kaikkiin seuraaviin vaiheisiin.</p>
             </div>
 
             <h2>3. Fotonin ilmaisuun liittyvät käsitteet</h2>
@@ -308,10 +336,14 @@
 
             <h2>7. Rekonstruktiomenetelmät</h2>
 
-            <h3>7.1 Suodatettu takaisinprojektio (FBP)</h3>
-            <p>Perinteinen analyyttinen menetelmä: projektiodata takaisinprojisoidaan ja suodatetaan ramppifiltterillä (ramp filter) kuvan terävöittämiseksi. Matala laskentateho mutta herkkä kohinalle. Butterworth- tai Hann-suodattimia käytetään kohinan hallintaan (cut-off-taajuus ja potenssi).</p>
+            <h3>7.1 Sinogrammi ja Fourierin leiketeoreema</h3>
+            <p><strong>Sinogrammi</strong> on SPET-datan perusesitys, jossa kukin rivi vastaa yhtä projektiokulmaa ja sarakkeet kuvaavat ilmaisimen paikkaa (offset). Pistemäinen lähde piirtyy sinogrammiin siniaaltona &mdash; tästä nimi. Sinogrammi on hyödyllinen laadunvalvontatyökalu: potilaan liike näkyy sinogrammissa epäjatkuvuutena horisontaalisuunnassa.</p>
+            <p><strong>Fourierin leiketeoreema</strong> (Fourier slice theorem / central slice theorem) on matemaattinen perusta kaikelle tomografiselle rekonstruktiolle: yhden projektion 1D-Fourier-muunnos vastaa kuvan 2D-Fourier-muunnoksen yhtä viivaa, joka kulkee origon kautta projektiokulmaa vastaavassa suunnassa. Tämä periaate tekee rekonstruktion mahdolliseksi sekä analyyttisillä (FBP) että iteratiivisilla menetelmillä.</p>
 
-            <h3>7.2 Iteratiivinen rekonstruktio (OSEM)</h3>
+            <h3>7.2 Suodatettu takaisinprojektio (FBP)</h3>
+            <p>Perinteinen analyyttinen menetelmä: projektiodata takaisinprojisoidaan ja suodatetaan ramppifiltterillä (ramp filter) kuvan terävöittämiseksi. Ramppifiltteri on matemaattisesti välttämätön, koska pelkkä takaisinprojektio tuottaa sumean kuvan (1/r-häntä). Matala laskentateho mutta herkkä kohinalle. Butterworth- tai Hann-suodattimia (apodisaatiosuodattimet) käytetään kohinan hallintaan (cut-off-taajuus ja potenssi).</p>
+
+            <h3>7.3 Iteratiivinen rekonstruktio (OSEM)</h3>
             <p>OSEM (ordered subsets expectation maximization) on nykyisin yleisin rekonstruktiomenetelmä. Se mallintaa kuvantamisprosessin (systeemimatriisi) ja iteratiivisesti lähestyy todellista aktiivisuusjakaumaa:</p>
             <ul>
                 <li><strong>Edut</strong>: Voidaan sisällyttää kollimaattorin vaste, vaimennus, hajasäteily ja kuollut aika suoraan malliin &rarr; tarkempi kvantitaatio</li>
@@ -321,7 +353,7 @@
 
             <div class="theory-image-slot" data-slot="gammakamera-reconstruction" data-tab="gammakamera" data-default-caption="Rekonstruktiomenetelmien vertailu: FBP vs. OSEM — takaisinprojektio, iterointi ja kohinan hallinta samalla datasetillä."></div>
 
-            <h3>7.3 Kuvan prosessointi</h3>
+            <h3>7.4 Kuvan prosessointi</h3>
             <ul>
                 <li><strong>Liikkeen korjaus</strong>: Potilaan liikkeen havaitseminen ja korjaus projektiodatasta tai rekonstruoidusta kuvasta</li>
                 <li><strong>Uudelleenorientointi</strong>: Sydän-SPET:ssä kuvat uudelleenorientoidaan sydämen akselien mukaan (short axis, horizontal long axis, vertical long axis)</li>
@@ -484,7 +516,7 @@
     <!-- ================================================================
          VÄLILEHTI 2: PET-KAMERA
          ================================================================ -->
-    <div class="theory-panel" id="panel-pet" role="tabpanel">
+    <div class="theory-panel" id="panel-pet" role="tabpanel" data-epa-map='{"A1":[1,2],"A2":[2],"A3":[3],"A4":[3],"A5":[5],"A6":[4,6],"A7":[6],"A8":[2],"B1":[8],"B2":[7],"B3":[7],"B4":[4],"B5":[10],"B6":[10],"B7":[9]}'>
         <div class="theory-content">
 
             <!-- EPA-koulutuskortti: PET-kamerateknologia -->
@@ -572,8 +604,32 @@
                 \[ R_{\text{total}} = R_{\text{true}} + R_{\text{scatter}} + R_{\text{random}} \]
                 <p>Signaalinpoistosuhde (NEC, noise-equivalent count rate):</p>
                 \[ NEC = \frac{R_{\text{true}}^2}{R_{\text{total}}} \]
-                <p>NEC-käyrän huippu määrittää optimaalisen aktiivisuuden kuvaushetkellä.</p>
+                <p>NEC-käyrän huippu määrittää optimaalisen aktiivisuuden kuvaushetkellä. NEC on keskeinen kuvanlaadun mittari, koska se huomioi sekä signaalin (true) että kohinan (scatter + random) &mdash; korkeampi NEC tarkoittaa parempaa SNR:ää kuvassa.</p>
             </div>
+
+            <h3>2.4 Positronin kantama ja akollineaarisuus</h3>
+            <p>PET:n spatiaalinen resoluutio rajoittuu kahdesta fysikaalisesta tekijästä, joita ei voi eliminoida:</p>
+            <ul>
+                <li><strong>Positronin kantama</strong>: Positroni kulkee kudoksessa tietyn matkan ennen annihilaatiota. Kantama riippuu positronin energiasta:
+                    <ul>
+                        <li>F-18: E<sub>max</sub> = 0,63 MeV, keskimääräinen kantama kudoksessa ~0,6 mm, FWHM-vaikutus ~1 mm</li>
+                        <li>Ga-68: E<sub>max</sub> = 1,9 MeV, keskimääräinen kantama ~2,9 mm, FWHM-vaikutus ~2,4 mm</li>
+                        <li>O-15: E<sub>max</sub> = 1,73 MeV, keskimääräinen kantama ~2,5 mm, FWHM-vaikutus ~2,2 mm</li>
+                        <li>Rb-82: E<sub>max</sub> = 3,38 MeV, keskimääräinen kantama ~5,9 mm, FWHM-vaikutus ~6 mm</li>
+                    </ul>
+                </li>
+                <li><strong>Akollineaarisuus</strong>: Annihilaatiofotonit eivät lähde täsmälleen 180°-kulmassa, vaan poikkeama on ~&plusmn;0,25°. Tästä aiheutuva paikanepävarmuus &asymp; 0,0044 &times; D, missä D = ilmaisimien etäisyys. Tyypillisessä PET-kamerassa (D ~80 cm) vaikutus on ~1,8 mm FWHM.</li>
+            </ul>
+            <div class="theory-info">
+                <p><strong>Kliininen merkitys:</strong> F-18-merkkiaineet (FDG, PSMA-1007) antavat parhaan mahdollisen resoluution, koska positronin kantama on lyhyt. Ga-68- ja Rb-82-merkkiaineilla resoluutio on fysikaalisesti rajoitetumpi. Tämä vaikuttaa erityisesti pienten leesioiden havaitsemiseen.</p>
+            </div>
+
+            <h3>2.5 Vuorovaikutussyvyys (DOI, Depth of Interaction)</h3>
+            <p>Korkeaenergiaiset 511 keV:n fotonit voivat tunkeutua tuikekiteeseen eri syvyyksille ennen vuorovaikutusta. Ilmaisinrenkaan reunoilla vinojen LOR-linjojen kohdalla vuorovaikutussyvyyden vaihtelu aiheuttaa paikanepävarmuutta (parallaksivirhe), joka heikentää resoluutiota ilmaisinkentän reunoilla.</p>
+            <ul>
+                <li><strong>DOI-ilmaisu</strong>: Kaksikerroskiset (phoswich) ilmaisimet tai jatkuvan DOI:n mittaustekniikat mahdollistavat vuorovaikutussyvyyden korjauksen &rarr; tasaisempi resoluutio koko kuva-alueella.</li>
+                <li><strong>Vaikutus</strong>: Ilman DOI-korjausta volumetrinen resoluutio voi heikentyä 2&ndash;3-kertaisesti FOV:n reunoilla keskustaan verrattuna.</li>
+            </ul>
 
             <h2>3. Kuvausmoodit</h2>
 
@@ -611,6 +667,9 @@
                 <li><strong>UTE/ZTE-sekvenssit</strong>: Lyhyen TE:n sekvenssit luun erottamiseksi</li>
                 <li><strong>Koneoppimispohjaiset menetelmät</strong>: Deep learning generoi pseudo-TT:n MRI:stä</li>
             </ul>
+            <div class="theory-warning">
+                <p><strong>PET/MRI:n erityishaasteet:</strong> (1) Luun ja ilman erottelu on vaikeaa, koska molemmat antavat matalan MRI-signaalin &rarr; luun vaimennuksen aliarviointi johtaa SUV-virheeseen jopa 10&ndash;20 % luurakenteiden läheisyydessä. (2) MRI-kelat ja kiinnityslaitteet aiheuttavat vaimennusta, jota MRAC ei automaattisesti huomioi. (3) Metalliset implantit tuottavat MRI-artefakteja, jotka heijastuvat MRAC:iin. (4) Keuhkojen vaimennusarvon asettaminen kiinteäksi on epätarkka &mdash; keuhkokudoksen tiheys vaihtelee merkittävästi potilaiden välillä.</p>
+            </div>
 
             <h2>5. Oheislaitteet</h2>
             <ul>
@@ -669,6 +728,25 @@
                 <li>Ajoitusresoluutio (TOF-PET)</li>
                 <li>Laskentanopeuden lineaarisuus</li>
             </ul>
+
+            <h3>7.4 PET-kameran herkkyys</h3>
+            <p>PET-kameran herkkyys riippuu useasta geometrisestä ja fysikaalisesta tekijästä:</p>
+            <div class="formula">
+                \[ S \propto \epsilon^2 \cdot \frac{\Omega}{4\pi} \]
+                <p>missä \( \epsilon \) = yksittäisen ilmaisimen ilmaisutehokkuus (riippuu kidemateriaalista ja paksuudesta) ja \( \Omega / 4\pi \) = geometrinen peittävyys (solid angle fraction). Herkkyys on verrannollinen ilmaisutehokkuuden neliöön, koska koinsidenssimittaus vaatii molempien fotonien ilmaisun.</p>
+            </div>
+            <p>Tyypillisiä herkkyyslukemia (NEMA NU 2): 5&ndash;15 cps/kBq (perinteinen PET), 15&ndash;30 cps/kBq (SiPM-pohjainen), &gt; 100 cps/kBq (total-body PET).</p>
+
+            <h3>7.5 Laskentanopeuden ja kuvanlaadun suhde</h3>
+            <p>PET-kuvantamisessa kuvanlaatu ei parane rajattomasti aktiivisuutta lisäämällä. NEC-käyrä kuvaa tätä suhdetta:</p>
+            <ul>
+                <li><strong>Matala aktiivisuus</strong>: NEC kasvaa lähes lineaarisesti aktiivisuuden myötä &rarr; kuvanlaatu paranee</li>
+                <li><strong>NEC-huippu</strong>: Optimaalinen kuvanlaatu. Tämän jälkeen random-koinsidenssin (R<sub>random</sub> &prop; A&sup2;) kasvu hallitsee &rarr; NEC alkaa laskea</li>
+                <li><strong>Yliaktiivisuus</strong>: NEC laskee, kuvanlaatu heikkenee, kuollut aika kasvaa</li>
+            </ul>
+            <div class="theory-info">
+                <p><strong>Käytännön merkitys:</strong> Sairaalafyysikon on tunnettava laitteen NEC-käyrä protokollaoptimoinnissa. Optimaalinen injektoitava aktiivisuus riippuu NEC-huipusta, potilaan koosta ja kuvausajasta. CZT-/SiPM-PET-kameroissa NEC-huippu on korkeammalla kuin perinteisissä PMT-kameroissa.</p>
+            </div>
 
             <h2>8. Artefaktit ja niiden tunnistaminen PET-kuvantamisessa</h2>
 
@@ -791,7 +869,7 @@
     <!-- ================================================================
          VÄLILEHTI 3: RADIOFARMASIA JA ANNOSTELU
          ================================================================ -->
-    <div class="theory-panel" id="panel-radiofarmasia" role="tabpanel">
+    <div class="theory-panel" id="panel-radiofarmasia" role="tabpanel" data-epa-map='{"A1":[1],"A2":[2,3],"A3":[4],"A4":[5],"A5":[6],"A6":[7],"A7":[8],"A8":[9],"A9":[9]}'>
         <div class="theory-content">
 
             <!-- EPA-koulutuskortti: Annostelu- ja radiofarmasiatoiminta -->
@@ -843,13 +921,14 @@
             <ul>
                 <li><strong>Mo-99</strong>: U-235:n fissiotuote &rarr; Mo-99/Tc-99m-generaattorin emäisotooppi. Puoliintumisaika 66 h.</li>
                 <li><strong>I-131</strong>: Tuotetaan Te-130:n neutronisäteilytyksellä. T&frac12; = 8,02 d. Beetaemitteri (&beta;<sup>&minus;</sup>, 606 keV max) + gamma (364 keV).</li>
-                <li><strong>Sm-153, Y-90, Lu-177</strong>: Hoitonuklidit, tuotetaan reaktorissa.</li>
+                <li><strong>Lu-177</strong>: Tuotetaan kahdella menetelmällä: (1) <em>suora aktivointi</em> Lu-176(n,&gamma;)Lu-177 &mdash; yksinkertainen, mutta matala spesifinen aktiivisuus, koska kantaja-Lu-176 on läsnä; (2) <em>epäsuora tuotanto</em> Yb-176(n,&gamma;)Yb-177 &rarr; &beta;<sup>&minus;</sup>-hajoaminen Lu-177 (carrier-free) &mdash; korkea spesifinen aktiivisuus, tärkeä peptidihoitojen tehon optimoimiseksi. T&frac12; = 6,65 d. &beta;<sup>&minus;</sup> (497 keV max) + &gamma; (208 keV, 11 %).</li>
+                <li><strong>Sm-153, Y-90</strong>: Muita hoitonuklideja, tuotetaan reaktorissa.</li>
             </ul>
 
             <h3>2.2 Syklotronituotanto</h3>
             <p>Syklotronissa tuotetaan protoninrikas isotooppeja protonikiihdytyksellä:</p>
             <ul>
-                <li><strong>F-18</strong>: O-18(p,n)F-18 -reaktio. T&frac12; = 109,8 min. PET:n ylivoimaisesti käytetyin. Tuotetaan FDG-synteesiin.</li>
+                <li><strong>F-18</strong>: O-18(p,n)F-18 -reaktio <sup>18</sup>O-rikastetusta vedestä (97 % rikastusaste). T&frac12; = 109,8 min. PET:n ylivoimaisesti käytetyin. Tuotetaan ensisijaisesti [<sup>18</sup>F]FDG-synteesiin ja muihin <sup>18</sup>F-merkkiaineisiin (PSMA-1007, FDOPA, NaF). Suomessa syklotronit mm. HUS:n Meilahden sairaalassa (IBA Cyclone 18/9, 18 MeV protoni / 9 MeV deuteroni) tuottavat F-18:aa päivittäin.</li>
                 <li><strong>C-11</strong>: N-14(p,&alpha;)C-11. T&frac12; = 20,4 min. Lyhyt puoliintumisaika vaatii lähellä olevan syklotronin.</li>
                 <li><strong>N-13</strong>: O-16(p,&alpha;)N-13. T&frac12; = 9,97 min. Ammoniakki sydänperfuusioon.</li>
                 <li><strong>O-15</strong>: N-14(d,n)O-15. T&frac12; = 2,04 min. Vesimolekyyli aivojen verenkiertomittauksiin.</li>
@@ -924,6 +1003,9 @@
                 <li><strong>Ga-68-peptidit</strong>: DOTATOC/DOTATATE/PSMA leimaus generaattorieluaatista. Automatisoitu valmistus (esim. iQS, Modular-Lab). Kesto ~30 min.</li>
                 <li><strong>[<sup>18</sup>F]PSMA-1007</strong>: Nukleofiilinen fluoraus, pidempi puoliintumisaika kuin Ga-68 &rarr; mahdollistaa keskitetyn tuotannon ja jakelun</li>
             </ul>
+            <div class="theory-info">
+                <p><strong>Synteesiaikasääntö:</strong> Radiolääkkeen synteesiajan (säteilytys + synteesi + puhdistus + QC) tulee olla &le; 3 &times; T&frac12;, jotta riittävä aktiivisuus säilyy. Esim. F-18: max ~330 min (tyypillisesti ~60 min riittää). C-11: max ~60 min (erittäin tiukka). Ga-68: max ~200 min (generaattorieluointi + leimaus &lt; 30 min). Lyhytikäisten nuklidien (C-11, N-13, O-15) valmistus edellyttää syklotronin välitöntä läheisyyttä.</p>
+            </div>
 
             <h3>5.3 GMP-vaatimukset (Good Manufacturing Practice)</h3>
             <p>Radiolääkkeiden valmistus edellyttää GMP-ehtojen noudattamista:</p>
@@ -1080,7 +1162,7 @@
     <!-- ================================================================
          VÄLILEHTI 4: GAMMAKUVAUS/SPET-tutkimukset
          ================================================================ -->
-    <div class="theory-panel" id="panel-spet" role="tabpanel">
+    <div class="theory-panel" id="panel-spet" role="tabpanel" data-epa-map='{"A1":[1,2],"A2":[2],"B1":[3],"B2":[4]}'>
         <div class="theory-content">
 
             <!-- EPA-koulutuskortti: Gammakuvaus ja SPET-tutkimukset -->
@@ -1777,7 +1859,7 @@
     <!-- ================================================================
          VÄLILEHTI 5: PET-TUTKIMUKSET
          ================================================================ -->
-    <div class="theory-panel" id="panel-pet-tutkimukset" role="tabpanel">
+    <div class="theory-panel" id="panel-pet-tutkimukset" role="tabpanel" data-epa-map='{"A1":[1,2],"A2":[2],"B1":[3],"B2":[4,5,6,7]}'>
         <div class="theory-content">
 
             <!-- EPA-koulutuskortti: PET-tutkimukset -->
@@ -2269,7 +2351,7 @@
     <!-- ================================================================
          VÄLILEHTI 6: RADIONUKLIDIHOIDOT
          ================================================================ -->
-    <div class="theory-panel" id="panel-radionuklidihoidot" role="tabpanel">
+    <div class="theory-panel" id="panel-radionuklidihoidot" role="tabpanel" data-epa-map='{"A1":[1],"A2":[2],"A3":[3],"A4":[2],"A5":[2],"A6":[3],"B1":[3,10],"B2":[7],"B3":[7],"B4":[11]}'>
         <div class="theory-content">
 
             <!-- EPA-koulutuskortti: Radionuklidihoidot -->
@@ -2462,13 +2544,21 @@
 
             <h3>4.4 Kriittiset elimet ja dosimetria</h3>
             <ul>
-                <li><strong>Munuaiset</strong>: Tärkein kriittinen elin. Kumulatiivinen BED-annos tyypillisesti &lt; 28&ndash;40 Gy. SPET/TT-pohjainen dosimetria suositeltava.</li>
-                <li><strong>Luuydin</strong>: Seuraava rajoite; veriarvojen seuranta jokaisen syklin yhteydessä. Voimakas luuydinlama harvinaista.</li>
+                <li><strong>Munuaiset</strong>: Tärkein kriittinen elin PRRT:ssä. Kumulatiivinen BED-annosrajat:
+                    <ul>
+                        <li>23 Gy: konservatiivinen raja (ilman riskitekijöitä)</li>
+                        <li>27 Gy: raja potilaille, joilla munuaisten riskitekijöitä (diabetes, hypertensio, yksi munuainen)</li>
+                        <li>40 Gy: yläraja, jota ei tulisi ylittää (EANM/IAEA-suositus)</li>
+                    </ul>
+                    SPET/TT-pohjainen dosimetria suositeltava kumulatiivisen annoksen seurantaan. Aminohappoinfuusio (lysiini/arginiini) vähentää munuaisannosta 30&ndash;50 % estämällä Lu-177-DOTATATE:n tubulaarisen takaisinimun.</li>
+                <li><strong>Dosimetriaesimerkki</strong>: Tyypillinen munuaisannos yhdellä PRRT-syklillä (7 400 MBq Lu-177-DOTATATE) on ~3,5&ndash;4 Gy aminohapposuojauksen kanssa. Neljän syklin jälkeen kumulatiivinen annos ~14&ndash;16 Gy, joka jää selvästi alle 23 Gy:n rajan. Ilman aminohapposuojausta munuaisannos olisi ~6&ndash;8 Gy/sykli.</li>
+                <li><strong>Luuydin</strong>: Seuraava rajoite; luuydinannos tyypillisesti &lt; 2 Gy kumulatiivisesti. Veriarvojen seuranta jokaisen syklin yhteydessä. Voimakas luuydinlama harvinaista (&lt; 5 %).</li>
+                <li><strong>Kuvantaminen hoidon aikana</strong>: Lu-177:n 208 keV:n gammafotoni mahdollistaa kuvantamisen hoidon aikana MELP-kollimaattorilla (medium-energy low-penetration), joka on optimoitu Lu-177:n energialle. MEGP-kollimaattori on vaihtoehto, mutta MELP antaa paremman kuvanlaadun vähentyneen septapenetraation ansiosta.</li>
                 <li><strong>Säteilysuojelu</strong>: Potilas erittää aktiivisuutta virtsaan ensimmäiset 24&nbsp;h. Eristyshuone tarvittaessa.</li>
             </ul>
 
             <h2>5. PSMA-radionuklidihoito (PRLT)</h2>
-            <p><sup>177</sup>Lu-PSMA-617 (Pluvicto®) kohdentuu transmembraaniproteiiniin PSMA (prostate-specific membrane antigen), jota ilmentyy noin 98&nbsp;%:ssa eturauhassyöpäsoluista. Pienmolekyyliset PSMA-inhibiittorit kulkeutuvat solun sisälle (internalisaatio), jolloin säteilyannos kohdistuu tumaansa.</p>
+            <p><sup>177</sup>Lu-PSMA-617 (Pluvicto®) kohdentuu transmembraaniproteiiniin PSMA (prostate-specific membrane antigen, viralliselta nimeltään GCPII = glutamaattikarboksipeptidaasi II). PSMA/GCPII on tyypin II transmembraaniproteiini, jota ilmentyy noin 98&nbsp;%:ssa eturauhassyöpäsoluista, ja sen ilmentyminen kasvaa kasvaimen aggressiivisuuden myötä. Pienmolekyyliset PSMA-inhibiittorit kulkeutuvat solun sisälle (internalisaatio), jolloin säteilyannos kohdistuu tumaansa.</p>
 
             <h3>5.1 Hoitoprotokolla ja potilasvalinta</h3>
             <ul>
@@ -2719,7 +2809,7 @@
     <!-- ================================================================
          VÄLILEHTI 7: SÄTEILYBIOLOGIA JA -SUOJELU
          ================================================================ -->
-    <div class="theory-panel" id="panel-sateilybiologia" role="tabpanel">
+    <div class="theory-panel" id="panel-sateilybiologia" role="tabpanel" data-epa-map='{"A1":[3],"A2":[2],"A3":[2],"A4":[4],"A5":[5],"A6":[6],"A7":[8,9],"B1":[9],"B2":[6],"B3":[6],"B4":[2,3],"B5":[4],"B6":[7],"B7":[8],"B8":[10],"B9":[11],"B10":[3]}'>
         <div class="theory-content">
 
             <!-- EPA-koulutuskortti: Säteilybiologia ja säteilysuojelu isotooppitoiminnassa -->
@@ -2857,7 +2947,14 @@
                 <li><strong>Henkilökunnan altistuksen arviointi</strong>: Jos henkilöihin kohdistuu kontaminaatio, arvioidaan ulkoinen ja mahdollinen sisäinen altistus</li>
             </ol>
 
-            <h3>4.3 Akuutti kontaminaatiotilanne</h3>
+            <h3>4.3 Käytännön kontaminaatioesimerkkejä</h3>
+            <ul>
+                <li><strong>Esimerkki 1 &mdash; Tc-99m-eluaatin kaatuminen</strong>: Tc-99m-generaattorista eluoitu perteknetaattiliuos (15 GBq / 15 ml) kaatuu laminaarikaappiin. Toimenpiteet: sulje kaappi, mittaa annosnopeus ulkopuolelta, odota 3&ndash;4 puoliintumisaikaa (18&ndash;24 h) ennen siivousta. Kontaminaatioannos iholla tyypillisesti merkityksetön (Tc-99m:n matalaenerginen gamma). Dokumentoi.</li>
+                <li><strong>Esimerkki 2 &mdash; I-131-potilaan oksennus</strong>: I-131-hoitopotilas (3,7 GBq) oksentaa lattialle eristyshuoneessa 2 h hoidon jälkeen. Suuri osa aktiivisuudesta on jo imeytynyt, mutta oksennuksessa voi olla satoja MBq:eitä. Sulje huoneen ilmanvaihto (I-131 haihtuu), puhdista imukykyisellä materiaalilla, käytä N95-hengityssuojainta. I-131 vaatii erityistä huomiota haihtuvuutensa vuoksi.</li>
+                <li><strong>Esimerkki 3 &mdash; F-18-FDG-ruiskun rikkoutuminen</strong>: Automaattisesta injektorista irronnut letku roiskii FDG-liuosta lattialle (200 MBq). 511 keV:n fotonit vaativat merkittävän etäisyyden &mdash; henkilökunta poistuu alueelta. F-18:n lyhyt puoliintumisaika (110 min) helpottaa tilannetta: 10 puoliintumisaikaa = ~18 h, jonka jälkeen aktiivisuus on käytännössä hajonnut.</li>
+            </ul>
+
+            <h3>4.4 Akuutti kontaminaatiotilanne</h3>
             <p>Sairaalafyysikko johtaa akuutin kontaminaatiotilanteen teknistä selvitystyötä:</p>
             <ul>
                 <li>Radioaktiivisen aineen identifiointi (nuklidi, aktiivisuus)</li>
@@ -2943,6 +3040,32 @@
                 <li><strong>Kontaminaatiomittaukset</strong>: Pyyhintänäytteet säännöllisesti työskentelypinnoilta. Suorat mittaukset käsi/jalka-monitorilla. Kynnysarvo: &lt; 4 kBq/100 cm&sup2; (beta/gamma), &lt; 0,4 kBq/100 cm&sup2; (alfa).</li>
                 <li><strong>Ilma-aktiivisuusmittaukset</strong>: Erityisesti I-131-hoitohuoneissa ja radiolääkkeen valmistustiloissa. Ilmanäytteenottimet tai suorat mittaukset.</li>
             </ul>
+
+            <h4>9.2.1 Mittalaitteet isotooppitoiminnassa</h4>
+            <table>
+                <thead>
+                    <tr><th>Mittalaite</th><th>Ilmaisintyyppi</th><th>K&auml;ytt&ouml;tarkoitus</th><th>Esimerkkej&auml;</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Annosnopeusmittari</td><td>Ionisaatiokammio tai GM-putki</td><td>Ympäristön ja potilaan annosnopeus</td><td>Berthold LB 124 (SCINTI-2), RadEye PRD-ER</td></tr>
+                    <tr><td>Kontaminaatiomittari</td><td>GM-putki (laaja ikkuna) tai tuikeilmaisin</td><td>Pinta- ja ihokontaminaation mittaus</td><td>Berthold LB 124 (proportionaalilaskuri), CoMo 170</td></tr>
+                    <tr><td>Annosnopeus/kontaminaatio (monitoimittari)</td><td>Vaihdettavat ilmaisimet</td><td>Universaalimittari eri ilmaisinvaihtoehdoilla</td><td>RDS-80, Automess 6150 AD</td></tr>
+                    <tr><td>Sormidosimetri</td><td>TLD tai OSL</td><td>Henkilökunnan sormidosin mittaus</td><td>Landauer Luxel/InLight, RPL-dosimetri</td></tr>
+                    <tr><td>Kokovartalo-/k&auml;si-jalkamonitori</td><td>Tuikeilmaisin tai proportionaalilaskuri</td><td>Henkilökunnan kontaminaatiotarkistus</td><td>Thermo PCM-100B</td></tr>
+                    <tr><td>Gammasektrometri</td><td>HPGe tai NaI(Tl)</td><td>Nuklidi-identifiointi, nuklidipuhtauden mittaus</td><td>HPGe-kannakoiva, NaI-kaivomittari</td></tr>
+                </tbody>
+            </table>
+
+            <h4>9.2.2 Ihokontaminaation annoslaskuesimerkki</h4>
+            <p>Kontaminaatioannoksen laskentaesimerkki, kun Tc-99m-kontaminaatio havaitaan iholla:</p>
+            <div class="formula">
+                <p>Oletus: pinta-aktiivisuus 600 Bq/cm&sup2; (havainto pyyhintänäytteestä), kontaminaatioaika 2 h, kontaminoitunut pinta-ala 10 cm&sup2;.</p>
+                <p>Ihon ekvivalenttiannos:</p>
+                \[ H_{\text{iho}} = A_s \cdot t \cdot DCF_{\text{iho}} \]
+                <p>missä \( A_s \) = 600 Bq/cm&sup2;, \( t \) = 7 200 s, DCF<sub>iho</sub> (Tc-99m) &asymp; 1,1 &times; 10<sup>&minus;11</sup> Sv&middot;cm&sup2;/(Bq&middot;s).</p>
+                \[ H_{\text{iho}} = 600 \times 7200 \times 1{,}1 \times 10^{-11} \approx 0{,}048 \text{ mSv} \approx 0{,}05 \text{ mSv} \]
+                <p>Tämä on merkityksetön annos (vrt. vuotuinen raja 500 mSv iholle), mutta kontaminaatio on silti puhdistettava ALARA-periaatteen mukaisesti.</p>
+            </div>
 
             <h3>9.3 Mittausten epävarmuusarviot</h3>
             <p>Sairaalafyysikon on arvioitava ja dokumentoitava säteilysuojelumittausten epävarmuudet GUM (Guide to the Expression of Uncertainty in Measurement) -periaattein:</p>
@@ -3051,10 +3174,366 @@
         </div>
     </div>
 
+    <!-- ================================================================
+         VÄLILEHTI 8: ANALYSOINTIOHJEET
+         ================================================================ -->
+    <div class="theory-panel" id="panel-analysointiohjeet" role="tabpanel">
+        <div class="theory-content">
+
+            <h2><i class="fas fa-microscope" style="color: var(--color-primary); margin-right: 8px;"></i> Isotooppitutkimusten analysointiohjeet</h2>
+            <p>Fyysikoiden tutkimuskohtaiset analysointiohjeet gammakuvausten, SPET/TT- ja PET/TT-tutkimusten jälkikäsittelyyn ja analyysiin. Ohjeet perustuvat OYS:n isotooppiyksikön käytäntöihin (Hermes-työasema, Siemens Symbia / Intevo Bold / ProSpecta -kamerat).</p>
+
+            <!-- ---- NEUROLOGIA ---- -->
+            <h3><i class="fas fa-brain" style="color: var(--color-violet); margin-right: 6px;"></i> Neurologia: DaTSCAN (AA5EN)</h3>
+            <p>Aivojen dopamiinin kuljettajaproteiinien gammakuvaus I-123-β-FP-CIT:llä (DaTSCAN). Tyvitumakkeiden (striatum) radiolääkekertymä kuvastaa dopamiinin takaisinottoa presynaptisiin hermopäätteisiin. Parkinsonin taudissa kertymä on pienentynyt, tyypillisesti voimakkaammin putamenissa kuin nucleus caudatuksessa.</p>
+            <h4>Rekonstruktio (Hybrid Recon)</h4>
+            <ul>
+                <li>Avaa projektiokuvat (Intevo: AIVOTOMO, ProSpecta: Tomoprojektiot) Hybrid Recon -ohjelmalla. Valitse isotooppi I-123.</li>
+                <li><strong>Recon-välilehti:</strong> Rajaa rekonstruoitava alue oransseilla viivoilla — jätä ilmaa pään yläpuolelle, rajaa sylkirauhaset pois alareunasta. <em>Perform reconstructions.</em></li>
+                <li><strong>Vaimennuskorjaus:</strong> Tarkista ellipsin istuvuus leike kerrallaan. Outline threshold oletuksena 30 %. ProSpectalla Zoom = 150 %. Huonolla sovituksella vaihda Trace-tilaan.</li>
+                <li><strong>Align-välilehti:</strong> Suorista pää tarvittaessa kolmessa suunnassa. Älä muuta Zoomia.</li>
+                <li><strong>Results:</strong> Tallenna kuvasarja (Save → OK). AC-, RR- ja Scatter-korjaukset ovat kamerakohtaiset (Turun kalibrointimittaukset).</li>
+                <li><strong>Ilmaisimien etäisyys:</strong> View Header → (0018,1142) Radial position. Pyritään alle 15 cm.</li>
+            </ul>
+            <h4>Kvantitointi (BRASS DAT Scan OYS 7)</h4>
+            <ul>
+                <li>Avaa RECON TOMO (RR_ACSC_AivoTomo) BRASS DAT Scan OYS 7 -ohjelmalla. Analyysi käynnistyy automaattisesti (~1 min) ja sovittaa iän mukaiseen templateen.</li>
+                <li>Tarkista striatumien osuminen sovitusrajauksen sisälle. Vertaa viiteaineistoon (keskimmäinen kuva).</li>
+                <li><strong>Datscan Leikkeet -näkymä:</strong> Isocontour pois tarvittaessa, Thickness = 1. Tarkista reseptorien näkyminen kokonaan. Säädä Zoom (Z) ja Layout (oletus 5×3).</li>
+                <li><strong>Printit ja nimeäminen:</strong> Brass study 1 region Map = "Datscan taulukko", Z-Score Plot = "Datscan Z-Score", Leikkeet (Inverse linear) = "Datscan Leikkeet", Leikkeet (Finn Table) = "Datscan Leikkeet väri". Export to DICOM.</li>
+            </ul>
+            <h4>Tulkinta</h4>
+            <ul>
+                <li><strong>SBR-suhde</strong> = (VOI<sub>CAU tai PUT</sub> − VOI<sub>OCC</sub>) / VOI<sub>OCC</sub></li>
+                <li>Z-Score &lt; −2,0 → poikkeava, Z-Score &lt; −3,0 → huomattava poikkeama (punaiseksi)</li>
+                <li>Esimerkkilausunto: "Poikkeava löydös, joka sopii Parkinsonin tautiin / Parkinson plus -oireyhtymään."</li>
+            </ul>
+
+            <!-- ---- SYDÄN ---- -->
+            <h3><i class="fas fa-heartbeat" style="color: var(--color-red); margin-right: 6px;"></i> Sydäntutkimukset</h3>
+
+            <h4>Sydänlihasperfuusion gammakuvaus — rasitus ja lepo (FM3CN)</h4>
+            <p>Tc-99m-Tetrofosmin/MIBI kertyvät sydänlihassoluihin injektiohetkellä vallinneen alueellisen verenkierron mukaisesti. Rasituskuvaus paljastaa iskeemiset alueet, lepokuvaus erottaa infarktiarvet.</p>
+            <ul>
+                <li><strong>Rekonstruktio (Hybrid Recon Cardiac):</strong> Avaa Rest, Rest-gated ja AC Rest. Protokollat: nongated_rest, nac_rest, gated_rest. Rajaa sydän ympyrään koronaali-/sagittaalisuunnissa — suoliston aktiivisuus pois.</li>
+                <li><strong>Align:</strong> Käännä sydän apuviivoja vasten, rajaa ulkopuolinen aktiivisuus. Scrollaa leikkeet läpi kolmessa suunnassa.</li>
+                <li><strong>SPET-TT kohdistus:</strong> Alpha-palkilla sekoituskuva. Outline piirtää sydänlihaksen ääriviivan. Manuaalisiirto tarvittaessa (x/y/z-shift).</li>
+                <li><strong>Cardiac Splash -tulosteet:</strong> Rst AC ja Rst NAC. Thickness 2, väritaulu Cardiac 2 ja Heart 10. Sydämen kärki sarjan oikeaan reunaan.</li>
+                <li><strong>QPS-tulosteet:</strong> Polar- ja Slices-palkit → väritaulu Cool, Grid = Segments → Print "Bullseye_segments". Toinen print: Hermesheart10, Grid = Vessels → "Bullseye_vessels".</li>
+                <li><strong>QGS-pumppausfunktio:</strong> LEPO_NC_GATED, väritaulu Gray/Cool, Grid = Segments → "Pumppausfunktio".</li>
+            </ul>
+
+            <h4>Sydämen sarkoidoosin PET ja lepoperfuusio (FM1JR)</h4>
+            <p>FDG-PET-TT osoittaa sarkoidoosin sydänlihaksessa ylimääräisenä glukoosiaineenvaihduntana. Tc-99m-Tetrofosmin perfuusiokuvaus erottaa arpikudoksen: aktiivisessa pesäkkeessä kohonnut metabolia + alentunut perfuusio (mismatch).</p>
+            <ul>
+                <li>Sama rekonstruktioprotokollia kuin FM3CN. Tiedostonimet: Lepo_NC_gated, Lepo_AC, Lepo_NC_trans, Lepo_AC_trans, Lepo_NC.</li>
+                <li>PET-SPET-kohdistus ja fuusiokuvat QPS/QGS-ohjelmalla.</li>
+                <li>Jos FDG-PET on negatiivinen, Tc-99m-kuvausta ei tarvitse tehdä.</li>
+            </ul>
+
+            <h4>Sydämen amyloidoosi — Tc-99m-HDP ROI-analyysi</h4>
+            <p>3 h kuvaus Tc-99m-HDP:llä. ROI-analyysi: sydämen ja kontralateraalisen alueen kertymäsuhde (H/CL ratio). Perugini-luokitus: Grade 0 (ei kertymää) – Grade 3 (voimakas, luustomerkki häviää).</p>
+
+            <h4>Sydämen oikovirtauksen gammakuvaus (FM2FN)</h4>
+            <p>Ensikierron (first-pass) gammakuvaus oikovirtauksen (shuntin) arvioimiseksi.</p>
+            <ul>
+                <li><strong>Qp/Qs-suhde:</strong> Keuhko- ja systeemivirtauksen suhde. Normaali ~1,05. Shuntin kynnysarvo 1,2.</li>
+                <li>Analyysialueet: keuhkot (perfuusio) ja vasemman kammion verenpooliaktiivisuus.</li>
+            </ul>
+
+            <!-- ---- KEUHKOT ---- -->
+            <h3><i class="fas fa-lungs" style="color: var(--color-primary); margin-right: 6px;"></i> Keuhkotutkimukset</h3>
+
+            <h4>Keuhkojen alueellisen toiminnan gammakuvaus — SPECT/TT (GD2FN)</h4>
+            <p>Preoperatiivinen keuhkoresektiosuunnittelu. Lohkojen perfuusio-osuudet SPECT/TT-kuvauksesta 9-vaiheisella segmentointiprosessilla.</p>
+            <ul>
+                <li>TT-pohjainen anatominen segmentointi → SPECT-aktiivisuuden laskenta lohkoittain</li>
+                <li>Vaimennuskorjaus TT-kuvasta, keuhko-/mediastinumsegmentointi</li>
+            </ul>
+
+            <h4>Keuhkojen alueellisen toiminnan gammakuvaus — planaarianalyysi (GD2FN)</h4>
+            <p>Vaihtoehtona SPECT/TT:lle, kun tomografiakuvaus ei ole mahdollinen.</p>
+            <ul>
+                <li>Geometrisen keskiarvon (GM) menetelmä: ANT × POST -projektioiden yhdistäminen</li>
+                <li>Excel-laskenta lohkokohtaisille perfuusio-osuuksille</li>
+            </ul>
+
+            <!-- ---- MUNUAISET ---- -->
+            <h3><i class="fas fa-kidneys" style="color: var(--color-orange); margin-right: 6px;"></i> Munuaiset ja virtsatiet</h3>
+
+            <h4>Munuaistoiminnan gammakuvaus (KA1FN)</h4>
+            <p>Tc-99m-MAG3 (tubulaarinen eritys) tai Tc-99m-DTPA (glomerulaarinen filtraatio). Normaalisti kuorikerroksen kertymämaksimi ~5 min, munuaisaltaiden maksimi ~10 min injektiosta. Furosemiditehosteen avulla erotellaan obstruktiivinen staasineste.</p>
+            <ul>
+                <li><strong>NM Processing → Renogram AutoROIs:</strong> Syötä pituus, paino, diureetin antohetki. Piirrä ROI:t (Blood: Freehand keltainen &lt;1 min; Kid dx: Seed vihreä, Kid sin: Seed punainen 1–3 min).</li>
+                <li><strong>Tarkistukset:</strong> Tausta-ROI:t eivät saa olla maksan, pernan tai munuaisjohtimien aktiivisuuden päällä. Vetopalikalla tarkista altaan näkyminen ja rajaa se mukaan.</li>
+                <li><strong>Tulosten kirjaaminen:</strong> OYS Results -näkymä. Annotaatiot: POST, SIN, DEX. Quick Print → "Munuaistoiminnan gammakuvaus".</li>
+                <li><strong>Liikekorjaus:</strong> Oikea hiiren painike → Motion correction. Rajaa munuaisen alue → Compute. Tallenna MOCO-kuvasarja.</li>
+            </ul>
+
+            <h4>Munuaisten kuorikerroksen gammakuvaus (DMSA)</h4>
+            <p>Tc-99m-DMSA-SPET/TT. Suhteellinen kertymä oikea vs. vasen munuainen, arpimuutosten ja displasian arviointi. Käytännössä useimmiten lapsipotilailla.</p>
+
+            <h4>Virtsan refluksin gammakuvaus (KB1FN)</h4>
+            <p>Dynaaminen kuvaus virtsarakon täytön ja tyhjennyksen aikana. Refluksin luokittelu: G2 (ureter), G3 (pyelon), G4 (pyelon+dilatoitu). ROI-analyysi munuaisten ja rakon alueelta.</p>
+
+            <h4>GFR-tulosteen tallennus ja siirto RIS:iin</h4>
+            <p>GFR-laskennan Excel-tulosteen tallennus PDF-muodossa ja siirto kuva-arkistoon NeaLink-ohjelman kautta. Polku: Y:\...\GFR\GFR-tallenteet. Nimeä tutkimuksen nimeksi "Glomerulusten suodatusnopeuden mittaus".</p>
+
+            <!-- ---- RUOANSULATUSKANAVA ---- -->
+            <h3><i class="fas fa-stomach" style="color: var(--color-success); margin-right: 6px;"></i> Ruoansulatuskanava</h3>
+
+            <h4>Mahalaukun toiminnan gammakuvaus (JD1FN)</h4>
+            <p>Mahalaukun tyhjenemisnopeuden arviointi kiinteään ruokaan sekoitetulla 25 MBq Tc-99m-DTPA:lla. 30 min dynaaminen sarja + staattiset kuvat 30, 60 ja 180 min. Viiteaineisto: J Nucl Med Technol 2008;36:44–54.</p>
+            <ul>
+                <li><strong>NM Processing → Gastrointestinal / Gastric Emptying Tc v2:</strong> Tarkista liike dynaamisissa kuvissa, tee liikekorjaus tarvittaessa.</li>
+                <li>Piirrä ROI:t: mahalaukku, tausta, kobolttinappeihin. Skaalaa kuvat — ROI:t kohdillaan myöhemmissä kuvissa.</li>
+                <li><strong>Viitearvot:</strong> Taulukon oikeassa reunassa 30 min ja 1 h arvot + ylä-/alarajakäyrät vihreällä. Aikapisteiden tarkkuus kriittinen vertailun onnistumiselle.</li>
+            </ul>
+
+            <h4>Kaksoisotooppimahafunktio (Symbia, Tc-99m + In-111)</h4>
+            <p>Nestemäisen (Tc-99m) ja kiinteän (In-111) faasin samanaikainen kuvaus. Viitearvot: nestemäinen T½ = 10–45 min, kiinteä T½ = 60–105 min. Lag-korjaus ja sovitus kuvaajiin.</p>
+
+            <h4>Ohutsuolen gammakuvaus</h4>
+            <p>Ohutsuolen transitioajan arviointi. Staattiset kuvat 0–24 h. Terminaalisen ileumin ja paksusuolen aktiivisuusosuuden laskenta 6 h kuvasta geometrisellä keskiarvolla (ANT × POST). Tulosteen nimi: "Aktiivisuus terminal ileum + colon".</p>
+
+            <h4>Sappiteiden gammakuvaus (JK3AN)</h4>
+            <p>Tc-99m-Mebrofenin: maksan hepatosyytit poistavat radiolääkkeen verenkierrosta ja erittävät sappiteihin. Indikaatiot: akuutin kolekystiitin diagnostiikka, sappivuoto, sappitieatresia.</p>
+            <ul>
+                <li>Dynaaminen kuvaus 30 min (30 s/kuva). Myöhäiskuvat 1 h, 4–6 h, tarvittaessa 24 h. Lapsilla zoom 1–2.</li>
+                <li><strong>Analyysi:</strong> Macros → Sappiteiden GK. Piirrä ROI:t (virtsarakko pois suoliston ROI:sta). Dynaaminen aktiivisuus-aikakäyrä + summatut kuvat (Add frames 6). Quick Print.</li>
+                <li>Suoliston aktiivisuuden prosenttiosuus lasketaan vain lääkärin pyynnöstä.</li>
+            </ul>
+
+            <h4>Sappihappojen imeytymistutkimus — SeHCAT (JK3MN)</h4>
+            <p>Se-75-merkitty taurokolihappo (SeHCAT). 7 vuorokauden retentiomittaus suun kautta annetun kapselin jälkeen. Normaali retentio &gt;19 %. Sappihapporipulin diagnostiikka.</p>
+
+            <!-- ---- LUUSTO ---- -->
+            <h3><i class="fas fa-bone" style="color: var(--text-secondary); margin-right: 6px;"></i> Luusto</h3>
+
+            <h4>Luuston SPECT/TT SUV-kalibroidut rekonstruktiot</h4>
+            <p>Kokokehon SPECT/TT:n SUV-kalibroidut tomo-rekonstruktiot. Injektiohetken aktiivisuus lasketaan IBC-NM-ohjelman annosteluhetken aktiivisuudesta puoliintumislaskulla.</p>
+            <ul>
+                <li><strong>ProSpecta (SYMBIAX3):</strong> Valitse TOMO + CT. Ohjelma tarjoaa automaattisesti oikean recon-ohjelman (konvertoi 128 → 256 matriisi). Tarkista SPET/TT-kohdistus (Manual X/Y/Z-shift). ReProj → synteettiset planaarit. Results: syötä Activity (injektiohetki) ja Activity meas. time (injektioaika RIS:stä). Matriisikoko 128×128 = 4,78 mm pikselikoko.</li>
+                <li><strong>Intevo:</strong> Valitse TOMO (Ala + Keski + Ylä). Tomo-projektiodata jo valmiiksi 256-matriisissa. Muuten sama prosessi kuin ProSpecta. Matriisikoko 256×256 = 2,39 mm pikselikoko.</li>
+                <li>Offsetit on määritetty pallofantomilla.</li>
+            </ul>
+
+            <!-- ---- IMUSOLMUKKEET JA KILPIRAUHANEN ---- -->
+            <h3><i class="fas fa-satellite-dish" style="color: var(--color-violet); margin-right: 6px;"></i> Imusolmukkeet ja kilpirauhanen</h3>
+
+            <h4>Imuteiden gammakuvaus — Transport Index (PJ1AN)</h4>
+            <p>Tc-99m-nanocolloidin kuvaus ylä- tai alaraajojen imuteistä. Dynaamiset kuvat + staattinen kokokehokuvaus 1 h ja 3 h. Transport Index (TI) kuvaa imunestekierron tilaa molemmille puolille.</p>
+            <ul>
+                <li><strong>Esikäsittely:</strong> Skannatut kuvat käännetään 180° Sync-työkalulla (pistokohdat alareunaan). Tarkista ANT/POST-puolien järjestys (Co-57-lähde oikealla).</li>
+                <li><strong>LTI_TAYS_macro:</strong> Dynaamiset + COREG-kuvat. Etsi frame, jossa imusolmuke tulee näkyviin. Add Frames summaus. Ikkunoi imusolmukkeet näkyviin, Zoomaa, annotoi Co-57.</li>
+                <li><strong>TI-pisteytys</strong> (kaava: TI = K + D + 0,04 × T + N + V):
+                    <ul>
+                        <li><strong>K (Kinetics):</strong> 0 = &lt;15 min, 1–3 = asteittain hidastunut, 5 = vasta 3 h kuvassa, 9 = ei näy</li>
+                        <li><strong>D (Distribution):</strong> 0 = normaali, 3 = osittain diffuusi, 5 = täysin diffuusi, 9 = ei mitään</li>
+                        <li><strong>T (Time):</strong> Aika minuutteina. Jos vasta 3 h → 120 min, ei näy → 225 min</li>
+                        <li><strong>N (Node):</strong> 0 = selvästi, 3 = heikosti, 5 = hädin tuskin, 7 = vasta 3 h, 9 = ei näy</li>
+                        <li><strong>V (Vessel):</strong> Sama asteikko kuin N</li>
+                    </ul>
+                </li>
+                <li><strong>Viitearvot:</strong> TI &lt; 10 normaali. Selvä puoliero on poikkeava.</li>
+            </ul>
+
+            <h4>Kilpirauhasen gammakuvaus — kertymän mittaus (BA1AN / BA1MN)</h4>
+            <p>I-123-uptake-% -laskenta. ROI-analyysi kilpirauhasen ja standardifantomin aktiivisuudesta.</p>
+
+            <h4>Lisäkilpirauhasen gammakuvaus — PINHOLE ja SPET-erotuskuvat (BB1BQ)</h4>
+            <p>Kaksoisvaiheprotokolla: I-123 (kilpirauhaskuvaus) + Tc-99m-MIBI (lisäkilpirauhaskertymä). Subtraktiokuva (MIBI − jodi) paljastaa lisäkilpirauhasadenoomat. SPET-rekonstruktio ja 3D-subtraktio.</p>
+
+            <!-- ---- PET-TT JA TYÖASEMA ---- -->
+            <h3><i class="fas fa-desktop" style="color: var(--color-primary); margin-right: 6px;"></i> PET-TT ja työasemaohjeita</h3>
+
+            <h4>PET-TT MIP- ja fuusiokuvien tekeminen (HERMES)</h4>
+            <p>PET-TT-tulosteita iRAD-lähettämistä varten, kun isotooppilääkäri ei ole paikalla.</p>
+            <ul>
+                <li>Valitse PT + CT → OYS PET -ohjelma. MIP-projektiot: punainen nappi (save multi-frame) → tallenna 1–32 kuvaa.</li>
+                <li><strong>Fuusiokoronaalit:</strong> CS-Full-välilehti, etsi etusuunnan ensimmäinen ja takasuunnan viimeinen leike. Tallenna leikkeet nimellä "FUUSIOKORONAALIT".</li>
+                <li><strong>Fuusioaksiaalit:</strong> TCS-välilehti, pehmytkudosikkuna (F2), luustoikkuna (F10), keuhkoikkuna (F6). Tallenna kaikki leikkeet paitsi keuhkoikkunalla vain keuhkoalueen leikkeet.</li>
+                <li>Kuvat siirtyvät automaattisesti PACSiin. Osastosihteeri lähettää iRADille.</li>
+            </ul>
+
+            <h4>Siemens Intevo Bold — SPECT-rekonstruktionimien ohje</h4>
+            <p>Automaattisesti laitteelta tulevien rekonstruktiotiedostojen nimeämiskäytännöt. Etuliite kuvatun elimen mukaan (Luusto, Polvet, Kilpirauhanen…).</p>
+            <ul>
+                <li><strong>iMAR:</strong> Metallartefaktien poistoalgoritmi. Aktivoidaan potilaskohtaisesti, jos metallia kuvausalueella. Ilman iMAR:ia uudet CT-reconit pyynnöstä.</li>
+                <li><strong>eFOV:</strong> Laajennettu aksiaalinen kuvausalue (700 mm). Isokokoiset potilaat tai kädet alhaalla → parempi vaimennuskorjaus.</li>
+                <li><strong>xSPECT Bone:</strong> CT-pohjaisen segmentoinnin avulla parannetut SPECT-kuvat. Gradienttilaskentaan perustuva Advanced-tiedosto. Vain luuston SPECT/TT:ssä.</li>
+            </ul>
+
+            <!-- ---- SIR-HOITOSUUNNITTELU ---- -->
+            <h3><i class="fas fa-procedures" style="color: var(--color-orange); margin-right: 6px;"></i> SIR-hoidon suunnittelu (Y-90 SIRT)</h3>
+            <p>Y-90-SIR-Spheres-mikropallosia injisoidaan maksatuumoreihin katetrilla maksavaltimon kautta. Mikropallosten halkaisija 20–60 µm. Y-90: korkeaenerginen beetasäteilijä, maksimikantama 11 mm, keskimääräinen 2,5 mm pehmytkudoksessa.</p>
+
+            <h4>Esitutkimus (Tc-99m-MAA)</h4>
+            <ul>
+                <li>~2 viikkoa ennen hoitoa. Annos ~150 MBq MAA angiografiassa steriilisti. Kuvaus aloitettava &lt;60 min injektiosta (vapaa Tc alkaa näkyä taustana).</li>
+                <li>Kokokehon planaari (silmäkulmat – reidet) + SPECT/TT keuhkojen ja maksan alueelta.</li>
+            </ul>
+
+            <h4>Keuhko-shunttisuhteen laskenta</h4>
+            <ul>
+                <li><strong>3D (Affinity viewer 5 SIRT):</strong> Organ segmentation → Liver, Left Lung, Right Lung → Merge keuhkot. Total counts from = Total FOV. Tulos: 3D lung shunt (%).</li>
+                <li><strong>2D (Lung Liver Shunt -makro):</strong> NM Processing → Hepatobiliary. Piirrä keuhkot, maksa, tausta. Ohjelma peilaa ROI:t ja laskee taustavähennyksellä. Annotoi 3D-arvo kuvaan.</li>
+                <li><strong>Raja-arvot:</strong> &gt;20 % → hoitoa ei tehdä. 10–20 % → annosta vähennetään.</li>
+            </ul>
+
+            <h4>Annoslaskenta (Affinity Viewer 5 SIRT)</h4>
+            <ul>
+                <li>SPECT + TT → rekisteröinti (isotooppisarja fixed). Segmentoitavat: koko maksa, hoitokohde (lohko/segmentit/tuumorit), keuhkot.</li>
+                <li>Annos määräytyy aktiivisuuden (GBq) ja tilavuuden mukaan. Useissa injektioissa: aktiivisuus jakautuu tilavuuden mukaan (LSF% vähennetty).</li>
+                <li><strong>Annossuositukset (EANM):</strong>
+                    <ul>
+                        <li>Säteilysegmentektomia: ≥190 Gy, mielellään 250–300 Gy kohdesegmenteille</li>
+                        <li>Lobektomia: &lt;75 Gy terveeseen maksaan, 200 Gy tuumoriin. Yhden kompartmentin laskenta: 120 Gy (80–150) perfuusioalueelle</li>
+                        <li>Palliatiivinen: &lt;75 Gy terve maksa. HCC makrovaskulaari-invaasiolla: &gt;205 Gy tuumoriin</li>
+                    </ul>
+                </li>
+                <li>Annoksen pienennysharkinta (−30 %): alentunut maksan toiminta, tuumori &lt;10 % maksasta, maksakirroosi, maksan tilavuus &lt;1200 ml.</li>
+            </ul>
+
+            <h4>Maksan segmentointi (tilavuus, HERMES ROI)</h4>
+            <ul>
+                <li>TT-/MRI-kuvat MPR-näkymässä. Tools → ROI/VOI → Total. Piirrä ROI:t joka toiseen leikkeeseen → "Insert ROIs Between" → tarkista ja editoi → "Create VOI from ROIs". Tilavuus Volume cm³ sarakkeessa.</li>
+                <li>Segmentoitavat: koko maksa, oikea lohko (vena hepatican suuntaisesti, Couinaudin mukaan), vasen lohko (laskennallisesti), tuumoritilavuudet lohkoittain.</li>
+                <li>Excel-annossuunnittelutaulukko. Tilaus CardiRad/SIRTex: tiistaina edeltävällä viikolla.</li>
+            </ul>
+
+        </div>
+    </div>
+
+    <!-- ================================================================
+         VÄLILEHTI 9: ISOTOOPPIHOITOJEN OHJEET
+         ================================================================ -->
+    <div class="theory-panel" id="panel-isotooppihoidot-ohjeet" role="tabpanel">
+        <div class="theory-content">
+
+            <h2><i class="fas fa-notes-medical" style="color: var(--color-primary); margin-right: 8px;"></i> Isotooppihoitojen ohjeet</h2>
+            <p>Radionuklidihoitojen käytännön ohjeet: hoitoprosessit, säteilysuojelu, annosmittaukset, kontaminaatiohallinta ja hoitokohtaiset protokollat. Ohjeet perustuvat OYS:n/Pohde:n käytäntöihin ja STUK:n määräyksiin.</p>
+
+            <!-- ---- I-131 ABLAATIO ---- -->
+            <h3><i class="fas fa-capsules" style="color: var(--color-orange); margin-right: 6px;"></i> I-131-ablaatiohoito (radiojodihoito)</h3>
+            <p>Kilpirauhasen jäännöskudoksen tai metastaasien hoito I-131-radiojodikapselilla (tyypillisesti 3,7 GBq = 100 mCi). Potilas eristetään 1–3 vrk annetun aktiivisuuden mukaan. Kapseli tilataan GE:n sähköisestä järjestelmästä toimitettavaksi edeltävälle päivälle.</p>
+
+            <h4>Hoitoprosessi — kapselin laadunvalvonta ja antaminen</h4>
+            <ul>
+                <li><strong>Kapselin mittaus:</strong> I-131*-kanava Capintec-aktiivisuusmittarilla. Aseta kapseli suojassaan lähelle kammiota, siirrä sitten annosteluputkeen kauhan avulla. Lukeman tulee olla ±10 % suunnitellusta annoksesta.</li>
+                <li><strong>Suojaus mittauksen aikana:</strong> Mittari suojattu lyijytiilillä (annosnopeus pieni). Kapselin siirto tehdään ripeästi mutta rauhallisesti — suojattomana annosnopeus nousee.</li>
+                <li><strong>Curiumin vs. GE:n suoja:</strong> Curiumin suoja päästää ~20 % enemmän säteilyä kuin GE:n suoja. Lyijypurkin pinnalta ~480 µSv/h, 50 cm etäisyydellä ~8,3 µSv/h (3,7 GBq).</li>
+                <li><strong>Kapselin anto:</strong> Fyysikko kuljettaa kapselin säteilysuojatussa kärryssä. Varmistaa potilaan henkilöllisyyden ja ESKO-tiedot. Ohjeistaa säteilysuojelun. Kirjaa annetun aktiivisuuden, antoajankohdan ja antajan hoitokertomukseen.</li>
+            </ul>
+
+            <h4>Eristysprotokolla ja säteilysuojelumittaukset</h4>
+            <ul>
+                <li><strong>Kotiutuskriteeri:</strong> Annosnopeus potilaan rinnan korkeudelta &lt;20 µSv/h 1 m etäisyydellä. Mittauksen tekee isotooppiosaston röntgenhoitaja RADOS RDS-31 -mittarilla.</li>
+                <li><strong>Varoajat:</strong> Mitatusta annosnopeudesta johdetut varoajat aikuisiin ja lapsiin (vrk). Kirjataan ESKO-hoitokertomukseen. Potilas ohjeistetaan kirjallisesti ja suullisesti.</li>
+                <li><strong>Eristyshuone:</strong> Säteilyvaaran merkinnät oveen. Instrumenttipöytä sulkutilassa ruoan kuljettamiseen. Kertakäyttöastiat. Potilasta ohjataan: suihku ja vaatevaihto päivittäin, virtsaaminen istuen (myös miehet), WC-huuhtelu 2×, suolen toiminnan seuranta.</li>
+            </ul>
+
+            <h4>ESKO-kirjaukset</h4>
+            <ul>
+                <li><strong>Riskitiedot:</strong> "Säteilyriski. I-131 Isotooppi" — Erityishuomiota vaativa muu hoitomuoto, määräaikainen (1 kk).</li>
+                <li><strong>Hoitokertomus (Tutkimukset, lisätietoa):</strong> Eristys alkaa/jatkuu/päättyy, aktiivisuus, annosnopeus, varoajat, mittaaja.</li>
+            </ul>
+
+            <h4>Kontaminaation hallinta eristyshuoneessa</h4>
+            <ul>
+                <li><strong>Mittaus:</strong> RadEye B20 pintakontaminaatiomittari + teleskooppivarsi. Mittaa heti potilaan lähdettyä: tyyny, sänky, pyykkisäkit (4 puolelta), roskapussi (4 puolelta), lattia kulkualueilta, WC:n lattia ja roskis. Vesihana juoksemaan mittauksen ajaksi (lattiakaivon tausta).</li>
+                <li><strong>Pintakontaminaatiorajat:</strong> STUK S/1/2018 Liite 1. Tarkkailualueen raja 4 Bq/cm². Ylityksestä: pesu yleispuhdistusainevedellä tai NuClean-erikoispesuaineella.</li>
+                <li><strong>Jätteet:</strong> Yli 5 µSv/h tai 5 Bq/cm² materiaalit isotooppiosaston jätevarastoon. Korkea aktiivisuus (&gt;50 µSv/h) → S-tunnelivarasto puoliintumaan. Kirjaus Excel-taulukkoon.</li>
+                <li><strong>Suojavaatetus:</strong> Kertakäyttöinen muoviesiliina, kengänsuojukset, kahdet nitriilihansikkaat. Kroonikkovaippa oven eteen lattialle.</li>
+            </ul>
+
+            <h4>Erityistilanteet</h4>
+            <ul>
+                <li><strong>Avannepotilaat:</strong> Suoliavannepussin vaihto 1×/vrk eristyksen aikana. WC-tyhjennys + 2× huuhtelu. Käytetyt pussit WC:n roskapussiin. Nitriilihanskat 3 vrk ajan. Kotona jätepussi viikon puoliintumisvarastoon ulkotilaan.</li>
+                <li><strong>Potilaan poistuminen eristyshuoneesta:</strong> Ei suoraa vaaraa, jos ei eritekontaminaatiota. Isotooppiosasto varmistaa tilanteen.</li>
+                <li><strong>Hoito muualla (esim. leikkaussali):</strong> Normaalisiivous, instrumentit ja lakanat erilleen. Kertakäyttömateriaali 2× jätesäkkiin, merkintä "I-131 + päivämäärä".</li>
+                <li><strong>Potilaan menehtyminen:</strong> Vainaja merkitään säteilyvaaraosoituksin. Fyysikko antaa ohjeet.</li>
+            </ul>
+
+            <!-- ---- Lu-177-PSMA ---- -->
+            <h3><i class="fas fa-atom" style="color: var(--color-violet); margin-right: 6px;"></i> Lu-177-PSMA-hoidot</h3>
+            <p>Metastasoituneen kastraatioresistentin eturauhassyövän hoito lutetium-177-PSMA-ligandilla. Vertailu HUS:n ja KYS:n käytäntöjen välillä.</p>
+            <ul>
+                <li><strong>Leimaus ja kalibrointi:</strong> Sairaalakohtaiset käytännöt radiolääkkeen valmistuksessa. Annoskalibraattorin kalibrointi Lu-177:lle.</li>
+                <li><strong>Infuusio:</strong> Laskimoon, tyypillisesti ~7,4 GBq/hoitokerta. 4–6 hoitokertaa 6 viikon välein.</li>
+                <li><strong>Säteilysuojelu:</strong> Annosnopeusmittaukset hoitohuoneessa. Kotiutusohjeet. Beetasäteilyn (β⁻) dominanssi, gammakomponentti pieni.</li>
+                <li><strong>Dosimetria:</strong> Hoitovasteen seuranta SPECT/TT-kuvauksilla. Kriittiset elimet: munuaiset (kumulatiivinen annos) ja luuydin.</li>
+                <li><strong>Kamerakalibrointi:</strong> Lu-177:n kuvantaminen gammakameralla vaatii energiaikkunoiden säädön (113 keV ja 208 keV).</li>
+            </ul>
+
+            <!-- ---- Ra-223 ---- -->
+            <h3><i class="fas fa-bone" style="color: var(--color-success); margin-right: 6px;"></i> Radiumdikloridi (Ra-223, Xofigo)</h3>
+            <p>Luustometastaasien palliatiivinen hoito alfasäteilijä Ra-223-dikloridilla. 6 hoitokertaa 4 viikon välein.</p>
+            <ul>
+                <li><strong>Annostelu:</strong> Painoon perustuva: 55 kBq/kg. Annostelupöytäkirja täytetään jokaiselle hoitokerralle.</li>
+                <li><strong>Annoskalibraattori:</strong> Erillinen kalibraattorikaavake. Tarkista asetukset Ra-223:lle.</li>
+                <li><strong>Eränvapautussertifikaatti:</strong> Bayer/Xofigo-valmisteen mukana, tarkistettava ennen antoa.</li>
+                <li><strong>Kontaminaatiomittaukset:</strong> RADOS RDS-31 -mittarilla. Pintakontaminaatiorajat (ST-OHJE 6.1): iho 6 cpm, vaatteet 12 cpm, lattiapinnat/kalusteet 120 cpm.</li>
+                <li><strong>Kontaminaation sattuessa:</strong> Pysäytä, riisu kontaminoituneet suojat nurinpäin radiumjätepussiin. Hälytä fyysikko. Kartoita, rajaa, imeytä, pese NuClean-liuoksella. Kahden pesun jälkeenkin jäävä aktiivisuus → kontaktimuovi + säteilyvaaratarra.</li>
+                <li><strong>Jätteen säilytys:</strong> Ra-223-jäte puoliintumisvarastoon, merkintä "Ra-223 + pvm", hävitys 4 kk kuluttua.</li>
+            </ul>
+
+            <!-- ---- Y-90 SIRT ---- -->
+            <h3><i class="fas fa-liver" style="color: var(--color-red); margin-right: 6px;"></i> SIR-hoito (Y-90 SIRT, radioembolisaatio)</h3>
+            <p>Maksan maligniteettien hoito Y-90-mikrosfeereillä (SIR-Spheres) intra-arteriaalisesti. Y-90: puhdas beetasäteilijä, ei gammasäteilyä.</p>
+
+            <h4>Hoitopäivän fyysikon tehtävät</h4>
+            <ul>
+                <li><strong>Suunnitelman varmennus:</strong> Tarkista kalibrointitiedot pakkauksesta, päivitä Excel-taulukkoon.</li>
+                <li><strong>Alueen suojaus (angio-osasto):</strong> Tarkista lattiateippaukset ~klo 9. Muovitettu paperi kulkualueille, instrumenttipöydät suojattu. Kaksinkertainen punainen jätesäkki radioaktiiviselle jätteelle, musta tavalliselle.</li>
+                <li><strong>Henkilökunnan suojaus:</strong> Kahdet hanskat + kengänsuojat kaikille. Radiologi: lyijyliivit + steriilit varusteet.</li>
+                <li><strong>Radiofarmasian kontaminaatiomittaus:</strong> ~klo 10, isotooppihoitajat.</li>
+                <li><strong>Toimenpiteen jälkeen (~klo 11–14):</strong> Mittaa kontaminaatiot välittömästi. Ruiskut erikseen (jäännösmittaus). Kaikkien huoneessa työskennelleiden kädet, jalat ja vartalo mitataan molemmilta puolilta. Kertaluontoiset veriset suojaliinat aina punaiseen säkkiin.</li>
+                <li><strong>Jätteet:</strong> Kaksinkertainen Y-90-jätesäkki + pleksiboxit puoliintumisvarastoon (huone S6 222). Merkintä "Y-90 + sulkemispvm". Hävitys ≥3 vk kuluttua mittauksen jälkeen. Ei-kertakäyttöiset instrumentit muovipussissa puoliintumaan.</li>
+            </ul>
+
+            <h4>Y-90 SIRT kontaminaatiotilanteet</h4>
+            <ul>
+                <li><strong>Käsikontaminaatio:</strong> Mittaa päällimmäisten hanskojen päältä. Kontaminaatio → riisu varovasti nurinpäin punaiseen säkkiin. Mittaa alimmat hanskat, tarvittaessa iho. Ihopesu saippualla + vedellä.</li>
+                <li><strong>Pintakontaminaatio:</strong> Rajaa alue, vaihda suojapaperi. Imeytä → pese NuClean → uusintamittaus. Kahden pesun jälkeen jäävä aktiivisuus → ≥0,5 cm pleksilevy päälle + merkintä.</li>
+                <li><strong>Pintakontaminaatiorajat:</strong> STUK-taulukko Y-90:lle (eri rajat kuin gammasäteilijöille).</li>
+            </ul>
+
+            <!-- ---- KONTAMINAATIO YLEINEN ---- -->
+            <h3><i class="fas fa-broom" style="color: var(--text-secondary); margin-right: 6px;"></i> Kontaminaatiomittaukset — yleisohjeet</h3>
+
+            <h4>Yleinen toimintaohje kontaminaation sattuessa</h4>
+            <ol>
+                <li><strong>Keskeytä</strong> työskentely, jos mahdollista. Ellet tiedä mitä teet, kysy säteilyturvallisuusvastaavalta.</li>
+                <li><strong>Imeytä</strong> nestemäinen aine imumatolla/paperilla. Kaksinkertaiset suojakäsineet + kengänsuojukset.</li>
+                <li><strong>Kartoita</strong> kontaminoitunut alue Geiger-mittarilla. Merkitse teipillä/tussilla.</li>
+                <li><strong>Pese</strong> imeytyksen jälkeen kertakäyttöpyyhkeillä. Iho: runsaalla vedellä + saippualla, ihoa rikkomatta. Vartalo: suihku.</li>
+                <li><strong>Varmista</strong> mittarilla, toista tarvittaessa.</li>
+                <li><strong>Jätteet</strong> ja kontaminoituneet vaatteet suljettuun muovipussiin → vanhenemisvarasto. Merkintä: radionuklidi + sulkemispvm + kelloaika.</li>
+                <li><strong>Raportoi</strong> säteilyturvallisuusvastaavalle → poikkeavan tapahtuman ilmoitus → tarvittaessa STUK-ilmoitus.</li>
+            </ol>
+
+            <h4>SPECT/TT-laitteen kontaminaatiotilanne</h4>
+            <p>Potilaan virtsaaminen tutkimuspöydälle: Pysäytä kuvaus välittömästi. Kaksinkertaiset hanskat + kengänsuojat. Imeytä virtsa, auta potilas pois, suihkuun puhtaisiin vaatteisiin (omat vaatteet muovipussissa, pesuun seuraavana päivänä). Pese pinnat varovasti (ilmaisinta ei saa kastella). Aamutasomittaus kameralle → huone suljetaan puoliintumaan, jos ei rajoissa.</p>
+
+            <h4>I-131-hoitohuoneen kontaminaatiomittaus — fyysikon toimintaohje</h4>
+            <ul>
+                <li>Mittaus heti potilaan lähdettyä (~klo 9:30). RadEye B20 + teleskooppivarsi.</li>
+                <li>Kroonikkovaippa oven eteen ennen potilaan poistumista. Kengänsuojat + hanskat fyysikolle.</li>
+                <li>Vesihana juoksemaan (lattiakaivon tausta). Tausta-arvo eteistilasta vertailuksi.</li>
+                <li>Mittauskohteet: tyyny, sänky, pyykkisäkit (4 suuntaa), roskapussit (4 suuntaa), lattia kulkualueilta, WC roskis + lattia, eteistilan roskakori + lattia.</li>
+                <li>Kontaminoitunut materiaali (yli 5 µSv/h tai 5 Bq/cm²) pois huoneesta isotooppiosaston jätevarastoon.</li>
+                <li>Kirjaus: I-131-ablaatiohoitohuoneen kontaminaatiomittaustulokset.xls</li>
+            </ul>
+
+        </div>
+    </div>
+
 </div> <!-- closes .theory-container -->
 {% endblock %}
 
 {% block extra_js %}
+<script src="{% static 'sisalto/js/theory-epa-links.js' %}"></script>
 <script src="{% static 'sisalto/js/tts-player.js' %}"></script>
 <script>
 (function() {
@@ -3264,7 +3743,7 @@
             p.classList.toggle('active', p.id === 'panel-' + tabId);
         });
         history.replaceState(null, '', '#' + tabId);
-        document.querySelector('.theory-tabs').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        (document.querySelector('.theory-tabs-grouped') || document.querySelector('.theory-tabs')).scrollIntoView({ behavior: 'smooth', block: 'start' });
         if (window.MathJax && MathJax.typesetPromise) {
             var activePanel = document.getElementById('panel-' + tabId);
             if (activePanel) {

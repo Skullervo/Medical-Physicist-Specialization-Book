@@ -4,8 +4,8 @@
 {% block title %}Sädehoidon teoria - Fyysikkoportti{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'sisalto/css/theory.css' %}?v=1">
-<link rel="stylesheet" href="{% static 'sisalto/css/theory-inline-editor.css' %}?v=1">
+<link rel="stylesheet" href="{% static 'sisalto/css/theory.css' %}?v=11">
+<link rel="stylesheet" href="{% static 'sisalto/css/theory-inline-editor.css' %}?v=2">
 {% endblock %}
 
 {% block content %}
@@ -84,7 +84,7 @@
     <!-- ================================================================
          VÄLILEHTI 1: PERUSKÄSITTEET
          ================================================================ -->
-    <div class="theory-panel active" id="panel-peruskasitteet" role="tabpanel">
+    <div class="theory-panel active" id="panel-peruskasitteet" role="tabpanel" data-epa-map='{"A1":[2,3],"A2":[7],"A3":[1,5],"A4":[6],"A5":[8],"A6":[8],"A7":[9],"A8":[10]}'>
         <div class="theory-content">
 
             <!-- EPA-koulutuskortti: Sädehoidon peruskäsitteet -->
@@ -450,7 +450,7 @@
     <!-- ================================================================
          VÄLILEHTI 2: KUVANTAMINEN JA SUUNNITTELU
          ================================================================ -->
-    <div class="theory-panel" id="panel-kuvantaminen" role="tabpanel">
+    <div class="theory-panel" id="panel-kuvantaminen" role="tabpanel" data-epa-map='{"A1":[2],"A2":[6],"A3":[8],"A4":[8],"A5":[7],"A6":[7],"A7":[10],"B1":[10],"B2":[3],"B3":[8],"B4":[3],"B5":[4],"B6":[5],"B7":[9],"B8":[10]}'>
         <div class="theory-content">
 
             <!-- EPA-koulutuskortti: Kuvantaminen sädehoidon suunnittelua varten -->
@@ -756,11 +756,27 @@
 
             <h3>13.2 Konformaali-indeksi ja homogeenisuusindeksi</h3>
             <div class="formula">
-                <p>\[ CI = \frac{V_{ref}}{V_{PTV}} \]</p>
-                <p>missä \( V_{ref} \) on reseptiannoksen isodoosivolyymin tilavuus ja \( V_{PTV} \) on PTV:n tilavuus. Ideaali CI = 1.</p>
+                <p>\[ CI_{RTOG} = \frac{V_{ref}}{V_{PTV}} \]</p>
+                <p>missä \( V_{ref} \) on reseptiannoksen isodoosivolyymin tilavuus ja \( V_{PTV} \) on PTV:n tilavuus. Ideaali CI<sub>RTOG</sub> = 1.</p>
+                <p>\[ CI_{Paddick} = \frac{TV_{PIV}^2}{TV \times V_{RI}} \]</p>
+                <p>missä \( TV_{PIV} \) on reseptiannoksen isodoosin sisällä oleva kasvaimen (PTV) tilavuus, \( TV \) on koko PTV:n tilavuus ja \( V_{RI} \) on koko reseptiannoksen isodoosin tilavuus. Paddick CI = 1 tarkoittaa täydellinen konformaalisuus (ei reseptiannoksen tilavuutta PTV:n ulkopuolella eikä PTV:tä isodoosin ulkopuolella).</p>
+                <p>\[ GI_{Paddick} = \frac{V_{50\%}}{V_{100\%}} \]</p>
+                <p>Gradienttiindeksi kuvaa annosgradientin jyrkkyyttä: 50 %:n isodoosivolyymin suhde 100 %:n isodoosivolyymiin. Pieni GI &rarr; jyrkkä gradientti &rarr; normaali kudos säästyy paremmin. Erityisen tärkeä stereotaktisissa hoidoissa.</p>
                 <p>\[ HI = \frac{D_2 - D_{98}}{D_{50}} \]</p>
                 <p>missä \( D_2 \), \( D_{98} \) ja \( D_{50} \) ovat annoksia, jotka 2 %, 98 % ja 50 % kohdevolyymista saa. Ideaali HI = 0 (täysin homogeeninen annos).</p>
             </div>
+            <p><strong>Hoitosuunnitelman arviointikriteerit (ICRU-suositus):</strong></p>
+            <table>
+                <thead>
+                    <tr><th>Kriteeri</th><th>Konventionaalinen sädehoito</th><th>Stereotaktinen sädehoito</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>D<sub>min,PTV</sub></td><td>&ge; 95 % reseptiannoksesta</td><td>&ge; 98 % reseptiannoksesta</td></tr>
+                    <tr><td>D<sub>min,GTV</sub></td><td>&mdash;</td><td>&ge; 100 %</td></tr>
+                    <tr><td>D<sub>max,PTV</sub></td><td>&le; 107 %</td><td>125 % tai enemmän (hyväksytty)</td></tr>
+                    <tr><td>D<sub>median,PTV</sub></td><td>100 %</td><td>&mdash;</td></tr>
+                </tbody>
+            </table>
 
             <h3>13.3 QUANTEC-rajoitukset</h3>
             <p>QUANTEC (Quantitative Analyses of Normal Tissue Effects in the Clinic) tarjoaa näyttöön perustuvat annosrajoitukset kriittisille elimille:</p>
@@ -817,7 +833,7 @@
     <!-- ================================================================
          VÄLILEHTI 3: ULKOINEN SÄDEHOITO
          ================================================================ -->
-    <div class="theory-panel" id="panel-ulkoinen" role="tabpanel">
+    <div class="theory-panel" id="panel-ulkoinen" role="tabpanel" data-epa-map='{"A1":[1],"A2":[2],"A3":[1],"A4":[11],"A5":[1],"A6":[5,6],"A7":[2],"A8":[15],"B1":[7,8,13,14,15],"B2":[14]}'>
         <div class="theory-content">
 
             <!-- EPA-koulutuskortti: Ulkoinen sädehoito -->
@@ -909,19 +925,19 @@
                 <li><strong>Kenttäkoko ja annos</strong>: Suurempi kenttäkoko &rarr; enemmän sirontaa &rarr; suurempi annos isosentrin pisteessä samalla monitor unit -arvolla. Tämä huomioidaan sironta-faktoreilla \( S_c \) ja \( S_p \).</li>
             </ul>
 
-            <h2>3. Elektronisädehoito</h2>
+            <h2>4. Elektronisädehoito</h2>
 
-            <h3>3.1 Elektronien annosjakauma</h3>
+            <h3>4.1 Elektronien annosjakauma</h3>
             <p>Elektronikeilan PDD poikkeaa merkittävästi fotonikeilan PDD:stä: pinnassa on korkea annos (~80&ndash;100 %), annos pysyy suhteellisen tasaisena terapeuttiseen syvyyteen asti ja laskee sen jälkeen jyrkästi. Tämä tekee elektroneista ihanteellisia pinnallisiin kohteisiin, koska syvemmät kudokset saavat vain vähän annosta.</p>
 
-            <h3>3.2 Elektronikeilan parametrit</h3>
+            <h3>4.2 Elektronikeilan parametrit</h3>
             <ul>
                 <li><strong>R80, R90</strong>: Syvyys, jossa annos on 80 % tai 90 % maksimiannoksesta. Terapeuttisena syvyytenä käytetään yleensä R90:tä.</li>
                 <li><strong>Rp (practical range)</strong>: Käytännöllinen kantama, jossa PDD leikkaa jarrutussäteilyn taustan ekstrapolaation. Nyrkkisääntö: \( R_p \approx E/2 \) cm, missä \( E \) on nimellisenergia MeV:ssa.</li>
                 <li><strong>R50</strong>: Syvyys, jossa annos on 50 % &rarr; käytetään IEC:n mukaisessa energiamäärittelyssä.</li>
             </ul>
 
-            <h3>3.3 Energian valinta ja käyttöalueet</h3>
+            <h3>4.3 Energian valinta ja käyttöalueet</h3>
             <table>
                 <thead>
                     <tr><th>Energia (MeV)</th><th>R90 (cm)</th><th>Rp (cm)</th><th>Käyttökohteita</th></tr>
@@ -935,9 +951,9 @@
                 </tbody>
             </table>
 
-            <h2>4. Kenttämuokkaus</h2>
+            <h2>5. Kenttämuokkaus</h2>
 
-            <h3>4.1 MLC (multileaf collimator)</h3>
+            <h3>5.1 MLC (multileaf collimator)</h3>
             <p>Monitasokollimaattori koostuu vastakkaisista lehtiparista (tyypillisesti 40&ndash;80 paria per puoli), jotka liikkuvat itsenäisesti keilan muodon muokkaamiseksi. MLC on IMRT- ja VMAT-hoitojen perusta.</p>
             <ul>
                 <li><strong>Lehden leveys</strong>: 2,5&ndash;10 mm isosentrisessä (5 mm yleisin). Pienemmät lehdet &rarr; parempi konformaalisuus mutta monimutkaisempi järjestelmä.</li>
@@ -945,32 +961,41 @@
                 <li><strong>Lehtien transmissio</strong>: Säteilyä läpäisee lehtien läpi ~1,5&ndash;2,5 %. Lehtien välistä vuotoa (interleaf leakage) minimoidaan tongue-and-groove-rakenteella.</li>
             </ul>
 
-            <h3>4.2 Kiilat (wedges)</h3>
+            <h3>5.2 Kiilat (wedges)</h3>
             <ul>
                 <li><strong>Fyysinen kiila</strong>: Metallikappale (yleensä teräs tai lyijy), joka asetetaan keilaan. Tuottaa annoksen lineaarisen gradientin kenttäakselin poikki. Kiilakulma (15&ndash;60&deg;) kuvaa isodoosiviivan kaltevuutta.</li>
                 <li><strong>Dynaaminen kiila (enhanced dynamic wedge)</strong>: Kiilan vaikutus tuotetaan kollimaattorin liukua liikuttamalla säteilytyksen aikana. Etuna: vapaa kiilakulman valinta, ei kiilan vaimennus (korkeampi annosnopeus).</li>
             </ul>
 
-            <h3>4.3 Bolus ja kompensaattorit</h3>
+            <h3>5.3 Bolus ja kompensaattorit</h3>
             <p><strong>Bolus</strong> on kudosekvivalentti materiaali (yleensä supreflab tai silicone), joka asetetaan potilaan iholle. Boluksen tarkoitus on siirtää build-up-aluetta pintaan, jolloin pintaannos kasvaa. Käytetään, kun kohde ulottuu ihon pintaan asti (esim. ihon kasvaimet, rintaseinämä postoperatiivinen hoito). Tyypillisesti 0,5&ndash;1 cm paksu.</p>
 
-            <h2>5. Hoitotekniikat</h2>
+            <h2>6. Hoitotekniikat</h2>
 
-            <h3>5.1 3D-CRT (3D-konformaalinen sädehoito)</h3>
+            <h3>6.1 3D-CRT (3D-konformaalinen sädehoito)</h3>
             <p>3D-CRT käyttää useita (tyypillisesti 3&ndash;7) kiinteitä keilasuuntia, joiden muoto mukautetaan MLC:llä kohteen BEV-projektion (beam's eye view) mukaan. Suunnittelu on etenevä (forward planning): fyysikko valitsee kenttien suunnat ja painot manuaalisesti. 3D-CRT sopii yksinkertaisiin kohteisiin, joissa OAR:t eivät ole kohteen lähellä tai sisällä.</p>
 
-            <h3>5.2 IMRT (intensity-modulated radiation therapy)</h3>
+            <h3>6.2 IMRT (intensity-modulated radiation therapy)</h3>
             <div class="theory-image-slot" data-slot="imrt-technique" data-tab="ulkoinen" data-default-caption="IMRT-fluenssikartta: moduloidut kentät, käänteissuunnittelu ja annosgradientin muodostuminen"></div>
             <p>IMRT moduloi säteilykeilan intensiteettiä kenttäakselin poikkisuunnassa, mahdollistaen konkaavit annosjakaumat. Tämä on tarpeen, kun OAR sijaitsee kohteen vieressä tai sen sisällä (esim. selkäydin kohdunkaulan syövässä).</p>
             <ul>
                 <li><strong>Käänteissuunnittelu (inverse planning)</strong>: Optimointialgoritmi etsii fluenssijakauman, joka täyttää annetut annoskriteerit (objectives ja constraints). Fysikko/onkologi asettaa tavoitteet, optimoija ratkaisee fluenssin.</li>
-                <li><strong>Segmentointi</strong>: Optimoitu fluenssikartta muunnetaan MLC-segmenttien sarjaksi (step-and-shoot IMRT) tai liukumallilla (sliding window IMRT).</li>
+                <li><strong>Sliding window (dMLC)</strong>: MLC-lehdet liikkuvat säteilytyksen aikana jatkuvasti vakioannosenopeudella &mdash; kenttäprofiili muuttuu dynaamisesti. Yleisin nykyaikainen IMRT-tekniikka.</li>
+                <li><strong>Step-and-shoot</strong>: Säteily katkaistaan MLC-liikkeen ajaksi; hoito toteutetaan sarjana staattisia segmenttejä. Yksinkertaisempi verifioida mutta hitaampi.</li>
+                <li><strong>Kenttien lukumäärä</strong>: Tyypillisesti 3&ndash;9 kenttää (jopa 20), suunniteltu epätasapainoisiin suuntiin (ei vastakkaiset kentät).</li>
+                <li><strong>Energia</strong>: Tyypillisesti &le; 10 MV fotonikeiloilla. Suuremmilla energioilla (15&ndash;18 MV) neutronituotto kiihdyttimen metalliosissa kasvaa merkittävästi, lisäksi IMRT:n pieni aukko lisää MU-määrää &rarr; suurempi integraaliannos &rarr; neutroniriskin minimointi suositellaan käyttämällä &le; 10 MV.</li>
             </ul>
 
-            <h3>5.3 VMAT (volumetric modulated arc therapy)</h3>
-            <p>VMAT on IMRT:n muoto, jossa gantry pyörii jatkuvasti potilaan ympäri (yksi tai useampi kaari) samalla kun MLC-kuvio, annosnopeus ja gantry-nopeus vaihtelevat. VMAT tuottaa tyypillisesti vastaavan tai paremman annosjakauman kuin kiinteäkenttäinen IMRT, mutta huomattavasti nopeammin (2&ndash;5 min vs. 15&ndash;20 min).</p>
+            <h3>6.3 VMAT (volumetric modulated arc therapy)</h3>
+            <p>VMAT on IMRT:n muoto, jossa gantry pyörii jatkuvasti potilaan ympäri samalla kun MLC-kuvio, annosnopeus ja gantry-nopeus vaihtelevat dynaamisesti. VMAT tuottaa tyypillisesti vastaavan tai paremman annosjakauman kuin kiinteäkenttäinen IMRT, mutta huomattavasti nopeammin (2&ndash;5 min vs. 15&ndash;20 min).</p>
+            <ul>
+                <li><strong>Kaarien lukumäärä</strong>: Yleensä 1&ndash;2 kaarta. Koplanaarisia (saman tason) tai ei-koplanaarisia (pöydän liike kaarien välissä).</li>
+                <li><strong>Jaw tracking (leuanliike)</strong>: Kollimaattorin kenttäkoko voi muuttua kaaren aikana kohteen muodon mukaan &rarr; pienennetään annosta kohteen ulkopuolella.</li>
+                <li><strong>Dynaaminen kollimointikulma</strong>: Uusimmissa laitteissa kollimaattori voi kiertyä kaaren aikana parantaen konformaalisuutta.</li>
+                <li><strong>Energia</strong>: Tyypillisesti &le; 10 MV (samat neutronisyyt kuin IMRT:ssä).</li>
+            </ul>
 
-            <h3>5.4 Hoitotekniikoiden vertailu</h3>
+            <h3>6.4 Hoitotekniikoiden vertailu</h3>
             <table>
                 <thead>
                     <tr><th>Ominaisuus</th><th>3D-CRT</th><th>IMRT</th><th>VMAT</th></tr>
@@ -990,10 +1015,15 @@
                 <p><strong>Kliininen käytäntö:</strong> VMAT on nykyisin yleisin hoitotekniikka vaativissa sädehoidoissa (pään ja kaulan alueen syövät, keuhko, prostata, gynekologiset syövät). 3D-CRT:tä käytetään edelleen yksinkertaisissa palliatiivisissa hoidoissa ja joissakin rintasyövän hoidoissa.</p>
             </div>
 
-            <h2>6. Stereotaktinen sädehoito</h2>
+            <h2>7. Stereotaktinen sädehoito</h2>
 
-            <h3>6.1 SRS (stereotactic radiosurgery)</h3>
+            <h3>7.1 SRS (stereotactic radiosurgery)</h3>
             <p>SRS tarkoittaa korkea-annosteista, yksifraktioista (tai harvafraktioista, 1&ndash;5 fr) stereotaktista sädehoitoa, joka kohdistetaan pieneen intrakraniaaliseen kohteeseen erittäin tarkasti (&lt; 1 mm marginaali). Käyttöaiheita: aivometastaasit, akustikusneurinooma, AVM, trigeminusneuralgia.</p>
+            <ul>
+                <li><strong>Annos per fraktio</strong>: Tyypillisesti 5&ndash;160 Gy (pienimmät vestibulaarischwannooman hoidossa ~12 Gy, suurimmat pienillä AVM-kohteilla). Tavallisimmin 12&ndash;24 Gy yksifraktiohoitoina.</li>
+                <li><strong>Fraktiot</strong>: SRS = 1 fraktio; SRT (stereotactic radiation therapy) = harvafraktioitu (2&ndash;5 fr) &mdash; käytetään kun kohde on lähellä kriittisiä rakenteita.</li>
+                <li><strong>Kohde</strong>: GTV-annos &ge; 100 %, maksimi usein &ge; 125 %. Jyrkkä annosgradientin vaatimus: normaali aivokudos saa vain murto-osan annoksesta.</li>
+            </ul>
             <p>Hoitolaitteet:</p>
             <ul>
                 <li><strong>Gamma Knife</strong>: ~192 Co-60-lähdettä puolipallon muotoisessa kypärässä, kollimoitu kohdepisteeseen. Erittäin tarkka, mutta vain intrakraniaaliset kohteet.</li>
@@ -1001,20 +1031,21 @@
                 <li><strong>Linac-pohjainen SRS</strong>: Tavallinen kiihdytin lisävarusteilla (stereotaktinen kehys/maski, pieni MLC tai kartiokollimaattorit, kV-kuvantaminen).</li>
             </ul>
 
-            <h3>6.2 SBRT (stereotactic body radiation therapy)</h3>
-            <p>SBRT soveltaa stereotaktisen hoidon periaatteita ekstrakraniaalisiin kohteisiin. Tyypillisesti 3&ndash;8 fraktiota suurilla kerta-annoksilla (esim. 54 Gy / 3 fr keuhko, 35 Gy / 5 fr maksa). SBRT vaatii:</p>
+            <h3>7.2 SBRT (stereotactic body radiation therapy)</h3>
+            <p>SBRT (myös SABR, stereotactic ablative radiotherapy) soveltaa stereotaktisen hoidon periaatteita ekstrakraniaalisiin kohteisiin. Tavallisesti 1&ndash;5 fraktiota (joskus 8&ndash;20), ja fraktioannos tasapainotetaan kasvainablaation ja normaalikudoksen säästön välillä. Esimerkkiannoksia: 54 Gy / 3 fr keuhko, 35 Gy / 5 fr maksa. SBRT vaatii:</p>
             <ul>
                 <li>Tarkkaa immobilisaatiota (vakuumityyny, kehokehys)</li>
-                <li>Liikkeenhallintaa (4D-CT, gating, ITV)</li>
+                <li>Liikkeenhallintaa (4D-CT, gating, ITV, DIBH)</li>
                 <li>Tiukkaa IGRT:tä (CBCT ennen jokaista fraktiota)</li>
                 <li>Pientä PTV-marginaalia (3&ndash;5 mm)</li>
                 <li>Tiukennettua laadunvarmistusta (AAPM TG-101)</li>
+                <li>Usein MR-linac-teknologiaa reaaliaikaisen pehmustkudosseurannan mahdollistamiseksi</li>
             </ul>
 
-            <h2>7. IGRT (kuvaohjattu sädehoito)</h2>
+            <h2>8. IGRT (kuvaohjattu sädehoito)</h2>
             <div class="theory-image-slot" data-slot="igrt-methods" data-tab="ulkoinen" data-default-caption="IGRT-menetelmät: kV-CBCT, MV-EPID, pinta-analyysi ja ultraääniohjaus — tarkkuusvertailu"></div>
 
-            <h3>7.1 Kuvantamismenetelmät</h3>
+            <h3>8.1 Kuvantamismenetelmät</h3>
             <table>
                 <thead>
                     <tr><th>Menetelmä</th><th>Kuvaus</th><th>Tarkkuus</th><th>Käyttö</th></tr>
@@ -1028,16 +1059,26 @@
                 </tbody>
             </table>
 
-            <h3>7.2 Korjausprotokollat</h3>
+            <h3>8.2 Korjausprotokollat</h3>
             <ul>
                 <li><strong>Online-korjaus</strong>: Korjaus tehdään joka fraktioissa kuvantamisen jälkeen ennen säteilytystä. Yleisin menetelmä nykyään. Vaatii CBCT:n tai vastaavan.</li>
                 <li><strong>Offline-korjaus (NAL, no action level)</strong>: Kerätään asettelukuvat ensimmäisistä fraktioista, lasketaan systemaattinen virhe ja korjataan kumulatiivinen poikkeama. Ei korjaa yksittäisten fraktioiden satunnaista virhettä.</li>
                 <li><strong>Adaptiivinen</strong>: Kuvantamisen perusteella tehdään hoitosuunnitelman muutos (re-planning), jos anatomia on muuttunut merkittävästi.</li>
             </ul>
 
-            <h2>8. PTV-marginaalit</h2>
+            <h3>8.3 Fiducial-markkerit</h3>
+            <p>Fiducial-markkerit (viitemerkit) ovat potilaan kehoon implantoitavia tai kiinnitettäviä pieniä kohteita, joita käytetään IGRT:n tarkkuuden parantamiseen:</p>
+            <ul>
+                <li><strong>Kultajyvät (gold seeds)</strong>: Yleisin tyyppi. 1&ndash;3 kpl implantoidaan kasvaimen läheisyyteen (esim. eturauhaseen). Näkyvät selkeästi kV-kuvissa ja CBCT:ssä.</li>
+                <li><strong>Kultaankkurit (gold anchors)</strong>: Hankaloitettu poistuminen kudoksesta koukun ansiosta.</li>
+                <li><strong>RF-lähettimet (Calypso/Beacon)</strong>: Lähettävät sähkömagneettista signaalia — mahdollistavat jatkuvan reaaliaikaisen seurannan ilman ionisaatioannosta. Erityisesti käytetty eturauhashoidoissa.</li>
+                <li><strong>Muovijyvät</strong>: Näkyvät MRI:ssä (MR-linac käyttöön).</li>
+            </ul>
+            <p>Markkereita voidaan käyttää myös jatkuvaan liikevalvontaan 5 sekunnin välein otettavilla kuvilla (gating-triggeri) tai reaaliaikaiseen seurantaan RF-lähettimillä. Käyttöalueet: eturauhanen, keuhko, maksa, haimasyöpä.</p>
 
-            <h3>8.1 Van Herk -kaava</h3>
+            <h2>9. PTV-marginaalit</h2>
+
+            <h3>9.1 Van Herk -kaava</h3>
             <p>PTV-marginaalin laskenta perustuu van Herkin kaavaan, joka varmistaa, että vähintään 90 % potilaista saa &ge; 95 % reseptiannoksen CTV:hen:</p>
 
             <div class="formula">
@@ -1051,7 +1092,7 @@
                 <p><strong>Kliininen esimerkki:</strong> Eturauhasen hoito ilman IGRT:tä: \( \Sigma \) = 3,5 mm, \( \sigma \) = 3,0 mm &rarr; \( M \) = 2,5 &times; 3,5 + 0,7 &times; 3,0 = 10,85 mm &asymp; 11 mm. Päivittäisellä CBCT-kohdistuksella: \( \Sigma \) = 1,5 mm, \( \sigma \) = 2,0 mm &rarr; \( M \) = 2,5 &times; 1,5 + 0,7 &times; 2,0 = 5,15 mm &asymp; 5 mm. IGRT puolittaa marginaalin.</p>
             </div>
 
-            <h2>9. Adaptiivinen sädehoito</h2>
+            <h2>10. Adaptiivinen sädehoito</h2>
             <p>Adaptiivinen sädehoito (adaptive radiation therapy, ART) tarkoittaa hoitosuunnitelman mukauttamista hoidon aikana tapahtuvien anatomisten muutosten perusteella. Muutoksia aiheuttavat:</p>
             <ul>
                 <li>Kasvaimen pieneneminen (tumor shrinkage) hoidon aikana</li>
@@ -1067,24 +1108,24 @@
                 <li><strong>Deformable image registration (DIR)</strong>: Mahdollistaa anatomisten muutosten kvantifioinnin ja annoksen kumulatiivisen arvioinnin muuttuvassa anatomiassa.</li>
             </ul>
 
-            <h2>10. Annoslaskenta ja MU-määritys</h2>
+            <h2>11. Annoslaskenta ja MU-määritys</h2>
 
-            <h3>10.1 Monitor unit -laskenta (MU calculation)</h3>
+            <h3>11.1 Monitor unit -laskenta (MU calculation)</h3>
             <p>Monitor unit (MU) on lineaarikiihdyttimen annosmonitorin mittayksikkö. Kiihdytin on kalibroitu siten, että 1 MU = 1 cGy referenssiolosuhteissa (tyypillisesti: 10 &times; 10 cm&sup2; kenttä, 10 cm syvyys, SSD 90 cm tai SAD 100 cm). MU-laskennassa määritetään tarvittavien MU:iden lukumäärä halutun annoksen tuottamiseksi kohdevolyymiin.</p>
 
-            <h3>10.2 MU-laskenta SSD-geometriassa</h3>
+            <h3>11.2 MU-laskenta SSD-geometriassa</h3>
             <div class="formula">
                 <p>\[ MU = \frac{D_{rx}}{D_{cal} \cdot PDD(d,A_s,SSD) \cdot S_{cp}(A_c,A_s) \cdot \left(\frac{SSD_0 + d_{max}}{SSD + d_{max}}\right)^2 \cdot \text{muut korjaustekijät}} \]</p>
                 <p>missä \( D_{rx} \) on haluttu annos pisteessä, \( D_{cal} \) on annos per MU referenssiolosuhteissa, \( PDD \) on prosentuaalinen syvyysannos, \( S_{cp} \) on kokonaissironta-faktori ja käänteisen neliön lain korjaus huomioi SSD-eron.</p>
             </div>
 
-            <h3>10.3 MU-laskenta SAD-geometriassa (isosentrinen)</h3>
+            <h3>11.3 MU-laskenta SAD-geometriassa (isosentrinen)</h3>
             <div class="formula">
                 <p>\[ MU = \frac{D_{rx}}{D_{cal} \cdot TMR(d,A_d) \cdot S_{cp}(A_c,A_d) \cdot \text{muut korjaustekijät}} \]</p>
                 <p>SAD-geometriassa käytetään TMR:ää PDD:n sijasta, koska TMR on SSD-riippumaton. Kenttäkoko määritellään isosentrissä.</p>
             </div>
 
-            <h3>10.4 Ilman leikekuvasuunnitelmaa annettavat hoidot</h3>
+            <h3>11.4 Ilman leikekuvasuunnitelmaa annettavat hoidot</h3>
             <p>Joissakin kliinisissä tilanteissa hoito annetaan ilman TPS-pohjaista leikekuvadataan perustuvaa suunnitelmaa. Tällöin annoslaskenta tehdään manuaalisesti taulukoiduilla parametreilla:</p>
             <ul>
                 <li><strong>Palliatiiviset hoidot</strong>: Yksinkertaiset kenttäjärjestelyt (AP-PA, yksittäinen kenttä), annos lasketaan PDD-taulukoista ja sironta-faktoreista</li>
@@ -1096,9 +1137,9 @@
                 <p><strong>Tärkeää:</strong> Manuaalinen MU-laskenta on edelleen tärkeä taito, vaikka TPS hoitaa laskennan automaattisesti. Manuaalinen laskenta toimii riippumattomana tarkistuksena (independent MU check) TPS:n tulokselle. Poikkeama &gt; 3&ndash;5 % edellyttää selvitystä.</p>
             </div>
 
-            <h2>11. IGRT:n yksityiskohdat ja laadunvalvonta</h2>
+            <h2>12. IGRT:n yksityiskohdat ja laadunvalvonta</h2>
 
-            <h3>11.1 CBCT (cone beam CT) yksityiskohdittain</h3>
+            <h3>12.1 CBCT (cone beam CT) yksityiskohdittain</h3>
             <p>CBCT on yleisin IGRT-menetelmä nykyaikaisessa sädehoidossa. Se tuottaa 3D-tilavuuskuvan potilaan anatomiasta hoitoasennossa:</p>
             <ul>
                 <li><strong>Periaate</strong>: kV-lähde ja flat panel -detektori kiinnitettyinä gantryyn (ortogonaalinen hoitokeilan kanssa). Gantry pyörii 180&ndash;360&deg; ja detektori kerää projektioita, joista rekonstruoidaan 3D-kuva.</li>
@@ -1107,7 +1148,7 @@
                 <li><strong>Moodit</strong>: Full-fan (360&deg;, pieni FOV ~25 cm), half-fan (360&deg;, laaja FOV ~45 cm, offset-detektori), 4D-CBCT (hengityssignaaliin synkronoitu)</li>
             </ul>
 
-            <h3>11.2 Kuvantamisohjauslaitteiden laadunvalvonta</h3>
+            <h3>12.2 Kuvantamisohjauslaitteiden laadunvalvonta</h3>
             <table>
                 <thead>
                     <tr><th>Parametri</th><th>Tiheys</th><th>Toleranssi</th></tr>
@@ -1121,9 +1162,9 @@
                 </tbody>
             </table>
 
-            <h2>12. Automaattinen annossuunnittelu</h2>
+            <h2>13. Automaattinen annossuunnittelu</h2>
 
-            <h3>12.1 Knowledge-based planning (KBP)</h3>
+            <h3>13.1 Knowledge-based planning (KBP)</h3>
             <p>KBP-menetelmissä (esim. Varian RapidPlan) TPS:n optimoija käyttää aiemmista hoitosuunnitelmista opittuja DVH-ennusteita uusien suunnitelmien optimoinnin lähtökohtana. Hyödyt:</p>
             <ul>
                 <li>Nopeampi suunnitteluprosessi (vähennetään iterointia)</li>
@@ -1131,7 +1172,7 @@
                 <li>DVH-ennusteet tunnistavat, milloin parempi suunnitelma on saavutettavissa</li>
             </ul>
 
-            <h3>12.2 Automaattinen optimointi</h3>
+            <h3>13.2 Automaattinen optimointi</h3>
             <p>Täysin automaattiset suunnittelujärjestelmät (esim. Varian HyperArc, Elekta APAS, RayStation scripted planning) suorittavat koko suunnitteluprosessin automaattisesti: kenttäjärjestely, optimointi, annoslaskenta ja suunnitelman arviointi. Automaattisuunnittelun laadunvarmistus edellyttää:</p>
             <ul>
                 <li>Automaattisten suunnitelmien systemaattista vertailua manuaalisiin</li>
@@ -1139,16 +1180,16 @@
                 <li>Säännöllistä mallin (model) validointia uusilla potilastiedoilla</li>
             </ul>
 
-            <h2>13. Fraktioinnin muutokset ja uusintasädetys</h2>
+            <h2>14. Fraktioinnin muutokset ja uusintasädetys</h2>
 
-            <h3>13.1 Hoitotaukojen ja fraktiomuutosten arviointi</h3>
+            <h3>14.1 Hoitotaukojen ja fraktiomuutosten arviointi</h3>
             <p>Hoitotauot (esim. koneen huolto, potilaan sairastuminen) tai fraktioannoksen muutokset edellyttävät biologista arviointia. BED-laskennalla arvioidaan, miten muutos vaikuttaa hoidon tehoon ja sivuvaikutuksiin:</p>
             <ul>
                 <li><strong>Hoitotauon kompensaatio</strong>: Menetettyjen fraktioiden korvaaminen lisäfraktioilla viikon aikana (esim. 6 fx/viikko 5:n sijaan). Kasvaimen repopulaation vuoksi pelkkä fraktioiden lisääminen hoitokauden loppuun ei täysin kompensoi taukoa.</li>
                 <li><strong>Fraktioannoksen muutos</strong>: BED-ekvivalenssilaskentaa käytetään, kun fraktioannosta muutetaan (esim. hypofraktiointiin siirtyminen konerikosta johtuen).</li>
             </ul>
 
-            <h3>13.2 Uusintasädetys (re-irradiation)</h3>
+            <h3>14.2 Uusintasädetys (re-irradiation)</h3>
             <p>Uusintasädetys on tilanne, jossa aiemmin säteilytettyä aluetta hoidetaan uudelleen. Fysikon on arvioitava:</p>
             <ul>
                 <li><strong>Aiemman hoidon kumulatiivinen annos</strong>: EQD2-muunnos aiemmasta hoidosta normaalikudostoleranssien arvioimiseksi</li>
@@ -1161,21 +1202,52 @@
                 <p><strong>Kliininen merkitys:</strong> Uusintasädetys on kasvava kliininen haaste, koska yhä useampi potilas selviytyy pitkään ensimmäisen sädehoidon jälkeen. Sairaalafyysikon rooli on kriittinen kumulatiivisten annosten arvioinnissa ja turvallisen hoitosuunnitelman laatimisessa.</p>
             </div>
 
-            <h2>14. Erityishoitomuodot</h2>
+            <h2>15. Erityishoitomuodot</h2>
 
-            <h3>14.1 TBI (total body irradiation)</h3>
+            <h3>15.1 TBI (total body irradiation)</h3>
             <p>Koko kehon sädehoidon käytetään kantasolusiirron esivalmistelussa (myeloablatiivinen konditionointi). Tyypillinen annos 12 Gy / 6 fraktiota (2 Gy &times; 2/pv). Erityishaasteita: annoksen homogeenisuus koko kehossa, keuhkojen suojaus (keuhkoblokki tai kompensaattori, D(keuhko) &lt; 10 Gy), annosnopeus &lt; 0,15 Gy/min (vähentää keuhkotoksisuutta).</p>
 
-            <h3>14.2 TSEBT (total skin electron beam therapy)</h3>
+            <h3>15.2 TSEBT (total skin electron beam therapy)</h3>
             <p>Koko ihon elektronisädehoidon käytetään ihon T-solulymfooman (mycosis fungoides) hoidossa. Stanford-tekniikka: 6 kehon asentoa, 6 elektronikenttäparia eri kulmista. Tyypillinen annos 30&ndash;36 Gy iholle, minimaalinen annos syvemmälle.</p>
 
-            <h3>14.3 Protonihoito</h3>
+            <h3>15.3 Protonihoito</h3>
             <p>Protonien Bragg-piikki mahdollistaa annoksen kohdistamisen tiettyyn syvyyteen ilman ulostuloanosta. Annosjakaumaa muokataan SOBP:ksi (spread-out Bragg peak) kohteen kattamiseksi. Kaksi pääteknikkaa:</p>
             <ul>
                 <li><strong>Passiivinen sirontasysteemi</strong>: Sirontakalvot levittävät keilan, vaihtelevapaksuinen absorptori muodostaa SOBP:n, apertuuri ja kompensaattori muokkaavat lateraalisen ja distaalisen muodon.</li>
                 <li><strong>Pencil beam scanning (PBS)</strong>: Ohut protonikeila ohjataan magneetilla pisteestä pisteeseen, energiaa muutetaan kerroksittain. Mahdollistaa IMPT:n (intensity-modulated proton therapy). Nykyisin suositeltu tekniikka.</li>
             </ul>
             <p>Protonien RBE on ~1,1 kliinisessä käytössä (kiinteä arvo), mutta todellisuudessa RBE vaihtelee energian, kudoksen ja biologisen päätepisteen mukaan. Tämä on aktiivisen tutkimuksen kohde.</p>
+            <div class="theory-warning">
+                <p><strong>Haasteet:</strong> Protonin kantaman epävarmuus on keskeinen haaste. Eri kudosten elektronitiheys vaikuttaa voimakkaasti kantamaan &rarr; tarkan asettelun ja kuvausohjauksen merkitys korostuu. Robust optimization huomioi suunnitteluvaiheessa nämä epävarmuudet.</p>
+            </div>
+
+            <h3>15.4 IORT (intraoperatiivinen sädehoito)</h3>
+            <p>IORT tarkoittaa korkea-annosteisen sädehoidon antamista suoraan leikkauksen aikana kirurgisen haavan kautta, kun kasvain tai kasvaimen poiston jälkeinen alue on suoraan saavutettavissa. Edut: terve kudos voidaan suojata tai siirtää säteilykentän ulkopuolelle, korkea kerta-annos annetaan suoraan riskiregioniin ilman toistuvia asetteluja.</p>
+            <ul>
+                <li><strong>Elektronit (IOERT)</strong>: Mobiilikiihdytin (esim. Mobetron) tai siirrettävä yksikkö. Sovellusalojen tuubi kohdistaa keilan. Energia valitaan kasvainalueen syvyyden mukaan.</li>
+                <li><strong>Kilovolttisäteily (kV-IORT)</strong>: Erityislaite (esim. Intrabeam/Zeiss), joka tuottaa pallomaisen isotropisen annosjakauman applikaattorin kautta. Käytetään erityisesti rintasyövän leikkauksen yhteydessä.</li>
+                <li><strong>HDR-brakyterapia intraoperatiivisesti</strong>: Fleksibeli katetri asetetaan kasvaimalueelle leikkauksen aikana.</li>
+                <li><strong>Käyttöalueet</strong>: Rintasyöpä, aivokasvamet, ruoansulatuskanavan kasvaimet, pään ja kaulan alueen kasvaimet, ihosyöpä, selkärankametastaasit.</li>
+            </ul>
+            <p>Moniammatillinen tiimi on välttämätön: kirurgi, sädeonkologi, sairaalafyysikko, anestesiologi, hoitaja, patologi ja säteilynhoitaja.</p>
+
+            <h3>15.5 BNCT (boorineuttonikaappausterapia)</h3>
+            <p>BNCT perustuu booria sisältäviin yhdisteisiin, jotka kertyvät selektiivisesti kasvaimeen potilaan verenkierron kautta. Kasvain säteilytetään tarkoilla neutroneilla:</p>
+            <ul>
+                <li>Neutroni kaappautuu boori-10-ytimeen: <sup>10</sup>B(n,α)<sup>7</sup>Li -reaktio</li>
+                <li>Tuotetut &alpha;-hiukkaset ja litiumytimet ovat hyvin lyhytmatkaisia (~5&ndash;10 μm) &rarr; vaikutus rajoittuu kasvainsoluihin</li>
+                <li>Normaalikudos, johon boori ei kerry, saa vain vähän annosta</li>
+            </ul>
+            <p>BNCT vaatii booripitoisia lääkeaineita (BSH tai BPA) ja neutronilähteen (perinteisesti reaktori, nykyisin myös kiihdytinpohjaiset lähteet). Erityinen potentiaali aivokasvaimissa (glioblastooma) ja pään ja kaulan alueen syövissä.</p>
+
+            <h3>15.6 FLASH-sädehoito</h3>
+            <p>FLASH-sädehoito tarkoittaa säteilytystä erittäin korkealla annosenopeudella (UHDR, ultra-high dose rate, &gt; 40 Gy/s vs. konventionaalinen ~0,03 Gy/s). Tutkimusnäyttö viittaa siihen, että FLASH-sädehoito:</p>
+            <ul>
+                <li>Tuottaa vastaavan kasvainkontrollin kuin tavanomainen sädehoito</li>
+                <li>Aiheuttaa merkittävästi vähemmän vauriota ympäröivään normaali kudokseen (FLASH-efekti)</li>
+                <li>Mekanismi ei ole täysin selvä: happiradikaalihypoteesi, immuunivaste, DNA-vastemuutokset</li>
+            </ul>
+            <p>FLASH on vielä kehitysvaiheessa. Kliinisiä tutkimuksia tehdään sekä elektroni- että protonilaitteistoilla. Annoksen mittaus UHDR-olosuhteissa on merkittävä tekninen haaste sairaalafyysikolle.</p>
 
             <div class="theory-quiz-section" data-tab="ulkoinen">
                 <div class="theory-quiz-start">
@@ -1211,7 +1283,7 @@
     <!-- ================================================================
          VÄLILEHTI 4: SISÄINEN SÄDEHOITO (BRAKYTERAPIA)
          ================================================================ -->
-    <div class="theory-panel" id="panel-sisainen" role="tabpanel">
+    <div class="theory-panel" id="panel-sisainen" role="tabpanel" data-epa-map='{"A1":[1,2],"A2":[4],"A3":[3],"A4":[6,7],"A5":[8],"A6":[2],"A7":[10],"B1":[2,3],"B2":[4,8]}'>
         <div class="theory-content">
 
             <!-- EPA-koulutuskortti: Sisäinen sädehoito -->
@@ -1407,7 +1479,12 @@
             </ul>
 
             <h3>7.3 Annoskriteerit</h3>
-            <p>Kohdunkaulan syövän brakyterapian annoskriteerit ilmaistaan EQD2-arvoina (equivalent dose in 2 Gy fractions), jotka yhdistävät ulkoisen sädehoidon ja brakyterapian annokset:</p>
+            <p>Tyypilliset fyysiset annokset Suomessa käytössä olevissa protokollissa:</p>
+            <ul>
+                <li><strong>Kohdunkaulansyöpä</strong>: 4 &times; 7 Gy HDR brakyterapia + ulkoinen sädehoito 45&ndash;50 Gy</li>
+                <li><strong>Kohdun limakalvon syöpä</strong>: 3 &times; 7 Gy HDR brakyterapia (adjuvantti, tunnus ei ulkoista sädehoitoa)</li>
+            </ul>
+            <p>Annoskriteerit ilmaistaan EQD2-arvoina (equivalent dose in 2 Gy fractions), jotka yhdistävät ulkoisen sädehoidon ja brakyterapian annokset:</p>
             <ul>
                 <li><strong>D90(HR-CTV)</strong> &ge; 87 Gy EQD2 ((&alpha;/&beta; = 10 Gy) &rarr; yli 90 % paikallinen hallinta</li>
                 <li><strong>D2cc(rektum)</strong> &lt; 65&ndash;75 Gy EQD2 (&alpha;/&beta; = 3 Gy)</li>
@@ -1450,8 +1527,14 @@
 
             <h2>9. Muut brakyterapia-alueet</h2>
 
-            <h3>9.1 Eturauhasen permanent-seed -hoito</h3>
-            <p>LDR-brakyterapia <sup>125</sup>I- tai <sup>103</sup>Pd-seedeillä. 50&ndash;120 radioaktiivista siementä istutetaan ultraääniohjatusti transperineaalisesti eturauhaseen. Reseptiannos: 145 Gy (<sup>125</sup>I) tai 125 Gy (<sup>103</sup>Pd). Matalanerginen säteily absorboituu lähes kokonaan muutaman senttimetrin sisällä, suojaten ympäröiviä rakenteita.</p>
+            <h3>9.1 Eturauhasen brakyterapia</h3>
+            <p><strong>LDR-brakyterapia (permanent seed -hoito)</strong>: <sup>125</sup>I- tai <sup>103</sup>Pd-seedeillä. 50&ndash;120 radioaktiivista siementä istutetaan ultraääniohjatusti transperineaalisesti eturauhaseen. Reseptiannos: 145 Gy (<sup>125</sup>I) tai 125 Gy (<sup>103</sup>Pd). Matalanerginen säteily absorboituu lähes kokonaan muutaman senttimetrin sisällä, suojaten ympäröiviä rakenteita.</p>
+            <p><strong>HDR-brakyterapia</strong>: Ir-192-afterloading-tekniikalla. Neulat istutetaan transperineaalisesti transrektaaliultraääniohjauksessa. Annos annetaan väliaikaisesti ja neulat poistetaan hoidon jälkeen. Tyypilliset annokset:</p>
+            <ul>
+                <li><strong>Boost ulkoiseen sädehoitoon</strong>: 1 &times; 15 Gy HDR + 37,5&ndash;46 Gy EBRT (matalan riskin eturauhassyöpä)</li>
+                <li><strong>Salvage-hoito uusiutumisessa</strong>: 3 &times; 8 Gy HDR (aiemmin hoidettu eturauhassyöpä)</li>
+            </ul>
+            <p>HDR-tekniikan etu: hoitosuunnitelma voidaan optimoida reaaliaikaisesti neuloja asetettaessa, eikä prostatalla tapahtuva turvotus asettamisen jälkeen muuta siemenien sijaintia (toisin kuin LDR:ssä).</p>
 
             <h3>9.2 Rintasyövän brakyterapia</h3>
             <p>Osittaisen rinnan sädehoidossa (accelerated partial breast irradiation, APBI) brakyterapia kohdistetaan tuumoriontelo ympäristöön. Tekniikat: interstitiaaliset neulat, MammoSite-pallonki, SAVI-applikaattori. Tyypillinen annos: 34 Gy / 10 fr (HDR) 5 päivän aikana.</p>
@@ -1541,7 +1624,7 @@
     <!-- ================================================================
          VÄLILEHTI 5: DOSIMETRIA
          ================================================================ -->
-    <div class="theory-panel" id="panel-dosimetria" role="tabpanel">
+    <div class="theory-panel" id="panel-dosimetria" role="tabpanel" data-epa-map='{"A1":[2],"A2":[3,4],"A3":[6],"A4":[8],"A5":[5],"A6":[7],"A7":[10],"A8":[12],"B1":[8,9],"B2":[9,10]}'>
         <div class="theory-content">
 
             <!-- EPA-koulutuskortti: Sädehoidon dosimetria -->
@@ -1658,10 +1741,10 @@
                 </tbody>
             </table>
 
-            <h2>3. Absorboituneen annoksen mittaus &mdash; IAEA TRS-398</h2>
+            <h2>4. Absorboituneen annoksen mittaus &mdash; IAEA TRS-398</h2>
             <div class="theory-image-slot" data-slot="trs398-protocol" data-tab="dosimetria" data-default-caption="IAEA TRS-398 kalibrointiketju: BIPM → STUK → sairaala, kalibrointikerroin N_D,w ja korjauskertoimet"></div>
 
-            <h3>3.1 Kalibrointiketju</h3>
+            <h3>4.1 Kalibrointiketju</h3>
             <p>Absorboituneen annoksen mittaus perustuu katkeamattomaan kalibrointiketjuun, joka ulottuu kansainvälisistä primäärimittalaboratorioista sairaalaan:</p>
             <ol>
                 <li><strong>BIPM (Bureau International des Poids et Mesures)</strong>: Kansainvälinen primääristandardi</li>
@@ -1674,7 +1757,7 @@
                 <p><strong>T&auml;rke&auml;&auml;:</strong> Kalibrointitodistus on voimassa enintään 3 vuotta. Kammion kalibrointi on uusittava määräajoin ja aina, jos kammio on pudonnut tai altistunut poikkeukselliselle rasitukselle. Ristiinkalibrointi (cross-calibration) voidaan tehdä sairaalassa toisen kalibroinnin omaavan kammion avulla, mutta primäärikalibroinnin korvaajaksi se ei käy.</p>
             </div>
 
-            <h3>3.2 Absorboidun annoksen laskenta</h3>
+            <h3>4.2 Absorboidun annoksen laskenta</h3>
             <p>IAEA TRS-398 -protokollan mukaan absorboidun annoksen määritys vedessä perustuu seuraavaan perusyhtälöön:</p>
             <div class="formula">
                 \[ D_{w,Q} = M_Q \cdot N_{D,w,Q_0} \cdot k_{Q,Q_0} \]
@@ -1687,7 +1770,7 @@
                 <li>\( k_{Q,Q_0} \) = säteilylaadun korjauskerroin, joka korjaa eron referenssi- ja käyttäjän säteilylaadun välillä</li>
             </ul>
 
-            <h3>3.3 Korjauskertoimet</h3>
+            <h3>4.3 Korjauskertoimet</h3>
             <p>Elektrometrin raakaa lukemaa \( M_{raw} \) on korjattava useilla tekijöillä, jotta saadaan korjattu lukema \( M_Q \):</p>
             <div class="formula">
                 \[ M_Q = M_{raw} \cdot k_{TP} \cdot k_{pol} \cdot k_s \cdot k_{elec} \]
@@ -1710,9 +1793,9 @@
                 <p><strong>K&auml;yt&auml;nn&ouml;n vinkki:</strong> Lämpötila- ja painekorjaus on aina tehtävä avoimilla kammioilla. Huonelämpötilan ja paineen mittaukseen tulee käyttää kalibroituja mittareita. Kammion ja vesifantomin lämpötilan tulee olla tasapainossa ennen mittausta (odota vähintään 30 min).</p>
             </div>
 
-            <h2>4. STUK:n kansallinen absoluuttidosimetriaprotokolla</h2>
+            <h2>5. STUK:n kansallinen absoluuttidosimetriaprotokolla</h2>
 
-            <h3>4.1 Suomen kansallinen standardi (STUK-STO-TR1)</h3>
+            <h3>5.1 Suomen kansallinen standardi (STUK-STO-TR1)</h3>
             <p>STUK:n tekninen raportti STO-TR1 on Suomen kansallinen ohje absorboituneen annoksen mittaukseen sädehoidossa. Se perustuu IAEA TRS-398 -protokollaan ja täydentää sitä kansallisilla erityispiirteillä:</p>
             <ul>
                 <li><strong>Kalibrointiketju</strong>: STUK ylläpitää Suomen primäärimitanormaalia absorboituneelle annokselle vedessä. Sairaaloiden kammiot kalibroidaan STUK:ssa tai kansallisen kalibrointiketjun kautta.</li>
@@ -1720,7 +1803,7 @@
                 <li><strong>Säteilylaadun määritys</strong>: Fotoneille käytetään TPR<sub>20,10</sub>-suuretta (kudosfantomin suhde syvyyksillä 20 cm ja 10 cm). Elektroneille R<sub>50</sub> (50 %:n annossyvyys).</li>
             </ul>
 
-            <h3>4.2 Mittausmenettely fotoneille</h3>
+            <h3>5.2 Mittausmenettely fotoneille</h3>
             <p>Vaiheittainen mittausprotokolla STUK-STO-TR1:n mukaan:</p>
             <ol>
                 <li><strong>Vesifantomin valmistelu</strong>: Tasapäistettävä vaakasuoraan, täytettävä vedellä, odotettava lämpötilan tasaantumista (&ge; 30 min). Veden tulee olla puhdasta ja deioinisoitua.</li>
@@ -1732,7 +1815,7 @@
                 <li><strong>Vertailu kiihdyttimen outputiin</strong>: MU-arvo suhteessa mitattuun annokseen. Poikkeama &gt; &plusmn;1 % referenssiolosuhteista vaatii kiihdyttimen uudelleenkalibroinnin.</li>
             </ol>
 
-            <h3>4.3 Epävarmuusbudjetti</h3>
+            <h3>5.3 Epävarmuusbudjetti</h3>
             <p>TRS-398:n mukainen epävarmuusbudjetti absorboituneen annoksen mittaukselle:</p>
             <table>
                 <thead>
@@ -1752,9 +1835,9 @@
                 <p><strong>Käytäntö Suomessa:</strong> STUK suorittaa vuosittain absoluuttidosimetrisen tarkastuksen jokaiselle sädehoidon lineaarikiihdyttimelle. STUK:n referenssikammion tulos verrataan sairaalan omaan kalibrointitulokseen. Sallittu poikkeama on &plusmn; 2 %. Systemaattisten poikkeamien seuranta yli vuosien mahdollistaa kalibrointiketjun vakauden arvioinnin.</p>
             </div>
 
-            <h2>5. Annosmittauksen ja annoslaskennan välinen yhteys</h2>
+            <h2>6. Annosmittauksen ja annoslaskennan välinen yhteys</h2>
 
-            <h3>5.1 Kalibrointidata ja TPS:n beam model</h3>
+            <h3>6.1 Kalibrointidata ja TPS:n beam model</h3>
             <p>Annosmittauksen ja annoslaskennan välillä on suora yhteys: TPS:n annosalgoritmit perustuvat commissioning-mittausdataan (PDD, profiilit, output-faktorit). Mittausdata muodostaa perustan beam model -mallinnukselle:</p>
             <ul>
                 <li><strong>PDD-mittaukset</strong> &rarr; TPS:n syvyysannosten kalibraatio</li>
@@ -1763,7 +1846,7 @@
                 <li><strong>MLC-parametrit</strong> (DLG, transmissio) &rarr; IMRT/VMAT-mallinnuksen tarkkuus</li>
             </ul>
 
-            <h3>5.2 Riippumaton annoksen tarkistus (independent MU check)</h3>
+            <h3>6.2 Riippumaton annoksen tarkistus (independent MU check)</h3>
             <p>Hoitosuunnitelman riippumaton tarkistus tarkoittaa, että toinen, TPS:stä riippumaton menetelmä verifioi annoksen pisteessä tai kokonaisannoksen. Menetelmiä:</p>
             <ul>
                 <li><strong>Manuaalinen MU-laskenta</strong>: Kynä-paperilaskenta tai taulukkolaskenta tabuloiduilla PDD/TMR-arvoilla ja sironta-faktoreilla. Vertailu TPS:n MU-arvoon pisteessä.</li>
@@ -1775,9 +1858,9 @@
                 <p><strong>Tärkeää:</strong> Riippumaton tarkistus on sädehoidon potilasturvallisuuden kulmakivi. Se tunnistaa TPS:n mallinnusvirheet, virheelliset syöttöparametrit ja tiedonsiirron virheet. Tarkistuksen hyväksymisraja on tyypillisesti &plusmn; 3&ndash;5 % (hoitopaikasta ja tekniikasta riippuen). Suurempi poikkeama vaatii selvityksen ennen hoidon aloittamista.</p>
             </div>
 
-            <h2>6. Kaviteettiteoriat</h2>
+            <h2>7. Kaviteettiteoriat</h2>
 
-            <h3>6.1 Bragg-Gray-kaviteettiteoria</h3>
+            <h3>7.1 Bragg-Gray-kaviteettiteoria</h3>
             <p>Bragg-Gray-teoria muodostaa absorboituneen annoksen mittauksen teoreettisen perustan. Se yhdistää annoksen kammion kaasutäytteessä (kaviteetissa) annokseen ympäröivässä väliaineessa:</p>
             <div class="formula">
                 \[ D_{med} = D_{cav} \cdot \bar{s}_{med,air} \]
@@ -1789,7 +1872,7 @@
                 <li>Annoksen kaviteetissa tulee olla kokonaan varattujen hiukkasten aiheuttama (ei fotonivuorovaikutuksia kaviteetissa)</li>
             </ol>
 
-            <h3>6.2 Spencer-Attix-kaviteettiteoria</h3>
+            <h3>7.2 Spencer-Attix-kaviteettiteoria</h3>
             <p>Spencer-Attix-teoria on Bragg-Gray-teorian tarkennus, joka huomioi delta-elektronit (knock-on electrons) eli sekundaarielektronit, joiden energia on riittävän suuri poistumaan kaviteetista. Teoria ottaa käyttöön energiakatkaisuparametrin \( \Delta \), joka on delta-elektronien minimienergiaraja:</p>
             <ul>
                 <li>Elektronit, joiden energia \( E > \Delta \), sisällytetään fluenssiin</li>
@@ -1798,7 +1881,7 @@
             </ul>
             <p>Spencer-Attix-teoria antaa tarkempia pysäytysvoimasuhteita kuin alkuperäinen Bragg-Gray, ja se on nykyisten kalibrointiprotokollien (TRS-398, TG-51) teoreettinen perusta.</p>
 
-            <h3>6.3 Fano-teoreema ja CPE</h3>
+            <h3>7.3 Fano-teoreema ja CPE</h3>
             <p>Fano-teoreema toteaa, että homogeenisessa ja äärettömässä väliaineessa, johon kohdistuu tasainen fotonikenttä, varattujen hiukkasten fluenssi on kaikkialla sama riippumatta väliaineen tiheydestä &mdash; kunhan atomikoostumus on sama. Tämä teoreema on kaviteettiteorian perusta ja oikeuttaa pienten kaviteettien käytön annoksen mittaukseen.</p>
             <p>CPE (charged particle equilibrium) tarkoittaa, että jokaisessa pisteessä väliaineeseen saapuvien ja siitä poistuvien varattujen hiukkasten energia on tasapainossa. CPE:n toteutuessa kerma ja absorboitunut annos ovat yhtä suuria: \( D = K_{col} \).</p>
 
@@ -1806,9 +1889,9 @@
                 <p><strong>Teoreettinen perusta:</strong> Kaviteettiteoria on absoluuttisen dosimetrian perusta. Ilman kaviteettiteoriaa emme voisi muuntaa ionisaatiokammion mittaamaa varausta absorboituneeksi annokseksi kudoksessa. TRS-398 ja TG-51 -protokollat perustuvat Spencer-Attix-teoriaan ja sen johdannaisiin.</p>
             </div>
 
-            <h2>5. Suhteellinen dosimetria</h2>
+            <h2>8. Suhteellinen dosimetria</h2>
 
-            <h3>5.1 PDD- ja profiilimittaukset vesifantomissa</h3>
+            <h3>8.1 PDD- ja profiilimittaukset vesifantomissa</h3>
             <div class="theory-image-slot" data-slot="relative-dosimetry" data-tab="dosimetria" data-default-caption="Vesifantomimittaukset: PDD-käyrä, poikkisuuntainen profiili ja output-faktorit eri kenttäkoille"></div>
             <p>Suhteellinen dosimetria (relative dosimetry) kuvaa annosjakauman muodon ilman absoluuttista annostasoa. Mittaukset tehdään tyypillisesti automaattisella vesifantomilla (esim. PTW MP3, IBA Blue Phantom).</p>
             <ul>
@@ -1817,7 +1900,7 @@
                 <li><strong>Output-faktorit \( S_{cp} \)</strong>: Annos isosentrissa kenttäkoon funktiona, normalisoitu referenssikenttäkokoon (10 &times; 10 cm&sup2;). Koostuu kollimaattorin sironta-faktorista \( S_c \) ja fantomin sironta-faktorista \( S_p \).</li>
             </ul>
 
-            <h3>5.2 Pienten kenttien dosimetria &mdash; IAEA TRS-483</h3>
+            <h3>8.2 Pienten kenttien dosimetria &mdash; IAEA TRS-483</h3>
             <p>Pienet kentät (&lt; 4 &times; 4 cm&sup2;) aiheuttavat erityisiä dosimetrisia haasteita, koska kolme oletusta murtuvat:</p>
             <ol>
                 <li><strong>Lateraalisen tasapainon puute (LCPE loss)</strong>: Sekundaarielektronien kantama ylittää kenttäkoon &rarr; annoksen pieneneminen keskiakselilla</li>
@@ -1825,7 +1908,7 @@
                 <li><strong>Detektorin tilavuusvaikutus (volume averaging)</strong>: Detektori on suuri suhteessa kenttäkokoon &rarr; mittaustulos aliarvioi annoksen</li>
             </ol>
 
-            <h3>5.3 Pienkenttädosimetrian detektorit</h3>
+            <h3>8.3 Pienkenttädosimetrian detektorit</h3>
             <table>
                 <thead>
                     <tr><th>Haaste</th><th>Suositeltu detektori</th><th>Perustelu</th></tr>
@@ -1842,7 +1925,7 @@
                 <p><strong>T&auml;rke&auml;&auml;:</strong> Pienten kenttien dosimetriassa tavallinen Farmer-kammio antaa virheellisiä tuloksia (jopa 10&ndash;20 % aliarvio). IAEA TRS-483 suosittelee käytettäväksi erityisiä detektorikohtaisia korjauskertoimia (\( k \)-faktorit), jotka on taulukoitu eri detektori-kiihdytin-yhdistelmille.</p>
             </div>
 
-            <h3>5.4 STUK-B-272: Pienten kenttien dosimetria Suomessa</h3>
+            <h3>8.4 STUK-B-272: Pienten kenttien dosimetria Suomessa</h3>
             <p>STUK:n raportti B-272 esittelee systemaattisen tutkimuksen pienten kenttien annosmäärityksistä suomalaisissa sädehoidon yksiköissä. Raportissa korostuvat seuraavat tulokset ja käytännöt:</p>
             <ul>
                 <li><strong>Tilavuuskeskiarvoistuskorjaus \( k_{vol} \)</strong>: Ionisaatiokammion äärellinen tilavuus aiheuttaa mittaustuloksen aliarvioinnin pienissä kentissä. Korjauskerroin \( k_{vol} \) riippuu kammion tyypistä ja kenttäkoosta. Farmer-kammiolle (0,6 cm&sup3;) korjaus voi olla jopa 10&ndash;15 % alle 3 &times; 3 cm&sup2; kentäkoolla.</li>
@@ -1856,9 +1939,9 @@
                 <p>missä \( M \) on detektorin lukema, \( f_{clin} \) on kliininen pieni kenttä, \( f_{msr} \) on koneen-spesifinen referenssikenttä ja \( k \) on detektorikohtainen korjauskerroin, joka on tabuloitu TRS-483:ssa.</p>
             </div>
 
-            <h2>8. Erikoisdetektorit</h2>
+            <h2>9. Erikoisdetektorit</h2>
 
-            <h3>8.1 Detektorivaihtoehdot</h3>
+            <h3>9.1 Detektorivaihtoehdot</h3>
             <p>Ionisaatiokammion lisäksi sädehoidon dosimetriassa käytetään useita erikoisdetektoreita, joilla on kullakin omat vahvuutensa ja rajoituksensa:</p>
             <ul>
                 <li><strong>Diamanttidetektori (diamond detector)</strong>: Luonnon- tai synteettinen timantti. Lähes kudosekvivalentti (Z = 6), erinomainen spatiaalinen resoluutio ja hyvä herkkyys. Annosnopeus voi vaikuttaa vasteeseen (korjattavissa). Käyttö: pienten kenttien dosimetria, SRS/SBRT.</li>
@@ -1870,7 +1953,7 @@
                 <li><strong>Geelidosimetri (gel dosimetry)</strong>: Kolmiulotteinen annosjakauma geelimatriisissa (esim. MAGIC, PAGAT). Luetaan MRI:llä tai optisella CT:llä. Käyttö: 3D-annoksen verifiointi monimutkaisissa hoidoissa.</li>
             </ul>
 
-            <h3>8.2 Detektorien vertailu</h3>
+            <h3>9.2 Detektorien vertailu</h3>
             <table>
                 <thead>
                     <tr><th>Detektori</th><th>Spat. resoluutio</th><th>Reaaliaikaisuus</th><th>Energiariipp.</th><th>P&auml;&auml;k&auml;ytt&ouml;</th></tr>
@@ -1886,9 +1969,9 @@
                 </tbody>
             </table>
 
-            <h2>9. In vivo -dosimetria</h2>
+            <h2>10. In vivo -dosimetria</h2>
 
-            <h3>9.1 Menetelmät</h3>
+            <h3>10.1 Menetelmät</h3>
             <p>In vivo -dosimetria tarkoittaa annoksen mittaamista suoraan potilaan pinnalta tai sisältä hoidon aikana. Tavoitteena on todentaa, että potilaan saama annos vastaa suunniteltua.</p>
             <ul>
                 <li><strong>TLD/OSLD-mittaukset</strong>: Detektorit asetetaan potilaan iholle hoitoalueen sisäänmeno- ja ulostulopuolelle. Mitattu annos verrataan hoitosuunnitelman ennustamaan pinta-annokseen.</li>
@@ -1896,7 +1979,7 @@
                 <li><strong>EPID-dosimetria (electronic portal imaging device)</strong>: Lineaarikiihdyttimen portaalikuvailmaisin (yleensä aSi flat panel) voidaan käyttää annoksen mittaamiseen potilaan takana (transit dosimetry). Mahdollistaa jokaisen fraktion annoksen verifioinnin ilman lisädetektoreita.</li>
             </ul>
 
-            <h3>9.2 Pre-treatment verification</h3>
+            <h3>10.2 Pre-treatment verification</h3>
             <p>Ennen potilaan hoitoa tehtävä annosverifiointi (pre-treatment QA) vertaa mitattua annos- tai fluenssijakaumaa hoitosuunnitelmajärjestelmän laskemaan. Menetelmät:</p>
             <ul>
                 <li>Ionisaatiokammiomatriisit (esim. PTW Octavius, IBA MatriXX): 2D-annosjakauma</li>
@@ -1905,19 +1988,19 @@
                 <li>Log-file-analyysi: MLC-lehtien toteutuneet asennot vs. suunnitellut</li>
             </ul>
 
-            <h2>10. STUK-laitetarkastukset</h2>
+            <h2>11. STUK-laitetarkastukset</h2>
 
-            <h3>10.1 Käyttöönottotarkastus (commissioning verification)</h3>
+            <h3>11.1 Käyttöönottotarkastus (commissioning verification)</h3>
             <p>STUK suorittaa uuden sädehoidon laitteen tarkastuksen ennen kliinistä käyttöönottoa. Tarkastuksessa verifioidaan sairaalan commissioning-mittauksien tulokset ja arvioidaan laadunvarmistusohjelman riittävyys.</p>
 
-            <h3>10.2 Määräaikaistarkastukset</h3>
+            <h3>11.2 Määräaikaistarkastukset</h3>
             <p>STUK suorittaa sädehoidon laitteiden määräaikaistarkastukset säännöllisin väliajoin:</p>
             <ul>
                 <li><strong>Vuosittainen tarkastus</strong>: Absorboidun annoksen mittaus STUK:n referenssikammiolla, mekaanisten parametrien tarkastus</li>
                 <li><strong>3 vuoden välein</strong>: Laajempi tarkastus, johon sisältyy annoksen tarkkuus useilla energioilla, MLC:n tarkkuus, turvallisuusjärjestelmät, kuvantaminen ja dokumentaation auditointi</li>
             </ul>
 
-            <h3>10.3 Mitattavat parametrit</h3>
+            <h3>11.3 Mitattavat parametrit</h3>
             <ul>
                 <li>Absorboidun annoksen tarkkuus: &plusmn; 2 % referenssiolosuhteissa</li>
                 <li>Mekaaninen tarkkuus: isosentrin koko &le; 2 mm (gantry, kollimaattori, peti)</li>
@@ -1929,12 +2012,12 @@
                 <p><strong>Lakis&auml;&auml;teinen vaatimus:</strong> STUK:n tarkastus on lakisääteinen vaatimus (säteilylaki 859/2018). Sairaalafyysikon on valmisteltava tarkastus huolellisesti, oltava läsnä tarkastuksen aikana ja huolehdittava mahdollisten poikkeamien korjaamisesta määräajassa. Tarkastuksen tulokset kirjataan STUK:n pöytäkirjaan.</p>
             </div>
 
-            <h2>11. Laadunvarmistusohjelmat</h2>
+            <h2>12. Laadunvarmistusohjelmat</h2>
 
-            <h3>11.1 AAPM TG-142 -suositukset</h3>
+            <h3>12.1 AAPM TG-142 -suositukset</h3>
             <p>AAPM Task Group 142 (TG-142) on kansainvälisesti laajimmin käytetty suositus lineaarikiihdyttimen laadunvarmistukselle. Se määrittelee testit ja toleranssit päivittäiselle, kuukausittaiselle ja vuosittaiselle QA:lle:</p>
 
-            <h3>11.2 TG-142 toleranssit</h3>
+            <h3>12.2 TG-142 toleranssit</h3>
             <table>
                 <thead>
                     <tr><th>Parametri</th><th>Tiheys</th><th>Toleranssi</th><th>Menetelm&auml;</th></tr>
@@ -1951,7 +2034,7 @@
                 </tbody>
             </table>
 
-            <h3>11.3 Potilas-QA: IMRT/VMAT-verifiointi</h3>
+            <h3>12.3 Potilas-QA: IMRT/VMAT-verifiointi</h3>
             <p>Intensiteettimuokattujen hoitojen (IMRT, VMAT) laadunvarmistus edellyttää potilaskohtaista annosverifiointia. Yleisin menetelmä on gamma-analyysi, joka vertaa mitattua ja suunniteltua annosjakaumaa sekä annoseron että etäisyyseron suhteen:</p>
             <div class="formula">
                 \[ \gamma(\mathbf{r}) = \min_{\mathbf{r}_r} \left\{ \sqrt{\frac{|\mathbf{r} - \mathbf{r}_r|^2}{\Delta d^2} + \frac{|D(\mathbf{r}) - D_r(\mathbf{r}_r)|^2}{\Delta D^2}} \right\} \]
@@ -2005,7 +2088,7 @@
     <!-- ================================================================
          VÄLILEHTI 6: LAITTEET
          ================================================================ -->
-    <div class="theory-panel" id="panel-laitteet" role="tabpanel">
+    <div class="theory-panel" id="panel-laitteet" role="tabpanel" data-epa-map='{"A1":[2,3],"A2":[3,4,5,6],"A3":[9],"A4":[10],"A5":[11],"B1":[8],"B2":[7,8]}'>
         <div class="theory-content">
 
             <!-- EPA-koulutuskortti: Säteilyä tuottavat laitteet sädehoidossa -->
@@ -2426,7 +2509,7 @@
     <!-- ================================================================
          VÄLILEHTI 7: SÄTEILYBIOLOGIA JA -SUOJELU
          ================================================================ -->
-    <div class="theory-panel" id="panel-sateilybiologia" role="tabpanel">
+    <div class="theory-panel" id="panel-sateilybiologia" role="tabpanel" data-epa-map='{"A1":[2],"A2":[3,5],"A3":[4,6],"A4":[8],"A5":[5,9,10],"A6":[11,12],"A7":[13,14],"B1":[10],"B2":[5,7,10,12,13]}'>
         <div class="theory-content">
 
             <!-- EPA-koulutuskortti: Säteilybiologia ja säteilysuojelu sädehoidossa -->
@@ -2546,6 +2629,16 @@
                 <p><strong>Kliininen merkitys:</strong> LQ-malli on kliinisen fraktioinnin suunnittelun perusta. Korkean &alpha;/&beta;-suhteen kasvaimissa (esim. pään ja kaulan alueen syövät) konventionaalinen fraktiointi (2 Gy/fx) on tehokas, koska kasvaimen ja myöhäisreaktioiden kudosten välillä on terapeuttinen ikkuna. Matalan &alpha;/&beta;-suhteen kasvaimissa (esim. eturauhassyöpä) hypofraktiointi voi olla edullista.</p>
             </div>
 
+            <h3>3.4 LQ-mallin rajoitukset</h3>
+            <p>LQ-malli on erittäin hyödyllinen työkalu, mutta sillä on tunnettuja rajoituksia:</p>
+            <ul>
+                <li><strong>Pieni fraktioannos (&lt; 1 Gy)</strong>: Alle 1 Gy:n annoksilla on havaittu hypersäteilyherkkyyttä (low-dose hyper-radiosensitivity, HRS) — solukuolema on suurempaa kuin LQ-malli ennustaa. Tämä on kliinisesti merkittävä esim. stereotaktisessa fraktioinnissa pienissä annostasoissa.</li>
+                <li><strong>Suuri fraktioannos (&gt; 6&ndash;7 Gy)</strong>: Empiirinen data viittaa siihen, että todellinen selviytymiskäyrä lähestyy suoraa korkeilla annoksilla, kun taas LQ-malli jatkaa kaarevana. SBRT:ssä ja SRS:ssä LQ-malli saattaa aliarvioida biologisen tehon.</li>
+                <li><strong>EQD2-muunnos suurilla annoksilla</strong>: Kun fraktioannos ylittää 6&ndash;7 Gy, EQD2-arvo on todennäköisesti isodoosia tai DVH-arvoa tarkempi, mutta saattaa silti aliarvioida myöhäisreaktioiden todennäköisyyttä.</li>
+                <li><strong>Pitkät hoitoajat</strong>: Malli ei oletusarvoisesti huomioi repopulaatiota tai solureparaatiota hoidon aikana. Yhden fraktion toimituksen kesto ei saisi ylittää 30 minuuttia — pidempi toimitusaika voi johtaa kasvainkontrollin heikkenemiseen reparaation vuoksi.</li>
+                <li><strong>Suuren muutoksen ekstrapolointi</strong>: Kokonaishoitoajan merkittäviä muutoksia (esim. hoitotauot) tulee arvioida varovaisuudella.</li>
+            </ul>
+
             <h2>4. Biologinen efektiivinen annos (BED)</h2>
 
             <h3>4.1 BED-kaava</h3>
@@ -2594,8 +2687,12 @@
             <h3>5.4 Reoxygenation (reoxyginaatio)</h3>
             <p>Hypoksiset kasvainsolut ovat 2&ndash;3 kertaa säteilyresistentimpiä kuin oksigeniset solut (OER, oxygen enhancement ratio ~3). Tuumorin pienentyessä hoidon aikana aiemmin hypoksiset solut saavat verenkierron ja hapettuvat (reoxygenation), jolloin ne tulevat säteilyherkemmiksi seuraavissa fraktioissa.</p>
 
+            <h3>5.5 Viides R: Intrinsic radiosensitivity (sisäinen säteilyherkkyys)</h3>
+            <p>Steel (1993) ehdotti viidenneksi R:ksi kasvaimen <strong>sisäistä säteilyherkkyyttä</strong> (intrinsic radiosensitivity). Eri kasvaintyypeillä on merkittäviä eroja säteilyherkkyyden suhteen, jotka eivät selity pelkästään perinteisillä neljällä R:llä. Tämä ero kuvastuu &alpha;-parameterissä: korkea &alpha; &rarr; herkempi kasvain (esim. lymfoomat, seminoomat). LQ-mallissa tämä näkyy selviytymiskäyrän alkukaltevuutena.</p>
+            <p>Lisäksi on ehdotettu muitakin tekijöitä, kuten kohdesäteilytilavuus (irradiated volume), pitkäaikainen palautuminen (long-term restoration) ja vaskulaariset sekä immunologiset vasteet (erityisesti suurilla kerta-annoksilla SBRT:ssä).</p>
+
             <div class="theory-info">
-                <p><strong>Fraktioinnin perusta:</strong> Neljä R:ää selittää, miksi fraktioitua sädehoitoa käytetään. Repair ja redistribution suosivat fraktiointia (normaalikudoksen suojelu). Repopulation rajoittaa hoitoajan pidentämistä. Reoxygenation suosii fraktiointia (kasvaimen tehostuminen). Optimaalinen fraktiointikaava tasapainottaa nämä neljä tekijää.</p>
+                <p><strong>Fraktioinnin perusta:</strong> Neljä R:ää selittää, miksi fraktioitua sädehoitoa käytetään. Repair ja redistribution suosivat fraktiointia (normaalikudoksen suojelu). Repopulation rajoittaa hoitoajan pidentämistä. Reoxygenation suosii fraktiointia (kasvaimen tehostuminen). Viides R (sisäinen säteilyherkkyys) muistuttaa, että potilaskohtaiset erot ovat suuria. Optimaalinen fraktiointikaava tasapainottaa kaikki nämä tekijät.</p>
             </div>
 
             <h2>6. TCP ja NTCP</h2>
@@ -2884,6 +2981,18 @@
                 <li>\( U \) = käyttökerroin (use factor), osuus ajasta kun keila suuntautuu seinään</li>
                 <li>\( T \) = oleskelukerroin (occupancy factor), osuus ajasta jolloin alueella oleskellaan</li>
             </ul>
+            <p><strong>Tyypilliset käyttökertoimet (U) NCRP 151 mukaan:</strong></p>
+            <table>
+                <thead>
+                    <tr><th>Gantry-suunta</th><th>Suojattu seinä</th><th>U-arvo</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Alas (gantry 0°, alasein&auml;)</td><td>Lattia</td><td>1</td></tr>
+                    <tr><td>Yl&ouml;s (gantry 180°)</td><td>Katto</td><td>0,5</td></tr>
+                    <tr><td>Sivulle (gantry 90° tai 270°)</td><td>Sivusein&auml;t</td><td>0,25</td></tr>
+                </tbody>
+            </table>
+            <p><strong>Esimerkki ty&ouml;kuorman (W) laskennasta:</strong> Lineaarikiihdytin, 50 potilasta/p&auml;iv&auml; &times; 250 ty&ouml;p&auml;iv&auml;/vuosi &times; 2,5 Gy/potilas = 31 250 Gy/vuosi prim&auml;&auml;riseetä. Lis&auml;&auml;m&auml;ll&auml; laadunvarmistusmittaukset (~25&ndash;30 %) kokonaisty&ouml;kuorma on n. 40 000 Gy/vuosi. Ty&ouml;kuorma on keskeinen muuttuja: se on arvioitava oikein &mdash; ali- tai yliarvioiminen johtaa suojauksen alimitoitukseen tai turhaan betonointiin.</p>
 
             <h3>13.3 Sokkelomitoitus (maze design)</h3>
             <p>Sädehoidon hoitohuoneeseen johtaa tyypillisesti L- tai U-muotoinen sokkelo (maze), joka vaimentaa hajasäteilyä moninkertaisen sironnan kautta. Sokkelomitoituksessa huomioidaan:</p>
@@ -3035,6 +3144,7 @@
 {% endblock %}
 
 {% block extra_js %}
+<script src="{% static 'sisalto/js/theory-epa-links.js' %}"></script>
 <script src="{% static 'sisalto/js/tts-player.js' %}"></script>
 <script>
 (function() {

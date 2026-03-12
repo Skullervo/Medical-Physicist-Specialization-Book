@@ -4,8 +4,8 @@
 {% block title %}Kliinisen fysiologian teoria - Fyysikkoportti{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'sisalto/css/theory.css' %}?v=1">
-<link rel="stylesheet" href="{% static 'sisalto/css/theory-inline-editor.css' %}?v=1">
+<link rel="stylesheet" href="{% static 'sisalto/css/theory.css' %}?v=11">
+<link rel="stylesheet" href="{% static 'sisalto/css/theory-inline-editor.css' %}?v=2">
 {% endblock %}
 
 {% block content %}
@@ -78,7 +78,7 @@
     <!-- ================================================================
          VÄLILEHTI 1: EKG-TUTKIMUKSET
          ================================================================ -->
-    <div class="theory-panel active" id="panel-ekg" role="tabpanel">
+    <div class="theory-panel active" id="panel-ekg" role="tabpanel" data-epa-map='{"A1":[1],"A2":[1],"A3":[1,2],"A4":[2,6],"A5":[2],"A6":[3],"A7":[8],"A8":[8],"A9":[8],"B1":[4],"B2":[5],"B3":[8],"B4":[8],"B5":[7],"B6":[1,2,3,4,5,6,7,8]}'>
         <div class="theory-content">
 
             <!-- EPA-koulutuskortti: EKG-tutkimukset -->
@@ -509,7 +509,7 @@
     <!-- ================================================================
          VÄLILEHTI 2: VERENKIERTOTUTKIMUKSET
          ================================================================ -->
-    <div class="theory-panel" id="panel-verenkierto" role="tabpanel">
+    <div class="theory-panel" id="panel-verenkierto" role="tabpanel" data-epa-map='{"A1":[1],"A2":[1],"A3":[1],"A4":[2,3],"A5":[1],"A6":[5],"A7":[1],"A8":[1],"A9":[1],"A10":[1],"B1":[2,3,4,7],"B2":[6],"B3":[2,3,7],"B4":[1,2,3,4,5,6,7,8]}'>
         <div class="theory-content">
 
             <!-- EPA-koulutuskortti: Verenkiertotutkimukset -->
@@ -902,7 +902,7 @@ $$\text{RMSSD} = \sqrt{\frac{1}{N-1} \sum_{i=1}^{N-1}(\text{RR}_{i+1} - \text{RR
     <!-- ================================================================
          VÄLILEHTI 3: KEUHKOFUNKTIOTUTKIMUKSET
          ================================================================ -->
-    <div class="theory-panel" id="panel-keuhkofunktio" role="tabpanel">
+    <div class="theory-panel" id="panel-keuhkofunktio" role="tabpanel" data-epa-map='{"A1":[1],"A2":[1],"A3":[1],"A4":[1,7],"A5":[1,2,3,4],"A6":[2,5],"A7":[1,2,3,4,7,8],"A8":[1,2,3,8],"A9":[1,2,8],"A10":[1,2,8],"B1":[8],"B2":[2,6],"B3":[8],"B4":[7],"B5":[1,2,3,4,5],"B6":[1,2,3,4,5,6,7,8]}'>
         <div class="theory-content">
 
             <!-- EPA-koulutuskortti: Keuhkofunktiotutkimukset -->
@@ -1287,7 +1287,7 @@ $$\text{RMSSD} = \sqrt{\frac{1}{N-1} \sum_{i=1}^{N-1}(\text{RR}_{i+1} - \text{RR
     <!-- ================================================================
          VÄLILEHTI 4: GI-KANAVAN TUTKIMUKSET
          ================================================================ -->
-    <div class="theory-panel" id="panel-gi" role="tabpanel">
+    <div class="theory-panel" id="panel-gi" role="tabpanel" data-epa-map='{"A1":[1],"A2":[1],"A3":[1],"A4":[1,6],"A5":[1,2,3,4,5],"A6":[1],"A7":[1],"A8":[1],"A9":[1],"B1":[8],"B2":[1,2,3,4,5,7],"B3":[1,2,3,4,5,7],"B4":[1,2,3,4,5,6,7,8]}'>
         <div class="theory-content">
 
             <!-- EPA-koulutuskortti: GI-kanavan tutkimukset -->
@@ -1610,7 +1610,7 @@ $$\text{RMSSD} = \sqrt{\frac{1}{N-1} \sum_{i=1}^{N-1}(\text{RR}_{i+1} - \text{RR
     <!-- ================================================================
          VÄLILEHTI 5: LUUSTON MINERAALITIHEYDEN MITTAUS (DXA)
          ================================================================ -->
-    <div class="theory-panel" id="panel-dxa" role="tabpanel">
+    <div class="theory-panel" id="panel-dxa" role="tabpanel" data-epa-map='{"A1":[1],"A2":[1],"A3":[1],"A4":[1],"A5":[1,2,3],"A6":[3],"A7":[1],"A8":[1],"B1":[1],"B2":[1],"B3":[2],"B4":[1],"B5":[2],"B6":[1,2,3]}'>
         <div class="theory-content">
 
             <!-- EPA-koulutuskortti: Luuston mineraalitiheyden mittaus (DXA) -->
@@ -1752,6 +1752,7 @@ $$\text{RMSSD} = \sqrt{\frac{1}{N-1} \sum_{i=1}^{N-1}(\text{RR}_{i+1} - \text{RR
 {% endblock %}
 
 {% block extra_js %}
+<script src="{% static 'sisalto/js/theory-epa-links.js' %}"></script>
 <script src="{% static 'sisalto/js/tts-player.js' %}"></script>
 <script>
 (function() {

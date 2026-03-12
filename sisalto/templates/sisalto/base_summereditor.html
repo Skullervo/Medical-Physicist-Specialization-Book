@@ -98,7 +98,7 @@
         <div class="header-content">
             <h1 class="header-title">
                 <a href="/" style="color: inherit; text-decoration: none;">
-                    <i class="fas fa-radiation-alt" style="color: #4a90e2; margin-right: 12px;"></i><span class="highlight">Fyysikko</span>portti
+                    <i class="fas fa-radiation-alt" style="color: var(--color-primary); margin-right: 12px;"></i><span class="highlight">Fyysikko</span>portti
                 </a>
             </h1>
             <nav class="header-nav">
@@ -139,7 +139,7 @@
                 <li><a href="/">Etusivu</a></li>
                 <li>
                     <details>
-                        <summary><a href="/epas/">EPA-kortit</a></summary>
+                        <summary><a href="/epas/"><i class="fas fa-id-card"></i> EPA-kortit</a></summary>
                         <ul>
                             <li>
                                 <details>
@@ -213,7 +213,18 @@
                         </ul>
                     </details>
                 </li>
-                <li><a href="/modaliteetit/"><i class="fas fa-book-open"></i> Modaliteetit</a></li>
+                <li>
+                    <details>
+                        <summary><a href="/modaliteetit/"><i class="fas fa-book-open"></i> Modaliteetit</a></summary>
+                        <ul>
+                            <li><a href="/modaliteetit/radiologia/">Radiologia</a></li>
+                            <li><a href="/modaliteetit/sadehoito/">Sädehoito</a></li>
+                            <li><a href="/modaliteetit/isotooppi/">Isotooppilääketiede</a></li>
+                            <li><a href="/modaliteetit/knf/">Kliininen neurofysiologia</a></li>
+                            <li><a href="/modaliteetit/fysiologia/">Kliininen fysiologia</a></li>
+                        </ul>
+                    </details>
+                </li>
             </ul>
 
             <!-- Harjoittelu -->
@@ -240,6 +251,7 @@
             <div class="sidebar-section">
                 <div class="sidebar-section-title">Muut</div>
                 <ul>
+                    <li><a href="/viitteet/"><i class="fas fa-book-open"></i> Viitteet</a></li>
                     <li><a href="/raportoi-ongelma/"><i class="fas fa-bug"></i> Raportoi ongelmasta</a></li>
                 </ul>
             </div>
@@ -257,8 +269,13 @@
                 <i class="fas fa-robot"></i>
                 AI Assistant
             </div>
-            <div id="chatbot-toggle" class="chatbot-toggle">
-                <i class="fas fa-chevron-up"></i>
+            <div style="display:flex;align-items:center;gap:2px;" onclick="event.stopPropagation()">
+                <button class="chatbot-expand-btn" id="chatbot-expand-btn" onclick="toggleChatbotExpand()" title="Laajenna / pienennä">
+                    <i class="fas fa-expand-alt"></i>
+                </button>
+                <div id="chatbot-toggle" class="chatbot-toggle" onclick="toggleChatbot()">
+                    <i class="fas fa-chevron-up"></i>
+                </div>
             </div>
         </div>
         
@@ -270,27 +287,29 @@
                     </div>
                     <div class="message-content">
                         <div class="message-text">
-                            Hei! Olen AI-assistentti. Voin auttaa sinua sairaalafyysikon erikoistumiseen liittyvissä kysymyksissä. 
+                            Hei! Olen AI-assistentti. Voin auttaa sinua sairaalafyysikon erikoistumiseen liittyvissä kysymyksissä.
                             <br><br>
                             <strong>Ominaisuudet:</strong>
                             <br>• Vastaan kysymyksiin EPA-alueista
                             <br>• Selitän fysiikan käsitteitä
                             <br>• Autan tenttiin valmistautumisessa
-                            <br><br>
-                            <em>Huom: Tarvitset OpenAI API-avaimen keskustellaksesi.</em>
                         </div>
                     </div>
                 </div>
             </div>
+            <div id="chatbot-status" class="chatbot-status"></div>
             
-            <div class="chatbot-input-container">
-                <input 
-                    type="text" 
-                    id="chatbot-input-field" 
-                    class="chatbot-input" 
-                    placeholder="Kirjoita viestisi..."
+            <div class="chatbot-input-container" style="display:flex;gap:6px;align-items:center;">
+                <input
+                    type="text"
+                    id="chatbot-input-field"
+                    class="chatbot-input"
+                    placeholder="Kirjoita tai puhu..."
                     onkeypress="handleChatbotEnter(event)"
                 >
+                <button id="chatbot-mic-btn" class="chatbot-mic-btn" onclick="toggleChatbotMic()" title="Puhu">
+                    <i class="fas fa-microphone"></i>
+                </button>
                 <button id="chatbot-send-btn" class="chatbot-send-btn" onclick="sendChatbotMessage()">
                     <i class="fas fa-paper-plane"></i>
                 </button>
@@ -303,17 +322,6 @@
             </div>
             
             <div id="chatbot-settings-panel" class="chatbot-settings-panel" style="display: none;">
-                <div class="setting-group">
-                    <label>OpenAI API Key:</label>
-                    <input 
-                        type="password" 
-                        id="api-key-input" 
-                        class="api-key-input"
-                        placeholder="sk-..." 
-                        onchange="saveChatbotApiKey()"
-                    >
-                    <small>Avain tallennetaan vain paikallisesti selaimeesi.</small>
-                </div>
                 <div class="setting-actions">
                     <button onclick="clearChatHistory()" class="clear-btn">
                         <i class="fas fa-trash"></i> Tyhjennä keskustelu

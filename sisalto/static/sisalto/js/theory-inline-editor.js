@@ -43,6 +43,119 @@
         return panel ? panel.id.replace('panel-', '') : '';
     }
 
+    // ── close all picker popups ───────────────────────────────────────
+    function closeAllPickers() {
+        if (!toolbar) return;
+        toolbar.querySelectorAll('.theory-color-picker.open, .theory-fontsize-picker.open, .theory-lineheight-picker.open')
+            .forEach(function (p) { p.classList.remove('open'); });
+    }
+
+    // ── font size ─────────────────────────────────────────────────────
+    function applyFontSize(size) {
+        var sel = window.getSelection();
+        if (!sel || sel.rangeCount === 0 || sel.isCollapsed) {
+            // No selection → apply to current block
+            var block = getContainingBlock(sel);
+            if (block) {
+                block.style.fontSize = size || '';
+                if (!block.style.cssText.trim()) block.removeAttribute('style');
+            }
+            return;
+        }
+        // Wrap selection in a span
+        var range = sel.getRangeAt(0);
+        if (!size) {
+            // Remove: strip font-size from any spans in selection
+            var container = range.commonAncestorContainer;
+            var spans = (container.nodeType === 1 ? container : container.parentElement)
+                .querySelectorAll('span[style*="font-size"]');
+            spans.forEach(function (sp) {
+                sp.style.fontSize = '';
+                if (!sp.style.cssText.trim()) {
+                    // Unwrap span
+                    while (sp.firstChild) sp.parentNode.insertBefore(sp.firstChild, sp);
+                    sp.remove();
+                }
+            });
+            return;
+        }
+        var span = document.createElement('span');
+        span.style.fontSize = size;
+        try {
+            range.surroundContents(span);
+        } catch (e) {
+            // If range crosses element boundaries, use execCommand fallback
+            document.execCommand('fontSize', false, '7');
+            var fontEls = document.querySelectorAll('font[size="7"]');
+            fontEls.forEach(function (f) {
+                var s = document.createElement('span');
+                s.style.fontSize = size;
+                while (f.firstChild) s.appendChild(f.firstChild);
+                f.parentNode.replaceChild(s, f);
+            });
+        }
+    }
+
+    // ── line height ───────────────────────────────────────────────────
+    function applyLineHeight(lh) {
+        var sel = window.getSelection();
+        var block = getContainingBlock(sel);
+        if (!block) return;
+        block.style.lineHeight = lh || '';
+        if (!block.style.cssText.trim()) block.removeAttribute('style');
+    }
+
+    function getContainingBlock(sel) {
+        if (!sel || sel.rangeCount === 0) return null;
+        var node = sel.anchorNode;
+        if (node.nodeType === 3) node = node.parentElement;
+        while (node && node.nodeType === 1) {
+            var display = window.getComputedStyle(node).display;
+            if (display === 'block' || display === 'list-item' || node.tagName === 'LI' ||
+                node.tagName === 'P' || node.tagName === 'H2' || node.tagName === 'H3' ||
+                node.tagName === 'H4' || node.tagName === 'DIV') {
+                // Don't go up to .theory-content itself
+                if (node.classList && node.classList.contains('theory-content')) return null;
+                return node;
+            }
+            node = node.parentElement;
+        }
+        return null;
+    }
+
+    // ── insert horizontal rule ────────────────────────────────────────
+    function insertHorizontalRule() {
+        var sel = window.getSelection();
+        if (!sel || sel.rangeCount === 0) {
+            showToast('Aseta kursori tekstiin ensin', false);
+            return;
+        }
+        var range = sel.getRangeAt(0);
+        var editableEl = range.startContainer;
+        if (editableEl.nodeType === 3) editableEl = editableEl.parentElement;
+        editableEl = editableEl.closest('.theory-content[contenteditable="true"]');
+        if (!editableEl) {
+            showToast('Aseta kursori tekstiin ensin', false);
+            return;
+        }
+
+        // Find the nearest block-level element to insert after
+        var insertRef = range.startContainer;
+        while (insertRef && insertRef !== editableEl && insertRef.parentNode !== editableEl) {
+            insertRef = insertRef.parentNode;
+        }
+
+        var hr = document.createElement('hr');
+        hr.className = 'theory-hr';
+        hr.setAttribute('contenteditable', 'false');
+
+        if (insertRef && insertRef !== editableEl) {
+            insertRef.parentNode.insertBefore(hr, insertRef.nextSibling);
+        } else {
+            editableEl.appendChild(hr);
+        }
+    }
+
     // ── fixed dock toolbar ──────────────────────────────────────────────
     function createToolbar() {
         if (toolbar) return toolbar;
@@ -71,6 +184,32 @@
             '<div class="theory-dock-group">' +
                 '<button data-cmd="subscript" title="Alaindeksi"><i class="fas fa-subscript"></i></button>' +
                 '<button data-cmd="superscript" title="Yläindeksi"><i class="fas fa-superscript"></i></button>' +
+            '</div>' +
+            '<div class="theory-dock-group theory-dock-fontsize-group">' +
+                '<button data-cmd="fontSizeMenu" title="Fonttikoko"><i class="fas fa-text-height"></i></button>' +
+                '<div class="theory-fontsize-picker">' +
+                    '<button data-fontsize="0.8rem" title="Pieni (0.8rem)">A<small>pieni</small></button>' +
+                    '<button data-fontsize="0.95rem" title="Normaali (0.95rem)" class="theory-fs-active">A<small>norm</small></button>' +
+                    '<button data-fontsize="1.1rem" title="Suuri (1.1rem)">A<small>suuri</small></button>' +
+                    '<button data-fontsize="1.3rem" title="Erittäin suuri (1.3rem)">A<small>xl</small></button>' +
+                    '<button data-fontsize="1.6rem" title="Jättimäinen (1.6rem)">A<small>xxl</small></button>' +
+                    '<button data-fontsize="" title="Poista fonttikoko" class="theory-fs-reset"><i class="fas fa-ban"></i></button>' +
+                '</div>' +
+            '</div>' +
+            '<div class="theory-dock-group theory-dock-lineheight-group">' +
+                '<button data-cmd="lineHeightMenu" title="Riviväli"><i class="fas fa-arrows-alt-v"></i></button>' +
+                '<div class="theory-lineheight-picker">' +
+                    '<button data-lineheight="1.0" title="Tiivis (1.0)">1.0</button>' +
+                    '<button data-lineheight="1.3" title="Tiukka (1.3)">1.3</button>' +
+                    '<button data-lineheight="1.6" title="Normaali (1.6)" class="theory-lh-active">1.6</button>' +
+                    '<button data-lineheight="1.8" title="Väljä (1.8)">1.8</button>' +
+                    '<button data-lineheight="2.0" title="Leveä (2.0)">2.0</button>' +
+                    '<button data-lineheight="2.5" title="Erittäin leveä (2.5)">2.5</button>' +
+                    '<button data-lineheight="" title="Poista riviväli" class="theory-lh-reset"><i class="fas fa-ban"></i></button>' +
+                '</div>' +
+            '</div>' +
+            '<div class="theory-dock-group">' +
+                '<button data-cmd="insertHR" title="Lisää vaakaviiva"><i class="fas fa-minus"></i></button>' +
             '</div>' +
             '<div class="theory-dock-group">' +
                 '<button data-cmd="createLink" title="Linkki"><i class="fas fa-link"></i></button>' +
@@ -122,21 +261,53 @@
                 return;
             }
 
+            // Font size picker swatch click
+            if (btn.dataset.fontsize !== undefined && btn.dataset.fontsize !== null && btn.closest('.theory-fontsize-picker')) {
+                applyFontSize(btn.dataset.fontsize);
+                btn.closest('.theory-fontsize-picker').classList.remove('open');
+                return;
+            }
+
+            // Line height picker swatch click
+            if (btn.dataset.lineheight !== undefined && btn.dataset.lineheight !== null && btn.closest('.theory-lineheight-picker')) {
+                applyLineHeight(btn.dataset.lineheight);
+                btn.closest('.theory-lineheight-picker').classList.remove('open');
+                return;
+            }
+
             const cmd = btn.dataset.cmd;
             const value = btn.dataset.value || null;
 
             // Toggle color picker
             if (cmd === 'textColor') {
+                closeAllPickers();
                 const picker = btn.nextElementSibling;
                 if (picker) picker.classList.toggle('open');
                 return;
             }
 
-            // Close color picker on any other action
-            const openPicker = toolbar.querySelector('.theory-color-picker.open');
-            if (openPicker) openPicker.classList.remove('open');
+            // Toggle font size picker
+            if (cmd === 'fontSizeMenu') {
+                closeAllPickers();
+                const picker = btn.nextElementSibling;
+                if (picker) picker.classList.toggle('open');
+                return;
+            }
 
-            if (cmd === 'insertImage') {
+            // Toggle line height picker
+            if (cmd === 'lineHeightMenu') {
+                closeAllPickers();
+                const picker = btn.nextElementSibling;
+                if (picker) picker.classList.toggle('open');
+                return;
+            }
+
+            // Close all pickers on any other action
+            closeAllPickers();
+
+            if (cmd === 'insertHR') {
+                insertHorizontalRule();
+            } else if (cmd === 'insertImage') {
                 insertImageSlot();
             } else if (cmd === 'save') {
                 const tabId = getActiveTabId();
@@ -447,9 +618,11 @@
         const quizSec = clone.querySelector('.theory-quiz-section');
         if (quizSec) quizSec.remove();
 
-        // Remove EPA card from saved content (it comes from the template)
+        // Move EPA card to top of clone so it's saved in correct position
         const epaCard = clone.querySelector('.theory-epa-card');
-        if (epaCard) epaCard.remove();
+        if (epaCard) {
+            clone.insertBefore(epaCard, clone.firstChild);
+        }
 
         clone.querySelectorAll('.theory-image-slot').forEach(s => {
             if (s.dataset.dynamic === 'true') {
@@ -475,7 +648,7 @@
         const content = clone.innerHTML.trim();
         const modality = getModality();
 
-        fetch(SAVE_URL, {
+        return fetch(SAVE_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -553,6 +726,18 @@
             document.body.classList.add('theory-inline-editing');
             document.body.classList.add('theory-edit-mode');
         } else {
+            // Auto-save all panels that have been activated (editorActive) before stopping
+            const activeTabIds = Array.from(panels)
+                .filter(p => {
+                    const tc = p.querySelector('.theory-content');
+                    return tc && tc.dataset.editorActive === 'true';
+                })
+                .map(p => p.id.replace('panel-', ''));
+
+            if (activeTabIds.length > 0) {
+                Promise.all(activeTabIds.map(tabId => savePanel(tabId)))
+                    .then(() => showToast('Muutokset tallennettu automaattisesti (' + activeTabIds.length + ' välilehteä)'));
+            }
             panels.forEach(p => deactivatePanel(p));
             document.body.classList.remove('theory-inline-editing');
             document.body.classList.remove('theory-edit-mode');
@@ -653,16 +838,12 @@
                     const quizSection = theoryContent.querySelector('.theory-quiz-section');
                     const quizClone = quizSection ? quizSection.cloneNode(true) : null;
 
-                    // Preserve EPA card from template (always at top)
-                    const epaCard = theoryContent.querySelector('.theory-epa-card');
-                    const epaClone = epaCard ? epaCard.cloneNode(true) : null;
+                    // Preserve EPA card from template as fallback
+                    const templateEpa = theoryContent.querySelector('.theory-epa-card');
+                    const templateEpaClone = templateEpa ? templateEpa.cloneNode(true) : null;
 
                     // Replace content with saved version
                     theoryContent.innerHTML = data.content;
-
-                    // Remove any EPA card from saved content (old position)
-                    const savedEpa = theoryContent.querySelector('.theory-epa-card');
-                    if (savedEpa) savedEpa.remove();
 
                     // Fix dynamic slots saved without class attribute (legacy bug)
                     theoryContent.querySelectorAll('[data-dynamic="true"]').forEach(el => {
@@ -671,9 +852,16 @@
                         }
                     });
 
-                    // Re-insert EPA card at the very top
-                    if (epaClone) {
-                        theoryContent.insertBefore(epaClone, theoryContent.firstChild);
+                    // Use saved EPA card if present, otherwise restore template version
+                    const savedEpa = theoryContent.querySelector('.theory-epa-card');
+                    if (savedEpa) {
+                        // Move saved EPA card to top (it may be in old position)
+                        if (savedEpa !== theoryContent.firstChild) {
+                            theoryContent.insertBefore(savedEpa, theoryContent.firstChild);
+                        }
+                    } else if (templateEpaClone) {
+                        // No EPA in saved content — use template fallback
+                        theoryContent.insertBefore(templateEpaClone, theoryContent.firstChild);
                     }
 
                     // Re-append predefined template slots at original positions

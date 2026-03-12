@@ -1,4 +1,4 @@
-const CACHE_NAME = 'erikoistuminen-v1';
+const CACHE_NAME = 'erikoistuminen-v2';
 const OFFLINE_URL = '/offline/';
 
 // Cache offline page on install
@@ -53,9 +53,10 @@ self.addEventListener('fetch', event => {
     }
 
     // Network-first for navigation requests, offline fallback
+    // Use cache: 'no-cache' to bypass browser HTTP cache and always revalidate with server
     if (event.request.mode === 'navigate') {
         event.respondWith(
-            fetch(event.request).catch(() => caches.match(OFFLINE_URL))
+            fetch(event.request, { cache: 'no-cache' }).catch(() => caches.match(OFFLINE_URL))
         );
     }
 });

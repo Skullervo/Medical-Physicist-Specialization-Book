@@ -6,12 +6,22 @@
 (function() {
     'use strict';
 
+    // Available voices: {id, label, gender}
+    var VOICES = [
+        { id: 'nova',    label: 'Nova',    gender: 'f' },
+        { id: 'shimmer', label: 'Shimmer', gender: 'f' },
+        { id: 'echo',    label: 'Echo',    gender: 'm' },
+        { id: 'onyx',    label: 'Onyx',    gender: 'm' },
+        { id: 'fable',   label: 'Fable',   gender: 'm' },
+    ];
+
     // State
     var isPlaying = false;
     var isPaused = false;
     var audioQueue = [];         // Array of {audio: Audio, url: blobURL}
     var currentAudioIndex = 0;
     var currentRate = 1.0;
+    var currentVoice = localStorage.getItem('tts_voice') || 'nova';
     var playerBar = null;
     var activeBtn = null;
     var isLoading = false;
@@ -119,7 +129,7 @@
                 'Content-Type': 'application/json',
                 'X-CSRFToken': getCsrfToken(),
             },
-            body: JSON.stringify({ text: text }),
+            body: JSON.stringify({ text: text, voice: currentVoice }),
             signal: signal,
         })
         .then(function(response) {
@@ -145,6 +155,12 @@
     function createPlayerBar() {
         if (playerBar) return playerBar;
 
+        var voiceOptions = VOICES.map(function(v) {
+            var gIcon = v.gender === 'f' ? '♀' : v.gender === 'm' ? '♂' : '◈';
+            var sel = v.id === currentVoice ? ' selected' : '';
+            return '<option value="' + v.id + '"' + sel + '>' + gIcon + ' ' + v.label + '</option>';
+        }).join('');
+
         var bar = document.createElement('div');
         bar.className = 'tts-player-bar';
         bar.innerHTML =
@@ -159,6 +175,7 @@
                     '<div class="tts-progress-bar"><div class="tts-progress-fill"></div></div>' +
                 '</div>' +
                 '<span class="tts-status-text">Kuuntelee...</span>' +
+                '<select class="tts-voice-select" title="Valitse ääni">' + voiceOptions + '</select>' +
                 '<button class="tts-btn tts-speed-btn" title="Nopeus">1×</button>' +
             '</div>';
 
@@ -167,6 +184,14 @@
         bar.querySelector('.tts-play-pause').addEventListener('click', togglePause);
         bar.querySelector('.tts-stop').addEventListener('click', stopPlayback);
         bar.querySelector('.tts-speed-btn').addEventListener('click', cycleSpeed);
+        bar.querySelector('.tts-voice-select').addEventListener('change', function() {
+            currentVoice = this.value;
+            localStorage.setItem('tts_voice', currentVoice);
+            // Stop current playback so next Kuuntele press uses new voice
+            if (isPlaying || isLoading) {
+                stopPlayback();
+            }
+        });
 
         playerBar = bar;
         return bar;

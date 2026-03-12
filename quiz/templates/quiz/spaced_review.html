@@ -959,9 +959,9 @@
         }
         list.innerHTML = comments.map(function(c) {
             var resolvedStyle = c.is_resolved ? 'opacity: 0.5;' : '';
-            var resolvedBadge = c.is_resolved ? ' <span style="color: #34d399; font-size: 0.75em;">[ratkaistu]</span>' : '';
+            var resolvedBadge = c.is_resolved ? ' <span style="color: var(--color-success); font-size: 0.75em;">[ratkaistu]</span>' : '';
             var resolveBtn = IS_SUPERUSER
-                ? '<button onclick="resolveComment(' + c.id + ')" style="background: none; border: none; color: #34d399; font-size: 0.75em; cursor: pointer; padding: 0 4px;" title="Merkitse ratkaisuksi"><i class="fas fa-check"></i></button>'
+                ? '<button onclick="resolveComment(' + c.id + ')" style="background: none; border: none; color: var(--color-success); font-size: 0.75em; cursor: pointer; padding: 0 4px;" title="Merkitse ratkaisuksi"><i class="fas fa-check"></i></button>'
                 : '';
             return '<div style="border-top: 1px solid var(--border-default); padding: 8px 0; ' + resolvedStyle + '">' +
                 '<div style="display: flex; justify-content: space-between; align-items: baseline;">' +

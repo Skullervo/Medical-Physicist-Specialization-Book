@@ -16,6 +16,7 @@ This file contains all view functions organized by functionality:
 from django.contrib.auth import login
 from django.db import models as db_models
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_POST, require_GET
 from django.http import JsonResponse, HttpResponse
 from django.db.models import F, Max, Q
@@ -295,6 +296,7 @@ def get_theory_link_for_epa(epa) -> dict | None:
 	return None
 
 
+@never_cache
 def modaliteetit_radiologia_view(request):
 	"""Radiologia theory page with tabs for each sub-modality"""
 	import random as _random  # noqa: F811
@@ -332,6 +334,7 @@ def modaliteetit_radiologia_view(request):
 	})
 
 
+@never_cache
 def modaliteetit_sadehoito_view(request):
 	"""Sädehoito theory page with tabs for each sub-modality"""
 	spec = Specialty.objects.filter(name__icontains='dehoito').first()
@@ -366,6 +369,7 @@ def modaliteetit_sadehoito_view(request):
 	})
 
 
+@never_cache
 def modaliteetit_isotooppi_view(request):
 	"""Isotooppilääketiede theory page with tabs for each sub-modality"""
 	spec = Specialty.objects.filter(name__icontains='isotooppi').first()
@@ -400,6 +404,7 @@ def modaliteetit_isotooppi_view(request):
 	})
 
 
+@never_cache
 def modaliteetit_fysiologia_view(request):
 	"""Kliininen fysiologia theory page with tabs for each sub-modality"""
 	spec = Specialty.objects.filter(name__icontains='fysiolog').first()
@@ -432,6 +437,7 @@ def modaliteetit_fysiologia_view(request):
 	})
 
 
+@never_cache
 def modaliteetit_knf_view(request):
 	"""Kliininen neurofysiologia theory page with tabs for each sub-modality"""
 	spec = Specialty.objects.filter(name='KNF').first()
@@ -3438,6 +3444,11 @@ def update_fysiologia_verenkierto_proficiency_view(request):
 # RAPORTOI ONGELMASTA SIVU
 # =============================================================================
 
+def viitteet_view(request):
+    """EPA-korttien viitteet -sivu."""
+    return render(request, 'sisalto/viitteet.html')
+
+
 def raportoi_ongelma_view(request):
     """
     Näyttää "Raportoi ongelmasta" -sivun joka käyttää base_summereditor.html pohjaa
@@ -3763,10 +3774,15 @@ def tts_generate(request):
     if len(text) > 4096:
         text = text[:4096]
 
-    # File-based cache
+    allowed_voices = {'echo', 'fable', 'onyx', 'nova', 'shimmer'}
+    voice = data.get('voice', 'nova')
+    if voice not in allowed_voices:
+        voice = 'nova'
+
+    # File-based cache — key includes voice so each voice is cached separately
     cache_dir = os.path.join(settings.BASE_DIR, 'media', 'tts_cache')
     text_hash = hashlib.sha256(text.encode('utf-8')).hexdigest()[:24]
-    cache_path = os.path.join(cache_dir, f'{text_hash}.mp3')
+    cache_path = os.path.join(cache_dir, f'{text_hash}_{voice}.mp3')
 
     if os.path.exists(cache_path):
         with open(cache_path, 'rb') as f:
@@ -3785,7 +3801,7 @@ def tts_generate(request):
         client = openai.OpenAI(api_key=api_key)
         response = client.audio.speech.create(
             model='tts-1',
-            voice='nova',
+            voice=voice,
             input=text,
             response_format='mp3',
         )
