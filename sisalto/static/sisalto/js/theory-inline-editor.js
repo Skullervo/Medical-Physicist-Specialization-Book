@@ -618,11 +618,9 @@
         const quizSec = clone.querySelector('.theory-quiz-section');
         if (quizSec) quizSec.remove();
 
-        // Move EPA card to top of clone so it's saved in correct position
+        // Remove EPA card from saved content — it's always restored from template
         const epaCard = clone.querySelector('.theory-epa-card');
-        if (epaCard) {
-            clone.insertBefore(epaCard, clone.firstChild);
-        }
+        if (epaCard) epaCard.remove();
 
         clone.querySelectorAll('.theory-image-slot').forEach(s => {
             if (s.dataset.dynamic === 'true') {
@@ -852,15 +850,11 @@
                         }
                     });
 
-                    // Use saved EPA card if present, otherwise restore template version
+                    // Always use the original template EPA card (saved version
+                    // may lose list classes/structure from contenteditable)
                     const savedEpa = theoryContent.querySelector('.theory-epa-card');
-                    if (savedEpa) {
-                        // Move saved EPA card to top (it may be in old position)
-                        if (savedEpa !== theoryContent.firstChild) {
-                            theoryContent.insertBefore(savedEpa, theoryContent.firstChild);
-                        }
-                    } else if (templateEpaClone) {
-                        // No EPA in saved content — use template fallback
+                    if (savedEpa) savedEpa.remove();
+                    if (templateEpaClone) {
                         theoryContent.insertBefore(templateEpaClone, theoryContent.firstChild);
                     }
 
@@ -893,6 +887,9 @@
                         }
                     }
                     tryRender(5);
+
+                    // Notify EPA-links (and other scripts) that panel content was replaced
+                    panel.dispatchEvent(new CustomEvent('theory-content-loaded', { bubbles: true }));
                 })
                 .catch(() => {}); // Network error — keep template content
         });
